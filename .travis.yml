@@ -9,5 +9,4 @@ install:
  - gem install kramdown-rfc2629
  - pip install xml2rfc
 
-
 script: make ghpages
