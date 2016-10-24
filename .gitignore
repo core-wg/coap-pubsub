@@ -5,7 +5,3 @@
 *~
 *.swp
 /*-[0-9][0-9].xml
-.refcache
-venv/
-issues.json
-lib
