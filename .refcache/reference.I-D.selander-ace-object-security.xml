@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<reference anchor='I-D.selander-ace-object-security'>
+<front>
+<title>Object Security of CoAP (OSCOAP)</title>
+
+<author initials='G' surname='Selander' fullname='Goeran Selander'>
+    <organization />
+</author>
+
+<author initials='J' surname='Mattsson' fullname='John Mattsson'>
+    <organization />
+</author>
+
+<author initials='F' surname='Palombini' fullname='Francesca Palombini'>
+    <organization />
+</author>
+
+<author initials='L' surname='Seitz' fullname='Ludwig Seitz'>
+    <organization />
+</author>
+
+<date month='October' day='11' year='2016' />
+
+<abstract><t>This memo defines Object Security of CoAP (OSCOAP), a method for application layer protection of message exchanges with the Constrained Application Protocol (CoAP), using the CBOR Object Signing and Encryption (COSE) format.  OSCOAP provides end-to-end encryption, integrity and replay protection to CoAP payload, options, and header fields, as well as a secure binding between CoAP request and response messages.  The use of OSCOAP is signaled with the CoAP option Object-Security, also defined in this memo.</t></abstract>
+
+</front>
+
+<seriesInfo name='Internet-Draft' value='draft-selander-ace-object-security-06' />
+<format type='TXT'
+        target='http://www.ietf.org/internet-drafts/draft-selander-ace-object-security-06.txt' />
+</reference>
