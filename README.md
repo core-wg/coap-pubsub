@@ -1,4 +1,4 @@
-# Patch and pubsub Methods for Constrained Application Protocol (CoAP)
+# Patch and PubSub Methods for Constrained Application Protocol (CoAP)
 
 This is the working area for the Individual internet-draft, "Patch and Fpubsub Methods for Constrained Application Protocol (CoAP)".
 
