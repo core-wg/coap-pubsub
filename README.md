@@ -1,4 +1,4 @@
-# Patch and PubSub Methods for Constrained Application Protocol (CoAP)
+# Publish-Subscribe Broker for the Constrained Application Protocol (CoAP)
 
 This is the working area for the Individual internet-draft, "Publish-Subscribe Broker for the Constrained Application Protocol (CoAP)".
 
