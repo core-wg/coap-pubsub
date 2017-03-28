@@ -29,7 +29,7 @@ author:
   org: Ericsson
   email: ari.keranen@ericsson.com
 - ins: J. J. Jimenez
-  name: Jaime Jiménez
+  name: Jaime Jiménez
   org: Ericsson
   email: jaime.jimenez@ericsson.com
 normative:
