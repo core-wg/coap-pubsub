@@ -28,7 +28,7 @@ author:
   name: Ari Keranen
   org: Ericsson
   email: ari.keranen@ericsson.com
-- ins: J. J. Jimenez
+- ins: J. J. Jiménez
   name: Jaime Jiménez
   org: Ericsson
   email: jaime.jimenez@ericsson.com
@@ -273,17 +273,10 @@ Method:
 
 
 URI Template:
-: /.well-known/core
-
-
-URI Template:
-: /{+ps/}{topic}{/topic\*}{?q\*}
+: /{+ps}{/topic*}?{q*}
 
 
 URI Template Variables:
-:   /.well-known/core :=
-    : for discovering the pubsub API (optional)
-
 
     ps :=
     : pubsub API path (optional). The base URI path of the pubsub API,
@@ -415,7 +408,7 @@ Method:
 
 
 URI Template:
-: /{+ps/}{topic}{/topic\*}
+: /{+ps}{/topic*}?{q*}
 
 
 URI Template Variables:
@@ -462,7 +455,7 @@ successfully created.
 ~~~~
 Client                                          Broker
   |                                               |
-  | ---------- POST /ps "<topic1>;ct=50" -------->|
+  | ---------- POST /ps/ "<topic1>;ct=50" -------->|
   |                                               |
   | <---------------- 2.01 Created ---------------|
   |               Location: /ps/topic1            |
@@ -676,10 +669,8 @@ The SUBSCRIBE interface is specified as follows:
 Interaction:
 : Client -> Broker
 
-
 Method:
 : GET
-
 
 Options:
 : Observe:0
@@ -820,7 +811,6 @@ Client                                          Broker
 
 ~~~~
 {: #unsubscribe-fig title='Example of UNSUBSCRIBE' artwork-align="center"}
-
 
 
 ## READ
