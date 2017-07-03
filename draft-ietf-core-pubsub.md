@@ -275,6 +275,7 @@ Method:
 
 
 URI Template:
+
 : /{+ps}/{+topic}{?q\*}
 
 
@@ -286,6 +287,7 @@ URI Template Variables:
 
 : q := Query Filter (optional). MAY contain a query filter list as per
  {{RFC6690}} Section 4.1.
+
 
 
 Content-Format:
@@ -406,7 +408,9 @@ Method:
 
 
 URI Template:
+
 : /{+ps}/{+topic}{?q\*}
+
 
 
 URI Template Variables:
@@ -1101,7 +1105,6 @@ perform aggregation of data/requests collected.
 Depending on the level of trust users and system designers place in
 the CoAP pubsub broker, the use of end-to-end object security is
 RECOMMENDED as described in {{I-D.palombini-ace-coap-pubsub-profile}}.
-
 When only end-to-end encryption is necessary and the CoAP Broker is
 trusted, Payload Only Protection (Mode:PAYL) could be used. The
 Publisher would wrap only the payload before sending it to the broker

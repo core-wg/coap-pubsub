@@ -9,3 +9,5 @@
 venv/
 issues.json
 lib
+
+.targets.mk
