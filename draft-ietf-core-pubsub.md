@@ -273,20 +273,19 @@ Method:
 
 
 URI Template:
-: /{+ps}{/topic*}?{q*}
+: /{+ps}{/topic\*}?{q\*}
 
 
 URI Template Variables:
+:   ps :=
+    : pubsub API path (optional). The base URI path of the pubsub
+    API, as obtained from discovery, used to discover topics.
 
-    ps :=
-    : pubsub API path (optional). The base URI path of the pubsub API,
-      as obtained from discovery, used to discover topics.
-
-    topic :=
+:   topic :=
     : The desired topic to return links for (optional).
 
 
-    q :=
+:   q :=
     : Query Filter (optional). MAY contain a query filter list as per
       {{RFC6690}} Section 4.1.
 
@@ -408,7 +407,7 @@ Method:
 
 
 URI Template:
-: /{+ps}{/topic*}?{q*}
+: /{+ps}{/topic\*}?{q\*}
 
 
 URI Template Variables:
