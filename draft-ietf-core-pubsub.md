@@ -39,7 +39,7 @@ normative:
   RFC6570:
   RFC7641:
   I-D.ietf-core-resource-directory:
-  I-D.selander-ace-object-security:
+  I-D.ietf-core-object-security:
   RFC7252:
 informative:
   RFC5988:
@@ -1097,7 +1097,7 @@ perform aggregation of data/requests collected.
 
 Depending on the level of trust users and system designers place in
 the CoAP pubsub broker, the use of end-to-end object security is
-RECOMMENDED {{I-D.selander-ace-object-security}}.
+RECOMMENDED {{I-D.ietf-core-object-security}}.
 
 When only end-to-end encryption is necessary and the CoAP Broker is
 trusted, Payload Only Protection (Mode:PAYL) could be used. The
