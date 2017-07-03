@@ -1,7 +1,7 @@
 ---
 stand_alone: true
 ipr: trust200902
-docname: draft-ietf-core-coap-pubsub-01
+docname: draft-ietf-core-coap-pubsub-02
 cat: std
 pi:
   toc: 'yes'
@@ -275,7 +275,7 @@ Method:
 
 
 URI Template:
-: /{+ps}{/topic\*}?{q\*}
+: /{+ps}/{+topic}{?q\*}
 
 
 URI Template Variables:
@@ -406,14 +406,13 @@ Method:
 
 
 URI Template:
-: /{+ps}{/topic\*}?{q\*}
+: /{+ps}/{+topic}{?q\*}
 
 
 URI Template Variables:
 : ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
-
 
 : q := Query Filter (optional). MAY contain a query filter list as per
  {{RFC6690}} Section 4.1.
@@ -549,7 +548,7 @@ Method:
 
 
 URI Template:
-: /{+ps}{/topic\*}?{q\*}
+: /{+ps}/{+topic}{?q\*}
 
 
 URI Template Variables:
@@ -678,7 +677,7 @@ Options:
 
 
 URI Template:
-: /{+ps}{/topic\*}?{q\*}
+: /{+ps}/{+topic}{?q\*}
 
 
 URI Template Variables:
@@ -767,7 +766,7 @@ Options:
 
 
 URI Template:
-: /{+ps}{/topic\*}?{q\*}
+: /{+ps}/{+topic}{?q\*}
 
 
 URI Template Variables:
@@ -846,7 +845,7 @@ Method:
 
 
 URI Template:
-: /{+ps}{/topic\*}?{q\*}
+: /{+ps}/{+topic}{?q\*}
 
 
 URI Template Variables:
@@ -938,7 +937,7 @@ Method:
 
 
 URI Template:
-: /{+ps}{/topic\*}?{q\*}
+: /{+ps}/{+topic}{?q\*}
 
 
 URI Template Variables:
