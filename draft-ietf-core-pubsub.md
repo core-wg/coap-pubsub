@@ -276,7 +276,7 @@ Method:
 
 URI Template:
 
-: /{+ps}/{+topic}{?q\*}
+: {+ps}/{+topic}{?q\*}
 
 
 URI Template Variables:
@@ -409,7 +409,7 @@ Method:
 
 URI Template:
 
-: /{+ps}/{+topic}{?q\*}
+: {+ps}/{+topic}{?q\*}
 
 
 
@@ -552,7 +552,7 @@ Method:
 
 
 URI Template:
-: /{+ps}/{+topic}{?q\*}
+: {+ps}/{+topic}{?q\*}
 
 
 URI Template Variables:
@@ -681,7 +681,7 @@ Options:
 
 
 URI Template:
-: /{+ps}/{+topic}{?q\*}
+: {+ps}/{+topic}{?q\*}
 
 
 URI Template Variables:
@@ -770,7 +770,7 @@ Options:
 
 
 URI Template:
-: /{+ps}/{+topic}{?q\*}
+: {+ps}/{+topic}{?q\*}
 
 
 URI Template Variables:
@@ -849,7 +849,7 @@ Method:
 
 
 URI Template:
-: /{+ps}/{+topic}{?q\*}
+: {+ps}/{+topic}{?q\*}
 
 
 URI Template Variables:
@@ -941,7 +941,7 @@ Method:
 
 
 URI Template:
-: /{+ps}/{+topic}{?q\*}
+: {+ps}/{+topic}{?q\*}
 
 
 URI Template Variables:
