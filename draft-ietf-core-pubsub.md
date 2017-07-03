@@ -1,7 +1,7 @@
 ---
 stand_alone: true
 ipr: trust200902
-docname: draft-ietf-core-coap-pubsub-01
+docname: draft-ietf-core-coap-pubsub-02
 cat: std
 pi:
   toc: 'yes'
@@ -38,10 +38,11 @@ normative:
   RFC6690:
   RFC6570:
   RFC7641:
-  I-D.ietf-core-resource-directory:
-  I-D.ietf-core-object-security:
   RFC7252:
 informative:
+  I-D.selander-ace-object-security:
+  I-D.palombini-ace-coap-pubsub-profile:
+  I-D.ietf-core-resource-directory:
   RFC5988:
 
 --- abstract
@@ -103,15 +104,14 @@ Publish-Subscribe (pubsub):
 
 
 CoAP pubsub service:
-: A group of REST resources, as defined in this document, which together implement
-  the CoAP pubsub service.
+: A group of REST resources, as defined in this document, which together implement the required features of this specification.
 
 
 CoAP pubsub Broker:
 : A server node capable of receiving messages (publications) from and sending
   messages to other nodes, and able to match subscriptions and publications
   in order to route messages to the right destinations. The broker can also
-  temporarily store publications to satisfy future subscriptions.
+  temporarily store publications to satisfy future subscriptions and pending notifications.
 
 
 CoAP pubsub Client:
@@ -131,7 +131,7 @@ Topic:
 ## CoAP pubsub Architecture
 
 {{arch-fig}} shows the architecture of a CoAP pubsub service. CoAP pubsub Clients interact
-with a CoAP pubsub Broker through the CoAP pubsub API which is hosted by
+with a CoAP pubsub Broker through the CoAP pubsub REST API which is hosted by
 the Broker. State information is updated between the Clients and the Broker.
 The CoAP pubsub Broker performs a store-and-forward of state update representations
 between certain CoAP pubsub Clients. Clients Subscribe to topics upon which
@@ -161,7 +161,7 @@ Clients        pubsub         Broker
 
 ## CoAP pubsub Broker
 
-A CoAP pubsub Broker is a CoAP Server that exposes an API for clients
+A CoAP pubsub Broker is a CoAP Server that exposes a REST API for clients
 to use to initiate publish-subscribe interactions. Avoiding the need
 for direct reachability between clients, the broker only needs to be
 reachable from all clients. The broker also needs to have sufficient
@@ -172,11 +172,11 @@ and potentially buffer messages, on behalf of the clients.
 ## CoAP pubsub Client
 
 A CoAP pubsub Client interacts with a CoAP pubsub Broker using the CoAP pubsub
-API. Clients initiate interactions with a CoAP pubsub broker. A data source
+REST API defined in this document. Clients initiate interactions with a CoAP pubsub broker. A data source
 (e.g., sensor clients) can publish state updates to the broker and data sinks
 (e.g., actuator clients) can read from or subscribe to state updates from
 the broker. Application clients can make use of both publish and subscribe
-in order to exchange state updates with data sources and sinks.
+in order to exchange state updates with data sources and data sinks.
 
 
 ## CoAP pubsub Topic
@@ -224,13 +224,15 @@ broker nodes in a system with full interoperability.
 
 
 
-# CoAP pubsub API {#function-set}
+# CoAP pubsub REST API {#function-set}
 
-This section defines the API exposed by a CoAP pubsub Broker to pubsub
+This section defines the REST API exposed by a CoAP pubsub Broker to pubsub
 Clients.  The examples throughout this section assume the use of CoAP
-{{RFC7252}}. A CoAP pubsub Broker implementing this specification MUST
+{{RFC7252}}. A CoAP pubsub Broker implementing this specification SHOULD
 support the DISCOVERY, CREATE, PUBLISH, SUBSCRIBE, UNSUBSCRIBE, READ,
-and REMOVE operations defined in this section.
+and REMOVE operations defined in this section. Optimized implementations 
+MAY support a subset of the operations as required by particular constrained 
+use cases.
 
 ## DISCOVERY {#discover}
 
@@ -238,8 +240,8 @@ CoAP pubsub Clients discover CoAP pubsub Brokers by using CoAP Simple
 Discovery or through a Resource Directory (RD)
 {{I-D.ietf-core-resource-directory}}. A CoAP pubsub Broker SHOULD
 indicate its presence and availability on a network by exposing a link
-to its pubsub API at its .well-known/core location {{RFC6690}}. A CoAP
-pubsub broker MAY register its pubsub API location with a Resource
+to the entry point of its pubsub API at its .well-known/core location {{RFC6690}}. A CoAP
+pubsub broker MAY register its pubsub REST API entry point with a Resource
 Directory. {{discover-fig}} shows an example of a client discovering a
 local pubsub API using CoAP Simple Discovery. A broker wishing to
 advertise the CoAP pubsub API for Simple Discovery or through a
@@ -247,7 +249,7 @@ Resource Directory MUST use the link relation rt=core.ps. A broker MAY
 advertise its supported content formats and other attributes in the
 link to its pubsub API.
 
-A CoAP pubsub Broker MAY offer a topic discovery API to enable Clients
+A CoAP pubsub Broker MAY offer a topic discovery entry point to enable Clients
 to find topics of interest, either by topic name or by link attributes
 which may be registered when the topic is
 created. {{discover-topic-fig}} shows an example of a client looking
@@ -273,21 +275,19 @@ Method:
 
 
 URI Template:
-: /{+ps}{/topic\*}?{q\*}
+
+: /{+ps}/{+topic}{?q\*}
 
 
 URI Template Variables:
-:   ps :=
-    : pubsub API path (optional). The base URI path of the pubsub
-    API, as obtained from discovery, used to discover topics.
+: ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.
 
-:   topic :=
-    : The desired topic to return links for (optional).
+: topic := The desired topic to return links for (optional).
 
 
-:   q :=
-    : Query Filter (optional). MAY contain a query filter list as per
-      {{RFC6690}} Section 4.1.
+: q := Query Filter (optional). MAY contain a query filter list as per
+ {{RFC6690}} Section 4.1.
+
 
 
 Content-Format:
@@ -368,7 +368,8 @@ Client                                          Broker
 
 ## CREATE
 
-Clients create new topics on the broker using CREATE. A client wishing
+A CoAP pubsub broker MAY allow Clients to create new topics on the 
+broker using CREATE. A client wishing
 to create a topic MUST use CoAP POST to the pubsub API with a payload
 indicating the desired topic. The topic specification sent in the
 payload MUST use a supported serialization of the CoRE link format
@@ -407,14 +408,19 @@ Method:
 
 
 URI Template:
-: /{+ps}{/topic\*}?{q\*}
+
+: /{+ps}/{+topic}{?q\*}
+
 
 
 URI Template Variables:
-:   ps :=
-    : pubsub API path (mandatory). The path of the pubsub API, as
-      obtained from discovery. A pubsub broker SHOULD use the value
-      "ps" for this variable whenever possible.
+: ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.
+
+: topic := The desired topic to return links for (optional).
+
+: q := Query Filter (optional). MAY contain a query filter list as per
+ {{RFC6690}} Section 4.1.
+
 
 Content-Format:
 : application/link-format
@@ -488,7 +494,7 @@ Client                                          Broker
 
 ## PUBLISH
 
-A CoAP pubsub Client uses the PUBLISH interface for updating topics on
+A CoAP pubsub broker MAY allow clients to PUBLISH to topics on
 the broker. A client MAY use the PUT or the POST method to publish
 state updates to the CoAP pubsub Broker. A client MUST use the content
 format specified upon creation of a given topic to publish updates to
@@ -519,11 +525,8 @@ the URI of the created topic, including all of the created path segments,
 returned via the Location-Path option.
 
 A Broker MAY accept PUBLISH operations using the POST method. If a
-broker accepts PUBLISH using POST it MAY store an ordered list of
-published representations, with an element of the list for each
-published representation. A Broker MAY reject, or delay responses to,
-POST requests if the internal capacity to store representations is
-exceeded.
+broker accepts PUBLISH using POST it shall respond with the 2.04 Changed 
+status code.
 
 A Broker MAY perform garbage collection of stored representations
 which have been delivered to all subscribers or which have timed
@@ -549,16 +552,18 @@ Method:
 
 
 URI Template:
-: /{+ps/}{topic}{/topic\*}
+: /{+ps}/{+topic}{?q\*}
 
 
 URI Template Variables:
-:   ps :=
-    : pubsub API path (mandatory). The path of the pubsub API, as
-      obtained from discovery.
+: ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.
 
-    topic :=
-    : The desired topic to publish on.
+: topic := The desired topic to return links for (optional).
+
+
+: q := Query Filter (optional). MAY contain a query filter list as per
+ {{RFC6690}} Section 4.1.
+
 
 Content-Format:
 : Any valid CoAP content format
@@ -624,7 +629,7 @@ Client                                          Broker
   | -------- PUT /ps/exa/mpl/e "1033.3"  -------> |
   |                                               |
   |                                               |
-  | <--------------- 2.04 Created---------------- |
+  | <--------------- 2.01 Created---------------- |
   |             Location: /ps/exa/mpl/e           |
   |                                               |
 
@@ -635,10 +640,10 @@ Client                                          Broker
 
 ## SUBSCRIBE
 
-CoAP pubsub Clients subscribe to topics on the Broker using CoAP Observe
-as described in {{RFC7641}}. A CoAP pubsub Client wishing to Subscribe
-to a topic on a broker MUST use
-a CoAP GET with Observe registration. The Broker MAY add the client to a
+A CoAP pubsub broker MAY allow Clients to subscribe to topics on the Broker 
+using CoAP Observe as described in {{RFC7641}}. A CoAP pubsub Client wishing 
+to Subscribe to a topic on a broker MUST use a CoAP GET with the Observe 
+option set to 0 (zero). The Broker MAY add the client to a
 list of observers. The Broker MUST return a response code of "2.05 Content"
 along with the most recently published value if the topic contains a valid
 value and the broker can supply the requested content format. The broker
@@ -649,7 +654,7 @@ can supply as alternate content formats to the content format the topic was
 registered with. If the topic was published with the Max-Age option, the
 broker MUST set the Max-Age option in the valid response to the amount of
 time remaining for the value to be valid since the last publish operation
-on that topic. The Broker MUST return a response code of "2.04 No Content"
+on that topic. The Broker MUST return a response code of "2.07 No Content"
 if the Max-Age of the previously stored value has expired. The Broker MUST
 return a response code "4.04 Not Found" if the topic does not exist or has
 been removed. The Broker MUST return a response code "4.15 Unsupported Content
@@ -676,16 +681,18 @@ Options:
 
 
 URI Template:
-: /{+ps/}{topic}{/topic\*}
+: /{+ps}/{+topic}{?q\*}
 
 
 URI Template Variables:
-:   ps :=
-    : pubsub API path (mandatory). The path of the pubsub API, as obtained from
-      discovery.
+: ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.
 
-    topic :=
-    : The desired topic to subscribe to.
+: topic := The desired topic to return links for (optional).
+
+
+: q := Query Filter (optional). MAY contain a query filter list as per
+ {{RFC6690}} Section 4.1.
+
 
 The following response codes are defined for this interface:
 
@@ -694,7 +701,7 @@ Success:
 
 
 Success:
-: 2.04 "No Content". Successful subscribe, value not included
+: 2.07 "No Content". Successful subscribe, value not included
 
 
 Failure:
@@ -742,7 +749,7 @@ Client1   Client2                                          Broker
 
 ## UNSUBSCRIBE
 
-CoAP pubsub Clients unsubscribe from topics on the Broker using the CoAP
+If a CoAP pubsub broker allows clients to SUBSCRIBE to topics on the broker, it MUST allow Clients to unsubscribe from topics on the Broker using the CoAP
 Cancel Observation operation. A CoAP pubsub Client wishing to unsubscribe
 to a topic on a Broker MUST either use CoAP GET with Observe using an Observe
 parameter of 1 or send a CoAP Reset message in response to a publish, as
@@ -763,16 +770,17 @@ Options:
 
 
 URI Template:
-: /{+ps/}{topic}{/topic\*}
+: /{+ps}/{+topic}{?q\*}
 
 
 URI Template Variables:
-:   ps :=
-    : pubsub API path (mandatory). The path of the pubsub API, as obtained from
-      discovery.
+: ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.
 
-    topic :=
-    : The desired topic to unsubscribe from.
+: topic := The desired topic to return links for (optional).
+
+
+: q := Query Filter (optional). MAY contain a query filter list as per
+ {{RFC6690}} Section 4.1.
 
 
 The following response codes are defined for this interface:
@@ -782,7 +790,7 @@ Success:
 
 
 Success:
-: 2.04 "No Content". Successful unsubscribe, value not included
+: 2.07 "No Content". Successful unsubscribe, value not included
 
 
 Failure:
@@ -814,10 +822,8 @@ Client                                          Broker
 
 ## READ
 
-A CoAP pubsub client wishing to obtain only the most recent published value
-on a topic MAY use the READ interface. For reading, the client uses the CoAP
-GET method. The broker MUST accept Read requests on a topic if the content
-format of the request matches the content format the topic was created with.
+A CoAP pubsub broker MAY accept Read requests on a topic using the the CoAP
+GET method if the content format of the request matches the content format the topic was created with.
 The broker MAY accept Read requests which specify content formats that the
 broker can supply as alternate content formats to the content format the
 topic was registered with. The Broker MUST return a response code of "2.05
@@ -826,7 +832,7 @@ a valid value and the broker can supply the requested content format. If
 the topic was published with the Max-Age option, the broker MUST set the
 Max-Age option in the valid response to the amount of time remaining for
 the topic to be valid since the last publish. The Broker MUST return a response
-code of "2.04 No Content" if the Max-Age of the previously stored value has
+code of "2.07 No Content" if the Max-Age of the previously stored value has
 expired. The Broker MUST return a response code "4.04 Not Found" if the topic
 does not exist or has been removed. The Broker MUST return a response code
 "4.15 Unsupported Content Format" if the broker can not return the requested
@@ -843,17 +849,17 @@ Method:
 
 
 URI Template:
-: /{+ps/}{topic}{/topic\*}
+: /{+ps}/{+topic}{?q\*}
 
 
 URI Template Variables:
-:   ps :=
-    : pubsub API path (mandatory). The path of the pubsub API, as
-      obtained from discovery.
+: ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.
 
-    topic :=
-    : The desired topic to READ.
+: topic := The desired topic to return links for (optional).
 
+
+: q := Query Filter (optional). MAY contain a query filter list as per
+ {{RFC6690}} Section 4.1.
 
 
 The following response codes are defined for this interface:
@@ -863,7 +869,7 @@ Success:
 
 
 Success:
-: 2.04 "No Content". Topic exists, value not included
+: 2.07 "No Content". Topic exists, value not included
 
 
 Failure:
@@ -913,9 +919,10 @@ Client1   Client2                                          Broker
 
 ## REMOVE
 
-A CoAP pubsub Client wishing to remove a topic MAY use the CoAP Delete
-operation on the URI of the topic. The CoAP pubsub Broker MUST return
-"2.02 Deleted" if the remove operation is successful. The broker MUST
+A CoAP pubsub broker MAY allow clientsremove a topics from the broker
+using the CoAP Delete
+method on the URI of the topic. The CoAP pubsub Broker MUST return
+"2.02 Deleted" if the removal is successful. The broker MUST
 return the appropriate 4.xx response code indicating the reason for
 failure if the topic can not be removed. When a topic is removed for
 any reason, the Broker SHOULD return the response code 4.04 Not Found
@@ -934,17 +941,17 @@ Method:
 
 
 URI Template:
-: /{+ps/}{topic}{/topic\*}
+: /{+ps}/{+topic}{?q\*}
 
 
 URI Template Variables:
-:   ps :=
-    : pubsub API path (mandatory). The path of the pubsub API, as
-      obtained from discovery.
+: ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.
 
-    topic :=
-    : The desired topic to REMOVE.
+: topic := The desired topic to return links for (optional).
 
+
+: q := Query Filter (optional). MAY contain a query filter list as per
+ {{RFC6690}} Section 4.1.
 
 
 Content-Format:
@@ -994,7 +1001,7 @@ Client                                         Broker
 
 # CoAP pubsub Operation with Resource Directory
 
-A CoAP pubsub Broker may register the base URI of a pubsub API with a Resource
+A CoAP pubsub Broker may register the base URI, which is the REST API entry point for a pubsub service, with a Resource
 Directory. A pubsub Client may use an RD to discover a pubsub Broker.
 
 A CoAP pubsub Client may register links {{RFC6690}} with a Resource
@@ -1097,8 +1104,7 @@ perform aggregation of data/requests collected.
 
 Depending on the level of trust users and system designers place in
 the CoAP pubsub broker, the use of end-to-end object security is
-RECOMMENDED {{I-D.ietf-core-object-security}}.
-
+RECOMMENDED as described in {{I-D.palombini-ace-coap-pubsub-profile}}.
 When only end-to-end encryption is necessary and the CoAP Broker is
 trusted, Payload Only Protection (Mode:PAYL) could be used. The
 Publisher would wrap only the payload before sending it to the broker
@@ -1141,18 +1147,18 @@ Registry.
 
 
 
-## Response Code value '2.04'
+## Response Code value '2.07'
 
 
 
-* Response Code: 2.04
+* Response Code: 2.07
 
 * Description: Add No Content response to GET to the existing definition of
-  the 2.04 response code.
+  the 2.07 response code.
 
 * Reference: [[This document]]
 
-* Notes: None
+* Notes: The server sends this code to the client to indicate that the request was valid and accepted, but the responce may contain an empty payload. It is comparable to and may be proxied with the http 204 No Content status code.
 
 
 
