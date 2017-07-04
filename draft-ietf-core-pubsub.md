@@ -368,8 +368,9 @@ Client                                          Broker
 
 ## CREATE
 
-A CoAP pubsub broker MAY allow Clients to create new topics on the 
-broker using CREATE. A client wishing
+A CoAP pubsub broker SHOULD allow Clients to create new topics on the 
+broker using CREATE. Some exceptions are for fixed brokerless devices
+and pre-configured brokers in dedicated installations. A client wishing
 to create a topic MUST use CoAP POST to the pubsub API with a payload
 indicating the desired topic. The topic specification sent in the
 payload MUST use a supported serialization of the CoRE link format
