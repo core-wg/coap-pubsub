@@ -95,7 +95,7 @@ this specification.
 
 This specification makes use of the following additional terminology:
 
-Publish-Subscribe (pubsub):
+Publish-Subscribe (pub/sub):
 : A messaging paradigm where messages are published to a broker and potential
   receivers can subscribe to the broker to receive messages. The publishers
   do not (need to) know where the message will be eventually sent: the publications
@@ -103,18 +103,18 @@ Publish-Subscribe (pubsub):
   by the broker to subscribed receivers.
 
 
-CoAP pubsub service:
+CoAP pub/sub service:
 : A group of REST resources, as defined in this document, which together implement the required features of this specification.
 
 
-CoAP pubsub Broker:
+CoAP pub/sub Broker:
 : A server node capable of receiving messages (publications) from and sending
   messages to other nodes, and able to match subscriptions and publications
   in order to route messages to the right destinations. The broker can also
   temporarily store publications to satisfy future subscriptions and pending notifications.
 
 
-CoAP pubsub Client:
+CoAP pub/sub Client:
 : A CoAP client which is capable of publish or subscribe operations as defined
   in this specification.
 
@@ -128,40 +128,40 @@ Topic:
 
 # Architecture {#architecture}
 
-## CoAP pubsub Architecture
+## CoAP Pub/sub Architecture
 
-{{arch-fig}} shows the architecture of a CoAP pubsub service. CoAP pubsub Clients interact
-with a CoAP pubsub Broker through the CoAP pubsub REST API which is hosted by
+{{arch-fig}} shows the architecture of a CoAP pub/sub service. CoAP pub/sub Clients interact
+with a CoAP pub/sub Broker through the CoAP pub/sub REST API which is hosted by
 the Broker. State information is updated between the Clients and the Broker.
-The CoAP pubsub Broker performs a store-and-forward of state update representations
-between certain CoAP pubsub Clients. Clients Subscribe to topics upon which
+The CoAP pub/sub Broker performs a store-and-forward of state update representations
+between certain CoAP pub/sub Clients. Clients Subscribe to topics upon which
 representations are Published by other Clients, which are forwarded by the
-Broker to the subscribing clients. A CoAP pubsub Broker may be used as a
+Broker to the subscribing clients. A CoAP pub/sub Broker may be used as a
 REST resource proxy, retaining the last published representation to supply
 in response to Read requests from Clients.
 
 ~~~~
-Clients        pubsub         Broker
+Clients        pub/sub         Broker
 +-------+         |
 | CoAP  |         |
-|pubsub |---------|------+
+|pub/sub|---------|------+
 |Client |         |      |    +-------+
 +-------+         |      +----| CoAP  |
-                  |           |pubsub |
+                  |           |pub/sub|
 +-------+         |      +----|Broker |
 | CoAP  |         |      |    +-------+
-|pubsub |---------|------+
+|pub/sub|---------|------+
 |Client |         |
 +-------+         |
 
 ~~~~
-{: #arch-fig title='CoAP pubsub Architecture' artwork-align="center"}
+{: #arch-fig title='CoAP pub/sub Architecture' artwork-align="center"}
 
 
 
-## CoAP pubsub Broker
+## CoAP Pub/sub Broker
 
-A CoAP pubsub Broker is a CoAP Server that exposes a REST API for clients
+A CoAP pub/sub Broker is a CoAP Server that exposes a REST API for clients
 to use to initiate publish-subscribe interactions. Avoiding the need
 for direct reachability between clients, the broker only needs to be
 reachable from all clients. The broker also needs to have sufficient
@@ -169,35 +169,35 @@ resources (storage, bandwidth, etc.) to host CoAP resource services,
 and potentially buffer messages, on behalf of the clients.
 
 
-## CoAP pubsub Client
+## CoAP Pub/sub Client
 
-A CoAP pubsub Client interacts with a CoAP pubsub Broker using the CoAP pubsub
-REST API defined in this document. Clients initiate interactions with a CoAP pubsub broker. A data source
+A CoAP pub/sub Client interacts with a CoAP pub/sub Broker using the CoAP pub/sub
+REST API defined in this document. Clients initiate interactions with a CoAP pub/sub broker. A data source
 (e.g., sensor clients) can publish state updates to the broker and data sinks
 (e.g., actuator clients) can read from or subscribe to state updates from
 the broker. Application clients can make use of both publish and subscribe
 in order to exchange state updates with data sources and data sinks.
 
 
-## CoAP pubsub Topic
+## CoAP Pub/sub Topic
 
 The clients and broker use topics to identify a particular resource or
 object in a publish-subscribe system. Topics are conventionally formed
 as a hierarchy, e.g. "/sensors/weather/barometer/pressure" or
 "EP-33543/sen/3303/0/5700".  The topics are hosted at the broker and
 all the clients using the broker share the same namespace for
-topics. Every CoAP pubsub topic has a link, consisting of a reference
+topics. Every CoAP pub/sub topic has a link, consisting of a reference
 path on the broker using URI path {{RFC3986}} construction and link
 attributes {{RFC6690}}. Every topic is associated with zero or more
 stored representations with a content-format specified in the link. A
-CoAP pubsub topic value may alternatively be a collection of one or
+CoAP pub/sub topic value may alternatively be a collection of one or
 more sub-topics, consisting of links to the sub-topic URIs and
 indicated by a link-format content-format.
 
 
-## Brokerless pubsub
+## Brokerless Pub/sub
 
-{{brokerless}} shows an arrangement for using CoAP pubsub in a
+{{brokerless}} shows an arrangement for using CoAP pub/sub in a
 "brokerless" configuration between peer nodes. Nodes in a brokerless
 system may act as both broker and client. The Broker interface in a
 brokerless node may be pre-configured with topics that expose services
@@ -207,28 +207,28 @@ broker nodes in a system with full interoperability.
 
 
 ~~~~
-  Peer         pubsub          Peer
+  Peer         pub/sub          Peer
 +-------+         |         +-------+
 | CoAP  |         |         | CoAP  |
-|pubsub |---------|---------|pubsub |
+|pub/sub|---------|---------|pub/sub|
 |Client |         |         |Broker |
 +-------+         |         +-------+
 | CoAP  |         |         | CoAP  |
-|pubsub |---------|---------|pubsub |
+|pub/sub|---------|---------|pub/sub|
 |Broker |         |         |Client |
 +-------+         |         +-------+
 
 ~~~~
-{: #brokerless title='Brokerless pubsub' artwork-align="center"}
+{: #brokerless title='Brokerless pub/sub' artwork-align="center"}
 
 
 
 
-# CoAP pubsub REST API {#function-set}
+# CoAP Pub/sub REST API {#function-set}
 
-This section defines the REST API exposed by a CoAP pubsub Broker to pubsub
+This section defines the REST API exposed by a CoAP pub/sub Broker to pub/sub
 Clients.  The examples throughout this section assume the use of CoAP
-{{RFC7252}}. A CoAP pubsub Broker implementing this specification SHOULD
+{{RFC7252}}. A CoAP pub/sub Broker implementing this specification SHOULD
 support the DISCOVERY, CREATE, PUBLISH, SUBSCRIBE, UNSUBSCRIBE, READ,
 and REMOVE operations defined in this section. Optimized implementations 
 MAY support a subset of the operations as required by particular constrained 
@@ -236,31 +236,31 @@ use cases.
 
 ## DISCOVERY {#discover}
 
-CoAP pubsub Clients discover CoAP pubsub Brokers by using CoAP Simple
+CoAP pub/sub Clients discover CoAP pub/sub Brokers by using CoAP Simple
 Discovery or through a Resource Directory (RD)
-{{I-D.ietf-core-resource-directory}}. A CoAP pubsub Broker SHOULD
+{{I-D.ietf-core-resource-directory}}. A CoAP pub/sub Broker SHOULD
 indicate its presence and availability on a network by exposing a link
-to the entry point of its pubsub API at its .well-known/core location {{RFC6690}}. A CoAP
-pubsub broker MAY register its pubsub REST API entry point with a Resource
+to the entry point of its pub/sub API at its .well-known/core location {{RFC6690}}. A CoAP
+pub/sub broker MAY register its pub/sub REST API entry point with a Resource
 Directory. {{discover-fig}} shows an example of a client discovering a
-local pubsub API using CoAP Simple Discovery. A broker wishing to
-advertise the CoAP pubsub API for Simple Discovery or through a
+local pub/sub API using CoAP Simple Discovery. A broker wishing to
+advertise the CoAP pub/sub API for Simple Discovery or through a
 Resource Directory MUST use the link relation rt=core.ps. A broker MAY
 advertise its supported content formats and other attributes in the
-link to its pubsub API.
+link to its pub/sub API.
 
-A CoAP pubsub Broker MAY offer a topic discovery entry point to enable Clients
+A CoAP pub/sub Broker MAY offer a topic discovery entry point to enable Clients
 to find topics of interest, either by topic name or by link attributes
 which may be registered when the topic is
 created. {{discover-topic-fig}} shows an example of a client looking
 for a topic with a resource type (rt) of "temperature" using
 Discover. The client then receives the URI of the resource and its
-content-format. A pubsub broker wishing to advertize topic discovery
+content-format. A pub/sub broker wishing to advertize topic discovery
 MUST use the relation rt=core.ps.discover in the link.
 
-A CoAP pubsub Broker MAY expose the Discover interface through the
+A CoAP pub/sub Broker MAY expose the Discover interface through the
 .well-known/core resource. Links to topics may be exposed at
-.well-known/core in addition to links to the pubsub
+.well-known/core in addition to links to the pub/sub
 API. {{discover-topic-wk-fig}} shows an example of topic discovery
 through .well-known/core.
 
@@ -280,7 +280,7 @@ URI Template:
 
 
 URI Template Variables:
-: ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.
+: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
 
@@ -298,8 +298,8 @@ The following response codes are defined for this interface:
 
 Success:
 : 2.05 "Content" with an application/link-format payload containing
-  one or more matching entries for the broker resource. A pubsub
-  broker SHOULD use the value "/ps/" for the base URI of the pubsub
+  one or more matching entries for the broker resource. A pub/sub
+  broker SHOULD use the value "/ps/" for the base URI of the pub/sub
   API wherever possible.
 
 
@@ -330,7 +330,7 @@ Client                                          Broker
   |                                               |
 
 ~~~~
-{: #discover-fig title='Example of DISCOVER pubsub function' artwork-align="center"}
+{: #discover-fig title='Example of DISCOVER pub/sub function' artwork-align="center"}
 
 
 
@@ -415,7 +415,7 @@ URI Template:
 
 
 URI Template Variables:
-: ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.
+: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
 
@@ -495,9 +495,9 @@ Client                                          Broker
 
 ## PUBLISH
 
-A CoAP pubsub broker MAY allow clients to PUBLISH to topics on
+A CoAP pub/sub broker MAY allow clients to PUBLISH to topics on
 the broker. A client MAY use the PUT or the POST method to publish
-state updates to the CoAP pubsub Broker. A client MUST use the content
+state updates to the CoAP pub/sub Broker. A client MUST use the content
 format specified upon creation of a given topic to publish updates to
 that topic. The broker MUST reject publish operations which do not use
 the specified content format.  A CoAP client publishing on a topic MAY
@@ -557,7 +557,7 @@ URI Template:
 
 
 URI Template Variables:
-: ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.
+: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
 
@@ -641,8 +641,8 @@ Client                                          Broker
 
 ## SUBSCRIBE
 
-A CoAP pubsub broker MAY allow Clients to subscribe to topics on the Broker 
-using CoAP Observe as described in {{RFC7641}}. A CoAP pubsub Client wishing 
+A CoAP pub/sub broker MAY allow Clients to subscribe to topics on the Broker 
+using CoAP Observe as described in {{RFC7641}}. A CoAP pub/sub Client wishing 
 to Subscribe to a topic on a broker MUST use a CoAP GET with the Observe 
 option set to 0 (zero). The Broker MAY add the client to a
 list of observers. The Broker MUST return a response code of "2.05 Content"
@@ -686,7 +686,7 @@ URI Template:
 
 
 URI Template Variables:
-: ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.
+: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
 
@@ -750,8 +750,8 @@ Client1   Client2                                          Broker
 
 ## UNSUBSCRIBE
 
-If a CoAP pubsub broker allows clients to SUBSCRIBE to topics on the broker, it MUST allow Clients to unsubscribe from topics on the Broker using the CoAP
-Cancel Observation operation. A CoAP pubsub Client wishing to unsubscribe
+If a CoAP pub/sub broker allows clients to SUBSCRIBE to topics on the broker, it MUST allow Clients to unsubscribe from topics on the Broker using the CoAP
+Cancel Observation operation. A CoAP pub/sub Client wishing to unsubscribe
 to a topic on a Broker MUST either use CoAP GET with Observe using an Observe
 parameter of 1 or send a CoAP Reset message in response to a publish, as
 per {{RFC7641}}.
@@ -775,7 +775,7 @@ URI Template:
 
 
 URI Template Variables:
-: ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.
+: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
 
@@ -823,7 +823,7 @@ Client                                          Broker
 
 ## READ
 
-A CoAP pubsub broker MAY accept Read requests on a topic using the the CoAP
+A CoAP pub/sub broker MAY accept Read requests on a topic using the the CoAP
 GET method if the content format of the request matches the content format the topic was created with.
 The broker MAY accept Read requests which specify content formats that the
 broker can supply as alternate content formats to the content format the
@@ -854,7 +854,7 @@ URI Template:
 
 
 URI Template Variables:
-: ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.
+: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
 
@@ -920,9 +920,9 @@ Client1   Client2                                          Broker
 
 ## REMOVE
 
-A CoAP pubsub broker MAY allow clientsremove a topics from the broker
+A CoAP pub/sub broker MAY allow clientsremove a topics from the broker
 using the CoAP Delete
-method on the URI of the topic. The CoAP pubsub Broker MUST return
+method on the URI of the topic. The CoAP pub/sub Broker MUST return
 "2.02 Deleted" if the removal is successful. The broker MUST
 return the appropriate 4.xx response code indicating the reason for
 failure if the topic can not be removed. When a topic is removed for
@@ -946,7 +946,7 @@ URI Template:
 
 
 URI Template Variables:
-: ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.
+: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
 
@@ -1000,35 +1000,35 @@ Client                                         Broker
 
 
 
-# CoAP pubsub Operation with Resource Directory
+# CoAP Pub/sub Operation with Resource Directory
 
-A CoAP pubsub Broker may register the base URI, which is the REST API entry point for a pubsub service, with a Resource
-Directory. A pubsub Client may use an RD to discover a pubsub Broker.
+A CoAP pub/sub Broker may register the base URI, which is the REST API entry point for a pub/sub service, with a Resource
+Directory. A pub/sub Client may use an RD to discover a pub/sub Broker.
 
-A CoAP pubsub Client may register links {{RFC6690}} with a Resource
-Directory to enable discovery of created pubsub topics. A pubsub
-Client may use an RD to discover pubsub Topics. A client which
-registers pubsub Topics with an RD MUST use the context relation (con)
+A CoAP pub/sub Client may register links {{RFC6690}} with a Resource
+Directory to enable discovery of created pub/sub topics. A pub/sub
+Client may use an RD to discover pub/sub Topics. A client which
+registers pub/sub Topics with an RD MUST use the context relation (con)
 {{I-D.ietf-core-resource-directory}} to indicate that the context of
-the registered links is the pubsub Broker.
+the registered links is the pub/sub Broker.
 
-A CoAP pubsub Broker may alternatively register links to its topics to
+A CoAP pub/sub Broker may alternatively register links to its topics to
 a Resource Directory by triggering the RD to retrieve it's links from
 .well-known/core.  In order to use this method, the links must first
-be exposed in the .well-known/core of the pubsub broker. See
+be exposed in the .well-known/core of the pub/sub broker. See
 {{discover}} in this document.
 
-The pubsub broker triggers the RD to retrieve its links by sending a
+The pub/sub broker triggers the RD to retrieve its links by sending a
 POST with an empty payload to the .well-known/core of the Resource
 Directory.  The RD server will then retrieve the links from the
-.well-known/core of the pubsub broker and incorporate them into the
+.well-known/core of the pub/sub broker and incorporate them into the
 Resource Directory. See {{I-D.ietf-core-resource-directory}} for
 further details.
 
 
 # Sleep-Wake Operation
 
-CoAP pubsub provides a way for client nodes to sleep between operations,
+CoAP pub/sub provides a way for client nodes to sleep between operations,
 conserving energy during idle periods. This is made possible by shifting
 the server role to the broker, allowing the broker to be always-on and respond
 to requests from other clients while a particular client is sleeping.
@@ -1067,10 +1067,10 @@ passed.
 
 # Security Considerations {#SecurityConsiderations}
 
-CoAP pubsub re-uses CoAP {{RFC7252}}, CoRE Resource Directory
+CoAP pub/sub re-uses CoAP {{RFC7252}}, CoRE Resource Directory
 {{I-D.ietf-core-resource-directory}}, and Web Linking {{RFC5988}} and
 therefore the security considerations of those documents also apply to
-this specification. Additionally, a CoAP pubsub broker and the clients
+this specification. Additionally, a CoAP pub/sub broker and the clients
 SHOULD authenticate each other and enforce access control policies. A
 malicious client could subscribe to data it is not authorized to or
 mount a denial of service attack against the broker by publishing a
@@ -1082,7 +1082,7 @@ data exchanged between these relevant parties. Provisioning the
 necessary credentials, trust anchors and authorization policies is
 non-trivial and subject of ongoing work.
 
-The use of a CoAP pubsub broker introduces challenges for the use of
+The use of a CoAP pub/sub broker introduces challenges for the use of
 end-to-end security between for example a client device on a sensor
 network and a client application running in a cloud-based server
 infrastructure since brokers terminate the exchange. While running
@@ -1104,7 +1104,7 @@ messages/requests are accepted. The broker would still be able to
 perform aggregation of data/requests collected.
 
 Depending on the level of trust users and system designers place in
-the CoAP pubsub broker, the use of end-to-end object security is
+the CoAP pub/sub broker, the use of end-to-end object security is
 RECOMMENDED as described in {{I-D.palombini-ace-coap-pubsub-profile}}.
 When only end-to-end encryption is necessary and the CoAP Broker is
 trusted, Payload Only Protection (Mode:PAYL) could be used. The
