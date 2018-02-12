@@ -1,7 +1,7 @@
 ---
 stand_alone: true
 ipr: trust200902
-docname: draft-ietf-core-coap-pubsub-02
+docname: draft-ietf-core-coap-pubsub-03
 cat: std
 pi:
   toc: 'yes'
