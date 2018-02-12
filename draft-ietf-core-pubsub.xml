@@ -41,7 +41,7 @@
       </address>
     </author>
 
-    <date year="2017"/>
+    <date year="2018"/>
 
     
     
@@ -107,20 +107,20 @@ this specification.</t>
 <t>This specification makes use of the following additional terminology:</t>
 
 <t><list style="hanging">
-  <t hangText='Publish-Subscribe (pubsub):'>
+  <t hangText='Publish-Subscribe (pub/sub):'>
   A messaging paradigm where messages are published to a broker and potential
 receivers can subscribe to the broker to receive messages. The publishers
 do not (need to) know where the message will be eventually sent: the publications
 and subscriptions are matched by a broker and publications are delivered
 by the broker to subscribed receivers.</t>
-  <t hangText='CoAP pubsub service:'>
+  <t hangText='CoAP pub/sub service:'>
   A group of REST resources, as defined in this document, which together implement the required features of this specification.</t>
-  <t hangText='CoAP pubsub Broker:'>
+  <t hangText='CoAP pub/sub Broker:'>
   A server node capable of receiving messages (publications) from and sending
 messages to other nodes, and able to match subscriptions and publications
 in order to route messages to the right destinations. The broker can also
 temporarily store publications to satisfy future subscriptions and pending notifications.</t>
-  <t hangText='CoAP pubsub Client:'>
+  <t hangText='CoAP pub/sub Client:'>
   A CoAP client which is capable of publish or subscribe operations as defined
 in this specification.</t>
   <t hangText='Topic:'>
@@ -132,38 +132,38 @@ is a valid CoAP URI as defined in <xref target="RFC7252"/></t>
 </section>
 <section anchor="architecture" title="Architecture">
 
-<section anchor="coap-pubsub-architecture" title="CoAP pubsub Architecture">
+<section anchor="coap-pubsub-architecture" title="CoAP Pub/sub Architecture">
 
-<t><xref target="arch-fig"/> shows the architecture of a CoAP pubsub service. CoAP pubsub Clients interact
-with a CoAP pubsub Broker through the CoAP pubsub REST API which is hosted by
+<t><xref target="arch-fig"/> shows the architecture of a CoAP pub/sub service. CoAP pub/sub Clients interact
+with a CoAP pub/sub Broker through the CoAP pub/sub REST API which is hosted by
 the Broker. State information is updated between the Clients and the Broker.
-The CoAP pubsub Broker performs a store-and-forward of state update representations
-between certain CoAP pubsub Clients. Clients Subscribe to topics upon which
+The CoAP pub/sub Broker performs a store-and-forward of state update representations
+between certain CoAP pub/sub Clients. Clients Subscribe to topics upon which
 representations are Published by other Clients, which are forwarded by the
-Broker to the subscribing clients. A CoAP pubsub Broker may be used as a
+Broker to the subscribing clients. A CoAP pub/sub Broker may be used as a
 REST resource proxy, retaining the last published representation to supply
 in response to Read requests from Clients.</t>
 
-<figure title="CoAP pubsub Architecture" anchor="arch-fig"><artwork align="center"><![CDATA[
-Clients        pubsub         Broker
+<figure title="CoAP pub/sub Architecture" anchor="arch-fig"><artwork align="center"><![CDATA[
+Clients        pub/sub         Broker
 +-------+         |
 | CoAP  |         |
-|pubsub |---------|------+
+|pub/sub|---------|------+
 |Client |         |      |    +-------+
 +-------+         |      +----| CoAP  |
-                  |           |pubsub |
+                  |           |pub/sub|
 +-------+         |      +----|Broker |
 | CoAP  |         |      |    +-------+
-|pubsub |---------|------+
+|pub/sub|---------|------+
 |Client |         |
 +-------+         |
 
 ]]></artwork></figure>
 
 </section>
-<section anchor="coap-pubsub-broker" title="CoAP pubsub Broker">
+<section anchor="coap-pubsub-broker" title="CoAP Pub/sub Broker">
 
-<t>A CoAP pubsub Broker is a CoAP Server that exposes a REST API for clients
+<t>A CoAP pub/sub Broker is a CoAP Server that exposes a REST API for clients
 to use to initiate publish-subscribe interactions. Avoiding the need
 for direct reachability between clients, the broker only needs to be
 reachable from all clients. The broker also needs to have sufficient
@@ -171,50 +171,50 @@ resources (storage, bandwidth, etc.) to host CoAP resource services,
 and potentially buffer messages, on behalf of the clients.</t>
 
 </section>
-<section anchor="coap-pubsub-client" title="CoAP pubsub Client">
+<section anchor="coap-pubsub-client" title="CoAP Pub/sub Client">
 
-<t>A CoAP pubsub Client interacts with a CoAP pubsub Broker using the CoAP pubsub
-REST API defined in this document. Clients initiate interactions with a CoAP pubsub broker. A data source
+<t>A CoAP pub/sub Client interacts with a CoAP pub/sub Broker using the CoAP pub/sub
+REST API defined in this document. Clients initiate interactions with a CoAP pub/sub broker. A data source
 (e.g., sensor clients) can publish state updates to the broker and data sinks
 (e.g., actuator clients) can read from or subscribe to state updates from
 the broker. Application clients can make use of both publish and subscribe
 in order to exchange state updates with data sources and data sinks.</t>
 
 </section>
-<section anchor="coap-pubsub-topic" title="CoAP pubsub Topic">
+<section anchor="coap-pubsub-topic" title="CoAP Pub/sub Topic">
 
 <t>The clients and broker use topics to identify a particular resource or
 object in a publish-subscribe system. Topics are conventionally formed
 as a hierarchy, e.g. “/sensors/weather/barometer/pressure” or
 “EP-33543/sen/3303/0/5700”.  The topics are hosted at the broker and
 all the clients using the broker share the same namespace for
-topics. Every CoAP pubsub topic has a link, consisting of a reference
+topics. Every CoAP pub/sub topic has a link, consisting of a reference
 path on the broker using URI path <xref target="RFC3986"/> construction and link
 attributes <xref target="RFC6690"/>. Every topic is associated with zero or more
 stored representations with a content-format specified in the link. A
-CoAP pubsub topic value may alternatively be a collection of one or
+CoAP pub/sub topic value may alternatively be a collection of one or
 more sub-topics, consisting of links to the sub-topic URIs and
 indicated by a link-format content-format.</t>
 
 </section>
-<section anchor="brokerless-pubsub" title="Brokerless pubsub">
+<section anchor="brokerless-pubsub" title="Brokerless Pub/sub">
 
-<t><xref target="brokerless"/> shows an arrangement for using CoAP pubsub in a
+<t><xref target="brokerless"/> shows an arrangement for using CoAP pub/sub in a
 “brokerless” configuration between peer nodes. Nodes in a brokerless
 system may act as both broker and client. The Broker interface in a
 brokerless node may be pre-configured with topics that expose services
 and resources. Brokerless peer nodes can be mixed with client and
 broker nodes in a system with full interoperability.</t>
 
-<figure title="Brokerless pubsub" anchor="brokerless"><artwork align="center"><![CDATA[
-  Peer         pubsub          Peer
+<figure title="Brokerless pub/sub" anchor="brokerless"><artwork align="center"><![CDATA[
+  Peer         pub/sub          Peer
 +-------+         |         +-------+
 | CoAP  |         |         | CoAP  |
-|pubsub |---------|---------|pubsub |
+|pub/sub|---------|---------|pub/sub|
 |Client |         |         |Broker |
 +-------+         |         +-------+
 | CoAP  |         |         | CoAP  |
-|pubsub |---------|---------|pubsub |
+|pub/sub|---------|---------|pub/sub|
 |Broker |         |         |Client |
 +-------+         |         +-------+
 
@@ -222,43 +222,43 @@ broker nodes in a system with full interoperability.</t>
 
 </section>
 </section>
-<section anchor="function-set" title="CoAP pubsub REST API">
+<section anchor="function-set" title="CoAP Pub/sub REST API">
 
-<t>This section defines the REST API exposed by a CoAP pubsub Broker to pubsub
+<t>This section defines the REST API exposed by a CoAP pub/sub Broker to pub/sub
 Clients.  The examples throughout this section assume the use of CoAP
-<xref target="RFC7252"/>. A CoAP pubsub Broker implementing this specification SHOULD
+<xref target="RFC7252"/>. A CoAP pub/sub Broker implementing this specification SHOULD
 support the DISCOVERY, CREATE, PUBLISH, SUBSCRIBE, UNSUBSCRIBE, READ,
-and REMOVE operations defined in this section. Optimized implementations 
-MAY support a subset of the operations as required by particular constrained 
+and REMOVE operations defined in this section. Optimized implementations
+MAY support a subset of the operations as required by particular constrained
 use cases.</t>
 
 <section anchor="discover" title="DISCOVERY">
 
-<t>CoAP pubsub Clients discover CoAP pubsub Brokers by using CoAP Simple
+<t>CoAP pub/sub Clients discover CoAP pub/sub Brokers by using CoAP Simple
 Discovery or through a Resource Directory (RD)
-<xref target="I-D.ietf-core-resource-directory"/>. A CoAP pubsub Broker SHOULD
+<xref target="I-D.ietf-core-resource-directory"/>. A CoAP pub/sub Broker SHOULD
 indicate its presence and availability on a network by exposing a link
-to the entry point of its pubsub API at its .well-known/core location <xref target="RFC6690"/>. A CoAP
-pubsub broker MAY register its pubsub REST API entry point with a Resource
+to the entry point of its pub/sub API at its .well-known/core location <xref target="RFC6690"/>. A CoAP
+pub/sub broker MAY register its pub/sub REST API entry point with a Resource
 Directory. <xref target="discover-fig"/> shows an example of a client discovering a
-local pubsub API using CoAP Simple Discovery. A broker wishing to
-advertise the CoAP pubsub API for Simple Discovery or through a
+local pub/sub API using CoAP Simple Discovery. A broker wishing to
+advertise the CoAP pub/sub API for Simple Discovery or through a
 Resource Directory MUST use the link relation rt=core.ps. A broker MAY
 advertise its supported content formats and other attributes in the
-link to its pubsub API.</t>
+link to its pub/sub API.</t>
 
-<t>A CoAP pubsub Broker MAY offer a topic discovery entry point to enable Clients
+<t>A CoAP pub/sub Broker MAY offer a topic discovery entry point to enable Clients
 to find topics of interest, either by topic name or by link attributes
 which may be registered when the topic is
 created. <xref target="discover-topic-fig"/> shows an example of a client looking
 for a topic with a resource type (rt) of “temperature” using
 Discover. The client then receives the URI of the resource and its
-content-format. A pubsub broker wishing to advertize topic discovery
+content-format. A pub/sub broker wishing to advertize topic discovery
 MUST use the relation rt=core.ps.discover in the link.</t>
 
-<t>A CoAP pubsub Broker MAY expose the Discover interface through the
+<t>A CoAP pub/sub Broker MAY expose the Discover interface through the
 .well-known/core resource. Links to topics may be exposed at
-.well-known/core in addition to links to the pubsub
+.well-known/core in addition to links to the pub/sub
 API. <xref target="discover-topic-wk-fig"/> shows an example of topic discovery
 through .well-known/core.</t>
 
@@ -270,9 +270,9 @@ through .well-known/core.</t>
   <t hangText='Method:'>
   GET</t>
   <t hangText='URI Template:'>
-  /{+ps}/{+topic}{?q*}</t>
+  {+ps}/{+topic}{?q*}</t>
   <t hangText='URI Template Variables:'>
-  ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.</t>
+  ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.</t>
   <t>topic := The desired topic to return links for (optional).</t>
   <t>q := Query Filter (optional). MAY contain a query filter list as per
  <xref target="RFC6690"/> Section 4.1.</t>
@@ -285,8 +285,8 @@ through .well-known/core.</t>
 <t><list style="hanging">
   <t hangText='Success:'>
   2.05 “Content” with an application/link-format payload containing
-one or more matching entries for the broker resource. A pubsub
-broker SHOULD use the value “/ps/” for the base URI of the pubsub
+one or more matching entries for the broker resource. A pub/sub
+broker SHOULD use the value “/ps/” for the base URI of the pub/sub
 API wherever possible.</t>
   <t hangText='Failure:'>
   4.04 “Not Found” is returned in case no matching entry is found for
@@ -298,7 +298,7 @@ request.</t>
   No error response to a multicast request.</t>
 </list></t>
 
-<figure title="Example of DISCOVER pubsub function" anchor="discover-fig"><artwork align="center"><![CDATA[
+<figure title="Example of DISCOVER pub/sub function" anchor="discover-fig"><artwork align="center"><![CDATA[
 Client                                          Broker
   |                                               |
   | ------ GET /.well-known/core?rt=core.ps ---->>|
@@ -337,8 +337,9 @@ Client                                          Broker
 </section>
 <section anchor="create" title="CREATE">
 
-<t>A CoAP pubsub broker MAY allow Clients to create new topics on the 
-broker using CREATE. A client wishing
+<t>A CoAP pubsub broker SHOULD allow Clients to create new topics on the
+broker using CREATE. Some exceptions are for fixed brokerless devices
+and pre-configured brokers in dedicated installations. A client wishing
 to create a topic MUST use CoAP POST to the pubsub API with a payload
 indicating the desired topic. The topic specification sent in the
 payload MUST use a supported serialization of the CoRE link format
@@ -374,9 +375,9 @@ shown in <xref target="create-sub-fig"/>.</t>
   <t hangText='Method:'>
   POST</t>
   <t hangText='URI Template:'>
-  /{+ps}/{+topic}{?q*}</t>
+  {+ps}/{+topic}{?q*}</t>
   <t hangText='URI Template Variables:'>
-  ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.</t>
+  ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.</t>
   <t>topic := The desired topic to return links for (optional).</t>
   <t>q := Query Filter (optional). MAY contain a query filter list as per
  <xref target="RFC6690"/> Section 4.1.</t>
@@ -435,9 +436,9 @@ Client                                          Broker
 </section>
 <section anchor="publish" title="PUBLISH">
 
-<t>A CoAP pubsub broker MAY allow clients to PUBLISH to topics on
+<t>A CoAP pub/sub broker MAY allow clients to PUBLISH to topics on
 the broker. A client MAY use the PUT or the POST method to publish
-state updates to the CoAP pubsub Broker. A client MUST use the content
+state updates to the CoAP pub/sub Broker. A client MUST use the content
 format specified upon creation of a given topic to publish updates to
 that topic. The broker MUST reject publish operations which do not use
 the specified content format.  A CoAP client publishing on a topic MAY
@@ -466,7 +467,7 @@ the URI of the created topic, including all of the created path segments,
 returned via the Location-Path option.</t>
 
 <t>A Broker MAY accept PUBLISH operations using the POST method. If a
-broker accepts PUBLISH using POST it shall respond with the 2.04 Changed 
+broker accepts PUBLISH using POST it shall respond with the 2.04 Changed
 status code.</t>
 
 <t>A Broker MAY perform garbage collection of stored representations
@@ -490,9 +491,9 @@ subscribed clients.</t>
   <t hangText='Method:'>
   PUT, POST</t>
   <t hangText='URI Template:'>
-  /{+ps}/{+topic}{?q*}</t>
+  {+ps}/{+topic}{?q*}</t>
   <t hangText='URI Template Variables:'>
-  ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.</t>
+  ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.</t>
   <t>topic := The desired topic to return links for (optional).</t>
   <t>q := Query Filter (optional). MAY contain a query filter list as per
  <xref target="RFC6690"/> Section 4.1.</t>
@@ -552,9 +553,9 @@ Client                                          Broker
 </section>
 <section anchor="subscribe" title="SUBSCRIBE">
 
-<t>A CoAP pubsub broker MAY allow Clients to subscribe to topics on the Broker 
-using CoAP Observe as described in <xref target="RFC7641"/>. A CoAP pubsub Client wishing 
-to Subscribe to a topic on a broker MUST use a CoAP GET with the Observe 
+<t>A CoAP pub/sub broker MAY allow Clients to subscribe to topics on the Broker
+using CoAP Observe as described in <xref target="RFC7641"/>. A CoAP pub/sub Client wishing
+to Subscribe to a topic on a broker MUST use a CoAP GET with the Observe
 option set to 0 (zero). The Broker MAY add the client to a
 list of observers. The Broker MUST return a response code of “2.05 Content”
 along with the most recently published value if the topic contains a valid
@@ -590,9 +591,9 @@ option, as per <xref target="RFC7641"/> Section 4.2, to the removed Subscriber.<
   <t hangText='Options:'>
   Observe:0</t>
   <t hangText='URI Template:'>
-  /{+ps}/{+topic}{?q*}</t>
+  {+ps}/{+topic}{?q*}</t>
   <t hangText='URI Template Variables:'>
-  ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.</t>
+  ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.</t>
   <t>topic := The desired topic to return links for (optional).</t>
   <t>q := Query Filter (optional). MAY contain a query filter list as per
  <xref target="RFC6690"/> Section 4.1.</t>
@@ -640,8 +641,8 @@ Client1   Client2                                          Broker
 </section>
 <section anchor="unsubscribe" title="UNSUBSCRIBE">
 
-<t>If a CoAP pubsub broker allows clients to SUBSCRIBE to topics on the broker, it MUST allow Clients to unsubscribe from topics on the Broker using the CoAP
-Cancel Observation operation. A CoAP pubsub Client wishing to unsubscribe
+<t>If a CoAP pub/sub broker allows clients to SUBSCRIBE to topics on the broker, it MUST allow Clients to unsubscribe from topics on the Broker using the CoAP
+Cancel Observation operation. A CoAP pub/sub Client wishing to unsubscribe
 to a topic on a Broker MUST either use CoAP GET with Observe using an Observe
 parameter of 1 or send a CoAP Reset message in response to a publish, as
 per <xref target="RFC7641"/>.</t>
@@ -656,9 +657,9 @@ per <xref target="RFC7641"/>.</t>
   <t hangText='Options:'>
   Observe:1</t>
   <t hangText='URI Template:'>
-  /{+ps}/{+topic}{?q*}</t>
+  {+ps}/{+topic}{?q*}</t>
   <t hangText='URI Template Variables:'>
-  ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.</t>
+  ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.</t>
   <t>topic := The desired topic to return links for (optional).</t>
   <t>q := Query Filter (optional). MAY contain a query filter list as per
  <xref target="RFC6690"/> Section 4.1.</t>
@@ -695,7 +696,7 @@ Client                                          Broker
 </section>
 <section anchor="read" title="READ">
 
-<t>A CoAP pubsub broker MAY accept Read requests on a topic using the the CoAP
+<t>A CoAP pub/sub broker MAY accept Read requests on a topic using the the CoAP
 GET method if the content format of the request matches the content format the topic was created with.
 The broker MAY accept Read requests which specify content formats that the
 broker can supply as alternate content formats to the content format the
@@ -719,9 +720,9 @@ content format.</t>
   <t hangText='Method:'>
   GET</t>
   <t hangText='URI Template:'>
-  /{+ps}/{+topic}{?q*}</t>
+  {+ps}/{+topic}{?q*}</t>
   <t hangText='URI Template Variables:'>
-  ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.</t>
+  ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.</t>
   <t>topic := The desired topic to return links for (optional).</t>
   <t>q := Query Filter (optional). MAY contain a query filter list as per
  <xref target="RFC6690"/> Section 4.1.</t>
@@ -771,9 +772,9 @@ Client1   Client2                                          Broker
 </section>
 <section anchor="remove" title="REMOVE">
 
-<t>A CoAP pubsub broker MAY allow clientsremove a topics from the broker
+<t>A CoAP pub/sub broker MAY allow clientsremove a topics from the broker
 using the CoAP Delete
-method on the URI of the topic. The CoAP pubsub Broker MUST return
+method on the URI of the topic. The CoAP pub/sub Broker MUST return
 “2.02 Deleted” if the removal is successful. The broker MUST
 return the appropriate 4.xx response code indicating the reason for
 failure if the topic can not be removed. When a topic is removed for
@@ -790,9 +791,9 @@ removed, then all of its sub-topics MUST be recursively removed.</t>
   <t hangText='Method:'>
   DELETE</t>
   <t hangText='URI Template:'>
-  /{+ps}/{+topic}{?q*}</t>
+  {+ps}/{+topic}{?q*}</t>
   <t hangText='URI Template Variables:'>
-  ps := pubsub REST API entry point (optional). The entry point of the pubsub REST API, as obtained from discovery, used to discover topics.</t>
+  ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.</t>
   <t>topic := The desired topic to return links for (optional).</t>
   <t>q := Query Filter (optional). MAY contain a query filter list as per
  <xref target="RFC6690"/> Section 4.1.</t>
@@ -830,35 +831,35 @@ Client                                         Broker
 
 </section>
 </section>
-<section anchor="coap-pubsub-operation-with-resource-directory" title="CoAP pubsub Operation with Resource Directory">
+<section anchor="coap-pubsub-operation-with-resource-directory" title="CoAP Pub/sub Operation with Resource Directory">
 
-<t>A CoAP pubsub Broker may register the base URI, which is the REST API entry point for a pubsub service, with a Resource
-Directory. A pubsub Client may use an RD to discover a pubsub Broker.</t>
+<t>A CoAP pub/sub Broker may register the base URI, which is the REST API entry point for a pub/sub service, with a Resource
+Directory. A pub/sub Client may use an RD to discover a pub/sub Broker.</t>
 
-<t>A CoAP pubsub Client may register links <xref target="RFC6690"/> with a Resource
-Directory to enable discovery of created pubsub topics. A pubsub
-Client may use an RD to discover pubsub Topics. A client which
-registers pubsub Topics with an RD MUST use the context relation (con)
+<t>A CoAP pub/sub Client may register links <xref target="RFC6690"/> with a Resource
+Directory to enable discovery of created pub/sub topics. A pub/sub
+Client may use an RD to discover pub/sub Topics. A client which
+registers pub/sub Topics with an RD MUST use the context relation (con)
 <xref target="I-D.ietf-core-resource-directory"/> to indicate that the context of
-the registered links is the pubsub Broker.</t>
+the registered links is the pub/sub Broker.</t>
 
-<t>A CoAP pubsub Broker may alternatively register links to its topics to
+<t>A CoAP pub/sub Broker may alternatively register links to its topics to
 a Resource Directory by triggering the RD to retrieve it’s links from
 .well-known/core.  In order to use this method, the links must first
-be exposed in the .well-known/core of the pubsub broker. See
+be exposed in the .well-known/core of the pub/sub broker. See
 <xref target="discover"/> in this document.</t>
 
-<t>The pubsub broker triggers the RD to retrieve its links by sending a
+<t>The pub/sub broker triggers the RD to retrieve its links by sending a
 POST with an empty payload to the .well-known/core of the Resource
 Directory.  The RD server will then retrieve the links from the
-.well-known/core of the pubsub broker and incorporate them into the
+.well-known/core of the pub/sub broker and incorporate them into the
 Resource Directory. See <xref target="I-D.ietf-core-resource-directory"/> for
 further details.</t>
 
 </section>
 <section anchor="sleep-wake-operation" title="Sleep-Wake Operation">
 
-<t>CoAP pubsub provides a way for client nodes to sleep between operations,
+<t>CoAP pub/sub provides a way for client nodes to sleep between operations,
 conserving energy during idle periods. This is made possible by shifting
 the server role to the broker, allowing the broker to be always-on and respond
 to requests from other clients while a particular client is sleeping.</t>
@@ -897,10 +898,10 @@ passed.</t>
 </section>
 <section anchor="SecurityConsiderations" title="Security Considerations">
 
-<t>CoAP pubsub re-uses CoAP <xref target="RFC7252"/>, CoRE Resource Directory
+<t>CoAP pub/sub re-uses CoAP <xref target="RFC7252"/>, CoRE Resource Directory
 <xref target="I-D.ietf-core-resource-directory"/>, and Web Linking <xref target="RFC5988"/> and
 therefore the security considerations of those documents also apply to
-this specification. Additionally, a CoAP pubsub broker and the clients
+this specification. Additionally, a CoAP pub/sub broker and the clients
 SHOULD authenticate each other and enforce access control policies. A
 malicious client could subscribe to data it is not authorized to or
 mount a denial of service attack against the broker by publishing a
@@ -912,7 +913,7 @@ data exchanged between these relevant parties. Provisioning the
 necessary credentials, trust anchors and authorization policies is
 non-trivial and subject of ongoing work.</t>
 
-<t>The use of a CoAP pubsub broker introduces challenges for the use of
+<t>The use of a CoAP pub/sub broker introduces challenges for the use of
 end-to-end security between for example a client device on a sensor
 network and a client application running in a cloud-based server
 infrastructure since brokers terminate the exchange. While running
@@ -934,10 +935,9 @@ messages/requests are accepted. The broker would still be able to
 perform aggregation of data/requests collected.</t>
 
 <t>Depending on the level of trust users and system designers place in
-the CoAP pubsub broker, the use of end-to-end object security is
-RECOMMENDED as described in <xref target="I-D.palombini-ace-coap-pubsub-profile"/>.</t>
-
-<t>When only end-to-end encryption is necessary and the CoAP Broker is
+the CoAP pub/sub broker, the use of end-to-end object security is
+RECOMMENDED as described in <xref target="I-D.palombini-ace-coap-pubsub-profile"/>.
+When only end-to-end encryption is necessary and the CoAP Broker is
 trusted, Payload Only Protection (Mode:PAYL) could be used. The
 Publisher would wrap only the payload before sending it to the broker
 and set the option Content-Format to application/smpayl. Upon
@@ -1013,7 +1013,7 @@ and Olaf Bergmann for their contributions and reviews.</t>
 
 
 
-<reference  anchor="RFC3986" target='http://www.rfc-editor.org/info/rfc3986'>
+<reference  anchor="RFC3986" target='https://www.rfc-editor.org/info/rfc3986'>
 <front>
 <title>Uniform Resource Identifier (URI): Generic Syntax</title>
 <author initials='T.' surname='Berners-Lee' fullname='T. Berners-Lee'><organization /></author>
@@ -1029,7 +1029,7 @@ and Olaf Bergmann for their contributions and reviews.</t>
 
 
 
-<reference  anchor="RFC2119" target='http://www.rfc-editor.org/info/rfc2119'>
+<reference  anchor="RFC2119" target='https://www.rfc-editor.org/info/rfc2119'>
 <front>
 <title>Key words for use in RFCs to Indicate Requirement Levels</title>
 <author initials='S.' surname='Bradner' fullname='S. Bradner'><organization /></author>
@@ -1043,7 +1043,7 @@ and Olaf Bergmann for their contributions and reviews.</t>
 
 
 
-<reference  anchor="RFC6690" target='http://www.rfc-editor.org/info/rfc6690'>
+<reference  anchor="RFC6690" target='https://www.rfc-editor.org/info/rfc6690'>
 <front>
 <title>Constrained RESTful Environments (CoRE) Link Format</title>
 <author initials='Z.' surname='Shelby' fullname='Z. Shelby'><organization /></author>
@@ -1056,7 +1056,7 @@ and Olaf Bergmann for their contributions and reviews.</t>
 
 
 
-<reference  anchor="RFC6570" target='http://www.rfc-editor.org/info/rfc6570'>
+<reference  anchor="RFC6570" target='https://www.rfc-editor.org/info/rfc6570'>
 <front>
 <title>URI Template</title>
 <author initials='J.' surname='Gregorio' fullname='J. Gregorio'><organization /></author>
@@ -1073,7 +1073,7 @@ and Olaf Bergmann for their contributions and reviews.</t>
 
 
 
-<reference  anchor="RFC7641" target='http://www.rfc-editor.org/info/rfc7641'>
+<reference  anchor="RFC7641" target='https://www.rfc-editor.org/info/rfc7641'>
 <front>
 <title>Observing Resources in the Constrained Application Protocol (CoAP)</title>
 <author initials='K.' surname='Hartke' fullname='K. Hartke'><organization /></author>
@@ -1086,7 +1086,7 @@ and Olaf Bergmann for their contributions and reviews.</t>
 
 
 
-<reference  anchor="RFC7252" target='http://www.rfc-editor.org/info/rfc7252'>
+<reference  anchor="RFC7252" target='https://www.rfc-editor.org/info/rfc7252'>
 <front>
 <title>The Constrained Application Protocol (CoAP)</title>
 <author initials='Z.' surname='Shelby' fullname='Z. Shelby'><organization /></author>
@@ -1151,15 +1151,15 @@ and Olaf Bergmann for their contributions and reviews.</t>
     <organization />
 </author>
 
-<date month='March' day='13' year='2017' />
+<date month='September' day='28' year='2017' />
 
 <abstract><t>This specification defines a profile for authentication and authorization for publishers and subscribers in a pub-sub setting scenario in a constrained environment, using the ACE framework.  This profile relies on transport layer or application layer security to authorize the publisher to the broker.  Moreover, it relies on application layer security for publisher-broker and subscriber-broker communication.</t></abstract>
 
 </front>
 
-<seriesInfo name='Internet-Draft' value='draft-palombini-ace-coap-pubsub-profile-00' />
+<seriesInfo name='Internet-Draft' value='draft-palombini-ace-coap-pubsub-profile-01' />
 <format type='TXT'
-        target='http://www.ietf.org/internet-drafts/draft-palombini-ace-coap-pubsub-profile-00.txt' />
+        target='http://www.ietf.org/internet-drafts/draft-palombini-ace-coap-pubsub-profile-01.txt' />
 </reference>
 
 
@@ -1184,20 +1184,24 @@ and Olaf Bergmann for their contributions and reviews.</t>
     <organization />
 </author>
 
-<date month='March' day='13' year='2017' />
+<author initials='C' surname='Amsuess' fullname='Christian Amsuess'>
+    <organization />
+</author>
+
+<date month='October' day='30' year='2017' />
 
 <abstract><t>In many M2M applications, direct discovery of resources is not practical due to sleeping nodes, disperse networks, or networks where multicast traffic is inefficient.  These problems can be solved by employing an entity called a Resource Directory (RD), which hosts descriptions of resources held on other servers, allowing lookups to be performed for those resources.  This document specifies the web interfaces that a Resource Directory supports in order for web servers to discover the RD and to register, maintain, lookup and remove resource descriptions.  Furthermore, new link attributes useful in conjunction with an RD are defined.</t></abstract>
 
 </front>
 
-<seriesInfo name='Internet-Draft' value='draft-ietf-core-resource-directory-10' />
+<seriesInfo name='Internet-Draft' value='draft-ietf-core-resource-directory-12' />
 <format type='TXT'
-        target='http://www.ietf.org/internet-drafts/draft-ietf-core-resource-directory-10.txt' />
+        target='http://www.ietf.org/internet-drafts/draft-ietf-core-resource-directory-12.txt' />
 </reference>
 
 
 
-<reference  anchor="RFC5988" target='http://www.rfc-editor.org/info/rfc5988'>
+<reference  anchor="RFC5988" target='https://www.rfc-editor.org/info/rfc5988'>
 <front>
 <title>Web Linking</title>
 <author initials='M.' surname='Nottingham' fullname='M. Nottingham'><organization /></author>
@@ -1218,238 +1222,240 @@ and Olaf Bergmann for their contributions and reviews.</t>
   </back>
 
 <!-- ##markdown-source:
-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
+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
+Dc2R7te5uSE1jpuuYxii+h9KfuygD54AAA==
 
 -->
 

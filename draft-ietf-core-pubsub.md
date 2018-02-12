@@ -18,7 +18,7 @@ pi:
 title: Publish-Subscribe Broker for the Constrained Application Protocol (CoAP)
 abbrev: Publish-Subscribe Broker for CoAP
 kw: Internet-Draft
-date: 2017
+date: 2018
 author:
 - ins: M. K. Koster
   name: Michael Koster
@@ -230,8 +230,8 @@ This section defines the REST API exposed by a CoAP pub/sub Broker to pub/sub
 Clients.  The examples throughout this section assume the use of CoAP
 {{RFC7252}}. A CoAP pub/sub Broker implementing this specification SHOULD
 support the DISCOVERY, CREATE, PUBLISH, SUBSCRIBE, UNSUBSCRIBE, READ,
-and REMOVE operations defined in this section. Optimized implementations 
-MAY support a subset of the operations as required by particular constrained 
+and REMOVE operations defined in this section. Optimized implementations
+MAY support a subset of the operations as required by particular constrained
 use cases.
 
 ## DISCOVERY {#discover}
@@ -368,7 +368,7 @@ Client                                          Broker
 
 ## CREATE
 
-A CoAP pubsub broker SHOULD allow Clients to create new topics on the 
+A CoAP pubsub broker SHOULD allow Clients to create new topics on the
 broker using CREATE. Some exceptions are for fixed brokerless devices
 and pre-configured brokers in dedicated installations. A client wishing
 to create a topic MUST use CoAP POST to the pubsub API with a payload
@@ -526,7 +526,7 @@ the URI of the created topic, including all of the created path segments,
 returned via the Location-Path option.
 
 A Broker MAY accept PUBLISH operations using the POST method. If a
-broker accepts PUBLISH using POST it shall respond with the 2.04 Changed 
+broker accepts PUBLISH using POST it shall respond with the 2.04 Changed
 status code.
 
 A Broker MAY perform garbage collection of stored representations
@@ -641,9 +641,9 @@ Client                                          Broker
 
 ## SUBSCRIBE
 
-A CoAP pub/sub broker MAY allow Clients to subscribe to topics on the Broker 
-using CoAP Observe as described in {{RFC7641}}. A CoAP pub/sub Client wishing 
-to Subscribe to a topic on a broker MUST use a CoAP GET with the Observe 
+A CoAP pub/sub broker MAY allow Clients to subscribe to topics on the Broker
+using CoAP Observe as described in {{RFC7641}}. A CoAP pub/sub Client wishing
+to Subscribe to a topic on a broker MUST use a CoAP GET with the Observe
 option set to 0 (zero). The Broker MAY add the client to a
 list of observers. The Broker MUST return a response code of "2.05 Content"
 along with the most recently published value if the topic contains a valid
