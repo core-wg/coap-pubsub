@@ -1150,16 +1150,13 @@ Registry.
 
 ## Response Code value '2.07'
 
-
-
 * Response Code: 2.07
 
-* Description: Add No Content response to GET to the existing definition of
-  the 2.07 response code.
+* Description: No Content
 
 * Reference: [[This document]]
 
-* Notes: The server sends this code to the client to indicate that the request was valid and accepted, but the responce may contain an empty payload. It is comparable to and may be proxied with the http 204 No Content status code.
+* Notes: The server sends this code to the client to indicate that the request was valid and accepted, but the response may contain an empty payload. It is comparable to and may be proxied with the HTTP 204 No Content status code.
 
 
 
