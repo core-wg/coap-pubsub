@@ -39,6 +39,7 @@ normative:
   RFC6570:
   RFC7641:
   RFC7252:
+  I-D.keranen-core-too-many-reqs:
 
 informative:
   I-D.selander-ace-object-security:
@@ -1053,10 +1054,11 @@ topics in a short period of time.
 
 If the broker is unable to serve a certain client that is sending
 publish messages too fast, the broker SHOULD respond with Response
-Code 4.29, "Too Many Requests" [REF TBD] and set the Max-Age Option to
-indicate the number of seconds after which the client can retry. The
-broker MAY stop creating notifications from the publish messages from
-this client and to this topic for the indicated time.
+Code 4.29, "Too Many Requests" {{I-D.keranen-core-too-many-reqs}} and
+set the Max-Age Option to indicate the number of seconds after which
+the client can retry. The broker MAY stop creating notifications from
+the publish messages from this client and to this topic for the
+indicated time.
 
 If a client receives the 4.29 Response Code from the broker for a
 publish message to a topic, it MUST NOT send new publish messages to
