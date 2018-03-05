@@ -40,7 +40,7 @@ normative:
   RFC7641:
   RFC7252:
 informative:
-  I-D.selander-ace-object-security:
+  I-D.ietf-core-object-security:
   I-D.palombini-ace-coap-pubsub-profile:
   I-D.ietf-core-resource-directory:
   RFC5988:
