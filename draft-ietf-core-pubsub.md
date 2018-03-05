@@ -39,6 +39,8 @@ normative:
   RFC6570:
   RFC7641:
   RFC7252:
+  I-D.keranen-core-too-many-reqs:
+
 informative:
   I-D.ietf-core-object-security:
   I-D.palombini-ace-coap-pubsub-profile:
@@ -1051,13 +1053,12 @@ may become overwhelmed if it receives many publish messages to popular
 topics in a short period of time.
 
 If the broker is unable to serve a certain client that is sending
-publish messages too fast, the broker MUST respond with Response Code
-4.29, "Too Many Requests". This Response Code is like HTTP 429 "Too
-Many Requests" but uses the Max-Age Option in place of the
-"Retry-After" header field to indicate the number of seconds after
-which to retry. The broker MAY stop creating notifications from the
-publish messages from this client and to this topic for the indicated
-time.
+publish messages too fast, the broker SHOULD respond with Response
+Code 4.29, "Too Many Requests" {{I-D.keranen-core-too-many-reqs}} and
+set the Max-Age Option to indicate the number of seconds after which
+the client can retry. The broker MAY stop creating notifications from
+the publish messages from this client and to this topic for the
+indicated time.
 
 If a client receives the 4.29 Response Code from the broker for a
 publish message to a topic, it MUST NOT send new publish messages to
@@ -1117,8 +1118,7 @@ it to the subscribers.
 # IANA Considerations {#iana}
 
 This document registers one attribute value in the Resource Type (rt=) registry
-established with {{RFC6690}} and appends to the definition of one CoAP Response Code in the CoRE Parameters
-Registry.
+established with {{RFC6690}} and appends to the definition of one CoAP Response Code in the CoRE Parameters Registry.
 
 ## Resource Type value 'core.ps'
 
@@ -1160,23 +1160,6 @@ Registry.
 * Reference: [[This document]]
 
 * Notes: The server sends this code to the client to indicate that the request was valid and accepted, but the responce may contain an empty payload. It is comparable to and may be proxied with the http 204 No Content status code.
-
-
-
-## Response Code value '4.29'
-
-
-
-* Response Code: 4.29
-
-* Description: This error code is used by a server to indicate that a client
-  is making too many requests on a resource.
-
-* Reference: [[This document]]
-
-* Notes: None
-
-
 
 
 # Acknowledgements {#acks}
