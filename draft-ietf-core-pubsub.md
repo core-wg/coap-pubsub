@@ -370,10 +370,10 @@ Client                                          Broker
 
 ## CREATE
 
-A CoAP pubsub broker SHOULD allow Clients to create new topics on the
+A CoAP pub/sub broker SHOULD allow Clients to create new topics on the
 broker using CREATE. Some exceptions are for fixed brokerless devices
 and pre-configured brokers in dedicated installations. A client wishing
-to create a topic MUST use CoAP POST to the pubsub API with a payload
+to create a topic MUST use a CoAP POST to the pub/sub API with a payload
 indicating the desired topic. The topic specification sent in the
 payload MUST use a supported serialization of the CoRE link format
 {{RFC6690}}. The target of the link MUST be a URI formatted
@@ -392,13 +392,13 @@ topic indefinitely if the Max-Age option is elided or is set to zero
 upon topic creation. The lifetime of a topic MUST be refreshed upon
 create operations with a target of an existing topic.
 
-Topics may be created as sub-topics of other topics. A client MAY
-create a topic with a ct (Content Format) link attribute value which
-describes a supported serialization of the CoRE link format
-{{RFC6690}} such as application/link-format (ct=40) or its JSON or
-CBOR serializations.  If a topic is created which describes a link
-serialization, that topic may then have sub-topics created under it as
-shown in {{create-sub-fig}}.
+Topic hierarchies can be created by creating parent topics. A parent
+topic is created with a POST using ct (Content Format) link attribute
+value which describes a supported serialization of the CoRE link
+format {{RFC6690}}, such as application/link-format (ct=40) or its
+JSON or CBOR serializations.  If a topic is created which describes a
+link serialization, that topic may then have sub-topics created under
+it as shown in {{create-sub-fig}}.
 
 The CREATE interface is specified as follows:
 
@@ -478,15 +478,15 @@ Client                                          Broker
 ~~~~
 Client                                          Broker
   |                                               |
-  | ------- POST /ps/ "<maintopic>;ct=40" ------->|
+  | ----- POST /ps/ "<parent-topic>;ct=40" ------>|
   |                                               |
   | <---------------- 2.01 Created ---------------|
-  |             Location: /ps/maintopic/          |
+  |            Location: /ps/parent-topic/        |
   |                                               |
-  | --- POST /ps/maintopic/ "<subtopic>;ct=50" -->|
+  |-- POST /ps/parent-topic/ "<subtopic>;ct=50" ->|
   |                                               |
   | <---------------- 2.01 Created ---------------|
-  |        Location: /ps/maintopic/subtopic       |
+  |       Location: /ps/parent-topic/subtopic     |
   |                                               |
   |                                               |
 
