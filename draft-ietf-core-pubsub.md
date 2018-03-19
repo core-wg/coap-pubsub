@@ -463,7 +463,7 @@ successfully created.
 ~~~~
 Client                                          Broker
   |                                               |
-  | ---------- POST /ps/ "<topic1>;ct=50" -------->|
+  | ---------- POST /ps/ "<topic1>;ct=50" ------->|
   |                                               |
   | <---------------- 2.01 Created ---------------|
   |               Location: /ps/topic1            |
@@ -478,20 +478,20 @@ Client                                          Broker
 ~~~~
 Client                                          Broker
   |                                               |
-  | ------- POST /ps/ "<mainTopic>;ct=40" ------->|
+  | ------- POST /ps/ "<maintopic>;ct=40" ------->|
   |                                               |
   | <---------------- 2.01 Created ---------------|
-  |             Location: /ps/mainTopic/          |
+  |             Location: /ps/maintopic/          |
   |                                               |
-  | --- POST /ps/mainTopic/ "<subTopic>;ct=50" -->|
+  | --- POST /ps/maintopic/ "<subtopic>;ct=50" -->|
   |                                               |
   | <---------------- 2.01 Created ---------------|
-  |        Location: /ps/mainTopic/subTopic       |
+  |        Location: /ps/maintopic/subtopic       |
   |                                               |
   |                                               |
 
 ~~~~
-{: #create-sub-fig title='Example of CREATE sub-topic' artwork-align="center"}
+{: #create-sub-fig title='Example of CREATE of topic hierarchy' artwork-align="center"}
 
 
 
