@@ -266,6 +266,12 @@ A CoAP pub/sub Broker MAY expose the Discover interface through the
 API. {{discover-topic-wk-fig}} shows an example of topic discovery
 through .well-known/core.
 
+Topics in the broker may be created in hierarchies (see {create}) with
+parent topics having sub-topics. For a discovery the broker may choose 
+to not expose the sub-topics in order to limit amount of topic links
+sent in a discovery response. The client can then perform discovery 
+for the parent topics it wants to discover the sub-topics. 
+
 The DISCOVER interface is specified as follows:
 
 Interaction:
@@ -368,7 +374,7 @@ Client                                          Broker
 
 
 
-## CREATE
+## CREATE {#create}
 
 A CoAP pubsub broker SHOULD allow Clients to create new topics on the
 broker using CREATE. Some exceptions are for fixed brokerless devices
