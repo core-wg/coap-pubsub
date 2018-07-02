@@ -1,7 +1,7 @@
 ---
 stand_alone: true
 ipr: trust200902
-docname: draft-ietf-core-coap-pubsub-03
+docname: draft-ietf-core-coap-pubsub-04
 cat: std
 pi:
   toc: 'yes'
@@ -39,8 +39,10 @@ normative:
   RFC6570:
   RFC7641:
   RFC7252:
+  I-D.keranen-core-too-many-reqs:
+
 informative:
-  I-D.selander-ace-object-security:
+  I-D.ietf-core-object-security:
   I-D.palombini-ace-coap-pubsub-profile:
   I-D.ietf-core-resource-directory:
   RFC5988:
@@ -255,7 +257,7 @@ which may be registered when the topic is
 created. {{discover-topic-fig}} shows an example of a client looking
 for a topic with a resource type (rt) of "temperature" using
 Discover. The client then receives the URI of the resource and its
-content-format. A pub/sub broker wishing to advertize topic discovery
+content-format. A pub/sub broker wishing to advertise topic discovery
 MUST use the relation rt=core.ps.discover in the link.
 
 A CoAP pub/sub Broker MAY expose the Discover interface through the
@@ -532,7 +534,7 @@ status code.
 A Broker MAY perform garbage collection of stored representations
 which have been delivered to all subscribers or which have timed
 out. A Broker MAY retain at least one most recently published
-representation to return in response to SUBSRCIBE and READ requests.
+representation to return in response to SUBSCRIBE and READ requests.
 
 A Broker MUST make a best-effort attempt to notify all clients
 subscribed on a particular topic each time it receives a publish on
@@ -920,7 +922,7 @@ Client1   Client2                                          Broker
 
 ## REMOVE
 
-A CoAP pub/sub broker MAY allow clientsremove a topics from the broker
+A CoAP pub/sub broker MAY allow clients to remove topics from the broker
 using the CoAP Delete
 method on the URI of the topic. The CoAP pub/sub Broker MUST return
 "2.02 Deleted" if the removal is successful. The broker MUST
@@ -1051,13 +1053,12 @@ may become overwhelmed if it receives many publish messages to popular
 topics in a short period of time.
 
 If the broker is unable to serve a certain client that is sending
-publish messages too fast, the broker MUST respond with Response Code
-4.29, "Too Many Requests". This Response Code is like HTTP 429 "Too
-Many Requests" but uses the Max-Age Option in place of the
-"Retry-After" header field to indicate the number of seconds after
-which to retry. The broker MAY stop creating notifications from the
-publish messages from this client and to this topic for the indicated
-time.
+publish messages too fast, the broker SHOULD respond with Response
+Code 4.29, "Too Many Requests" {{I-D.keranen-core-too-many-reqs}} and
+set the Max-Age Option to indicate the number of seconds after which
+the client can retry. The broker MAY stop creating notifications from
+the publish messages from this client and to this topic for the
+indicated time.
 
 If a client receives the 4.29 Response Code from the broker for a
 publish message to a topic, it MUST NOT send new publish messages to
@@ -1117,8 +1118,7 @@ it to the subscribers.
 # IANA Considerations {#iana}
 
 This document registers one attribute value in the Resource Type (rt=) registry
-established with {{RFC6690}} and appends to the definition of one CoAP Response Code in the CoRE Parameters
-Registry.
+established with {{RFC6690}} and appends to the definition of one CoAP Response Code in the CoRE Parameters Registry.
 
 ## Resource Type value 'core.ps'
 
@@ -1150,33 +1150,13 @@ Registry.
 
 ## Response Code value '2.07'
 
-
-
 * Response Code: 2.07
 
-* Description: Add No Content response to GET to the existing definition of
-  the 2.07 response code.
+* Description: No Content
 
 * Reference: [[This document]]
 
-* Notes: The server sends this code to the client to indicate that the request was valid and accepted, but the responce may contain an empty payload. It is comparable to and may be proxied with the http 204 No Content status code.
-
-
-
-## Response Code value '4.29'
-
-
-
-* Response Code: 4.29
-
-* Description: This error code is used by a server to indicate that a client
-  is making too many requests on a resource.
-
-* Reference: [[This document]]
-
-* Notes: None
-
-
+* Notes: The server sends this code to the client to indicate that the request was valid and accepted, but the response may contain an empty payload. It is comparable to and may be proxied with the HTTP 204 No Content status code.
 
 
 # Acknowledgements {#acks}
