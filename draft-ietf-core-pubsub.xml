@@ -17,7 +17,7 @@
 <?rfc compact="no"?>
 <?rfc subcompact="no"?>
 
-<rfc ipr="trust200902" docName="draft-ietf-core-coap-pubsub-03" category="std">
+<rfc ipr="trust200902" docName="draft-ietf-core-coap-pubsub-04" category="std">
 
   <front>
     <title abbrev="Publish-Subscribe Broker for CoAP">Publish-Subscribe Broker for the Constrained Application Protocol (CoAP)</title>
@@ -53,7 +53,7 @@
 <t>The Constrained Application Protocol (CoAP), and related extensions are intended
 to support machine-to-machine communication in systems where one or more
 nodes are resource constrained, in particular for low power wireless sensor
-networks. This document defines a publish-subscribe broker for CoAP that
+networks. This document defines a publish-subscribe Broker for CoAP that
 extends the capabilities of CoAP for supporting nodes with long breaks in
 connectivity and/or up-time.</t>
 
@@ -86,7 +86,7 @@ by the device.</t>
 
 <t>This document specifies the means for nodes with limited reachability to
 communicate using simple extensions to CoAP. The extensions enable publish-subscribe
-communication using a broker node that enables store-and-forward messaging
+communication using a Broker node that enables store-and-forward messaging
 between two or more nodes. Furthermore the extensions facilitate many-to-many
 communication using CoAP.</t>
 
@@ -101,31 +101,32 @@ specification are to be interpreted as described in <xref target="RFC2119"/>.</t
 concepts that are discussed in <xref target="RFC5988"/> and <xref target="RFC6690"/>. Readers
 should also be familiar with the terms and concepts discussed in
 <xref target="RFC7252"/> and <xref target="I-D.ietf-core-resource-directory"/>. The URI template
-format <xref target="RFC6570"/> is used to describe the REST interfaces defined in
+format <xref target="RFC6570"/> is used to describe the REST API defined in
 this specification.</t>
 
 <t>This specification makes use of the following additional terminology:</t>
 
 <t><list style="hanging">
   <t hangText='Publish-Subscribe (pub/sub):'>
-  A messaging paradigm where messages are published to a broker and potential
-receivers can subscribe to the broker to receive messages. The publishers
+  A messaging paradigm where messages are published to a Broker and potential
+receivers can subscribe to the Broker to receive messages. The publishers
 do not (need to) know where the message will be eventually sent: the publications
-and subscriptions are matched by a broker and publications are delivered
-by the broker to subscribed receivers.</t>
+and subscriptions are matched by a Broker and publications are delivered
+by the Broker to subscribed receivers.</t>
   <t hangText='CoAP pub/sub service:'>
-  A group of REST resources, as defined in this document, which together implement the required features of this specification.</t>
+  A group of REST resources, as defined in this document, which together
+implement the required features of this specification.</t>
   <t hangText='CoAP pub/sub Broker:'>
   A server node capable of receiving messages (publications) from and sending
 messages to other nodes, and able to match subscriptions and publications
-in order to route messages to the right destinations. The broker can also
+in order to route messages to the right destinations. The Broker can also
 temporarily store publications to satisfy future subscriptions and pending notifications.</t>
   <t hangText='CoAP pub/sub Client:'>
   A CoAP client which is capable of publish or subscribe operations as defined
 in this specification.</t>
   <t hangText='Topic:'>
   A unique identifier for a particular item being published and/or subscribed
-to. A broker uses the topics to match subscriptions to publications. A topic
+to. A Broker uses the topics to match subscriptions to publications. A topic
 is a valid CoAP URI as defined in <xref target="RFC7252"/></t>
 </list></t>
 
@@ -165,8 +166,8 @@ Clients        pub/sub         Broker
 
 <t>A CoAP pub/sub Broker is a CoAP Server that exposes a REST API for clients
 to use to initiate publish-subscribe interactions. Avoiding the need
-for direct reachability between clients, the broker only needs to be
-reachable from all clients. The broker also needs to have sufficient
+for direct reachability between clients, the Broker only needs to be
+reachable from all clients. The Broker also needs to have sufficient
 resources (storage, bandwidth, etc.) to host CoAP resource services,
 and potentially buffer messages, on behalf of the clients.</t>
 
@@ -174,37 +175,40 @@ and potentially buffer messages, on behalf of the clients.</t>
 <section anchor="coap-pubsub-client" title="CoAP Pub/sub Client">
 
 <t>A CoAP pub/sub Client interacts with a CoAP pub/sub Broker using the CoAP pub/sub
-REST API defined in this document. Clients initiate interactions with a CoAP pub/sub broker. A data source
-(e.g., sensor clients) can publish state updates to the broker and data sinks
+REST API defined in this document. Clients initiate interactions with a CoAP pub/sub Broker. A data source
+(e.g., sensor clients) can publish state updates to the Broker and data sinks
 (e.g., actuator clients) can read from or subscribe to state updates from
-the broker. Application clients can make use of both publish and subscribe
+the Broker. Application clients can make use of both publish and subscribe
 in order to exchange state updates with data sources and data sinks.</t>
 
 </section>
 <section anchor="coap-pubsub-topic" title="CoAP Pub/sub Topic">
 
-<t>The clients and broker use topics to identify a particular resource or
+<t>The clients and Broker use topics to identify a particular resource or
 object in a publish-subscribe system. Topics are conventionally formed
 as a hierarchy, e.g. “/sensors/weather/barometer/pressure” or
-“EP-33543/sen/3303/0/5700”.  The topics are hosted at the broker and
-all the clients using the broker share the same namespace for
-topics. Every CoAP pub/sub topic has a link, consisting of a reference
-path on the broker using URI path <xref target="RFC3986"/> construction and link
+“/EP-33543/sen/3303/0/5700”.  The topics are hosted by a Broker and
+all the clients using the Broker share the same namespace for
+topics. Every CoAP pub/sub topic has an associated link, consisting of a reference
+path on the Broker using URI path <xref target="RFC3986"/> construction and link
 attributes <xref target="RFC6690"/>. Every topic is associated with zero or more
-stored representations with a content-format specified in the link. A
-CoAP pub/sub topic value may alternatively be a collection of one or
+stored representations and a content-format specified in the link. A
+CoAP pub/sub topic value may alternatively consist of a collection of one or
 more sub-topics, consisting of links to the sub-topic URIs and
-indicated by a link-format content-format.</t>
+indicated by a link-format content-format. Sub-topics are also topics and
+may have their own sub-topics, forming a tree structure of unique paths that
+is implemented using URIs. The full URI of a topic includes a schems and authority
+for the Broker, for example “coaps://10.0.0.13:5684/EP-33543/sen/3303/0/5700”.</t>
 
 </section>
-<section anchor="brokerless-pubsub" title="Brokerless Pub/sub">
+<section anchor="brokerless-pubsub" title="brokerless Pub/sub">
 
 <t><xref target="brokerless"/> shows an arrangement for using CoAP pub/sub in a
-“brokerless” configuration between peer nodes. Nodes in a brokerless
-system may act as both broker and client. The Broker interface in a
-brokerless node may be pre-configured with topics that expose services
+“Brokerless” configuration between peer nodes. Nodes in a Brokerless
+system may act as both Broker and client. A node that supports Broker
+functionality may be pre-configured with topics that expose services
 and resources. Brokerless peer nodes can be mixed with client and
-broker nodes in a system with full interoperability.</t>
+Broker nodes in a system with full interoperability.</t>
 
 <figure title="Brokerless pub/sub" anchor="brokerless"><artwork align="center"><![CDATA[
   Peer         pub/sub          Peer
@@ -222,7 +226,7 @@ broker nodes in a system with full interoperability.</t>
 
 </section>
 </section>
-<section anchor="function-set" title="CoAP Pub/sub REST API">
+<section anchor="sec-rest-api" title="CoAP Pub/sub REST API">
 
 <t>This section defines the REST API exposed by a CoAP pub/sub Broker to pub/sub
 Clients.  The examples throughout this section assume the use of CoAP
@@ -239,11 +243,11 @@ Discovery or through a Resource Directory (RD)
 <xref target="I-D.ietf-core-resource-directory"/>. A CoAP pub/sub Broker SHOULD
 indicate its presence and availability on a network by exposing a link
 to the entry point of its pub/sub API at its .well-known/core location <xref target="RFC6690"/>. A CoAP
-pub/sub broker MAY register its pub/sub REST API entry point with a Resource
+pub/sub Broker MAY register its pub/sub REST API entry point with a Resource
 Directory. <xref target="discover-fig"/> shows an example of a client discovering a
-local pub/sub API using CoAP Simple Discovery. A broker wishing to
+local pub/sub API using CoAP Simple Discovery. A Broker wishing to
 advertise the CoAP pub/sub API for Simple Discovery or through a
-Resource Directory MUST use the link relation rt=core.ps. A broker MAY
+Resource Directory MUST use the link relation rt=core.ps. A Broker MAY
 advertise its supported content formats and other attributes in the
 link to its pub/sub API.</t>
 
@@ -253,16 +257,16 @@ which may be registered when the topic is
 created. <xref target="discover-topic-fig"/> shows an example of a client looking
 for a topic with a resource type (rt) of “temperature” using
 Discover. The client then receives the URI of the resource and its
-content-format. A pub/sub broker wishing to advertize topic discovery
+content-format. A pub/sub Broker wishing to advertise topic discovery
 MUST use the relation rt=core.ps.discover in the link.</t>
 
-<t>A CoAP pub/sub Broker MAY expose the Discover interface through the
+<t>A CoAP pub/sub Broker MAY provide topic discovery functionality through the
 .well-known/core resource. Links to topics may be exposed at
 .well-known/core in addition to links to the pub/sub
 API. <xref target="discover-topic-wk-fig"/> shows an example of topic discovery
 through .well-known/core.</t>
 
-<t>The DISCOVER interface is specified as follows:</t>
+<t>The DISCOVER operation is specified as follows:</t>
 
 <t><list style="hanging">
   <t hangText='Interaction:'>
@@ -280,13 +284,13 @@ through .well-known/core.</t>
   application/link-format</t>
 </list></t>
 
-<t>The following response codes are defined for this interface:</t>
+<t>The following response codes are defined for the DISCOVER operation:</t>
 
 <t><list style="hanging">
   <t hangText='Success:'>
   2.05 “Content” with an application/link-format payload containing
-one or more matching entries for the broker resource. A pub/sub
-broker SHOULD use the value “/ps/” for the base URI of the pub/sub
+one or more matching entries for the Broker resource. A pub/sub
+Broker SHOULD use the value “/ps/” for the base URI of the pub/sub
 API wherever possible.</t>
   <t hangText='Failure:'>
   4.04 “Not Found” is returned in case no matching entry is found for
@@ -335,11 +339,11 @@ Client                                          Broker
 ]]></artwork></figure>
 
 </section>
-<section anchor="create" title="CREATE">
+<section anchor="sec-create" title="CREATE">
 
-<t>A CoAP pubsub broker SHOULD allow Clients to create new topics on the
-broker using CREATE. Some exceptions are for fixed brokerless devices
-and pre-configured brokers in dedicated installations. A client wishing
+<t>A CoAP pubsub Broker SHOULD allow Clients to create new topics on the
+Broker using CREATE. Some exceptions are for fixed Brokerless devices
+and pre-configured Brokers in dedicated installations. A client wishing
 to create a topic MUST use CoAP POST to the pubsub API with a payload
 indicating the desired topic. The topic specification sent in the
 payload MUST use a supported serialization of the CoRE link format
@@ -349,16 +353,6 @@ publishes to the topic by using the ct (Content Format) link attribute
 in the link-format payload. The client MAY indicate the lifetime of
 the topic by including the Max-Age option in the CREATE request.</t>
 
-<t>A Broker MUST return a response code of “2.01 Created” if the topic is
-created and return the URI path of the created topic via Location-Path
-options. The broker MUST return the appropriate 4.xx response code
-indicating the reason for failure if a new topic can not be
-created. Broker SHOULD remove topics if the Max-Age of the topic is
-exceeded without any publishes to the topic.  Broker SHOULD retain a
-topic indefinitely if the Max-Age option is elided or is set to zero
-upon topic creation. The lifetime of a topic MUST be refreshed upon
-create operations with a target of an existing topic.</t>
-
 <t>Topics may be created as sub-topics of other topics. A client MAY
 create a topic with a ct (Content Format) link attribute value which
 describes a supported serialization of the CoRE link format
@@ -367,7 +361,29 @@ CBOR serializations.  If a topic is created which describes a link
 serialization, that topic may then have sub-topics created under it as
 shown in <xref target="create-sub-fig"/>.</t>
 
-<t>The CREATE interface is specified as follows:</t>
+<t>Ony one level in the topic hierarchy may be created as a result of a CREATE
+operation, unless create on PUBLISH is supported (see <xref target="sec-publish"/>).
+The topic string used in the link target MUST NOT contain the “/” character.</t>
+
+<t>A topic creator MUST include exactly one content format link attribute value (ct)
+in the create payload. If the Broker does not support the indicated format for
+both publish and subscribe, it MUST reject the operation with an error code of
+4.00 “Bad Request”.</t>
+
+<t>There is no default content format. If no ct is specified, the Broker MUST
+reject the operation with an error code of 4.00 “Bad Request”.</t>
+
+<t>A Broker MUST return a response code of “2.01 Created” if the topic is
+created and return the URI path of the created topic via Location-Path
+options. The Broker MUST return the appropriate 4.xx response code
+indicating the reason for failure if a new topic can not be
+created. Broker SHOULD remove topics if the Max-Age of the topic is
+exceeded without any publishes to the topic.  Broker SHOULD retain a
+topic indefinitely if the Max-Age option is elided or is set to zero
+upon topic creation. The lifetime of a topic MUST be refreshed upon
+create operations with a target of an existing topic.</t>
+
+<t>The CREATE operation is specified as follows:</t>
 
 <t><list style="hanging">
   <t hangText='Interaction:'>
@@ -375,19 +391,17 @@ shown in <xref target="create-sub-fig"/>.</t>
   <t hangText='Method:'>
   POST</t>
   <t hangText='URI Template:'>
-  {+ps}/{+topic}{?q*}</t>
+  {+ps}/{+topic}</t>
   <t hangText='URI Template Variables:'>
   ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.</t>
   <t>topic := The desired topic to return links for (optional).</t>
-  <t>q := Query Filter (optional). MAY contain a query filter list as per
- <xref target="RFC6690"/> Section 4.1.</t>
   <t hangText='Content-Format:'>
   application/link-format</t>
   <t hangText='Payload:'>
   The desired topic to CREATE</t>
 </list></t>
 
-<t>The following response codes are defined for this interface:</t>
+<t>The following response codes are defined for the CREATE operation:</t>
 
 <t><list style="hanging">
   <t hangText='Success:'>
@@ -408,7 +422,7 @@ successfully created.</t>
 <figure title="Example of CREATE topic" anchor="create-fig"><artwork align="center"><![CDATA[
 Client                                          Broker
   |                                               |
-  | ---------- POST /ps/ "<topic1>;ct=50" -------->|
+  | ---------- POST /ps/ "<topic1>;ct=50" ------->|
   |                                               |
   | <---------------- 2.01 Created ---------------|
   |               Location: /ps/topic1            |
@@ -434,18 +448,18 @@ Client                                          Broker
 ]]></artwork></figure>
 
 </section>
-<section anchor="publish" title="PUBLISH">
+<section anchor="sec-publish" title="PUBLISH">
 
-<t>A CoAP pub/sub broker MAY allow clients to PUBLISH to topics on
-the broker. A client MAY use the PUT or the POST method to publish
+<t>A CoAP pub/sub Broker MAY allow clients to PUBLISH to topics on
+the Broker. A client MAY use the PUT or the POST method to publish
 state updates to the CoAP pub/sub Broker. A client MUST use the content
 format specified upon creation of a given topic to publish updates to
-that topic. The broker MUST reject publish operations which do not use
+that topic. The Broker MUST reject publish operations which do not use
 the specified content format.  A CoAP client publishing on a topic MAY
 indicate the maximum lifetime of the value by including the Max-Age
-option in the publish request. The broker MUST return a response code
+option in the publish request. The Broker MUST return a response code
 of “2.04 Changed” if the publish is accepted.  A Broker MAY return a
-“4.04 Not Found” if the topic does not exist. A broker MAY return
+“4.04 Not Found” if the topic does not exist. A Broker MAY return
 “4.29 Too Many Requests” if simple flow control as described in
 <xref target="sec-flow-control"/> is implemented.</t>
 
@@ -461,29 +475,36 @@ the PUT method. If a Broker accepts a PUBLISH using PUT to a topic that does
 not exist, the Broker MUST create the topic using the information in the
 PUT operation. The Broker MUST create a topic with the URI-Path of the request,
 including all of the sub-topics necessary, and create a topic link with the
-ct attribute set to the content-format of the payload of the PUT request.
+ct attribute set to the content-format value from the header of the PUT request.
 If topic is created, the Broker MUST return the response “2.01 Created” with
 the URI of the created topic, including all of the created path segments,
 returned via the Location-Path option.</t>
 
+<t><xref target="create-publish-fig"/> shows an example of a topic being created on first
+PUBLISH.</t>
+
 <t>A Broker MAY accept PUBLISH operations using the POST method. If a
-broker accepts PUBLISH using POST it shall respond with the 2.04 Changed
-status code.</t>
+Broker accepts PUBLISH using POST it shall respond with the 2.04 Changed
+status code. If an attempt is made to PUBLISH using POST to a topic that does
+not exist, the Broker SHALL return a response status indicating resource not
+found, such as HTTP 404 or CoAP 4.04.</t>
 
 <t>A Broker MAY perform garbage collection of stored representations
 which have been delivered to all subscribers or which have timed
 out. A Broker MAY retain at least one most recently published
-representation to return in response to SUBSRCIBE and READ requests.</t>
+representation to return in response to SUBSCRIBE and READ requests.</t>
 
 <t>A Broker MUST make a best-effort attempt to notify all clients
 subscribed on a particular topic each time it receives a publish on
-that topic. An example is shown in <xref target="subscribe-fig"/>. If a client
-publishes to a broker with the Max-Age option, the broker MUST include
-the same value for the Max-Age option in all notifications. A broker
-MUST use CoAP Notification as described in <xref target="RFC7641"/> to notify
+that topic. An example is shown in <xref target="subscribe-fig"/>.</t>
+
+<t>If a client publishes to a Broker with the Max-Age option, the Broker MUST
+include the same value for the Max-Age option in all notifications.</t>
+
+<t>A Broker MUST use CoAP Notification as described in <xref target="RFC7641"/> to notify
 subscribed clients.</t>
 
-<t>The PUBLISH interface is specified as follows:</t>
+<t>The PUBLISH operation is specified as follows:</t>
 
 <t><list style="hanging">
   <t hangText='Interaction:'>
@@ -491,12 +512,10 @@ subscribed clients.</t>
   <t hangText='Method:'>
   PUT, POST</t>
   <t hangText='URI Template:'>
-  {+ps}/{+topic}{?q*}</t>
+  {+ps}/{+topic}</t>
   <t hangText='URI Template Variables:'>
   ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.</t>
   <t>topic := The desired topic to return links for (optional).</t>
-  <t>q := Query Filter (optional). MAY contain a query filter list as per
- <xref target="RFC6690"/> Section 4.1.</t>
   <t hangText='Content-Format:'>
   Any valid CoAP content format</t>
   <t hangText='Payload:'>
@@ -504,7 +523,7 @@ subscribed clients.</t>
 the indicated content format</t>
 </list></t>
 
-<t>The following response codes are defined for this interface:</t>
+<t>The following response codes are defined for the PUBLISH operation:</t>
 
 <t><list style="hanging">
   <t hangText='Success:'>
@@ -524,7 +543,7 @@ messages for this topic (see <xref target="sec-flow-control"/>).</t>
 
 <t><xref target="publish-fig"/> shows an example of a new value being successfully
 published to the topic “topic1”. See <xref target="subscribe-fig"/> for an example
-of a broker forwarding a message from a publishing client to a
+of a Broker forwarding a message from a publishing client to a
 subscribed client.</t>
 
 <figure title="Example of PUBLISH" anchor="publish-fig"><artwork align="center"><![CDATA[
@@ -553,35 +572,37 @@ Client                                          Broker
 </section>
 <section anchor="subscribe" title="SUBSCRIBE">
 
-<t>A CoAP pub/sub broker MAY allow Clients to subscribe to topics on the Broker
+<t>A CoAP pub/sub Broker MAY allow Clients to subscribe to topics on the Broker
 using CoAP Observe as described in <xref target="RFC7641"/>. A CoAP pub/sub Client wishing
-to Subscribe to a topic on a broker MUST use a CoAP GET with the Observe
+to Subscribe to a topic on a Broker MUST use a CoAP GET with the Observe
 option set to 0 (zero). The Broker MAY add the client to a
 list of observers. The Broker MUST return a response code of “2.05 Content”
 along with the most recently published value if the topic contains a valid
-value and the broker can supply the requested content format. The broker
+value and the Broker can supply the requested content format. The Broker
 MUST reject Subscribe requests on a topic if the content format of the request
-is not supported by the content format the topic was created with. The broker
-MAY accept Subscribe requests which specify content formats that the broker
-can supply as alternate content formats to the content format the topic was
-registered with. If the topic was published with the Max-Age option, the
-broker MUST set the Max-Age option in the valid response to the amount of
+is not the content format the topic was created with.</t>
+
+<t>If the topic was published with the Max-Age option, the
+Broker MUST set the Max-Age option in the valid response to the amount of
 time remaining for the value to be valid since the last publish operation
 on that topic. The Broker MUST return a response code of “2.07 No Content”
-if the Max-Age of the previously stored value has expired. The Broker MUST
+if the topic has not yet been published to, or if Max-Age of the previously
+stored value has expired. The Broker MUST
 return a response code “4.04 Not Found” if the topic does not exist or has
-been removed. The Broker MUST return a response code “4.15 Unsupported Content
+been removed.</t>
+
+<t>The Broker MUST return a response code “4.15 Unsupported Content
 Format” if it can not return the requested content format. If a Broker is
 unable to accept a new Subscription on a topic, it SHOULD return the
-appropriate
-response code without the Observe option as per as per <xref target="RFC7641"/>
-Section 4.1. There is no explicit maximum lifetime of a Subscription,
-thus
-a Broker may remove subscribers at any time. The Broker, upon removing a
+appropriate response code without the Observe option as per <xref target="RFC7641"/>
+Section 4.1.</t>
+
+<t>There is no explicit maximum lifetime of a Subscription,
+thus a Broker may remove subscribers at any time. The Broker, upon removing a
 Subscriber, will transmit the appropriate response code without the Observe
 option, as per <xref target="RFC7641"/> Section 4.2, to the removed Subscriber.</t>
 
-<t>The SUBSCRIBE interface is specified as follows:</t>
+<t>The SUBSCRIBE operation is specified as follows:</t>
 
 <t><list style="hanging">
   <t hangText='Interaction:'>
@@ -591,15 +612,13 @@ option, as per <xref target="RFC7641"/> Section 4.2, to the removed Subscriber.<
   <t hangText='Options:'>
   Observe:0</t>
   <t hangText='URI Template:'>
-  {+ps}/{+topic}{?q*}</t>
+  {+ps}/{+topic}</t>
   <t hangText='URI Template Variables:'>
   ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.</t>
   <t>topic := The desired topic to return links for (optional).</t>
-  <t>q := Query Filter (optional). MAY contain a query filter list as per
- <xref target="RFC6690"/> Section 4.1.</t>
 </list></t>
 
-<t>The following response codes are defined for this interface:</t>
+<t>The following response codes are defined for the SUBSCRIBE operation:</t>
 
 <t><list style="hanging">
   <t hangText='Success:'>
@@ -617,10 +636,10 @@ option, as per <xref target="RFC7641"/> Section 4.2, to the removed Subscriber.<
 </list></t>
 
 <t><xref target="subscribe-fig"/> shows an example of Client2 subscribing to “topic1”
-and receiving a response from the broker, with a subsequent
-notification. The subscribe response from the broker uses the last
+and receiving a response from the Broker, with a subsequent
+notification. The subscribe response from the Broker uses the last
 stored value associated with the topic1. The notification from the
-broker is sent in response to the publish received from Client1.</t>
+Broker is sent in response to the publish received from Client1.</t>
 
 <figure title="Example of SUBSCRIBE" anchor="subscribe-fig"><artwork align="center"><![CDATA[
 Client1   Client2                                          Broker
@@ -641,13 +660,13 @@ Client1   Client2                                          Broker
 </section>
 <section anchor="unsubscribe" title="UNSUBSCRIBE">
 
-<t>If a CoAP pub/sub broker allows clients to SUBSCRIBE to topics on the broker, it MUST allow Clients to unsubscribe from topics on the Broker using the CoAP
+<t>If a CoAP pub/sub Broker allows clients to SUBSCRIBE to topics on the Broker, it MUST allow Clients to unsubscribe from topics on the Broker using the CoAP
 Cancel Observation operation. A CoAP pub/sub Client wishing to unsubscribe
 to a topic on a Broker MUST either use CoAP GET with Observe using an Observe
 parameter of 1 or send a CoAP Reset message in response to a publish, as
 per <xref target="RFC7641"/>.</t>
 
-<t>The UNSUBSCRIBE interface is specified as follows:</t>
+<t>The UNSUBSCRIBE operation is specified as follows:</t>
 
 <t><list style="hanging">
   <t hangText='Interaction:'>
@@ -665,7 +684,7 @@ per <xref target="RFC7641"/>.</t>
  <xref target="RFC6690"/> Section 4.1.</t>
 </list></t>
 
-<t>The following response codes are defined for this interface:</t>
+<t>The following response codes are defined for the UNSUBSCRIBE operation:</t>
 
 <t><list style="hanging">
   <t hangText='Success:'>
@@ -696,23 +715,26 @@ Client                                          Broker
 </section>
 <section anchor="read" title="READ">
 
-<t>A CoAP pub/sub broker MAY accept Read requests on a topic using the the CoAP
+<t>A CoAP pub/sub Broker MAY accept Read requests on a topic using the the CoAP
 GET method if the content format of the request matches the content format the topic was created with.
-The broker MAY accept Read requests which specify content formats that the
-broker can supply as alternate content formats to the content format the
+The Broker MAY accept Read requests which specify content formats that the
+Broker can supply as alternate content formats to the content format the
 topic was registered with. The Broker MUST return a response code of “2.05
 Content” along with the most recently published value if the topic contains
-a valid value and the broker can supply the requested content format. If
-the topic was published with the Max-Age option, the broker MUST set the
+a valid value and the Broker can supply the requested content format.</t>
+
+<t>If the topic was published with the Max-Age option, the Broker MUST set the
 Max-Age option in the valid response to the amount of time remaining for
 the topic to be valid since the last publish. The Broker MUST return a response
 code of “2.07 No Content” if the Max-Age of the previously stored value has
-expired. The Broker MUST return a response code “4.04 Not Found” if the topic
+expired, or if the topic has not yet been published to.</t>
+
+<t>The Broker MUST return a response code “4.04 Not Found” if the topic
 does not exist or has been removed. The Broker MUST return a response code
-“4.15 Unsupported Content Format” if the broker can not return the requested
+“4.15 Unsupported Content Format” if the Broker can not return the requested
 content format.</t>
 
-<t>The READ interface is specified as follows:</t>
+<t>The READ operation is specified as follows:</t>
 
 <t><list style="hanging">
   <t hangText='Interaction:'>
@@ -720,15 +742,13 @@ content format.</t>
   <t hangText='Method:'>
   GET</t>
   <t hangText='URI Template:'>
-  {+ps}/{+topic}{?q*}</t>
+  {+ps}/{+topic}</t>
   <t hangText='URI Template Variables:'>
   ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.</t>
   <t>topic := The desired topic to return links for (optional).</t>
-  <t>q := Query Filter (optional). MAY contain a query filter list as per
- <xref target="RFC6690"/> Section 4.1.</t>
 </list></t>
 
-<t>The following response codes are defined for this interface:</t>
+<t>The following response codes are defined for the READ operation:</t>
 
 <t><list style="hanging">
   <t hangText='Success:'>
@@ -772,18 +792,19 @@ Client1   Client2                                          Broker
 </section>
 <section anchor="remove" title="REMOVE">
 
-<t>A CoAP pub/sub broker MAY allow clientsremove a topics from the broker
+<t>A CoAP pub/sub Broker MAY allow clients to remove topics from the Broker
 using the CoAP Delete
 method on the URI of the topic. The CoAP pub/sub Broker MUST return
-“2.02 Deleted” if the removal is successful. The broker MUST
+“2.02 Deleted” if the removal is successful. The Broker MUST
 return the appropriate 4.xx response code indicating the reason for
-failure if the topic can not be removed. When a topic is removed for
-any reason, the Broker SHOULD return the response code 4.04 Not Found
-and remove all of the observers from the list of observers as per as
-per <xref target="RFC7641"/> Section 3.2. If a topic which has sub-topics is
+failure if the topic can not be removed.</t>
+
+<t>When a topic is removed for any reason, the Broker SHOULD remove all of the
+observers from the list of observers and return a final 4.04 “Not Found”
+response as per <xref target="RFC7641"/> Section 3.2. If a topic which has sub-topics is
 removed, then all of its sub-topics MUST be recursively removed.</t>
 
-<t>The REMOVE interface is specified as follows:</t>
+<t>The REMOVE operation is specified as follows:</t>
 
 <t><list style="hanging">
   <t hangText='Interaction:'>
@@ -791,19 +812,17 @@ removed, then all of its sub-topics MUST be recursively removed.</t>
   <t hangText='Method:'>
   DELETE</t>
   <t hangText='URI Template:'>
-  {+ps}/{+topic}{?q*}</t>
+  {+ps}/{+topic}</t>
   <t hangText='URI Template Variables:'>
   ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.</t>
   <t>topic := The desired topic to return links for (optional).</t>
-  <t>q := Query Filter (optional). MAY contain a query filter list as per
- <xref target="RFC6690"/> Section 4.1.</t>
   <t hangText='Content-Format:'>
   None</t>
   <t hangText='Response Payload:'>
   None</t>
 </list></t>
 
-<t>The following response codes are defined for this interface:</t>
+<t>The following response codes are defined for the REMOVE operation:</t>
 
 <t><list style="hanging">
   <t hangText='Success:'>
@@ -846,13 +865,13 @@ the registered links is the pub/sub Broker.</t>
 <t>A CoAP pub/sub Broker may alternatively register links to its topics to
 a Resource Directory by triggering the RD to retrieve it’s links from
 .well-known/core.  In order to use this method, the links must first
-be exposed in the .well-known/core of the pub/sub broker. See
+be exposed in the .well-known/core of the pub/sub Broker. See
 <xref target="discover"/> in this document.</t>
 
-<t>The pub/sub broker triggers the RD to retrieve its links by sending a
+<t>The pub/sub Broker triggers the RD to retrieve its links by sending a
 POST with an empty payload to the .well-known/core of the Resource
 Directory.  The RD server will then retrieve the links from the
-.well-known/core of the pub/sub broker and incorporate them into the
+.well-known/core of the pub/sub Broker and incorporate them into the
 Resource Directory. See <xref target="I-D.ietf-core-resource-directory"/> for
 further details.</t>
 
@@ -861,38 +880,37 @@ further details.</t>
 
 <t>CoAP pub/sub provides a way for client nodes to sleep between operations,
 conserving energy during idle periods. This is made possible by shifting
-the server role to the broker, allowing the broker to be always-on and respond
+the server role to the Broker, allowing the Broker to be always-on and respond
 to requests from other clients while a particular client is sleeping.</t>
 
-<t>For example, the broker will retain the last state update received from a
+<t>For example, the Broker will retain the last state update received from a
 sleeping client, in order to supply the most recent state update to other
 clients in response to read and subscribe operations.</t>
 
-<t>Likewise, the broker will retain the last state update received on the topic
+<t>Likewise, the Broker will retain the last state update received on the topic
 such that a sleeping client, upon waking, can perform a read operation to
-the broker to update its own state from the most recent system state update.</t>
+the Broker to update its own state from the most recent system state update.</t>
 
 </section>
 <section anchor="sec-flow-control" title="Simple Flow Control">
 
-<t>Since the broker node has to potentially send a large amount of
+<t>Since the Broker node has to potentially send a large amount of
 notification messages for each publish message and it may be serving a
-large amount of subscribers and publishers simultaneously, the broker
+large amount of subscribers and publishers simultaneously, the Broker
 may become overwhelmed if it receives many publish messages to popular
 topics in a short period of time.</t>
 
-<t>If the broker is unable to serve a certain client that is sending
-publish messages too fast, the broker MUST respond with Response Code
-4.29, “Too Many Requests”. This Response Code is like HTTP 429 “Too
-Many Requests” but uses the Max-Age Option in place of the
-“Retry-After” header field to indicate the number of seconds after
-which to retry. The broker MAY stop creating notifications from the
-publish messages from this client and to this topic for the indicated
-time.</t>
+<t>If the Broker is unable to serve a certain client that is sending
+publish messages too fast, the Broker SHOULD respond with Response
+Code 4.29, “Too Many Requests” <xref target="I-D.keranen-core-too-many-reqs"/> and
+set the Max-Age Option to indicate the number of seconds after which
+the client can retry. The Broker MAY stop creating notifications from
+the publish messages from this client and to this topic for the
+indicated time.</t>
 
-<t>If a client receives the 4.29 Response Code from the broker for a
+<t>If a client receives the 4.29 Response Code from the Broker for a
 publish message to a topic, it MUST NOT send new publish messages to
-the broker on the same topic before the time indicated in Max-Age has
+the Broker on the same topic before the time indicated in Max-Age has
 passed.</t>
 
 </section>
@@ -901,10 +919,10 @@ passed.</t>
 <t>CoAP pub/sub re-uses CoAP <xref target="RFC7252"/>, CoRE Resource Directory
 <xref target="I-D.ietf-core-resource-directory"/>, and Web Linking <xref target="RFC5988"/> and
 therefore the security considerations of those documents also apply to
-this specification. Additionally, a CoAP pub/sub broker and the clients
+this specification. Additionally, a CoAP pub/sub Broker and the clients
 SHOULD authenticate each other and enforce access control policies. A
 malicious client could subscribe to data it is not authorized to or
-mount a denial of service attack against the broker by publishing a
+mount a denial of service attack against the Broker by publishing a
 large number of resources.  The authentication can be performed using
 the already standardized DTLS offered mechanisms, such as
 certificates. DTLS also allows communication security to be
@@ -913,14 +931,14 @@ data exchanged between these relevant parties. Provisioning the
 necessary credentials, trust anchors and authorization policies is
 non-trivial and subject of ongoing work.</t>
 
-<t>The use of a CoAP pub/sub broker introduces challenges for the use of
+<t>The use of a CoAP pub/sub Broker introduces challenges for the use of
 end-to-end security between for example a client device on a sensor
 network and a client application running in a cloud-based server
-infrastructure since brokers terminate the exchange. While running
-separate DTLS sessions from the client device to the broker and from
-broker to client application protects confidentially on those paths,
+infrastructure since Brokers terminate the exchange. While running
+separate DTLS sessions from the client device to the Broker and from
+Broker to client application protects confidentially on those paths,
 the client device does not know whether the commands coming from the
-broker are actually coming from the client application. Similarly, a
+Broker are actually coming from the client application. Similarly, a
 client application requesting data does not know whether the data
 originated on the client device. For scenarios where end-to-end
 security is desirable the use of application layer security is
@@ -929,17 +947,17 @@ to the client device that any request originated at the client
 application. Similarly, integrity protected sensor data from a client
 device will also provide guarantee to the client application that the
 data originated on the client device itself. The protected data can
-also be verified by the intermediate broker ensuring that it
+also be verified by the intermediate Broker ensuring that it
 stores/caches correct request/response and no malicious
-messages/requests are accepted. The broker would still be able to
+messages/requests are accepted. The Broker would still be able to
 perform aggregation of data/requests collected.</t>
 
 <t>Depending on the level of trust users and system designers place in
-the CoAP pub/sub broker, the use of end-to-end object security is
+the CoAP pub/sub Broker, the use of end-to-end object security is
 RECOMMENDED as described in <xref target="I-D.palombini-ace-coap-pubsub-profile"/>.
 When only end-to-end encryption is necessary and the CoAP Broker is
 trusted, Payload Only Protection (Mode:PAYL) could be used. The
-Publisher would wrap only the payload before sending it to the broker
+Publisher would wrap only the payload before sending it to the Broker
 and set the option Content-Format to application/smpayl. Upon
 receival, the Broker can read the unencrypted CoAP header to forward
 it to the subscribers.</t>
@@ -948,14 +966,13 @@ it to the subscribers.</t>
 <section anchor="iana" title="IANA Considerations">
 
 <t>This document registers one attribute value in the Resource Type (rt=) registry
-established with <xref target="RFC6690"/> and appends to the definition of one CoAP Response Code in the CoRE Parameters
-Registry.</t>
+established with <xref target="RFC6690"/> and appends to the definition of one CoAP Response Code in the CoRE Parameters Registry.</t>
 
 <section anchor="resource-type-value-coreps" title="Resource Type value ‘core.ps’">
 
 <t><list style="symbols">
   <t>Attribute Value: core.ps</t>
-  <t>Description: <xref target="function-set"/> of [[This document]]</t>
+  <t>Description: <xref target="sec-rest-api"/> of [[This document]]</t>
   <t>Reference: [[This document]]</t>
   <t>Notes: None</t>
 </list></t>
@@ -965,7 +982,7 @@ Registry.</t>
 
 <t><list style="symbols">
   <t>Attribute Value: core.ps.discover</t>
-  <t>Description: <xref target="function-set"/> of [[This document]]</t>
+  <t>Description: <xref target="sec-rest-api"/> of [[This document]]</t>
   <t>Reference: [[This document]]</t>
   <t>Notes: None</t>
 </list></t>
@@ -975,21 +992,9 @@ Registry.</t>
 
 <t><list style="symbols">
   <t>Response Code: 2.07</t>
-  <t>Description: Add No Content response to GET to the existing definition of
-the 2.07 response code.</t>
+  <t>Description: No Content</t>
   <t>Reference: [[This document]]</t>
-  <t>Notes: The server sends this code to the client to indicate that the request was valid and accepted, but the responce may contain an empty payload. It is comparable to and may be proxied with the http 204 No Content status code.</t>
-</list></t>
-
-</section>
-<section anchor="response-code-value-429" title="Response Code value ‘4.29’">
-
-<t><list style="symbols">
-  <t>Response Code: 4.29</t>
-  <t>Description: This error code is used by a server to indicate that a client
-is making too many requests on a resource.</t>
-  <t>Reference: [[This document]]</t>
-  <t>Notes: None</t>
+  <t>Notes: The server sends this code to the client to indicate that the request was valid and accepted, but the response may contain an empty payload. It is comparable to and may be proxied with the HTTP 204 No Content status code.</t>
 </list></t>
 
 </section>
@@ -1101,6 +1106,27 @@ and Olaf Bergmann for their contributions and reviews.</t>
 
 
 
+<reference anchor="I-D.keranen-core-too-many-reqs">
+<front>
+<title>Too Many Requests Response Code for the Constrained Application Protocol</title>
+
+<author initials='A' surname='Keranen' fullname='Ari Keranen'>
+    <organization />
+</author>
+
+<date month='March' day='19' year='2018' />
+
+<abstract><t>A Constrained Application Protocol (CoAP) server can experience temporary overload because one or more clients are sending requests to the server at a higher rate than the server is capable or willing to handle.  This document defines a new CoAP Response Code for a server to indicate that a client should reduce the rate of requests.</t></abstract>
+
+</front>
+
+<seriesInfo name='Internet-Draft' value='draft-keranen-core-too-many-reqs-01' />
+<format type='TXT'
+        target='http://www.ietf.org/internet-drafts/draft-keranen-core-too-many-reqs-01.txt' />
+</reference>
+
+
+
 
     </references>
 
@@ -1110,9 +1136,9 @@ and Olaf Bergmann for their contributions and reviews.</t>
 
 
 
-<reference anchor="I-D.selander-ace-object-security">
+<reference anchor="I-D.ietf-core-object-security">
 <front>
-<title>Object Security of CoAP (OSCOAP)</title>
+<title>Object Security for Constrained RESTful Environments (OSCORE)</title>
 
 <author initials='G' surname='Selander' fullname='Goeran Selander'>
     <organization />
@@ -1130,15 +1156,15 @@ and Olaf Bergmann for their contributions and reviews.</t>
     <organization />
 </author>
 
-<date month='October' day='11' year='2016' />
+<date month='June' day='27' year='2018' />
 
-<abstract><t>This memo defines Object Security of CoAP (OSCOAP), a method for application layer protection of message exchanges with the Constrained Application Protocol (CoAP), using the CBOR Object Signing and Encryption (COSE) format.  OSCOAP provides end-to-end encryption, integrity and replay protection to CoAP payload, options, and header fields, as well as a secure binding between CoAP request and response messages.  The use of OSCOAP is signaled with the CoAP option Object-Security, also defined in this memo.</t></abstract>
+<abstract><t>This document defines Object Security for Constrained RESTful Environments (OSCORE), a method for application-layer protection of the Constrained Application Protocol (CoAP), using CBOR Object Signing and Encryption (COSE).  OSCORE provides end-to-end protection between endpoints communicating using CoAP or CoAP-mappable HTTP. OSCORE is designed for constrained nodes and networks supporting a range of proxy operations, including translation between different transport protocols.</t></abstract>
 
 </front>
 
-<seriesInfo name='Internet-Draft' value='draft-selander-ace-object-security-06' />
+<seriesInfo name='Internet-Draft' value='draft-ietf-core-object-security-13' />
 <format type='TXT'
-        target='http://www.ietf.org/internet-drafts/draft-selander-ace-object-security-06.txt' />
+        target='http://www.ietf.org/internet-drafts/draft-ietf-core-object-security-13.txt' />
 </reference>
 
 
@@ -1151,15 +1177,15 @@ and Olaf Bergmann for their contributions and reviews.</t>
     <organization />
 </author>
 
-<date month='September' day='28' year='2017' />
+<date month='June' day='27' year='2018' />
 
 <abstract><t>This specification defines a profile for authentication and authorization for publishers and subscribers in a pub-sub setting scenario in a constrained environment, using the ACE framework.  This profile relies on transport layer or application layer security to authorize the publisher to the broker.  Moreover, it relies on application layer security for publisher-broker and subscriber-broker communication.</t></abstract>
 
 </front>
 
-<seriesInfo name='Internet-Draft' value='draft-palombini-ace-coap-pubsub-profile-01' />
+<seriesInfo name='Internet-Draft' value='draft-palombini-ace-coap-pubsub-profile-03' />
 <format type='TXT'
-        target='http://www.ietf.org/internet-drafts/draft-palombini-ace-coap-pubsub-profile-01.txt' />
+        target='http://www.ietf.org/internet-drafts/draft-palombini-ace-coap-pubsub-profile-03.txt' />
 </reference>
 
 
@@ -1188,15 +1214,17 @@ and Olaf Bergmann for their contributions and reviews.</t>
     <organization />
 </author>
 
-<date month='October' day='30' year='2017' />
+<date month='July' day='2' year='2018' />
 
 <abstract><t>In many M2M applications, direct discovery of resources is not practical due to sleeping nodes, disperse networks, or networks where multicast traffic is inefficient.  These problems can be solved by employing an entity called a Resource Directory (RD), which hosts descriptions of resources held on other servers, allowing lookups to be performed for those resources.  This document specifies the web interfaces that a Resource Directory supports in order for web servers to discover the RD and to register, maintain, lookup and remove resource descriptions.  Furthermore, new link attributes useful in conjunction with an RD are defined.</t></abstract>
 
 </front>
 
-<seriesInfo name='Internet-Draft' value='draft-ietf-core-resource-directory-12' />
+<seriesInfo name='Internet-Draft' value='draft-ietf-core-resource-directory-14' />
 <format type='TXT'
-        target='http://www.ietf.org/internet-drafts/draft-ietf-core-resource-directory-12.txt' />
+        target='http://www.ietf.org/internet-drafts/draft-ietf-core-resource-directory-14.txt' />
+<format type='PDF'
+        target='http://www.ietf.org/internet-drafts/draft-ietf-core-resource-directory-14.pdf' />
 </reference>
 
 
@@ -1222,240 +1250,245 @@ and Olaf Bergmann for their contributions and reviews.</t>
   </back>
 
 <!-- ##markdown-source:
-H4sIAL8BgloAA+19+3YbR3L3//0Ufag/JMUASEryjbt2QpF0lhuJZEhqN5t8
-OTkDoAHOcjCDnR6IgmXlffIcebHUrW8zA5K6fJadmMfHIoGZ7urq6qpfVVdX
-D4dDZZusnP5HVlSl2dNNvTIqX9b0m22e7Ox8u/NETatJmS3g62mdzZphbprZ
-cFLVBv6XLYfL1diuxsOdp2qSNXvaNlO1zPeU1k012dMP18Y+5D+qxTKbNMlH
-U7NsruCTp/J3Xk5NGT1i14vazGz0QVU36SfQ7ALeiT7JyyLHwfh3mjqnfstK
-XhA6+G8gPv2oyZsCXj9bjYvcXg0vYHyTOh8b/byurk2tZ1WtmyujD6oSms6g
-r6neXy6LHMafV6U+qyscbaEfHVT7Z49VNh7X5vUdDeKj6vpmTx+XjalL0wwP
-kdlqmjVAy5Od3W9UtmquqnpPDWGEMNyXI/1P8F9l4XkYBs/Qy3xylZkifFzV
-8z19scjq5vIqL+cWPjKLLC/8oyN+9B8sPtPQMyPgh+tln3sxdVaa0nezX+fR
-Z9THETDZ2qoMHWR1Prrmh/7ByLdx038c0X/54r//qzQ/+rb/mOULE3+8ofm/
-4nOjv8L/4LG0g7KqFzAXrw2K4fkPB0+//eYr+fXJ7u638utXX32743798mv3
-69dfPdt1vz758smeystZ3Nzx8HBkTQGLxtTDbGKG1fivZtIMrZms6rxZu2eW
-sKQW47zM6aF4pSzrapYXvrGwnGpjq1UNT0/zGpqs6rUQ8uW333yzp9RwONTZ
-GGVu0ih1eX8RHGggV9dAdQMPmjeNKS08ZmGKDMwF/Dk1U9VUsBaWS1hhepFN
-QBLMsKmG8iuts1XpOshLWJsgNwurb64MtALqAyZKL2AcwP6p4bbdiOBtT+gA
-X16CsOWTVZGx9BfVjV5WN7AWbmDohbFWW6CxqhWshJuqvrYjDfJrNaiiFS53
-PTUzaAx60UtZVtYvq3G6rGCxZo2iUU8trdxJtszGeZE3ObRQzfgpfFzGD4tA
-8yBu8uYKqIO/YQ1n1xZoVzCWEqYnfw2zjYzdhhdXy2GD4siTtMin08Io9QBX
-c11NVxNi2tsHefTnu/eaQv32rUjku3eOTKvunKdsUlfATMdFHGw0FWpqXucT
-A8wlDqwsMbQ2f1sZ22zD5C3hWQOTOgWVwvM8KXLUtiAh18Y9CUytlDX1a1Mj
-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
-3km7e/WyXSvK3arH1NrWg75yLzTXPW7/BoNDEvF/BJ/cr/i/pjvI/Il2Cfi6
-BqUoWxRJZQbKrN81A5EQpTfhtOZDCsOLgcfS930XGmA6bZ3P51xin6TuUOxT
-nZvXeF7woXVmCu+p6lTV1vo4um+KuQdDYSg5EHSDry9WWKM3r22jokLhEiLt
-FAtv2WNXe+HCGBXKg+OZ9vZNYWylWvhYxmj7R+gGOF67q1rBz6czrU448Ozl
-2p8QlgDuJpr7FiGhAOhYLpPlLEOuJi9kBEb5tJr7MYXrzZfwAF7hyie3F2h4
-icqeCwvciZ97CDLhab4SHGw7wI2CrwbTF3it/PDPeFDV68HWhRwA31/nBAz0
-TbaOruqT23vwAAC24q8yCieRBxh9Jd1GlaRNPccL50lE8ynejg7iWk0pdT6n
-hbPIAHy70tU0j1f5rHGn5oXpdVW0rl4esNPUuq+LI+5ZAVTboVyQJWeaFQlO
-fFclF6hzCRRURyA9gCtjRriMo8W6kgpzfF3cKtlMILmQ48c+zN+6ejROoMqU
-a1T6GSTXAkf7H9H+Stqgu4lYuTG0chko3pVcMBdNFAzlRX5tbnL7weOIw2+K
-yujxPei6MzK+IzXDux0GfGGfnBfPmEhPFtc3iedTOsWljif0mBLvfSW84euk
-YlpF4rnqxg+U8yJVN94+6BzbA5jrN2miy6rIL8NKLNFljJJOUmCdxCjzPkmx
-S04N0ilul0nnUk/4tglXSNEtmky1mk0zo91t0nS5OBYUWRVNVhra8IknUnGz
-EwyEosK9uTIFQm7OTfcHyRdRBcvkFupltcRFoJw3Shd2XeGBdl7CbvdrRDlK
-Ec/wzKjPXpeDP/56XX8bR9ZIziFdr91DQAUY39W4SIu/RCUKvMNzgJtIeOZz
-sOnQJ/SWPI3dF7AA9B8uL8/0Mzktqlo1W8arJuRcuo22U79FyNVRWLerrXMw
-COvh/gxxp74CucYDl7kppi1UYXS5Wow5OwmkEEYD84pvKXcjOtmWdRpkwUua
-YDKkXFD7uu5gejq8lG9yG93GxsrUn2R1Z0T8+WUVptYnWSS3p9D52pSh7VxV
-wrttcqLDWyEd7eT0kpcUnnHokYVYJYjSoTIDTPzYzCq5pZHrJJShZrKfM9z9
-XGbWcqm8B+hSg1Vq8N7G0oKtc4U03j5w36RftO+sArNLckEfRjeDDbjYaI9L
-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
-Jw3Nke7XubkhNY6brmMYovofRS+nKA+eAAA=
+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
 
 -->
 
