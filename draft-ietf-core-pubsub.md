@@ -52,7 +52,7 @@ informative:
 The Constrained Application Protocol (CoAP), and related extensions are intended
 to support machine-to-machine communication in systems where one or more
 nodes are resource constrained, in particular for low power wireless sensor
-networks. This document defines a publish-subscribe broker for CoAP that
+networks. This document defines a publish-subscribe Broker for CoAP that
 extends the capabilities of CoAP for supporting nodes with long breaks in
 connectivity and/or up-time.
 
@@ -77,7 +77,7 @@ by the device.
 
 This document specifies the means for nodes with limited reachability to
 communicate using simple extensions to CoAP. The extensions enable publish-subscribe
-communication using a broker node that enables store-and-forward messaging
+communication using a Broker node that enables store-and-forward messaging
 between two or more nodes. Furthermore the extensions facilitate many-to-many
 communication using CoAP.
 
@@ -92,27 +92,28 @@ This specification requires readers to be familiar with all the terms and
 concepts that are discussed in {{RFC5988}} and {{RFC6690}}. Readers
 should also be familiar with the terms and concepts discussed in
 {{RFC7252}} and {{I-D.ietf-core-resource-directory}}. The URI template
-format {{RFC6570}} is used to describe the REST interfaces defined in
+format {{RFC6570}} is used to describe the REST API defined in
 this specification.
 
 This specification makes use of the following additional terminology:
 
 Publish-Subscribe (pub/sub):
-: A messaging paradigm where messages are published to a broker and potential
-  receivers can subscribe to the broker to receive messages. The publishers
+: A messaging paradigm where messages are published to a Broker and potential
+  receivers can subscribe to the Broker to receive messages. The publishers
   do not (need to) know where the message will be eventually sent: the publications
-  and subscriptions are matched by a broker and publications are delivered
-  by the broker to subscribed receivers.
+  and subscriptions are matched by a Broker and publications are delivered
+  by the Broker to subscribed receivers.
 
 
 CoAP pub/sub service:
-: A group of REST resources, as defined in this document, which together implement the required features of this specification.
+: A group of REST resources, as defined in this document, which together
+  implement the required features of this specification.
 
 
 CoAP pub/sub Broker:
 : A server node capable of receiving messages (publications) from and sending
   messages to other nodes, and able to match subscriptions and publications
-  in order to route messages to the right destinations. The broker can also
+  in order to route messages to the right destinations. The Broker can also
   temporarily store publications to satisfy future subscriptions and pending notifications.
 
 
@@ -123,7 +124,7 @@ CoAP pub/sub Client:
 
 Topic:
 : A unique identifier for a particular item being published and/or subscribed
-  to. A broker uses the topics to match subscriptions to publications. A topic
+  to. A Broker uses the topics to match subscriptions to publications. A topic
   is a valid CoAP URI as defined in {{RFC7252}}
 
 
@@ -165,8 +166,8 @@ Clients        pub/sub         Broker
 
 A CoAP pub/sub Broker is a CoAP Server that exposes a REST API for clients
 to use to initiate publish-subscribe interactions. Avoiding the need
-for direct reachability between clients, the broker only needs to be
-reachable from all clients. The broker also needs to have sufficient
+for direct reachability between clients, the Broker only needs to be
+reachable from all clients. The Broker also needs to have sufficient
 resources (storage, bandwidth, etc.) to host CoAP resource services,
 and potentially buffer messages, on behalf of the clients.
 
@@ -174,37 +175,39 @@ and potentially buffer messages, on behalf of the clients.
 ## CoAP Pub/sub Client
 
 A CoAP pub/sub Client interacts with a CoAP pub/sub Broker using the CoAP pub/sub
-REST API defined in this document. Clients initiate interactions with a CoAP pub/sub broker. A data source
-(e.g., sensor clients) can publish state updates to the broker and data sinks
+REST API defined in this document. Clients initiate interactions with a CoAP pub/sub Broker. A data source
+(e.g., sensor clients) can publish state updates to the Broker and data sinks
 (e.g., actuator clients) can read from or subscribe to state updates from
-the broker. Application clients can make use of both publish and subscribe
+the Broker. Application clients can make use of both publish and subscribe
 in order to exchange state updates with data sources and data sinks.
 
 
 ## CoAP Pub/sub Topic
 
-The clients and broker use topics to identify a particular resource or
+The clients and Broker use topics to identify a particular resource or
 object in a publish-subscribe system. Topics are conventionally formed
 as a hierarchy, e.g. "/sensors/weather/barometer/pressure" or
-"EP-33543/sen/3303/0/5700".  The topics are hosted at the broker and
-all the clients using the broker share the same namespace for
-topics. Every CoAP pub/sub topic has a link, consisting of a reference
-path on the broker using URI path {{RFC3986}} construction and link
+"/EP-33543/sen/3303/0/5700".  The topics are hosted by a Broker and
+all the clients using the Broker share the same namespace for
+topics. Every CoAP pub/sub topic has an associated link, consisting of a reference
+path on the Broker using URI path {{RFC3986}} construction and link
 attributes {{RFC6690}}. Every topic is associated with zero or more
-stored representations with a content-format specified in the link. A
-CoAP pub/sub topic value may alternatively be a collection of one or
+stored representations and a content-format specified in the link. A
+CoAP pub/sub topic value may alternatively consist of a collection of one or
 more sub-topics, consisting of links to the sub-topic URIs and
-indicated by a link-format content-format.
+indicated by a link-format content-format. Sub-topics are also topics and
+may have their own sub-topics, forming a tree structure of unique paths that
+is implemented using URIs. The full URI of a topic includes a schems and authority
+for the Broker, for example "coaps://10.0.0.13:5684/EP-33543/sen/3303/0/5700".
 
-
-## Brokerless Pub/sub
+## brokerless Pub/sub
 
 {{brokerless}} shows an arrangement for using CoAP pub/sub in a
-"brokerless" configuration between peer nodes. Nodes in a brokerless
-system may act as both broker and client. The Broker interface in a
-brokerless node may be pre-configured with topics that expose services
+"Brokerless" configuration between peer nodes. Nodes in a Brokerless
+system may act as both Broker and client. A node that supports Broker
+functionality may be pre-configured with topics that expose services
 and resources. Brokerless peer nodes can be mixed with client and
-broker nodes in a system with full interoperability.
+Broker nodes in a system with full interoperability.
 
 
 
@@ -226,7 +229,7 @@ broker nodes in a system with full interoperability.
 
 
 
-# CoAP Pub/sub REST API {#function-set}
+# CoAP Pub/sub REST API {#sec-rest-api}
 
 This section defines the REST API exposed by a CoAP pub/sub Broker to pub/sub
 Clients.  The examples throughout this section assume the use of CoAP
@@ -243,11 +246,11 @@ Discovery or through a Resource Directory (RD)
 {{I-D.ietf-core-resource-directory}}. A CoAP pub/sub Broker SHOULD
 indicate its presence and availability on a network by exposing a link
 to the entry point of its pub/sub API at its .well-known/core location {{RFC6690}}. A CoAP
-pub/sub broker MAY register its pub/sub REST API entry point with a Resource
+pub/sub Broker MAY register its pub/sub REST API entry point with a Resource
 Directory. {{discover-fig}} shows an example of a client discovering a
-local pub/sub API using CoAP Simple Discovery. A broker wishing to
+local pub/sub API using CoAP Simple Discovery. A Broker wishing to
 advertise the CoAP pub/sub API for Simple Discovery or through a
-Resource Directory MUST use the link relation rt=core.ps. A broker MAY
+Resource Directory MUST use the link relation rt=core.ps. A Broker MAY
 advertise its supported content formats and other attributes in the
 link to its pub/sub API.
 
@@ -257,10 +260,10 @@ which may be registered when the topic is
 created. {{discover-topic-fig}} shows an example of a client looking
 for a topic with a resource type (rt) of "temperature" using
 Discover. The client then receives the URI of the resource and its
-content-format. A pub/sub broker wishing to advertise topic discovery
+content-format. A pub/sub Broker wishing to advertise topic discovery
 MUST use the relation rt=core.ps.discover in the link.
 
-A CoAP pub/sub Broker MAY expose the Discover interface through the
+A CoAP pub/sub Broker MAY provide topic discovery functionality through the
 .well-known/core resource. Links to topics may be exposed at
 .well-known/core in addition to links to the pub/sub
 API. {{discover-topic-wk-fig}} shows an example of topic discovery
@@ -292,22 +295,20 @@ URI Template Variables:
 
 : topic := The desired topic to return links for (optional).
 
-
 : q := Query Filter (optional). MAY contain a query filter list as per
  {{RFC6690}} Section 4.1.
-
 
 
 Content-Format:
 : application/link-format
 
 
-The following response codes are defined for this interface:
+The following response codes are defined for the DISCOVER operation:
 
 Success:
 : 2.05 "Content" with an application/link-format payload containing
-  one or more matching entries for the broker resource. A pub/sub
-  broker SHOULD use the value "/ps/" for the base URI of the pub/sub
+  one or more matching entries for the Broker resource. A pub/sub
+  Broker SHOULD use the value "/ps/" for the base URI of the pub/sub
   API wherever possible.
 
 
@@ -323,7 +324,6 @@ Failure:
 
 Failure:
 : No error response to a multicast request.
-
 
 
 
@@ -374,12 +374,13 @@ Client                                          Broker
 
 
 
-## CREATE {#create}
 
-A CoAP pubsub broker SHOULD allow Clients to create new topics on the
+## CREATE {#sec-create}
+
+A CoAP pub/sub broker SHOULD allow Clients to create new topics on the
 broker using CREATE. Some exceptions are for fixed brokerless devices
 and pre-configured brokers in dedicated installations. A client wishing
-to create a topic MUST use CoAP POST to the pubsub API with a payload
+to create a topic MUST use a CoAP POST to the pub/sub API with a payload
 indicating the desired topic. The topic specification sent in the
 payload MUST use a supported serialization of the CoRE link format
 {{RFC6690}}. The target of the link MUST be a URI formatted
@@ -388,16 +389,6 @@ publishes to the topic by using the ct (Content Format) link attribute
 in the link-format payload. The client MAY indicate the lifetime of
 the topic by including the Max-Age option in the CREATE request.
 
-A Broker MUST return a response code of "2.01 Created" if the topic is
-created and return the URI path of the created topic via Location-Path
-options. The broker MUST return the appropriate 4.xx response code
-indicating the reason for failure if a new topic can not be
-created. Broker SHOULD remove topics if the Max-Age of the topic is
-exceeded without any publishes to the topic.  Broker SHOULD retain a
-topic indefinitely if the Max-Age option is elided or is set to zero
-upon topic creation. The lifetime of a topic MUST be refreshed upon
-create operations with a target of an existing topic.
-
 Topics may be created as sub-topics of other topics. A client MAY
 create a topic with a ct (Content Format) link attribute value which
 describes a supported serialization of the CoRE link format
@@ -405,6 +396,37 @@ describes a supported serialization of the CoRE link format
 CBOR serializations.  If a topic is created which describes a link
 serialization, that topic may then have sub-topics created under it as
 shown in {{create-sub-fig}}.
+
+Ony one level in the topic hierarchy may be created as a result of a CREATE
+operation, unless create on PUBLISH is supported (see {{sec-publish}}).
+The topic string used in the link target MUST NOT contain the "/" character.
+
+A topic creator MUST include exactly one content format link attribute value (ct)
+in the create payload. If the Broker does not support the indicated format for
+both publish and subscribe, it MUST reject the operation with an error code of
+4.00 "Bad Request".
+
+There is no default content format. If no ct is specified, the Broker MUST
+reject the operation with an error code of 4.00 "Bad Request".
+
+A Broker MUST return a response code of "2.01 Created" if the topic is
+created and return the URI path of the created topic via Location-Path
+options. The Broker MUST return the appropriate 4.xx response code
+indicating the reason for failure if a new topic can not be
+created. Broker SHOULD remove topics if the Max-Age of the topic is
+exceeded without any publishes to the topic.  Broker SHOULD retain a
+topic indefinitely if the Max-Age option is elided or is set to zero
+upon topic creation. The lifetime of a topic MUST be refreshed upon
+create operations with a target of an existing topic.
+
+
+Topic hierarchies can be created by creating parent topics. A parent
+topic is created with a POST using ct (Content Format) link attribute
+value which describes a supported serialization of the CoRE link
+format {{RFC6690}}, such as application/link-format (ct=40) or its
+JSON or CBOR serializations.  If a topic is created which describes a
+link serialization, that topic may then have sub-topics created under
+it as shown in {{create-sub-fig}}.
 
 The CREATE interface is specified as follows:
 
@@ -417,18 +439,13 @@ Method:
 
 
 URI Template:
-
-: {+ps}/{+topic}{?q\*}
-
+: {+ps}/{+topic}
 
 
 URI Template Variables:
 : ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
-
-: q := Query Filter (optional). MAY contain a query filter list as per
- {{RFC6690}} Section 4.1.
 
 
 Content-Format:
@@ -439,7 +456,7 @@ Payload:
 : The desired topic to CREATE
 
 
-The following response codes are defined for this interface:
+The following response codes are defined for the CREATE operation:
 
 Success:
 : 2.01 "Created". Successful Creation of the topic
@@ -465,11 +482,10 @@ Failure:
 successfully created.
 
 
-
 ~~~~
 Client                                          Broker
   |                                               |
-  | ---------- POST /ps/ "<topic1>;ct=50" -------->|
+  | ---------- POST /ps/ "<topic1>;ct=50" ------->|
   |                                               |
   | <---------------- 2.01 Created ---------------|
   |               Location: /ps/topic1            |
@@ -484,35 +500,35 @@ Client                                          Broker
 ~~~~
 Client                                          Broker
   |                                               |
-  | ------- POST /ps/ "<mainTopic>;ct=40" ------->|
+  | ----- POST /ps/ "<parent-topic>;ct=40" ------>|
   |                                               |
   | <---------------- 2.01 Created ---------------|
-  |             Location: /ps/mainTopic/          |
+  |            Location: /ps/parent-topic/        |
   |                                               |
-  | --- POST /ps/mainTopic/ "<subTopic>;ct=50" -->|
+  |-- POST /ps/parent-topic/ "<subtopic>;ct=50" ->|
   |                                               |
   | <---------------- 2.01 Created ---------------|
-  |        Location: /ps/mainTopic/subTopic       |
+  |       Location: /ps/parent-topic/subtopic     |
   |                                               |
   |                                               |
 
 ~~~~
-{: #create-sub-fig title='Example of CREATE sub-topic' artwork-align="center"}
+{: #create-sub-fig title='Example of CREATE of topic hierarchy' artwork-align="center"}
 
 
 
-## PUBLISH
+## PUBLISH {#sec-publish}
 
-A CoAP pub/sub broker MAY allow clients to PUBLISH to topics on
-the broker. A client MAY use the PUT or the POST method to publish
+A CoAP pub/sub Broker MAY allow clients to PUBLISH to topics on
+the Broker. A client MAY use the PUT or the POST method to publish
 state updates to the CoAP pub/sub Broker. A client MUST use the content
 format specified upon creation of a given topic to publish updates to
-that topic. The broker MUST reject publish operations which do not use
+that topic. The Broker MUST reject publish operations which do not use
 the specified content format.  A CoAP client publishing on a topic MAY
 indicate the maximum lifetime of the value by including the Max-Age
-option in the publish request. The broker MUST return a response code
+option in the publish request. The Broker MUST return a response code
 of "2.04 Changed" if the publish is accepted.  A Broker MAY return a
-"4.04 Not Found" if the topic does not exist. A broker MAY return
+"4.04 Not Found" if the topic does not exist. A Broker MAY return
 "4.29 Too Many Requests" if simple flow control as described in
 {{sec-flow-control}} is implemented.
 
@@ -528,14 +544,19 @@ the PUT method. If a Broker accepts a PUBLISH using PUT to a topic that does
 not exist, the Broker MUST create the topic using the information in the
 PUT operation. The Broker MUST create a topic with the URI-Path of the request,
 including all of the sub-topics necessary, and create a topic link with the
-ct attribute set to the content-format of the payload of the PUT request.
+ct attribute set to the content-format value from the header of the PUT request.
 If topic is created, the Broker MUST return the response "2.01 Created" with
 the URI of the created topic, including all of the created path segments,
 returned via the Location-Path option.
 
+{{create-publish-fig}} shows an example of a topic being created on first
+PUBLISH.
+
 A Broker MAY accept PUBLISH operations using the POST method. If a
-broker accepts PUBLISH using POST it shall respond with the 2.04 Changed
-status code.
+Broker accepts PUBLISH using POST it shall respond with the 2.04 Changed
+status code. If an attempt is made to PUBLISH using POST to a topic that does
+not exist, the Broker SHALL return a response status indicating resource not
+found, such as HTTP 404 or CoAP 4.04.
 
 A Broker MAY perform garbage collection of stored representations
 which have been delivered to all subscribers or which have timed
@@ -544,13 +565,15 @@ representation to return in response to SUBSCRIBE and READ requests.
 
 A Broker MUST make a best-effort attempt to notify all clients
 subscribed on a particular topic each time it receives a publish on
-that topic. An example is shown in {{subscribe-fig}}. If a client
-publishes to a broker with the Max-Age option, the broker MUST include
-the same value for the Max-Age option in all notifications. A broker
-MUST use CoAP Notification as described in {{RFC7641}} to notify
+that topic. An example is shown in {{subscribe-fig}}.
+
+If a client publishes to a Broker with the Max-Age option, the Broker MUST
+include the same value for the Max-Age option in all notifications.
+
+A Broker MUST use CoAP Notification as described in {{RFC7641}} to notify
 subscribed clients.
 
-The PUBLISH interface is specified as follows:
+The PUBLISH operation is specified as follows:
 
 Interaction:
 : Client -> Broker
@@ -561,17 +584,13 @@ Method:
 
 
 URI Template:
-: {+ps}/{+topic}{?q\*}
+: {+ps}/{+topic}
 
 
 URI Template Variables:
 : ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
-
-
-: q := Query Filter (optional). MAY contain a query filter list as per
- {{RFC6690}} Section 4.1.
 
 
 Content-Format:
@@ -583,7 +602,7 @@ Payload:
   the indicated content format
 
 
-The following response codes are defined for this interface:
+The following response codes are defined for the PUBLISH operation:
 
 Success:
 : 2.01 "Created". Successful publish, topic is created
@@ -612,7 +631,7 @@ Failure:
 
 {{publish-fig}} shows an example of a new value being successfully
 published to the topic "topic1". See {{subscribe-fig}} for an example
-of a broker forwarding a message from a publishing client to a
+of a Broker forwarding a message from a publishing client to a
 subscribed client.
 
 
@@ -649,35 +668,37 @@ Client                                          Broker
 
 ## SUBSCRIBE
 
-A CoAP pub/sub broker MAY allow Clients to subscribe to topics on the Broker
+A CoAP pub/sub Broker MAY allow Clients to subscribe to topics on the Broker
 using CoAP Observe as described in {{RFC7641}}. A CoAP pub/sub Client wishing
-to Subscribe to a topic on a broker MUST use a CoAP GET with the Observe
+to Subscribe to a topic on a Broker MUST use a CoAP GET with the Observe
 option set to 0 (zero). The Broker MAY add the client to a
 list of observers. The Broker MUST return a response code of "2.05 Content"
 along with the most recently published value if the topic contains a valid
-value and the broker can supply the requested content format. The broker
+value and the Broker can supply the requested content format. The Broker
 MUST reject Subscribe requests on a topic if the content format of the request
-is not supported by the content format the topic was created with. The broker
-MAY accept Subscribe requests which specify content formats that the broker
-can supply as alternate content formats to the content format the topic was
-registered with. If the topic was published with the Max-Age option, the
-broker MUST set the Max-Age option in the valid response to the amount of
+is not the content format the topic was created with.
+
+If the topic was published with the Max-Age option, the
+Broker MUST set the Max-Age option in the valid response to the amount of
 time remaining for the value to be valid since the last publish operation
 on that topic. The Broker MUST return a response code of "2.07 No Content"
-if the Max-Age of the previously stored value has expired. The Broker MUST
+if the topic has not yet been published to, or if Max-Age of the previously
+stored value has expired. The Broker MUST
 return a response code "4.04 Not Found" if the topic does not exist or has
-been removed. The Broker MUST return a response code "4.15 Unsupported Content
+been removed.
+
+The Broker MUST return a response code "4.15 Unsupported Content
 Format" if it can not return the requested content format. If a Broker is
 unable to accept a new Subscription on a topic, it SHOULD return the
-appropriate
-response code without the Observe option as per as per {{RFC7641}}
-Section 4.1. There is no explicit maximum lifetime of a Subscription,
-thus
-a Broker may remove subscribers at any time. The Broker, upon removing a
+appropriate response code without the Observe option as per {{RFC7641}}
+Section 4.1.
+
+There is no explicit maximum lifetime of a Subscription,
+thus a Broker may remove subscribers at any time. The Broker, upon removing a
 Subscriber, will transmit the appropriate response code without the Observe
 option, as per {{RFC7641}} Section 4.2, to the removed Subscriber.
 
-The SUBSCRIBE interface is specified as follows:
+The SUBSCRIBE operation is specified as follows:
 
 Interaction:
 : Client -> Broker
@@ -690,7 +711,7 @@ Options:
 
 
 URI Template:
-: {+ps}/{+topic}{?q\*}
+: {+ps}/{+topic}
 
 
 URI Template Variables:
@@ -699,11 +720,7 @@ URI Template Variables:
 : topic := The desired topic to return links for (optional).
 
 
-: q := Query Filter (optional). MAY contain a query filter list as per
- {{RFC6690}} Section 4.1.
-
-
-The following response codes are defined for this interface:
+The following response codes are defined for the SUBSCRIBE operation:
 
 Success:
 : 2.05 "Content". Successful subscribe, current value included
@@ -730,10 +747,10 @@ Failure:
 
 
 {{subscribe-fig}} shows an example of Client2 subscribing to "topic1"
-and receiving a response from the broker, with a subsequent
-notification. The subscribe response from the broker uses the last
+and receiving a response from the Broker, with a subsequent
+notification. The subscribe response from the Broker uses the last
 stored value associated with the topic1. The notification from the
-broker is sent in response to the publish received from Client1.
+Broker is sent in response to the publish received from Client1.
 
 
 
@@ -758,13 +775,14 @@ Client1   Client2                                          Broker
 
 ## UNSUBSCRIBE
 
-If a CoAP pub/sub broker allows clients to SUBSCRIBE to topics on the broker, it MUST allow Clients to unsubscribe from topics on the Broker using the CoAP
+If a CoAP pub/sub Broker allows clients to SUBSCRIBE to topics on the Broker,
+it MUST allow Clients to unsubscribe from topics on the Broker using the CoAP
 Cancel Observation operation. A CoAP pub/sub Client wishing to unsubscribe
 to a topic on a Broker MUST either use CoAP GET with Observe using an Observe
 parameter of 1 or send a CoAP Reset message in response to a publish, as
 per {{RFC7641}}.
 
-The UNSUBSCRIBE interface is specified as follows:
+The UNSUBSCRIBE operation is specified as follows:
 
 Interaction:
 : Client -> Broker
@@ -783,7 +801,8 @@ URI Template:
 
 
 URI Template Variables:
-: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
+: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub
+REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
 
@@ -792,7 +811,7 @@ URI Template Variables:
  {{RFC6690}} Section 4.1.
 
 
-The following response codes are defined for this interface:
+The following response codes are defined for the UNSUBSCRIBE operation:
 
 Success:
 : 2.05 "Content". Successful unsubscribe, current value included
@@ -831,23 +850,24 @@ Client                                          Broker
 
 ## READ
 
-A CoAP pub/sub broker MAY accept Read requests on a topic using the the CoAP
-GET method if the content format of the request matches the content format the topic was created with.
-The broker MAY accept Read requests which specify content formats that the
-broker can supply as alternate content formats to the content format the
-topic was registered with. The Broker MUST return a response code of "2.05
+A CoAP pub/sub Broker MAY accept Read requests on a topic using the the CoAP
+GET method if the content format of the request matches the content format the
+topic was created with. The Broker MUST return a response code of "2.05
 Content" along with the most recently published value if the topic contains
-a valid value and the broker can supply the requested content format. If
-the topic was published with the Max-Age option, the broker MUST set the
+a valid value and the Broker can supply the requested content format.
+
+If the topic was published with the Max-Age option, the Broker MUST set the
 Max-Age option in the valid response to the amount of time remaining for
 the topic to be valid since the last publish. The Broker MUST return a response
 code of "2.07 No Content" if the Max-Age of the previously stored value has
-expired. The Broker MUST return a response code "4.04 Not Found" if the topic
+expired, or if the topic has not yet been published to.
+
+The Broker MUST return a response code "4.04 Not Found" if the topic
 does not exist or has been removed. The Broker MUST return a response code
-"4.15 Unsupported Content Format" if the broker can not return the requested
+"4.15 Unsupported Content Format" if the Broker can not return the requested
 content format.
 
-The READ interface is specified as follows:
+The READ operation is specified as follows:
 
 Interaction:
 : Client -> Broker
@@ -858,20 +878,17 @@ Method:
 
 
 URI Template:
-: {+ps}/{+topic}{?q\*}
+: {+ps}/{+topic}
 
 
 URI Template Variables:
-: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
+: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub
+REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
 
 
-: q := Query Filter (optional). MAY contain a query filter list as per
- {{RFC6690}} Section 4.1.
-
-
-The following response codes are defined for this interface:
+The following response codes are defined for the READ operation:
 
 Success:
 : 2.05 "Content". Successful READ, current value included
@@ -928,18 +945,19 @@ Client1   Client2                                          Broker
 
 ## REMOVE
 
-A CoAP pub/sub broker MAY allow clients to remove topics from the broker
+A CoAP pub/sub Broker MAY allow clients to remove topics from the Broker
 using the CoAP Delete
 method on the URI of the topic. The CoAP pub/sub Broker MUST return
-"2.02 Deleted" if the removal is successful. The broker MUST
+"2.02 Deleted" if the removal is successful. The Broker MUST
 return the appropriate 4.xx response code indicating the reason for
-failure if the topic can not be removed. When a topic is removed for
-any reason, the Broker SHOULD return the response code 4.04 Not Found
-and remove all of the observers from the list of observers as per as
-per {{RFC7641}} Section 3.2. If a topic which has sub-topics is
+failure if the topic can not be removed.
+
+When a topic is removed for any reason, the Broker SHOULD remove all of the
+observers from the list of observers and return a final 4.04 "Not Found"
+response as per {{RFC7641}} Section 3.2. If a topic which has sub-topics is
 removed, then all of its sub-topics MUST be recursively removed.
 
-The REMOVE interface is specified as follows:
+The REMOVE operation is specified as follows:
 
 Interaction:
 : Client -> Broker
@@ -950,17 +968,13 @@ Method:
 
 
 URI Template:
-: {+ps}/{+topic}{?q\*}
+: {+ps}/{+topic}
 
 
 URI Template Variables:
 : ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
-
-
-: q := Query Filter (optional). MAY contain a query filter list as per
- {{RFC6690}} Section 4.1.
 
 
 Content-Format:
@@ -971,7 +985,7 @@ Response Payload:
 : None
 
 
-The following response codes are defined for this interface:
+The following response codes are defined for the REMOVE operation:
 
 Success:
 : 2.02 "Deleted". Successful remove
@@ -1023,13 +1037,13 @@ the registered links is the pub/sub Broker.
 A CoAP pub/sub Broker may alternatively register links to its topics to
 a Resource Directory by triggering the RD to retrieve it's links from
 .well-known/core.  In order to use this method, the links must first
-be exposed in the .well-known/core of the pub/sub broker. See
+be exposed in the .well-known/core of the pub/sub Broker. See
 {{discover}} in this document.
 
-The pub/sub broker triggers the RD to retrieve its links by sending a
+The pub/sub Broker triggers the RD to retrieve its links by sending a
 POST with an empty payload to the .well-known/core of the Resource
 Directory.  The RD server will then retrieve the links from the
-.well-known/core of the pub/sub broker and incorporate them into the
+.well-known/core of the pub/sub Broker and incorporate them into the
 Resource Directory. See {{I-D.ietf-core-resource-directory}} for
 further details.
 
@@ -1038,37 +1052,37 @@ further details.
 
 CoAP pub/sub provides a way for client nodes to sleep between operations,
 conserving energy during idle periods. This is made possible by shifting
-the server role to the broker, allowing the broker to be always-on and respond
+the server role to the Broker, allowing the Broker to be always-on and respond
 to requests from other clients while a particular client is sleeping.
 
-For example, the broker will retain the last state update received from a
+For example, the Broker will retain the last state update received from a
 sleeping client, in order to supply the most recent state update to other
 clients in response to read and subscribe operations.
 
-Likewise, the broker will retain the last state update received on the topic
+Likewise, the Broker will retain the last state update received on the topic
 such that a sleeping client, upon waking, can perform a read operation to
-the broker to update its own state from the most recent system state update.
+the Broker to update its own state from the most recent system state update.
 
 
 # Simple Flow Control {#sec-flow-control}
 
-Since the broker node has to potentially send a large amount of
+Since the Broker node has to potentially send a large amount of
 notification messages for each publish message and it may be serving a
-large amount of subscribers and publishers simultaneously, the broker
+large amount of subscribers and publishers simultaneously, the Broker
 may become overwhelmed if it receives many publish messages to popular
 topics in a short period of time.
 
-If the broker is unable to serve a certain client that is sending
-publish messages too fast, the broker SHOULD respond with Response
+If the Broker is unable to serve a certain client that is sending
+publish messages too fast, the Broker SHOULD respond with Response
 Code 4.29, "Too Many Requests" {{I-D.keranen-core-too-many-reqs}} and
 set the Max-Age Option to indicate the number of seconds after which
-the client can retry. The broker MAY stop creating notifications from
+the client can retry. The Broker MAY stop creating notifications from
 the publish messages from this client and to this topic for the
 indicated time.
 
-If a client receives the 4.29 Response Code from the broker for a
+If a client receives the 4.29 Response Code from the Broker for a
 publish message to a topic, it MUST NOT send new publish messages to
-the broker on the same topic before the time indicated in Max-Age has
+the Broker on the same topic before the time indicated in Max-Age has
 passed.
 
 
@@ -1077,10 +1091,10 @@ passed.
 CoAP pub/sub re-uses CoAP {{RFC7252}}, CoRE Resource Directory
 {{I-D.ietf-core-resource-directory}}, and Web Linking {{RFC5988}} and
 therefore the security considerations of those documents also apply to
-this specification. Additionally, a CoAP pub/sub broker and the clients
+this specification. Additionally, a CoAP pub/sub Broker and the clients
 SHOULD authenticate each other and enforce access control policies. A
 malicious client could subscribe to data it is not authorized to or
-mount a denial of service attack against the broker by publishing a
+mount a denial of service attack against the Broker by publishing a
 large number of resources.  The authentication can be performed using
 the already standardized DTLS offered mechanisms, such as
 certificates. DTLS also allows communication security to be
@@ -1089,14 +1103,14 @@ data exchanged between these relevant parties. Provisioning the
 necessary credentials, trust anchors and authorization policies is
 non-trivial and subject of ongoing work.
 
-The use of a CoAP pub/sub broker introduces challenges for the use of
+The use of a CoAP pub/sub Broker introduces challenges for the use of
 end-to-end security between for example a client device on a sensor
 network and a client application running in a cloud-based server
-infrastructure since brokers terminate the exchange. While running
-separate DTLS sessions from the client device to the broker and from
-broker to client application protects confidentially on those paths,
+infrastructure since Brokers terminate the exchange. While running
+separate DTLS sessions from the client device to the Broker and from
+Broker to client application protects confidentially on those paths,
 the client device does not know whether the commands coming from the
-broker are actually coming from the client application. Similarly, a
+Broker are actually coming from the client application. Similarly, a
 client application requesting data does not know whether the data
 originated on the client device. For scenarios where end-to-end
 security is desirable the use of application layer security is
@@ -1105,17 +1119,17 @@ to the client device that any request originated at the client
 application. Similarly, integrity protected sensor data from a client
 device will also provide guarantee to the client application that the
 data originated on the client device itself. The protected data can
-also be verified by the intermediate broker ensuring that it
+also be verified by the intermediate Broker ensuring that it
 stores/caches correct request/response and no malicious
-messages/requests are accepted. The broker would still be able to
+messages/requests are accepted. The Broker would still be able to
 perform aggregation of data/requests collected.
 
 Depending on the level of trust users and system designers place in
-the CoAP pub/sub broker, the use of end-to-end object security is
+the CoAP pub/sub Broker, the use of end-to-end object security is
 RECOMMENDED as described in {{I-D.palombini-ace-coap-pubsub-profile}}.
 When only end-to-end encryption is necessary and the CoAP Broker is
 trusted, Payload Only Protection (Mode:PAYL) could be used. The
-Publisher would wrap only the payload before sending it to the broker
+Publisher would wrap only the payload before sending it to the Broker
 and set the option Content-Format to application/smpayl. Upon
 receival, the Broker can read the unencrypted CoAP header to forward
 it to the subscribers.
@@ -1132,7 +1146,7 @@ established with {{RFC6690}} and appends to the definition of one CoAP Response 
 
 * Attribute Value: core.ps
 
-* Description: {{function-set}} of [[This document]]
+* Description: {{sec-rest-api}} of [[This document]]
 
 * Reference: [[This document]]
 
@@ -1146,7 +1160,7 @@ established with {{RFC6690}} and appends to the definition of one CoAP Response 
 
 * Attribute Value: core.ps.discover
 
-* Description: {{function-set}} of [[This document]]
+* Description: {{sec-rest-api}} of [[This document]]
 
 * Reference: [[This document]]
 
