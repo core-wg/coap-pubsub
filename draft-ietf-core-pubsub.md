@@ -1,7 +1,7 @@
 ---
 stand_alone: true
 ipr: trust200902
-docname: draft-ietf-core-coap-pubsub-04
+docname: draft-ietf-core-coap-pubsub-05
 cat: std
 pi:
   toc: 'yes'
@@ -270,10 +270,10 @@ API. {{discover-topic-wk-fig}} shows an example of topic discovery
 through .well-known/core.
 
 Topics in the broker may be created in hierarchies (see {create}) with
-parent topics having sub-topics. For a discovery the broker may choose 
+parent topics having sub-topics. For a discovery the broker may choose
 to not expose the sub-topics in order to limit amount of topic links
-sent in a discovery response. The client can then perform discovery 
-for the parent topics it wants to discover the sub-topics. 
+sent in a discovery response. The client can then perform discovery
+for the parent topics it wants to discover the sub-topics.
 
 The DISCOVER interface is specified as follows:
 
