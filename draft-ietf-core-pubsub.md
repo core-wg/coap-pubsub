@@ -1,7 +1,7 @@
 ---
 stand_alone: true
 ipr: trust200902
-docname: draft-ietf-core-coap-pubsub-05
+docname: draft-ietf-core-coap-pubsub-06
 cat: std
 pi:
   toc: 'yes'
@@ -46,6 +46,7 @@ informative:
   I-D.palombini-ace-coap-pubsub-profile:
   I-D.ietf-core-resource-directory:
   RFC5988:
+  RFC8387:
 
 --- abstract
 
@@ -1127,12 +1128,14 @@ perform aggregation of data/requests collected.
 Depending on the level of trust users and system designers place in
 the CoAP pub/sub Broker, the use of end-to-end object security is
 RECOMMENDED as described in {{I-D.palombini-ace-coap-pubsub-profile}}.
-When only end-to-end encryption is necessary and the CoAP Broker is
-trusted, Payload Only Protection (Mode:PAYL) could be used. The
-Publisher would wrap only the payload before sending it to the Broker
-and set the option Content-Format to application/smpayl. Upon
-receival, the Broker can read the unencrypted CoAP header to forward
-it to the subscribers.
+An example application that uses the CoAP pub/sub Broker and relies on 
+end-to-end object security is described in {{RFC8387}}. 
+When only end-to-end encryption  is necessary and the CoAP Broker is 
+trusted, Payload Only Protection (Mode:PAYL) could be used. 
+The Publisher would wrap only the  payload before sending it to 
+the Broker and set the option Content-Format to application/smpayl. 
+Upon receival, the Broker can read the unencrypted CoAP header 
+to forward it to the subscribers.
 
 
 # IANA Considerations {#iana}
