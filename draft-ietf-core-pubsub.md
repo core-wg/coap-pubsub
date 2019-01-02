@@ -39,7 +39,7 @@ normative:
   RFC6570:
   RFC7641:
   RFC7252:
-  I-D.keranen-core-too-many-reqs:
+  I-D.ietf-core-too-many-reqs:
 
 informative:
   I-D.ietf-core-object-security:
@@ -1079,7 +1079,7 @@ topics in a short period of time.
 
 If the Broker is unable to serve a certain client that is sending
 publish messages too fast, the Broker SHOULD respond with Response
-Code 4.29, "Too Many Requests" {{I-D.keranen-core-too-many-reqs}} and
+Code 4.29, "Too Many Requests" {{I-D.ietf-core-too-many-reqs}} and
 set the Max-Age Option to indicate the number of seconds after which
 the client can retry. The Broker MAY stop creating notifications from
 the publish messages from this client and to this topic for the
