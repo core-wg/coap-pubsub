@@ -18,7 +18,7 @@ pi:
 title: Publish-Subscribe Broker for the Constrained Application Protocol (CoAP)
 abbrev: Publish-Subscribe Broker for CoAP
 kw: Internet-Draft
-date: 2018
+date: 2019
 author:
 - ins: M. K. Koster
   name: Michael Koster
@@ -39,7 +39,7 @@ normative:
   RFC6570:
   RFC7641:
   RFC7252:
-  I-D.keranen-core-too-many-reqs:
+  I-D.ietf-core-too-many-reqs:
 
 informative:
   I-D.ietf-core-object-security:
@@ -64,7 +64,7 @@ The Constrained Application Protocol (CoAP) {{RFC7252}} supports
 machine-to-machine communication across networks of constrained
 devices. CoAP uses a request/response model where clients make requests to
 servers in order to request actions on resources. Depending on the situation
-the same device may act either as a server or a client.
+the same device may act either as a server, a client, or both.
 
 One important class of constrained devices includes devices that are intended
 to run for years from a small battery, or by scavenging energy from their
@@ -75,11 +75,16 @@ Address Translators (NATs) or firewalls. Such middle-boxes often prevent
 connecting to a device from the Internet unless the connection was initiated
 by the device.
 
-This document specifies the means for nodes with limited reachability to
-communicate using simple extensions to CoAP. The extensions enable publish-subscribe
+For some applications the client/server and request/response communication model
+is not optimal but publish-subscribe communication with potentially many senders
+and/or receivers and communication via topics rather than directly with
+endpoints may fit better.
+
+This document specifies simple extensions to CoAP for enabling publish-subscribe
 communication using a Broker node that enables store-and-forward messaging
-between two or more nodes. Furthermore the extensions facilitate many-to-many
-communication using CoAP.
+between two or more nodes. This model facilitates communication of nodes with
+limited reachability, enables simple many-to-many communication, and eases
+integration with other publish-subscribe systems.
 
 
 # Terminology
@@ -197,7 +202,7 @@ CoAP pub/sub topic value may alternatively consist of a collection of one or
 more sub-topics, consisting of links to the sub-topic URIs and
 indicated by a link-format content-format. Sub-topics are also topics and
 may have their own sub-topics, forming a tree structure of unique paths that
-is implemented using URIs. The full URI of a topic includes a schems and authority
+is implemented using URIs. The full URI of a topic includes a scheme and authority
 for the Broker, for example "coaps://10.0.0.13:5684/EP-33543/sen/3303/0/5700".
 
 ## brokerless Pub/sub
@@ -1074,7 +1079,7 @@ topics in a short period of time.
 
 If the Broker is unable to serve a certain client that is sending
 publish messages too fast, the Broker SHOULD respond with Response
-Code 4.29, "Too Many Requests" {{I-D.keranen-core-too-many-reqs}} and
+Code 4.29, "Too Many Requests" {{I-D.ietf-core-too-many-reqs}} and
 set the Max-Age Option to indicate the number of seconds after which
 the client can retry. The Broker MAY stop creating notifications from
 the publish messages from this client and to this topic for the
