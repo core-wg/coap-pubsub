@@ -392,9 +392,11 @@ payload MUST use a supported serialization of the CoRE link format
 {{RFC6690}}. The target of the link MUST be a URI formatted
 string. The client MUST indicate the desired content format for
 publishes to the topic by using the ct (Content Format) link attribute
-in the link-format payload. Additional link target attributes and relation values may be included in the topic specification link whena topic is created. 
+in the link-format payload. Additional link target attributes and relation
+values MAY be included in the topic specification link when a topic is created. 
 
-The client MAY indicate the lifetime of the topic by including the Max-Age option in the CREATE request. 
+The client MAY indicate the lifetime of the topic by including the Max-Age
+option in the CREATE request. 
 
 Topic hierarchies can be created by creating parent topics. A parent
 topic is created with a POST using ct (Content Format) link attribute
@@ -410,15 +412,16 @@ The topic string used in the link target MUST NOT contain the "/" character.
 
 A topic creator MUST include exactly one content format link attribute value (ct)
 in the create payload. If the Broker does not support the indicated format for
-both publish and subscribe, or if there is more than one "ct" value included in the request, the Broker MUST reject the operation with an error code of
-4.00 "Bad Request".
+both publish and subscribe, or if there is more than one "ct" value included in
+the request, the Broker MUST reject the operation with an error code of
+"4.00 Bad Request".
 
 Only one topic may be created per request. If there is more than one link 
 included in a CREATE request, the Broker MUST reject the operation with an
-erroro code of 4.00 "Bad Request".
+error code of "4.00 Bad Request".
 
 There is no default content format. If no ct is specified, the Broker MUST
-reject the operation with an error code of 4.00 "Bad Request".
+reject the operation with an error code of "4.00 Bad Request".
 
 A Broker MUST return a response code of "2.01 Created" if the topic is
 created and return the URI path of the created topic via Location-Path
