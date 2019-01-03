@@ -392,16 +392,17 @@ payload MUST use a supported serialization of the CoRE link format
 {{RFC6690}}. The target of the link MUST be a URI formatted
 string. The client MUST indicate the desired content format for
 publishes to the topic by using the ct (Content Format) link attribute
-in the link-format payload. The client MAY indicate the lifetime of
-the topic by including the Max-Age option in the CREATE request.
+in the link-format payload. Additional link target attributes and relation values may be included in the topic specification link whena topic is created. 
 
-Topics may be created as sub-topics of other topics. A client MAY
-create a topic with a ct (Content Format) link attribute value which
-describes a supported serialization of the CoRE link format
-{{RFC6690}} such as application/link-format (ct=40) or its JSON or
-CBOR serializations.  If a topic is created which describes a link
-serialization, that topic may then have sub-topics created under it as
-shown in {{create-sub-fig}}.
+The client MAY indicate the lifetime of the topic by including the Max-Age option in the CREATE request. 
+
+Topic hierarchies can be created by creating parent topics. A parent
+topic is created with a POST using ct (Content Format) link attribute
+value which describes a supported serialization of the CoRE link
+format {{RFC6690}}, such as application/link-format (ct=40) or its
+JSON or CBOR serializations.  If a topic is created which describes a
+link serialization, that topic may then have sub-topics created under
+it as shown in {{create-sub-fig}}.
 
 Ony one level in the topic hierarchy may be created as a result of a CREATE
 operation, unless create on PUBLISH is supported (see {{sec-publish}}).
@@ -409,8 +410,12 @@ The topic string used in the link target MUST NOT contain the "/" character.
 
 A topic creator MUST include exactly one content format link attribute value (ct)
 in the create payload. If the Broker does not support the indicated format for
-both publish and subscribe, it MUST reject the operation with an error code of
+both publish and subscribe, or if there is more than one "ct" value included in the request, the Broker MUST reject the operation with an error code of
 4.00 "Bad Request".
+
+Only one topic may be created per request. If there is more than one link 
+included in a CREATE request, the Broker MUST reject the operation with an
+erroro code of 4.00 "Bad Request".
 
 There is no default content format. If no ct is specified, the Broker MUST
 reject the operation with an error code of 4.00 "Bad Request".
@@ -424,15 +429,6 @@ exceeded without any publishes to the topic.  Broker SHOULD retain a
 topic indefinitely if the Max-Age option is elided or is set to zero
 upon topic creation. The lifetime of a topic MUST be refreshed upon
 create operations with a target of an existing topic.
-
-
-Topic hierarchies can be created by creating parent topics. A parent
-topic is created with a POST using ct (Content Format) link attribute
-value which describes a supported serialization of the CoRE link
-format {{RFC6690}}, such as application/link-format (ct=40) or its
-JSON or CBOR serializations.  If a topic is created which describes a
-link serialization, that topic may then have sub-topics created under
-it as shown in {{create-sub-fig}}.
 
 The CREATE interface is specified as follows:
 
