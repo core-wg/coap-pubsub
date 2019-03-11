@@ -219,8 +219,8 @@ any outstanding subscriptions are cancelled.
 
 ## Brokerless Pub/sub
 
-In some use cases, it is desireable to use pub/sub semantics for peer to peer 
-communication, but it is not feasable or desireable to include a separate node 
+In some use cases, it is desireable to use pub/sub semantics for peer-to-peer 
+communication, but it is not feasible or desireable to include a separate node 
 on the network to serve as a Broker. In other use cases, it is desireable to enable one-way-only communication, such as sensors pushing updates to a service.
  
 {{brokerless}} shows an arrangement for using CoAP pub/sub in a
@@ -710,7 +710,7 @@ exist or has been removed, or if Max-Age of a previously published
 representation has expired.
 
 If a Topic has been created but not yet published to when a SUBSCRIBE to the 
-topic is recieved, the Broker MAY acknowledge and queue the pending SUBSCRIBE 
+topic is received, the Broker MAY acknowledge and queue the pending SUBSCRIBE 
 and defer the response until an initial PUBLISH occurs.
 
 The Broker MUST return a response code "4.15 Unsupported Content Format" if it 
@@ -886,7 +886,7 @@ exist or has been removed, or if Max-Age of a previously published
 representation has expired.
 
 If a Topic has been created but not yet published to when a READ to the topic is 
-recieved, the Broker MAY acknowledge and queue the pending READ, and defer the 
+received, the Broker MAY acknowledge and queue the pending READ, and defer the 
 response until an initial PUBLISH occurs.
 
 The Broker MUST return a response code "4.15 Unsupported Content Format" if the 
