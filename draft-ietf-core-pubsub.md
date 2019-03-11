@@ -290,7 +290,7 @@ A CoAP pub/sub Broker MAY provide topic discovery functionality through the
 API. {{discover-topic-wk-fig}} shows an example of topic discovery
 through .well-known/core.
 
-Topics in the broker may be created in hierarchies (see {create}) with
+Topics in the broker may be created in hierarchies (see {{sec-create}}) with
 parent topics having sub-topics. For a discovery the broker may choose
 to not expose the sub-topics in order to limit amount of topic links
 sent in a discovery response. The client can then perform discovery
