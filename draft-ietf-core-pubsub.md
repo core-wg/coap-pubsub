@@ -425,20 +425,15 @@ Ony one level in the topic hierarchy may be created as a result of a CREATE
 operation, unless create on PUBLISH is supported (see {{sec-publish}}).
 The topic string used in the link target MUST NOT contain the "/" character.
 
-A topic creator MUST include one or more content format link attribute values (ct) in the create payload. If the Broker does not support the indicated formats for both publish and subscribe, the Broker MUST reject the operation with an error code of "4.00 Bad Request".
-
-There is no default content format. If no ct is specified, the Broker MUST
-reject the operation with an error code of "4.00 Bad Request".
+A topic creator MUST include exactly one content format link attribute value (ct) in the create payload. If the content format option is not included or if the option is repeated, the Broker MUST reject the operation with an error code of "4.00 Bad Request".
 
 Only one topic may be created per request. If there is more than one link 
 included in a CREATE request, the Broker MUST reject the operation with an
 error code of "4.00 Bad Request".
 
 A Broker MUST return a response code of "2.01 Created" if the topic is
-created and return the URI path of the created topic via Location-Path
-options. The Broker MUST return the appropriate 4.xx response code
-indicating the reason for failure if a new topic can not be
-created. 
+created and MUST return the URI path of the created topic via Location-Path
+options. If a new topic can not be created, the Broker MUST return the appropriate 4.xx response code indicating the reason for failure. 
 
 A Broker SHOULD remove topics if the Max-Age of the topic is
 exceeded without any publishes to the topic.  A Broker SHOULD retain a
@@ -488,14 +483,6 @@ Failure:
 
 Failure:
 : 4.01 "Unauthorized". Authorization failure.
-
-
-Failure:
-: 4.03 "Forbidden". Topic already exists.
-
-
-Failure:
-: 4.06 "Not Acceptable". Unsupported content format for topic.
 
 
 {{create-fig}} shows an example of a topic called "topic1" being
