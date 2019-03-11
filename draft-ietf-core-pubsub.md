@@ -209,7 +209,7 @@ indicated by a link-format content-format. Sub-topics are also topics and
 may have their own sub-topics, forming a tree structure of unique paths that
 is implemented using URIs. The full URI of a topic includes a scheme and 
 authority for the Broker, for example 
-"coaps://10.0.0.13:5684/EP-33543/sen/3303/0/5700".
+"coaps://192.0.2.13:5684/EP-33543/sen/3303/0/5700".
 
 A Topic may have a lifetime defined by using the CoAP Max-Age option on topic 
 creation, or on publish operations to the topic. The lifetime is refreshed each 
