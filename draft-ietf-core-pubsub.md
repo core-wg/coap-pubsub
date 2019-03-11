@@ -1,7 +1,7 @@
 ---
 stand_alone: true
 ipr: trust200902
-docname: draft-ietf-core-coap-pubsub-06
+docname: draft-ietf-core-coap-pubsub-07
 cat: std
 pi:
   toc: 'yes'
@@ -39,7 +39,7 @@ normative:
   RFC6570:
   RFC7641:
   RFC7252:
-  I-D.ietf-core-too-many-reqs:
+  RFC8516:
 
 informative:
   I-D.ietf-core-object-security:
@@ -90,9 +90,7 @@ integration with other publish-subscribe systems.
 
 # Terminology
 
-The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL NOT',
-'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'MAY', and 'OPTIONAL' in this
-specification are to be interpreted as described in {{RFC2119}}.
+{::boilerplate bcp14}
 
 This specification requires readers to be familiar with all the terms and
 concepts that are discussed in {{RFC5988}} and {{RFC6690}}. Readers
@@ -130,7 +128,7 @@ CoAP pub/sub Client:
 
 Topic:
 : A unique identifier for a particular item being published and/or subscribed
-  to. A Broker uses the topics to match subscriptions to publications. A topic
+  to. A Broker uses the topics to match subscriptions to publications. A reference to a Topic on a Broker 
   is a valid CoAP URI as defined in {{RFC7252}}
 
 
@@ -195,7 +193,9 @@ object in a publish-subscribe system. Topics are conventionally formed
 as a hierarchy, e.g. "/sensors/weather/barometer/pressure" or
 "/EP-33543/sen/3303/0/5700".  The topics are hosted by a Broker and
 all the clients using the Broker share the same namespace for
-topics. Every CoAP pub/sub topic has an associated link, consisting of a reference
+topics. 
+
+Every CoAP pub/sub topic has an associated link, consisting of a reference
 path on the Broker using URI path {{RFC3986}} construction and link
 attributes {{RFC6690}}. Every topic is associated with zero or more
 stored representations and a content-format specified in the link. A
@@ -203,11 +203,22 @@ CoAP pub/sub topic value may alternatively consist of a collection of one or
 more sub-topics, consisting of links to the sub-topic URIs and
 indicated by a link-format content-format. Sub-topics are also topics and
 may have their own sub-topics, forming a tree structure of unique paths that
-is implemented using URIs. The full URI of a topic includes a scheme and authority
-for the Broker, for example "coaps://10.0.0.13:5684/EP-33543/sen/3303/0/5700".
+is implemented using URIs. The full URI of a topic includes a scheme and 
+authority for the Broker, for example 
+"coaps://192.0.2.13:5684/EP-33543/sen/3303/0/5700".
 
-## brokerless Pub/sub
+A Topic may have a lifetime defined by using the CoAP Max-Age option on topic 
+creation, or on publish operations to the topic. The lifetime is refreshed each 
+time a representation is published to the topic. If the lifetime expires, the 
+topic is removed from discovery responses, returns errors on subscription, and 
+any outstanding subscriptions are cancelled.
 
+## Brokerless Pub/sub
+
+In some use cases, it is desireable to use pub/sub semantics for peer-to-peer 
+communication, but it is not feasible or desireable to include a separate node 
+on the network to serve as a Broker. In other use cases, it is desireable to enable one-way-only communication, such as sensors pushing updates to a service.
+ 
 {{brokerless}} shows an arrangement for using CoAP pub/sub in a
 "Brokerless" configuration between peer nodes. Nodes in a Brokerless
 system may act as both Broker and client. A node that supports Broker
@@ -275,7 +286,7 @@ A CoAP pub/sub Broker MAY provide topic discovery functionality through the
 API. {{discover-topic-wk-fig}} shows an example of topic discovery
 through .well-known/core.
 
-Topics in the broker may be created in hierarchies (see {create}) with
+Topics in the broker may be created in hierarchies (see {{sec-create}}) with
 parent topics having sub-topics. For a discovery the broker may choose
 to not expose the sub-topics in order to limit amount of topic links
 sent in a discovery response. The client can then perform discovery
@@ -410,28 +421,23 @@ Ony one level in the topic hierarchy may be created as a result of a CREATE
 operation, unless create on PUBLISH is supported (see {{sec-publish}}).
 The topic string used in the link target MUST NOT contain the "/" character.
 
-A topic creator MUST include exactly one content format link attribute value (ct)
-in the create payload. If the Broker does not support the indicated format for
-both publish and subscribe, or if there is more than one "ct" value included in
-the request, the Broker MUST reject the operation with an error code of
-"4.00 Bad Request".
+A topic creator MUST include exactly one content format link attribute value (ct) in the create payload. If the content format option is not included or if the option is repeated, the Broker MUST reject the operation with an error code of "4.00 Bad Request".
 
 Only one topic may be created per request. If there is more than one link 
 included in a CREATE request, the Broker MUST reject the operation with an
 error code of "4.00 Bad Request".
 
-There is no default content format. If no ct is specified, the Broker MUST
-reject the operation with an error code of "4.00 Bad Request".
-
 A Broker MUST return a response code of "2.01 Created" if the topic is
-created and return the URI path of the created topic via Location-Path
-options. The Broker MUST return the appropriate 4.xx response code
-indicating the reason for failure if a new topic can not be
-created. Broker SHOULD remove topics if the Max-Age of the topic is
-exceeded without any publishes to the topic.  Broker SHOULD retain a
+created and MUST return the URI path of the created topic via Location-Path
+options. If a new topic can not be created, the Broker MUST return the appropriate 4.xx response code indicating the reason for failure. 
+
+A Broker SHOULD remove topics if the Max-Age of the topic is
+exceeded without any publishes to the topic.  A Broker SHOULD retain a
 topic indefinitely if the Max-Age option is elided or is set to zero
 upon topic creation. The lifetime of a topic MUST be refreshed upon
 create operations with a target of an existing topic.
+
+A topic creator SHOULD PUBLISH an initial value to a newly-created Topic in order to enable responses to READ and SUBSCRIBE requests that may be submitted after the topic is discoverable.
 
 The CREATE interface is specified as follows:
 
@@ -473,14 +479,6 @@ Failure:
 
 Failure:
 : 4.01 "Unauthorized". Authorization failure.
-
-
-Failure:
-: 4.03 "Forbidden". Topic already exists.
-
-
-Failure:
-: 4.06 "Not Acceptable". Unsupported content format for topic.
 
 
 {{create-fig}} shows an example of a topic called "topic1" being
@@ -571,6 +569,11 @@ representation to return in response to SUBSCRIBE and READ requests.
 A Broker MUST make a best-effort attempt to notify all clients
 subscribed on a particular topic each time it receives a publish on
 that topic. An example is shown in {{subscribe-fig}}.
+
+If a client publishes to a Broker without the Max-Age option, the Broker MUST
+refresh the topic lifetime with the most recently set Max-Age value, and the 
+Broker MUST include the most recently set Max-Age value in the Max-Age option of 
+all notifications.
 
 If a client publishes to a Broker with the Max-Age option, the Broker MUST
 include the same value for the Max-Age option in all notifications.
@@ -683,25 +686,25 @@ value and the Broker can supply the requested content format. The Broker
 MUST reject Subscribe requests on a topic if the content format of the request
 is not the content format the topic was created with.
 
-If the topic was published with the Max-Age option, the
-Broker MUST set the Max-Age option in the valid response to the amount of
-time remaining for the value to be valid since the last publish operation
-on that topic. The Broker MUST return a response code of "2.07 No Content"
-if the topic has not yet been published to, or if Max-Age of the previously
-stored value has expired. The Broker MUST
-return a response code "4.04 Not Found" if the topic does not exist or has
-been removed.
+If the topic was published with the Max-Age option, the Broker MUST set the Max-Age option in the valid response to the amount of time remaining for the value to be valid since the last publish operation on that topic. 
 
-The Broker MUST return a response code "4.15 Unsupported Content
-Format" if it can not return the requested content format. If a Broker is
-unable to accept a new Subscription on a topic, it SHOULD return the
-appropriate response code without the Observe option as per {{RFC7641}}
-Section 4.1.
+The Broker MUST return a response code "4.04 Not Found" if the topic does not 
+exist or has been removed, or if Max-Age of a previously published 
+representation has expired.
 
-There is no explicit maximum lifetime of a Subscription,
-thus a Broker may remove subscribers at any time. The Broker, upon removing a
-Subscriber, will transmit the appropriate response code without the Observe
-option, as per {{RFC7641}} Section 4.2, to the removed Subscriber.
+If a Topic has been created but not yet published to when a SUBSCRIBE to the 
+topic is received, the Broker MAY acknowledge and queue the pending SUBSCRIBE 
+and defer the response until an initial PUBLISH occurs.
+
+The Broker MUST return a response code "4.15 Unsupported Content Format" if it 
+can not return the requested content format. If a Broker is unable to accept a 
+new Subscription on a topic, it SHOULD return the appropriate response code 
+without the Observe option as per {{RFC7641}} Section 4.1.
+
+There is no explicit maximum lifetime of a Subscription, thus a Broker may 
+remove subscribers at any time. The Broker, upon removing a Subscriber, will 
+transmit the appropriate response code without the Observe option, as per 
+{{RFC7641}} Section 4.2, to the removed Subscriber.
 
 The SUBSCRIBE operation is specified as follows:
 
@@ -729,10 +732,6 @@ The following response codes are defined for the SUBSCRIBE operation:
 
 Success:
 : 2.05 "Content". Successful subscribe, current value included
-
-
-Success:
-: 2.07 "No Content". Successful subscribe, value not included
 
 
 Failure:
@@ -861,16 +860,20 @@ topic was created with. The Broker MUST return a response code of "2.05
 Content" along with the most recently published value if the topic contains
 a valid value and the Broker can supply the requested content format.
 
-If the topic was published with the Max-Age option, the Broker MUST set the
-Max-Age option in the valid response to the amount of time remaining for
-the topic to be valid since the last publish. The Broker MUST return a response
-code of "2.07 No Content" if the Max-Age of the previously stored value has
-expired, or if the topic has not yet been published to.
+If the topic was published with the Max-Age option, the Broker MUST set the 
+Max-Age option in the valid response to the amount of time remaining for the 
+value to be valid since the last publish operation on that topic. 
 
-The Broker MUST return a response code "4.04 Not Found" if the topic
-does not exist or has been removed. The Broker MUST return a response code
-"4.15 Unsupported Content Format" if the Broker can not return the requested
-content format.
+The Broker MUST return a response code "4.04 Not Found" if the topic does not 
+exist or has been removed, or if Max-Age of a previously published 
+representation has expired.
+
+If a Topic has been created but not yet published to when a READ to the topic is 
+received, the Broker MAY acknowledge and queue the pending READ, and defer the 
+response until an initial PUBLISH occurs.
+
+The Broker MUST return a response code "4.15 Unsupported Content Format" if the 
+Broker can not return the requested content format.
 
 The READ operation is specified as follows:
 
@@ -897,10 +900,6 @@ The following response codes are defined for the READ operation:
 
 Success:
 : 2.05 "Content". Successful READ, current value included
-
-
-Success:
-: 2.07 "No Content". Topic exists, value not included
 
 
 Failure:
@@ -1077,13 +1076,12 @@ large amount of subscribers and publishers simultaneously, the Broker
 may become overwhelmed if it receives many publish messages to popular
 topics in a short period of time.
 
-If the Broker is unable to serve a certain client that is sending
-publish messages too fast, the Broker SHOULD respond with Response
-Code 4.29, "Too Many Requests" {{I-D.ietf-core-too-many-reqs}} and
-set the Max-Age Option to indicate the number of seconds after which
-the client can retry. The Broker MAY stop creating notifications from
-the publish messages from this client and to this topic for the
-indicated time.
+If the Broker is unable to serve a certain client that is sending publish 
+messages too fast, the Broker SHOULD respond with Response Code 4.29, "Too Many 
+Requests" {{RFC8516}} and set the Max-Age Option to indicate the number of 
+seconds after which the client can retry. The Broker MAY stop creating 
+notifications from the publish messages from this client and to this topic for 
+the indicated time.
 
 If a client receives the 4.29 Response Code from the Broker for a
 publish message to a topic, it MUST NOT send new publish messages to
@@ -1173,17 +1171,6 @@ established with {{RFC6690}} and appends to the definition of one CoAP Response 
 
 * Notes: None
 
-
-
-## Response Code value '2.07'
-
-* Response Code: 2.07
-
-* Description: No Content
-
-* Reference: [[This document]]
-
-* Notes: The server sends this code to the client to indicate that the request was valid and accepted, but the response may contain an empty payload. It is comparable to and may be proxied with the HTTP 204 No Content status code.
 
 
 # Acknowledgements {#acks}
