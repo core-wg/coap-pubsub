@@ -17,7 +17,7 @@
 <?rfc compact="no"?>
 <?rfc subcompact="no"?>
 
-<rfc ipr="trust200902" docName="draft-ietf-core-coap-pubsub-06" category="std">
+<rfc ipr="trust200902" docName="draft-ietf-core-coap-pubsub-07" category="std">
 
   <front>
     <title abbrev="Publish-Subscribe Broker for CoAP">Publish-Subscribe Broker for the Constrained Application Protocol (CoAP)</title>
@@ -98,9 +98,11 @@ integration with other publish-subscribe systems.</t>
 </section>
 <section anchor="terminology" title="Terminology">
 
-<t>The key words ‘MUST’, ‘MUST NOT’, ‘REQUIRED’, ‘SHALL’, ‘SHALL NOT’,
-‘SHOULD’, ‘SHOULD NOT’, ‘RECOMMENDED’, ‘MAY’, and ‘OPTIONAL’ in this
-specification are to be interpreted as described in <xref target="RFC2119"/>.</t>
+<t>The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL
+NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”,
+“MAY”, and “OPTIONAL” in this document are to be interpreted as
+described in BCP 14 [RFC2119] [RFC8174] when, and only when, they
+appear in all capitals, as shown here.</t>
 
 <t>This specification requires readers to be familiar with all the terms and
 concepts that are discussed in <xref target="RFC5988"/> and <xref target="RFC6690"/>. Readers
@@ -131,7 +133,7 @@ temporarily store publications to satisfy future subscriptions and pending notif
 in this specification.</t>
   <t hangText='Topic:'>
   A unique identifier for a particular item being published and/or subscribed
-to. A Broker uses the topics to match subscriptions to publications. A topic
+to. A Broker uses the topics to match subscriptions to publications. A reference to a Topic on a Broker 
 is a valid CoAP URI as defined in <xref target="RFC7252"/></t>
 </list></t>
 
@@ -194,7 +196,9 @@ object in a publish-subscribe system. Topics are conventionally formed
 as a hierarchy, e.g. “/sensors/weather/barometer/pressure” or
 “/EP-33543/sen/3303/0/5700”.  The topics are hosted by a Broker and
 all the clients using the Broker share the same namespace for
-topics. Every CoAP pub/sub topic has an associated link, consisting of a reference
+topics.</t>
+
+<t>Every CoAP pub/sub topic has an associated link, consisting of a reference
 path on the Broker using URI path <xref target="RFC3986"/> construction and link
 attributes <xref target="RFC6690"/>. Every topic is associated with zero or more
 stored representations and a content-format specified in the link. A
@@ -202,11 +206,22 @@ CoAP pub/sub topic value may alternatively consist of a collection of one or
 more sub-topics, consisting of links to the sub-topic URIs and
 indicated by a link-format content-format. Sub-topics are also topics and
 may have their own sub-topics, forming a tree structure of unique paths that
-is implemented using URIs. The full URI of a topic includes a scheme and authority
-for the Broker, for example “coaps://10.0.0.13:5684/EP-33543/sen/3303/0/5700”.</t>
+is implemented using URIs. The full URI of a topic includes a scheme and 
+authority for the Broker, for example 
+“coaps://10.0.0.13:5684/EP-33543/sen/3303/0/5700”.</t>
+
+<t>A Topic may have a lifetime defined by using the CoAP Max-Age option on topic 
+creation, or on publish operations to the topic. The lifetime is refreshed each 
+time a representation is published to the topic. If the lifetime expires, the 
+topic is removed from discovery responses, returns errors on subscription, and 
+any outstanding subscriptions are cancelled.</t>
 
 </section>
-<section anchor="brokerless-pubsub" title="brokerless Pub/sub">
+<section anchor="brokerless-pubsub" title="Brokerless Pub/sub">
+
+<t>In some use cases, it is desireable to use pub/sub semantics for peer to peer 
+communication, but it is not feasable or desireable to include a separate node 
+on the network to serve as a Broker. In other use cases, it is desireable to enable one-way-only communication, such as sensors pushing updates to a service.</t>
 
 <t><xref target="brokerless"/> shows an arrangement for using CoAP pub/sub in a
 “Brokerless” configuration between peer nodes. Nodes in a Brokerless
@@ -361,9 +376,11 @@ payload MUST use a supported serialization of the CoRE link format
 <xref target="RFC6690"/>. The target of the link MUST be a URI formatted
 string. The client MUST indicate the desired content format for
 publishes to the topic by using the ct (Content Format) link attribute
-in the link-format payload. Additional link target attributes and relation values may be included in the topic specification link whena topic is created.</t>
+in the link-format payload. Additional link target attributes and relation
+values MAY be included in the topic specification link when a topic is created.</t>
 
-<t>The client MAY indicate the lifetime of the topic by including the Max-Age option in the CREATE request.</t>
+<t>The client MAY indicate the lifetime of the topic by including the Max-Age
+option in the CREATE request.</t>
 
 <t>Topic hierarchies can be created by creating parent topics. A parent
 topic is created with a POST using ct (Content Format) link attribute
@@ -377,27 +394,28 @@ it as shown in <xref target="create-sub-fig"/>.</t>
 operation, unless create on PUBLISH is supported (see <xref target="sec-publish"/>).
 The topic string used in the link target MUST NOT contain the “/” character.</t>
 
-<t>A topic creator MUST include exactly one content format link attribute value (ct)
-in the create payload. If the Broker does not support the indicated format for
-both publish and subscribe, or if there is more than one “ct” value included in the request, the Broker MUST reject the operation with an error code of
-4.00 “Bad Request”.</t>
+<t>A topic creator MUST include one or more content format link attribute values (ct) in the create payload. If the Broker does not support the indicated formats for both publish and subscribe, the Broker MUST reject the operation with an error code of “4.00 Bad Request”.</t>
+
+<t>There is no default content format. If no ct is specified, the Broker MUST
+reject the operation with an error code of “4.00 Bad Request”.</t>
 
 <t>Only one topic may be created per request. If there is more than one link 
 included in a CREATE request, the Broker MUST reject the operation with an
-erroro code of 4.00 “Bad Request”.</t>
-
-<t>There is no default content format. If no ct is specified, the Broker MUST
-reject the operation with an error code of 4.00 “Bad Request”.</t>
+error code of “4.00 Bad Request”.</t>
 
 <t>A Broker MUST return a response code of “2.01 Created” if the topic is
 created and return the URI path of the created topic via Location-Path
 options. The Broker MUST return the appropriate 4.xx response code
 indicating the reason for failure if a new topic can not be
-created. Broker SHOULD remove topics if the Max-Age of the topic is
-exceeded without any publishes to the topic.  Broker SHOULD retain a
+created.</t>
+
+<t>A Broker SHOULD remove topics if the Max-Age of the topic is
+exceeded without any publishes to the topic.  A Broker SHOULD retain a
 topic indefinitely if the Max-Age option is elided or is set to zero
 upon topic creation. The lifetime of a topic MUST be refreshed upon
 create operations with a target of an existing topic.</t>
+
+<t>A topic creator SHOULD PUBLISH an initial value to a newly-created Topic in order to enable responses to READ and SUBSCRIBE requests that may be submitted after the topic is discoverable.</t>
 
 <t>The CREATE interface is specified as follows:</t>
 
@@ -514,6 +532,11 @@ representation to return in response to SUBSCRIBE and READ requests.</t>
 subscribed on a particular topic each time it receives a publish on
 that topic. An example is shown in <xref target="subscribe-fig"/>.</t>
 
+<t>If a client publishes to a Broker without the Max-Age option, the Broker MUST
+refresh the topic lifetime with the most recently set Max-Age value, and the 
+Broker MUST include the most recently set Max-Age value in the Max-Age option of 
+all notifications.</t>
+
 <t>If a client publishes to a Broker with the Max-Age option, the Broker MUST
 include the same value for the Max-Age option in all notifications.</t>
 
@@ -598,25 +621,25 @@ value and the Broker can supply the requested content format. The Broker
 MUST reject Subscribe requests on a topic if the content format of the request
 is not the content format the topic was created with.</t>
 
-<t>If the topic was published with the Max-Age option, the
-Broker MUST set the Max-Age option in the valid response to the amount of
-time remaining for the value to be valid since the last publish operation
-on that topic. The Broker MUST return a response code of “2.07 No Content”
-if the topic has not yet been published to, or if Max-Age of the previously
-stored value has expired. The Broker MUST
-return a response code “4.04 Not Found” if the topic does not exist or has
-been removed.</t>
+<t>If the topic was published with the Max-Age option, the Broker MUST set the Max-Age option in the valid response to the amount of time remaining for the value to be valid since the last publish operation on that topic.</t>
 
-<t>The Broker MUST return a response code “4.15 Unsupported Content
-Format” if it can not return the requested content format. If a Broker is
-unable to accept a new Subscription on a topic, it SHOULD return the
-appropriate response code without the Observe option as per <xref target="RFC7641"/>
-Section 4.1.</t>
+<t>The Broker MUST return a response code “4.04 Not Found” if the topic does not 
+exist or has been removed, or if Max-Age of a previously published 
+representation has expired.</t>
 
-<t>There is no explicit maximum lifetime of a Subscription,
-thus a Broker may remove subscribers at any time. The Broker, upon removing a
-Subscriber, will transmit the appropriate response code without the Observe
-option, as per <xref target="RFC7641"/> Section 4.2, to the removed Subscriber.</t>
+<t>If a Topic has been created but not yet published to when a SUBSCRIBE to the 
+topic is recieved, the Broker MAY acknowledge and queue the pending SUBSCRIBE 
+and defer the response until an initial PUBLISH occurs.</t>
+
+<t>The Broker MUST return a response code “4.15 Unsupported Content Format” if it 
+can not return the requested content format. If a Broker is unable to accept a 
+new Subscription on a topic, it SHOULD return the appropriate response code 
+without the Observe option as per <xref target="RFC7641"/> Section 4.1.</t>
+
+<t>There is no explicit maximum lifetime of a Subscription, thus a Broker may 
+remove subscribers at any time. The Broker, upon removing a Subscriber, will 
+transmit the appropriate response code without the Observe option, as per 
+<xref target="RFC7641"/> Section 4.2, to the removed Subscriber.</t>
 
 <t>The SUBSCRIBE operation is specified as follows:</t>
 
@@ -639,8 +662,6 @@ option, as per <xref target="RFC7641"/> Section 4.2, to the removed Subscriber.<
 <t><list style="hanging">
   <t hangText='Success:'>
   2.05 “Content”. Successful subscribe, current value included</t>
-  <t hangText='Success:'>
-  2.07 “No Content”. Successful subscribe, value not included</t>
   <t hangText='Failure:'>
   4.00 “Bad Request”. Malformed request.</t>
   <t hangText='Failure:'>
@@ -739,16 +760,20 @@ topic was created with. The Broker MUST return a response code of “2.05
 Content” along with the most recently published value if the topic contains
 a valid value and the Broker can supply the requested content format.</t>
 
-<t>If the topic was published with the Max-Age option, the Broker MUST set the
-Max-Age option in the valid response to the amount of time remaining for
-the topic to be valid since the last publish. The Broker MUST return a response
-code of “2.07 No Content” if the Max-Age of the previously stored value has
-expired, or if the topic has not yet been published to.</t>
+<t>If the topic was published with the Max-Age option, the Broker MUST set the 
+Max-Age option in the valid response to the amount of time remaining for the 
+value to be valid since the last publish operation on that topic.</t>
 
-<t>The Broker MUST return a response code “4.04 Not Found” if the topic
-does not exist or has been removed. The Broker MUST return a response code
-“4.15 Unsupported Content Format” if the Broker can not return the requested
-content format.</t>
+<t>The Broker MUST return a response code “4.04 Not Found” if the topic does not 
+exist or has been removed, or if Max-Age of a previously published 
+representation has expired.</t>
+
+<t>If a Topic has been created but not yet published to when a READ to the topic is 
+recieved, the Broker MAY acknowledge and queue the pending READ, and defer the 
+response until an initial PUBLISH occurs.</t>
+
+<t>The Broker MUST return a response code “4.15 Unsupported Content Format” if the 
+Broker can not return the requested content format.</t>
 
 <t>The READ operation is specified as follows:</t>
 
@@ -770,8 +795,6 @@ REST API, as obtained from discovery, used to discover topics.</t>
 <t><list style="hanging">
   <t hangText='Success:'>
   2.05 “Content”. Successful READ, current value included</t>
-  <t hangText='Success:'>
-  2.07 “No Content”. Topic exists, value not included</t>
   <t hangText='Failure:'>
   4.00 “Bad Request”. Malformed request.</t>
   <t hangText='Failure:'>
@@ -917,13 +940,12 @@ large amount of subscribers and publishers simultaneously, the Broker
 may become overwhelmed if it receives many publish messages to popular
 topics in a short period of time.</t>
 
-<t>If the Broker is unable to serve a certain client that is sending
-publish messages too fast, the Broker SHOULD respond with Response
-Code 4.29, “Too Many Requests” <xref target="I-D.ietf-core-too-many-reqs"/> and
-set the Max-Age Option to indicate the number of seconds after which
-the client can retry. The Broker MAY stop creating notifications from
-the publish messages from this client and to this topic for the
-indicated time.</t>
+<t>If the Broker is unable to serve a certain client that is sending publish 
+messages too fast, the Broker SHOULD respond with Response Code 4.29, “Too Many 
+Requests” <xref target="RFC8516"/> and set the Max-Age Option to indicate the number of 
+seconds after which the client can retry. The Broker MAY stop creating 
+notifications from the publish messages from this client and to this topic for 
+the indicated time.</t>
 
 <t>If a client receives the 4.29 Response Code from the Broker for a
 publish message to a topic, it MUST NOT send new publish messages to
@@ -1004,16 +1026,6 @@ established with <xref target="RFC6690"/> and appends to the definition of one C
   <t>Description: <xref target="sec-rest-api"/> of [[This document]]</t>
   <t>Reference: [[This document]]</t>
   <t>Notes: None</t>
-</list></t>
-
-</section>
-<section anchor="response-code-value-207" title="Response Code value ‘2.07’">
-
-<t><list style="symbols">
-  <t>Response Code: 2.07</t>
-  <t>Description: No Content</t>
-  <t>Reference: [[This document]]</t>
-  <t>Notes: The server sends this code to the client to indicate that the request was valid and accepted, but the response may contain an empty payload. It is comparable to and may be proxied with the HTTP 204 No Content status code.</t>
 </list></t>
 
 </section>
@@ -1125,23 +1137,15 @@ and Olaf Bergmann for their contributions and reviews.</t>
 
 
 
-<reference anchor="I-D.ietf-core-too-many-reqs">
+<reference  anchor="RFC8516" target='https://www.rfc-editor.org/info/rfc8516'>
 <front>
-<title>Too Many Requests Response Code for the Constrained Application Protocol</title>
-
-<author initials='A' surname='Keranen' fullname='Ari Keranen'>
-    <organization />
-</author>
-
-<date month='November' day='6' year='2018' />
-
-<abstract><t>A Constrained Application Protocol (CoAP) server can experience temporary overload because one or more clients are sending requests to the server at a higher rate than the server is capable or willing to handle.  This document defines a new CoAP Response Code for a server to indicate that a client should reduce the rate of requests.</t></abstract>
-
+<title>&quot;Too Many Requests&quot; Response Code for the Constrained Application Protocol</title>
+<author initials='A.' surname='Keranen' fullname='A. Keranen'><organization /></author>
+<date year='2019' month='January' />
+<abstract><t>A Constrained Application Protocol (CoAP) server can experience temporary overload because one or more clients are sending requests to the server at a higher rate than the server is capable or willing to handle.  This document defines a new CoAP response code for a server to indicate that a client should reduce the rate of requests.</t></abstract>
 </front>
-
-<seriesInfo name='Internet-Draft' value='draft-ietf-core-too-many-reqs-06' />
-<format type='TXT'
-        target='http://www.ietf.org/internet-drafts/draft-ietf-core-too-many-reqs-06.txt' />
+<seriesInfo name='RFC' value='8516'/>
+<seriesInfo name='DOI' value='10.17487/RFC8516'/>
 </reference>
 
 
@@ -1175,15 +1179,15 @@ and Olaf Bergmann for their contributions and reviews.</t>
     <organization />
 </author>
 
-<date month='August' day='31' year='2018' />
+<date month='March' day='6' year='2019' />
 
-<abstract><t>This document defines Object Security for Constrained RESTful Environments (OSCORE), a method for application-layer protection of the Constrained Application Protocol (CoAP), using CBOR Object Signing and Encryption (COSE).  OSCORE provides end-to-end protection between endpoints communicating using CoAP or CoAP-mappable HTTP. OSCORE is designed for constrained nodes and networks supporting a range of proxy operations, including translation between different transport protocols.</t></abstract>
+<abstract><t>This document defines Object Security for Constrained RESTful Environments (OSCORE), a method for application-layer protection of the Constrained Application Protocol (CoAP), using CBOR Object Signing and Encryption (COSE).  OSCORE provides end-to-end protection between endpoints communicating using CoAP or CoAP-mappable HTTP. OSCORE is designed for constrained nodes and networks supporting a range of proxy operations, including translation between different transport protocols.  Although being an optional functionality of CoAP, OSCORE alters CoAP options processing and IANA registration.  Therefore, this document updates [RFC7252].</t></abstract>
 
 </front>
 
-<seriesInfo name='Internet-Draft' value='draft-ietf-core-object-security-15' />
+<seriesInfo name='Internet-Draft' value='draft-ietf-core-object-security-16' />
 <format type='TXT'
-        target='http://www.ietf.org/internet-drafts/draft-ietf-core-object-security-15.txt' />
+        target='http://www.ietf.org/internet-drafts/draft-ietf-core-object-security-16.txt' />
 </reference>
 
 
@@ -1233,15 +1237,15 @@ and Olaf Bergmann for their contributions and reviews.</t>
     <organization />
 </author>
 
-<date month='December' day='20' year='2018' />
+<date month='January' day='11' year='2019' />
 
 <abstract><t>In many M2M applications, direct discovery of resources is not practical due to sleeping nodes, disperse networks, or networks where multicast traffic is inefficient.  These problems can be solved by employing an entity called a Resource Directory (RD), which contains information about resources held on other servers, allowing lookups to be performed for those resources.  The input to an RD is composed of links and the output is composed of links constructed from the information stored in the RD.  This document specifies the web interfaces that a Resource Directory supports for web servers to discover the RD and to register, maintain, lookup and remove information on resources.  Furthermore, new target attributes useful in conjunction with an RD are defined.</t></abstract>
 
 </front>
 
-<seriesInfo name='Internet-Draft' value='draft-ietf-core-resource-directory-18' />
+<seriesInfo name='Internet-Draft' value='draft-ietf-core-resource-directory-19' />
 <format type='TXT'
-        target='http://www.ietf.org/internet-drafts/draft-ietf-core-resource-directory-18.txt' />
+        target='http://www.ietf.org/internet-drafts/draft-ietf-core-resource-directory-19.txt' />
 </reference>
 
 
@@ -1283,253 +1287,258 @@ and Olaf Bergmann for their contributions and reviews.</t>
   </back>
 
 <!-- ##markdown-source:
-H4sIALkOLlwAA+19a3cbR3Lo9/4VfaAPEmMAJPWwZe7aCS3SWW70YEhqN75J
-Ts4AaICzHMzA0wNStKz8n/s77h+79erXzIAPybHsk6V9bADT011dVV2vrq4e
-jUbKNlk5+6+sqEqzp5t6bVS+qumTbR7v7Hy981jNqmmZLeHxrM7mzSg3zXw0
-rWoD/8lWo9V6YteT0c6Xapo1e9o2M7XK95TWTTXd0w+vjX3IX6rlKps2yU8z
-s2rO4Zcn8j0vZ6aMmtjrZW3mNvqhqpv0F+h2Ce9Ev+RlkeNk/DtNndO4ZSUv
-CBz8HYBPf2rypoDXj9eTIrfno1OY37TOJ0Z/V1cXptbzqtbNudEvqhK6zmCs
-md5frYoc5p9XpT6uK5xtoR+9qPaPt1Q2mdTm8pYOsam6uNrTR2Vj6tI0owNE
-tpplDcDyeGf3a5Wtm/Oq3lMjmCFM99VY/wv8W1loD9NgCr3Kp+eZKcLPVb3Y
-06fLrG7OzvNyYeEns8zywjcdc9N/stimoTZjwIcbZZ9HMXVWmtIPs1/n0W80
-xiEg2dqqDANkdT6+4Eb/ZORp3PWfx/Rvvvx//7c0P/m+/5zlSxP/vKH7v2G7
-8d/gP9AsHaCs6iXQ4tIgG558/+LJ18+/lI+Pd3e/lo9ffvn1jvv47Cv38asv
-n+66j4+fPcaPR6ODcWD6pqpGy6y8HtXmR7unVF7O4+HSxtXkb2bajKyZruu8
-uXYNVrDelpO8zEfZNF1Gq7qa50VPT7Wx1bqG1rO8hi6r+lqgfPb18+fy8fmT
-518BRKPRSGcT5M1po9TZ3Vl1qEEW6NoUwHQzbd41prTQzAIpDdAMvs7MTDUV
-rJnVClaiXmZT4BjEyUg+0npcl26AvIQ1DPy1tPrq3EAvIGaAoHoJUwIyzQz3
-7SYHb3tAh/jyCpgyn66LjFdJUV3pVXUFa+YKsFAYa7UFGKtawYq5quoLO9bA
-51aDyFqjWNAzM4fOYBS9kuVnNy0/WNRZo2jWM0srfJqtskle5E0OPVRzboXN
-Zf6wWDRP4ipvzgE6+A5rPbuwALuCuZRAqfwSCI+I3YYX16tRg2zLRFrms1lh
-lHqAq76uZuspIe39gzz6+uFeJNTv3wvnfvjgwLTqVjpl07oCZDos4mQjUqiZ
-ucynBpBLGFhbQijw/9rYZhuIt4K2Bog6A9HDdJ4WOUpl4JAL41oCUitlTX1p
-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
-/4nD+CszowAA
+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
 
 -->
 
