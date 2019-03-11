@@ -90,11 +90,7 @@ integration with other publish-subscribe systems.
 
 # Terminology
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
-NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
-"MAY", and "OPTIONAL" in this document are to be interpreted as
-described in BCP 14 [RFC2119] [RFC8174] when, and only when, they
-appear in all capitals, as shown here.
+{::boilerplate bcp14}
 
 This specification requires readers to be familiar with all the terms and
 concepts that are discussed in {{RFC5988}} and {{RFC6690}}. Readers
