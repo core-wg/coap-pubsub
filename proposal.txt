@@ -1,0 +1,251 @@
+                                                                       M. Koster
+                                                                      A. Keranen
+                                                                       K. Hartke
+                                                                    July 8, 2019
+
+
+
+                     Proposal for PubSub Broker Improvements
+
+
+
+1. Overview
+
+    This provides a rough sketch for slightly redesigning the PubSub Broker into
+    splitting topics into a "configuration resource" and a "data resource".
+
+
+     ___                                      Topic Collection Resources
+    /   \                                     * get list of topics
+    \___/                                     * create a new topic by submitting
+        \                                       an initial topic configuration
+         \_______________________
+          \___     \___          \___         Topic Configuration Resources
+          /   \    /   \         /   \        * get current topic configuration
+          \___/    \___/         \___/        * update topic configuration
+            |        |             |          * get topic metadata (see below)
+            |        |     ...     |          * delete topic
+           _|_      _|_           _|_
+          /   \    /   \         /   \        Topic Data Resources
+          \___/    \___/         \___/        * get latest published item
+                                              * observe latest published item
+
+
+    The topic data resource does not exist until the first item has been
+    published to it. Before the first item has been published, the topic data
+    resource yields a 4.04 (Not Found) response. The topic creator could simply
+    publish a "placeholder" as the initial state of the data resource or simply
+    not give the URI of the data resource to a subscriber until something has
+    been published.
+
+    All topic URIs should be broker-generated.
+
+
+2. Topic Configuration Representations
+
+    Representations of configurations and configuration updates could be encoded
+    in CoRAL or a simple JSON- or CBOR-based format (described in CDDL).
+
+
+2.1 Topic Metadata (read-only)
+
+    Examples:
+
+    * Location of topic resource (URI)
+    * Has any published item (boolean)
+    * Creation timestamp (date/time)
+    * Last modified timestamp (date/time)
+    * ...
+
+
+2.2. Topic Configuration (read/write)
+
+    Examples:
+
+    * User-friendly topic description
+    * Allowed content formats
+    * Authorized publishers
+    * Rate limits
+    * Topic lifetime
+    * ...
+
+
+3. Operations
+
+3.1 Get List of Topics
+
+    Request:
+
+        GET </ps/topics>
+
+    Response:
+
+        2.05 Content
+        Content-Format: CoRAL
+
+        rdf:type <http://example.org/pubsub/topic-list>
+        topic    </ps/topics/1234>
+        topic    </ps/topics/1235>
+        topic    </ps/topics/1236>
+        topic    </ps/topics/1237>
+
+    (This is missing the #using's...)
+
+
+3.2 Filter List of Topics
+
+    Request:
+
+        GET </ps/topics?rt=oic.r.temperature>
+        Accept: CoRAL
+
+    Response:
+
+        2.05 Content
+        Content-Format: CoRAL
+
+        rdf:type <http://example.org/pubsub/topic-list>
+        topic    </ps/topics/1234>
+        topic    </ps/topics/1237>
+
+    It might be useful to use the same API as Resource Directory here. However,
+    query parameters should probably be limited to a fixed, well-known set of
+    built-in attributes.
+
+    The Accept option could be used to express a preference between CoRAL and
+    CoRE Link Format.
+
+
+3.3 Filter List of Topics by Custom Attributes
+
+    Request:
+
+        FETCH </ps/topics>
+        Content-Format: CoRAL
+
+        topic _ {
+            <http://example.org/vocab/building> 18
+            <http://example.org/vocab/floor>    1
+            <http://example.org/vocab/unit>     "Cel"
+        }
+
+    Response:
+
+        2.05 Content
+        Content-Format: CoRAL
+
+        rdf:type <http://example.org/pubsub/topic-list>
+        topic    </ps/topics/1234>
+
+    (CoRAL FETCH is currently not defined but would probably be very similar to
+    SenML FETCH.)
+
+
+3.4 Create a New Topic by Submitting an Initial Topic Configuration
+
+    Request:
+
+        POST </ps/topics>
+        Content-Format: CoRAL
+
+        topic-name          "My Office Room Temperature"
+
+    Response:
+
+        2.01 Created
+        Location: </ps/topics/1234>
+
+    If creators of topics just want all the defaults, they can just submit an
+    empty CoRAL document.
+
+
+3.5 Get Current Topic Configuration
+
+    Request:
+
+        GET </ps/topics/1234>
+
+    Response:
+
+        2.05 Content
+        Content-Format: CoRAL
+
+        rdf:type            <http://example.org/pubsub/topic>
+        has-published-item  true
+        topic-data          </ps/data/1234>
+        created             dt'2019-07-08T15:35:00+0200'
+        last-modified       dt'2019-07-08T15:35:00+0200'
+        topic-name          "My Office Room Temperature"
+        owner               <http://ericsson.example/people/ari>
+        publisher           <http://ericcson.example/people/klaus>
+        max-rate            50
+        expires             dt'2019-07-15T15:35:00+0200'
+        rt                  "oic.r.temperature"
+        building            18
+        floor               1
+        unit                "Cel"
+        vendor              "Ericsson"
+
+
+3.6 Update the Topic Configuration
+
+    Request:
+
+        POST </ps/topics/1234>
+        Content-Format: CoRAL
+
+        max-rate            55
+
+    Response:
+
+        2.04 Changed
+
+
+3.7 Delete the Topic
+
+    Request:
+
+        DELETE </ps/topics/1234>
+
+    Response:
+
+        2.02 Deleted
+
+
+3.8 Publish an Item
+
+    Request:
+
+        PUT </ps/data/1234>
+        Content-Format: SenML
+
+        [...SenML data here...]
+
+    Response:
+
+        2.04 Changed
+
+
+3.9 Observe the Latest Published Item
+
+    Request:
+
+        GET </ps/data/1234>
+        Observe: 0
+
+    Response:
+
+        2.05 Content
+        Content-Format: SenML
+
+        [...SenML data here...]
+
+
+4. References
+
+    Koster, M., Keranen, A., and J. Jimenez, "Publish-Subscribe Broker for the
+    Constrained Application Protocol (CoAP)", draft-ietf-core-coap-pubsub-08
+    (work in progress), March 2019.
+
+    Hartke, K., "The Constrained RESTful Application Language (CoRAL)",
+    draft-hartke-t2trg-coral-08 (work in progress), March 2019.
