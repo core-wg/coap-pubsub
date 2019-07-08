@@ -1,5 +1,5 @@
 *.redxml
-*.txt
+draft-*.txt
 *.html
 *.pdf
 *.xml
@@ -10,5 +10,5 @@
 venv/
 issues.json
 lib
-
+.vs
 .targets.mk
