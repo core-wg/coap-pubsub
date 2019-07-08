@@ -11,7 +11,7 @@
 
 1. Overview
 
-    This provides a rough sketch for slightly redesigning the PubSub Broker into
+    This document provides a rough sketch for improving the PubSub Broker by
     splitting topics into a "configuration resource" and a "data resource".
 
 
@@ -27,7 +27,7 @@
             |        |     ...     |          * delete topic
            _|_      _|_           _|_
           /   \    /   \         /   \        Topic Data Resources
-          \___/    \___/         \___/        * get latest published item
+          \___/    \___/         \___/        * publish an item
                                               * observe latest published item
 
 
@@ -89,7 +89,11 @@
         topic    </ps/topics/1236>
         topic    </ps/topics/1237>
 
-    (This is missing the #using's...)
+    The list of topics is a standard collection resource. The representation
+    consists of a list of links to the topic configuration resources. The
+    resource supports the typical create/read/update/delete operations.
+
+    (The example is missing the #using's...)
 
 
 3.2 Filter List of Topics
@@ -110,10 +114,10 @@
 
     It might be useful to use the same API as Resource Directory here. However,
     query parameters should probably be limited to a fixed, well-known set of
-    built-in attributes.
+    attributes.
 
     The Accept option could be used to express a preference between CoRAL and
-    CoRE Link Format.
+    CoRE Link Format in the response.
 
 
 3.3 Filter List of Topics by Custom Attributes
@@ -137,8 +141,8 @@
         rdf:type <http://example.org/pubsub/topic-list>
         topic    </ps/topics/1234>
 
-    (CoRAL FETCH is currently not defined but would probably be very similar to
-    SenML FETCH.)
+    (CoRAL FETCH is currently not defined but would probably work very similarly
+    to SenML FETCH.)
 
 
 3.4 Create a New Topic by Submitting an Initial Topic Configuration
@@ -155,8 +159,8 @@
         2.01 Created
         Location: </ps/topics/1234>
 
-    If creators of topics just want all the defaults, they can just submit an
-    empty CoRAL document.
+    If the creator of a topic just wants all the defaults, they can just submit
+    an empty CoRAL document.
 
 
 3.5 Get Current Topic Configuration
