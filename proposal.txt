@@ -32,13 +32,15 @@
 
 
     The topic data resource does not exist until the first item has been
-    published to it. Before the first item has been published, the topic data
-    resource yields a 4.04 (Not Found) response. The topic creator could simply
-    publish a "placeholder" as the initial state of the data resource or simply
-    not give the URI of the data resource to a subscriber until something has
-    been published.
+    published. Before the first item has been published, the topic data resource
+    yields a 4.04 (Not Found) response. The creator of the topic could publish a
+    placeholder to create the data resource or simply not give the URI of the
+    data resource to a subscriber until a publisher has published something.
 
-    All topic URIs should be broker-generated.
+    All topic URIs should be broker-generated. There does not need to be any
+    link between the path where the data exists and the path for the topic
+    configuration. Configuration and data resources might even be hosted by
+    different servers.
 
 
 2. Topic Configuration Representations
@@ -51,9 +53,9 @@
 
     Examples:
 
-    * Location of topic resource (URI)
+    * Location of the topic data resource (URI)
     * Has any published item (boolean)
-    * Creation timestamp (date/time)
+    * Created timestamp (date/time)
     * Last modified timestamp (date/time)
     * ...
 
@@ -117,7 +119,7 @@
     attributes.
 
     The Accept option could be used to express a preference between CoRAL and
-    CoRE Link Format in the response.
+    (for legacy clients) CoRE Link Format in the response.
 
 
 3.3 Filter List of Topics by Custom Attributes
@@ -141,8 +143,8 @@
         rdf:type <http://example.org/pubsub/topic-list>
         topic    </ps/topics/1234>
 
-    (CoRAL FETCH is currently not defined but would probably work very similarly
-    to SenML FETCH.)
+    (CoRAL FETCH is currently not yet defined but would probably work very
+    similarly to SenML FETCH.)
 
 
 3.4 Create a New Topic by Submitting an Initial Topic Configuration
@@ -152,6 +154,7 @@
         POST </ps/topics>
         Content-Format: CoRAL
 
+        rdf:type            <http://example.org/pubsub/topic>
         topic-name          "My Office Room Temperature"
 
     Response:
@@ -188,21 +191,23 @@
         building            18
         floor               1
         unit                "Cel"
-        vendor              "Ericsson"
 
 
 3.6 Update the Topic Configuration
 
     Request:
 
-        POST </ps/topics/1234>
+        PATCH </ps/topics/1234>
         Content-Format: CoRAL
 
-        max-rate            55
+        max-rate            60
 
     Response:
 
         2.04 Changed
+
+    (CoRAL PATCH is currently not yet defined but would probably work very
+    similarly to SenML PATCH.)
 
 
 3.7 Delete the Topic
@@ -241,6 +246,7 @@
 
         2.05 Content
         Content-Format: SenML
+        Observe: 9876
 
         [...SenML data here...]
 
@@ -252,4 +258,4 @@
     (work in progress), March 2019.
 
     Hartke, K., "The Constrained RESTful Application Language (CoRAL)",
-    draft-hartke-t2trg-coral-08 (work in progress), March 2019.
+    draft-hartke-t2trg-coral-09 (work in progress), July 2019.
