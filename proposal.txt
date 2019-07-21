@@ -1,7 +1,7 @@
                                                                        M. Koster
                                                                       A. Keranen
                                                                        K. Hartke
-                                                                    July 8, 2019
+                                                                   July 21, 2019
 
 
 
@@ -43,10 +43,15 @@
     different servers.
 
 
-2. Topic Configuration Representations
+2. Topic Configuration
 
-    Representations of configurations and configuration updates could be encoded
-    in CoRAL or a simple JSON- or CBOR-based format (described in CDDL).
+    Topic configurations and topic configuration updates are represented by
+    CoRAL documents.
+
+    When retrieving the representation of a topic configuration resource, the
+    CoRAL document includes both topic metadata and topic configuration data.
+    When updating a topic configuration resource, the CoRAL document includes
+    only the topic configuration data.
 
 
 2.1 Topic Metadata (read-only)
@@ -60,7 +65,7 @@
     * ...
 
 
-2.2. Topic Configuration (read/write)
+2.2 Topic Configuration Data (read/write)
 
     Examples:
 
@@ -73,6 +78,7 @@
 
 
 3. Operations
+
 
 3.1 Get List of Topics
 
@@ -114,9 +120,8 @@
         topic    </ps/topics/1234>
         topic    </ps/topics/1237>
 
-    It might be useful to use the same API as Resource Directory here. However,
-    query parameters should probably be limited to a fixed, well-known set of
-    attributes.
+    It might be useful to use the same API as CoRAL Reef. Query parameters are
+    limited to a fixed, well-known set of attributes.
 
     The Accept option could be used to express a preference between CoRAL and
     (for legacy clients) CoRE Link Format in the response.
@@ -160,10 +165,17 @@
     Response:
 
         2.01 Created
+        Content-Format: CoRAL
         Location: </ps/topics/1234>
+
+        topic-configuration </ps/topics/1234>
+        topic-data          </ps/data/1234>
 
     If the creator of a topic just wants all the defaults, they can just submit
     an empty CoRAL document.
+
+    The Accept option could be used to express a preference between CoRAL and
+    (for legacy clients) CoRE Link Format in the response.
 
 
 3.5 Get Current Topic Configuration
@@ -180,6 +192,7 @@
         rdf:type            <http://example.org/pubsub/topic>
         has-published-item  true
         topic-data          </ps/data/1234>
+        publish             -> </ps/data/1234> [ method 3 ]
         created             dt'2019-07-08T15:35:00+0200'
         last-modified       dt'2019-07-08T15:35:00+0200'
         topic-name          "My Office Room Temperature"
@@ -191,6 +204,12 @@
         building            18
         floor               1
         unit                "Cel"
+
+    Publishers should be given the form with the 'publish' operation type.
+    Subscribers should be given the link with the 'topic-data' relation type.
+
+    (In the example, it's ambiguous whether 'rt' is the resource type of the
+    topic configuration resource or the topic data resource...)
 
 
 3.6 Update the Topic Configuration
@@ -223,6 +242,9 @@
 
 3.8 Publish an Item
 
+    A publisher can publish an item by submitting a form with the 'publish'
+    operation type.
+
     Request:
 
         PUT </ps/data/1234>
@@ -235,7 +257,21 @@
         2.04 Changed
 
 
-3.9 Observe the Latest Published Item
+3.9 Get the Latest Published Item
+
+    Request:
+
+        GET </ps/data/1234>
+
+    Response:
+
+        2.05 Content
+        Content-Format: SenML
+
+        [...SenML data here...]
+
+
+3.10 Observe the Latest Published Item
 
     Request:
 
@@ -250,6 +286,9 @@
 
         [...SenML data here...]
 
+    If the 2.05 (Content) response does not include an Observe option, the
+    subscriber can poll the resource.
+
 
 4. References
 
@@ -259,3 +298,9 @@
 
     Hartke, K., "The Constrained RESTful Application Language (CoRAL)",
     draft-hartke-t2trg-coral-09 (work in progress), July 2019.
+
+
+Acknowledgements
+
+    Thanks to Christian Amsüss, Carsten Bormann, and Jim Schaad for helpful
+    comments and discussions that have shaped the document.
