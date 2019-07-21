@@ -160,7 +160,7 @@
         Content-Format: CoRAL
 
         rdf:type            <http://example.org/pubsub/topic>
-        topic-name          "My Office Room Temperature"
+        topic-title         "My Office Room Temperature"
 
     Response:
 
@@ -195,7 +195,7 @@
         publish             -> </ps/data/1234> [ method 3 ]
         created             dt'2019-07-08T15:35:00+0200'
         last-modified       dt'2019-07-08T15:35:00+0200'
-        topic-name          "My Office Room Temperature"
+        topic-title         "My Office Room Temperature"
         owner               <http://ericsson.example/people/ari>
         publisher           <http://ericcson.example/people/klaus>
         max-rate            50
