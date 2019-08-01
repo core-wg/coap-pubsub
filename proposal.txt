@@ -70,7 +70,7 @@
     Examples:
 
     * User-friendly topic description
-    * Allowed content formats
+    * Allowed content format
     * Authorized publishers
     * Rate limits
     * Topic lifetime
