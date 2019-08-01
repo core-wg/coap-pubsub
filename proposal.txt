@@ -1,7 +1,7 @@
                                                                        M. Koster
-                                                                      A. Keranen
+                                                                      A. Keränen
                                                                        K. Hartke
-                                                                   July 21, 2019
+                                                                  August 1, 2019
 
 
 
@@ -197,7 +197,7 @@
         last-modified       dt'2019-07-08T15:35:00+0200'
         topic-title         "My Office Room Temperature"
         owner               <http://ericsson.example/people/ari>
-        publisher           <http://ericcson.example/people/klaus>
+        publisher           <http://ericsson.example/people/klaus>
         max-rate            50
         expires             dt'2019-07-15T15:35:00+0200'
         rt                  "oic.r.temperature"
@@ -292,7 +292,7 @@
 
 4. References
 
-    Koster, M., Keranen, A., and J. Jimenez, "Publish-Subscribe Broker for the
+    Koster, M., Keränen, A., and J. Jiménez, "Publish-Subscribe Broker for the
     Constrained Application Protocol (CoAP)", draft-ietf-core-coap-pubsub-08
     (work in progress), March 2019.
 
