@@ -71,9 +71,21 @@
 
     * User-friendly topic description
     * Allowed content format
-    * Authorized publishers
+    * Location of the authorization server
     * Rate limits
     * Topic lifetime
+    * Tombstone representation
+    * ...
+
+
+2.3 Data Resource Attributes (read/write)
+
+    Examples:
+
+    * Resource type
+    * Interface type
+    * Physical sensor location
+    * Unit of sensor value
     * ...
 
 
