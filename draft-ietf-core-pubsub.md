@@ -1,7 +1,7 @@
 ---
 stand_alone: true
 ipr: trust200902
-docname: draft-ietf-core-coap-pubsub-07
+docname: draft-ietf-core-coap-pubsub-08
 cat: std
 pi:
   toc: 'yes'
@@ -56,6 +56,11 @@ nodes are resource constrained, in particular for low power wireless sensor
 networks. This document defines a publish-subscribe Broker for CoAP that
 extends the capabilities of CoAP for supporting nodes with long breaks in
 connectivity and/or up-time.
+
+There is work in progress to resolve some of the transfer layer issues 
+by using a more RESTful approach. 
+
+Please see https://github.com/core-wg/pubsub/blob/master/proposal.txt
 
 --- middle
 
