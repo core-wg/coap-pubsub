@@ -1,52 +1,32 @@
 ---
-stand_alone: true
-ipr: trust200902
-docname: draft-ietf-core-coap-pubsub-07
-cat: std
-pi:
-  toc: 'yes'
-  tocompact: 'yes'
-  tocdepth: '3'
-  tocindent: 'yes'
-  symrefs: 'yes'
-  sortrefs: 'yes'
-  comments: 'yes'
-  inline: 'yes'
-  strict: 'no'
-  compact: 'no'
-  subcompact: 'no'
 title: Publish-Subscribe Broker for the Constrained Application Protocol (CoAP)
 abbrev: Publish-Subscribe Broker for CoAP
-kw: Internet-Draft
-date: 2019
+docname: draft-ietf-core-coap-pubsub-09
+category: std
+
+ipr: trust200902
+area: Internet
+workgroup: CoRE
+keyword: CoAP, PubSub
+
+stand_alone: yes
+pi: [toc, sortrefs, symrefs, iprnotified]
+
 author:
 - ins: M. K. Koster
   name: Michael Koster
   org: SmartThings
   email: Michael.Koster@smartthings.com
+  
 - ins: A. K. Keranen
   name: Ari Keranen
   org: Ericsson
   email: ari.keranen@ericsson.com
+
 - ins: J. J. Jiménez
   name: Jaime Jiménez
   org: Ericsson
   email: jaime.jimenez@ericsson.com
-normative:
-  RFC3986:
-  RFC2119:
-  RFC6690:
-  RFC6570:
-  RFC7641:
-  RFC7252:
-  RFC8516:
-
-informative:
-  I-D.ietf-core-object-security:
-  I-D.palombini-ace-coap-pubsub-profile:
-  I-D.ietf-core-resource-directory:
-  RFC5988:
-  RFC8387:
 
 --- abstract
 
@@ -61,7 +41,7 @@ connectivity and/or up-time.
 
 # Introduction {#introduction}
 
-The Constrained Application Protocol (CoAP) {{RFC7252}} supports
+The Constrained Application Protocol (CoAP) {{!RFC7252}} supports
 machine-to-machine communication across networks of constrained
 devices. CoAP uses a request/response model where clients make requests to
 servers in order to request actions on resources. Depending on the situation
@@ -87,16 +67,15 @@ between two or more nodes. This model facilitates communication of nodes with
 limited reachability, enables simple many-to-many communication, and eases
 integration with other publish-subscribe systems.
 
-
 # Terminology
 
 {::boilerplate bcp14}
 
 This specification requires readers to be familiar with all the terms and
-concepts that are discussed in {{RFC5988}} and {{RFC6690}}. Readers
+concepts that are discussed in {{?RFC5988}} and {{!RFC6690}}. Readers
 should also be familiar with the terms and concepts discussed in
-{{RFC7252}} and {{I-D.ietf-core-resource-directory}}. The URI template
-format {{RFC6570}} is used to describe the REST API defined in
+{{!RFC7252}} and {{?I-D.ietf-core-resource-directory}}. The URI template
+format {{!RFC6570}} is used to describe the REST API defined in
 this specification.
 
 This specification makes use of the following additional terminology:
@@ -129,9 +108,7 @@ CoAP pub/sub Client:
 Topic:
 : A unique identifier for a particular item being published and/or subscribed
   to. A Broker uses the topics to match subscriptions to publications. A reference to a Topic on a Broker 
-  is a valid CoAP URI as defined in {{RFC7252}}
-
-
+  is a valid CoAP URI as defined in {{!RFC7252}}
 
 # Architecture {#architecture}
 
@@ -165,7 +142,6 @@ Clients        pub/sub         Broker
 {: #arch-fig title='CoAP pub/sub Architecture' artwork-align="center"}
 
 
-
 ## CoAP Pub/sub Broker
 
 A CoAP pub/sub Broker is a CoAP Server that exposes a REST API for clients
@@ -175,7 +151,6 @@ reachable from all clients. The Broker also needs to have sufficient
 resources (storage, bandwidth, etc.) to host CoAP resource services,
 and potentially buffer messages, on behalf of the clients.
 
-
 ## CoAP Pub/sub Client
 
 A CoAP pub/sub Client interacts with a CoAP pub/sub Broker using the CoAP pub/sub
@@ -184,7 +159,6 @@ REST API defined in this document. Clients initiate interactions with a CoAP pub
 (e.g., actuator clients) can read from or subscribe to state updates from
 the Broker. Application clients can make use of both publish and subscribe
 in order to exchange state updates with data sources and data sinks.
-
 
 ## CoAP Pub/sub Topic
 
@@ -196,8 +170,8 @@ all the clients using the Broker share the same namespace for
 topics. 
 
 Every CoAP pub/sub topic has an associated link, consisting of a reference
-path on the Broker using URI path {{RFC3986}} construction and link
-attributes {{RFC6690}}. Every topic is associated with zero or more
+path on the Broker using URI path {{!RFC3986}} construction and link
+attributes {{!RFC6690}}. Every topic is associated with zero or more
 stored representations and a content-format specified in the link. A
 CoAP pub/sub topic value may alternatively consist of a collection of one or
 more sub-topics, consisting of links to the sub-topic URIs and
@@ -244,13 +218,11 @@ Broker nodes in a system with full interoperability.
 {: #brokerless title='Brokerless pub/sub' artwork-align="center"}
 
 
-
-
 # CoAP Pub/sub REST API {#sec-rest-api}
 
 This section defines the REST API exposed by a CoAP pub/sub Broker to pub/sub
 Clients.  The examples throughout this section assume the use of CoAP
-{{RFC7252}}. A CoAP pub/sub Broker implementing this specification SHOULD
+{{!RFC7252}}. A CoAP pub/sub Broker implementing this specification SHOULD
 support the DISCOVERY, CREATE, PUBLISH, SUBSCRIBE, UNSUBSCRIBE, READ,
 and REMOVE operations defined in this section. Optimized implementations
 MAY support a subset of the operations as required by particular constrained
@@ -260,9 +232,9 @@ use cases.
 
 CoAP pub/sub Clients discover CoAP pub/sub Brokers by using CoAP Simple
 Discovery or through a Resource Directory (RD)
-{{I-D.ietf-core-resource-directory}}. A CoAP pub/sub Broker SHOULD
+{{?I-D.ietf-core-resource-directory}}. A CoAP pub/sub Broker SHOULD
 indicate its presence and availability on a network by exposing a link
-to the entry point of its pub/sub API at its .well-known/core location {{RFC6690}}. A CoAP
+to the entry point of its pub/sub API at its .well-known/core location {{!RFC6690}}. A CoAP
 pub/sub Broker MAY register its pub/sub REST API entry point with a Resource
 Directory. {{discover-fig}} shows an example of a client discovering a
 local pub/sub API using CoAP Simple Discovery. A Broker wishing to
@@ -313,7 +285,7 @@ URI Template Variables:
 : topic := The desired topic to return links for (optional).
 
 : q := Query Filter (optional). MAY contain a query filter list as per
- {{RFC6690}} Section 4.1.
+ {{!RFC6690}} Section 4.1.
 
 
 Content-Format:
@@ -400,7 +372,7 @@ and pre-configured brokers in dedicated installations. A client wishing
 to create a topic MUST use a CoAP POST to the pub/sub API with a payload
 indicating the desired topic. The topic specification sent in the
 payload MUST use a supported serialization of the CoRE link format
-{{RFC6690}}. The target of the link MUST be a URI formatted
+{{!RFC6690}}. The target of the link MUST be a URI formatted
 string. The client MUST indicate the desired content format for
 publishes to the topic by using the ct (Content Format) link attribute
 in the link-format payload. Additional link target attributes and relation
@@ -412,7 +384,7 @@ option in the CREATE request.
 Topic hierarchies can be created by creating parent topics. A parent
 topic is created with a POST using ct (Content Format) link attribute
 value which describes a supported serialization of the CoRE link
-format {{RFC6690}}, such as application/link-format (ct=40) or its
+format {{!RFC6690}}, such as application/link-format (ct=40) or its
 JSON or CBOR serializations.  If a topic is created which describes a
 link serialization, that topic may then have sub-topics created under
 it as shown in {{create-sub-fig}}.
@@ -578,7 +550,7 @@ all notifications.
 If a client publishes to a Broker with the Max-Age option, the Broker MUST
 include the same value for the Max-Age option in all notifications.
 
-A Broker MUST use CoAP Notification as described in {{RFC7641}} to notify
+A Broker MUST use CoAP Notification as described in {{!RFC7641}} to notify
 subscribed clients.
 
 The PUBLISH operation is specified as follows:
@@ -677,7 +649,7 @@ Client                                          Broker
 ## SUBSCRIBE
 
 A CoAP pub/sub Broker MAY allow Clients to subscribe to topics on the Broker
-using CoAP Observe as described in {{RFC7641}}. A CoAP pub/sub Client wishing
+using CoAP Observe as described in {{!RFC7641}}. A CoAP pub/sub Client wishing
 to Subscribe to a topic on a Broker MUST use a CoAP GET with the Observe
 option set to 0 (zero). The Broker MAY add the client to a
 list of observers. The Broker MUST return a response code of "2.05 Content"
@@ -699,12 +671,12 @@ and defer the response until an initial PUBLISH occurs.
 The Broker MUST return a response code "4.15 Unsupported Content Format" if it 
 can not return the requested content format. If a Broker is unable to accept a 
 new Subscription on a topic, it SHOULD return the appropriate response code 
-without the Observe option as per {{RFC7641}} Section 4.1.
+without the Observe option as per {{!RFC7641}} Section 4.1.
 
 There is no explicit maximum lifetime of a Subscription, thus a Broker may 
 remove subscribers at any time. The Broker, upon removing a Subscriber, will 
 transmit the appropriate response code without the Observe option, as per 
-{{RFC7641}} Section 4.2, to the removed Subscriber.
+{{!RFC7641}} Section 4.2, to the removed Subscriber.
 
 The SUBSCRIBE operation is specified as follows:
 
@@ -784,7 +756,7 @@ it MUST allow Clients to unsubscribe from topics on the Broker using the CoAP
 Cancel Observation operation. A CoAP pub/sub Client wishing to unsubscribe
 to a topic on a Broker MUST either use CoAP GET with Observe using an Observe
 parameter of 1 or send a CoAP Reset message in response to a publish, as
-per {{RFC7641}}.
+per {{!RFC7641}}.
 
 The UNSUBSCRIBE operation is specified as follows:
 
@@ -812,7 +784,7 @@ REST API, as obtained from discovery, used to discover topics.
 
 
 : q := Query Filter (optional). MAY contain a query filter list as per
- {{RFC6690}} Section 4.1.
+ {{!RFC6690}} Section 4.1.
 
 
 The following response codes are defined for the UNSUBSCRIBE operation:
@@ -958,7 +930,7 @@ failure if the topic can not be removed.
 
 When a topic is removed for any reason, the Broker SHOULD remove all of the
 observers from the list of observers and return a final 4.04 "Not Found"
-response as per {{RFC7641}} Section 3.2. If a topic which has sub-topics is
+response as per {{!RFC7641}} Section 3.2. If a topic which has sub-topics is
 removed, then all of its sub-topics MUST be recursively removed.
 
 The REMOVE operation is specified as follows:
@@ -1031,11 +1003,11 @@ Client                                         Broker
 A CoAP pub/sub Broker may register the base URI, which is the REST API entry point for a pub/sub service, with a Resource
 Directory. A pub/sub Client may use an RD to discover a pub/sub Broker.
 
-A CoAP pub/sub Client may register links {{RFC6690}} with a Resource
+A CoAP pub/sub Client may register links {{!RFC6690}} with a Resource
 Directory to enable discovery of created pub/sub topics. A pub/sub
 Client may use an RD to discover pub/sub Topics. A client which
 registers pub/sub Topics with an RD MUST use the context relation (con)
-{{I-D.ietf-core-resource-directory}} to indicate that the context of
+{{?I-D.ietf-core-resource-directory}} to indicate that the context of
 the registered links is the pub/sub Broker.
 
 A CoAP pub/sub Broker may alternatively register links to its topics to
@@ -1048,7 +1020,7 @@ The pub/sub Broker triggers the RD to retrieve its links by sending a
 POST with an empty payload to the .well-known/core of the Resource
 Directory.  The RD server will then retrieve the links from the
 .well-known/core of the pub/sub Broker and incorporate them into the
-Resource Directory. See {{I-D.ietf-core-resource-directory}} for
+Resource Directory. See {{?I-D.ietf-core-resource-directory}} for
 further details.
 
 
@@ -1078,7 +1050,7 @@ topics in a short period of time.
 
 If the Broker is unable to serve a certain client that is sending publish 
 messages too fast, the Broker SHOULD respond with Response Code 4.29, "Too Many 
-Requests" {{RFC8516}} and set the Max-Age Option to indicate the number of 
+Requests" {{!RFC8516}} and set the Max-Age Option to indicate the number of 
 seconds after which the client can retry. The Broker MAY stop creating 
 notifications from the publish messages from this client and to this topic for 
 the indicated time.
@@ -1091,8 +1063,8 @@ passed.
 
 # Security Considerations {#SecurityConsiderations}
 
-CoAP pub/sub re-uses CoAP {{RFC7252}}, CoRE Resource Directory
-{{I-D.ietf-core-resource-directory}}, and Web Linking {{RFC5988}} and
+CoAP pub/sub re-uses CoAP {{!RFC7252}}, CoRE Resource Directory
+{{?I-D.ietf-core-resource-directory}}, and Web Linking {{?RFC5988}} and
 therefore the security considerations of those documents also apply to
 this specification. Additionally, a CoAP pub/sub Broker and the clients
 SHOULD authenticate each other and enforce access control policies. A
@@ -1129,9 +1101,9 @@ perform aggregation of data/requests collected.
 
 Depending on the level of trust users and system designers place in
 the CoAP pub/sub Broker, the use of end-to-end object security is
-RECOMMENDED as described in {{I-D.palombini-ace-coap-pubsub-profile}}.
+RECOMMENDED as described in {{?I-D.ietf-ace-pubsub-profile}}.
 An example application that uses the CoAP pub/sub Broker and relies on 
-end-to-end object security is described in {{RFC8387}}. 
+end-to-end object security is described in {{?RFC8387}}. 
 When only end-to-end encryption  is necessary and the CoAP Broker is 
 trusted, Payload Only Protection (Mode:PAYL) could be used. 
 The Publisher would wrap only the  payload before sending it to 
@@ -1139,15 +1111,12 @@ the Broker and set the option Content-Format to application/smpayl.
 Upon receival, the Broker can read the unencrypted CoAP header 
 to forward it to the subscribers.
 
-
 # IANA Considerations {#iana}
 
 This document registers one attribute value in the Resource Type (rt=) registry
-established with {{RFC6690}} and appends to the definition of one CoAP Response Code in the CoRE Parameters Registry.
+established with {{!RFC6690}} and appends to the definition of one CoAP Response Code in the CoRE Parameters Registry.
 
 ## Resource Type value 'core.ps'
-
-
 
 * Attribute Value: core.ps
 
@@ -1157,10 +1126,7 @@ established with {{RFC6690}} and appends to the definition of one CoAP Response 
 
 * Notes: None
 
-
-
 ## Resource Type value 'core.ps.discover'
-
 
 
 * Attribute Value: core.ps.discover
@@ -1171,13 +1137,10 @@ established with {{RFC6690}} and appends to the definition of one CoAP Response 
 
 * Notes: None
 
-
-
 # Acknowledgements {#acks}
 
 The authors would like to thank Hannes Tschofenig, Zach Shelby, Mohit Sethi,
 Peter van der Stok, Tim Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen,
 and Olaf Bergmann for their contributions and reviews.
-
 
 --- back
