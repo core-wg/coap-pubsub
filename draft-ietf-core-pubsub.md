@@ -1,7 +1,7 @@
 ---
 title: Publish-Subscribe Broker for the Constrained Application Protocol (CoAP)
 abbrev: Publish-Subscribe Broker for CoAP
-docname: draft-ietf-core-coap-pubsub-09
+docname: draft-ietf-core-coap-pubsub-latest
 category: std
 
 ipr: trust200902
