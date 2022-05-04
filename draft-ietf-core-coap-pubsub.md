@@ -6,36 +6,31 @@ category: std
 
 ipr: trust200902
 area: Internet
-workgroup: CoRE
+workgroup: CoRE Working Group
 keyword: CoAP, PubSub
 
 stand_alone: yes
 pi: [toc, sortrefs, symrefs, iprnotified]
 
 author:
-- ins: M. K. Koster
+- ins: M. Koster
   name: Michael Koster
   org: SmartThings
   email: Michael.Koster@smartthings.com
   
-- ins: A. K. Keranen
+- ins: A. Keranen
   name: Ari Keranen
   org: Ericsson
   email: ari.keranen@ericsson.com
 
-- ins: J. J. Jiménez
-  name: Jaime Jiménez
+- ins: J. Jimenez
+  name: Jaime Jimenez
   org: Ericsson
   email: jaime.jimenez@ericsson.com
 
 --- abstract
 
-The Constrained Application Protocol (CoAP), and related extensions are intended
-to support machine-to-machine communication in systems where one or more
-nodes are resource constrained, in particular for low power wireless sensor
-networks. This document defines a publish-subscribe Broker for CoAP that
-extends the capabilities of CoAP for supporting nodes with long breaks in
-connectivity and/or up-time.
+The Constrained Application Protocol (CoAP), and related extensions are intended to support machine-to-machine communication in systems where one or more nodes are resource constrained, in particular for low power wireless sensor networks. This document defines a publish-subscribe Broker for CoAP that extends the capabilities of CoAP for supporting nodes with long breaks in connectivity and/or up-time.
 
 --- middle
 
@@ -67,14 +62,16 @@ between two or more nodes. This model facilitates communication of nodes with
 limited reachability, enables simple many-to-many communication, and eases
 integration with other publish-subscribe systems.
 
-# Terminology
+# Notational Conventions
 
 {::boilerplate bcp14}
+
+# Terminology
 
 This specification requires readers to be familiar with all the terms and
 concepts that are discussed in {{?RFC5988}} and {{!RFC6690}}. Readers
 should also be familiar with the terms and concepts discussed in
-{{!RFC7252}} and {{?I-D.ietf-core-resource-directory}}. The URI template
+{{!RFC7252}} and {{!RFC9176}}. The URI template
 format {{!RFC6570}} is used to describe the REST API defined in
 this specification.
 
@@ -107,7 +104,7 @@ CoAP pub/sub Client:
 
 Topic:
 : A unique identifier for a particular item being published and/or subscribed
-  to. A Broker uses the topics to match subscriptions to publications. A reference to a Topic on a Broker 
+  to. A Broker uses the topics to match subscriptions to publications. A reference to a Topic on a Broker
   is a valid CoAP URI as defined in {{!RFC7252}}
 
 # Architecture {#architecture}
@@ -192,15 +189,13 @@ any outstanding subscriptions are cancelled.
 In some use cases, it is desireable to use pub/sub semantics for peer-to-peer 
 communication, but it is not feasible or desireable to include a separate node 
 on the network to serve as a Broker. In other use cases, it is desireable to enable one-way-only communication, such as sensors pushing updates to a service.
- 
+
 {{brokerless}} shows an arrangement for using CoAP pub/sub in a
 "Brokerless" configuration between peer nodes. Nodes in a Brokerless
 system may act as both Broker and client. A node that supports Broker
 functionality may be pre-configured with topics that expose services
 and resources. Brokerless peer nodes can be mixed with client and
 Broker nodes in a system with full interoperability.
-
-
 
 ~~~~
   Peer         pub/sub          Peer
@@ -213,7 +208,6 @@ Broker nodes in a system with full interoperability.
 |pub/sub|---------|---------|pub/sub|
 |Broker |         |         |Client |
 +-------+         |         +-------+
-
 ~~~~
 {: #brokerless title='Brokerless pub/sub' artwork-align="center"}
 
@@ -232,10 +226,10 @@ use cases.
 
 CoAP pub/sub Clients discover CoAP pub/sub Brokers by using CoAP Simple
 Discovery or through a Resource Directory (RD)
-{{?I-D.ietf-core-resource-directory}}. A CoAP pub/sub Broker SHOULD
+{{!RFC9176}}. A CoAP pub/sub Broker SHOULD
 indicate its presence and availability on a network by exposing a link
-to the entry point of its pub/sub API at its .well-known/core location {{!RFC6690}}. A CoAP
-pub/sub Broker MAY register its pub/sub REST API entry point with a Resource
+to the entry point of its pub/sub API at its .well-known/core location {{!RFC6690}}.
+A CoAP pub/sub Broker MAY register its pub/sub REST API entry point with a Resource
 Directory. {{discover-fig}} shows an example of a client discovering a
 local pub/sub API using CoAP Simple Discovery. A Broker wishing to
 advertise the CoAP pub/sub API for Simple Discovery or through a
@@ -266,31 +260,18 @@ for the parent topics it wants to discover the sub-topics.
 
 The DISCOVER interface is specified as follows:
 
-Interaction:
-: Client -> Broker
-
-
-Method:
-: GET
-
-
-URI Template:
-
-: {+ps}/{+topic}{?q\*}
-
-
-URI Template Variables:
-: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
-
-: topic := The desired topic to return links for (optional).
-
-: q := Query Filter (optional). MAY contain a query filter list as per
- {{!RFC6690}} Section 4.1.
-
-
-Content-Format:
-: application/link-format
-
+~~~
+  Interaction: Client -> Broker
+  Method: GET
+  URI Template: {+ps}/{+topic}{?q\*}
+  URI Template Variables:
+    ps := Pub/sub REST API entry point (optional). 
+    Entry point of the pub/sub topic discovery API.
+    topic := The desired topic to return links for (optional).
+    q := Query Filter (optional). 
+    MAY contain a query filter list as per RFC6690 Section 4.1.
+  Content-Format: application/link-format
+~~~
 
 The following response codes are defined for the DISCOVER operation:
 
@@ -862,11 +843,10 @@ URI Template:
 
 
 URI Template Variables:
-: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub
-REST API, as obtained from discovery, used to discover topics.
+: ps := Pub/sub REST API entry point (optional).
+The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
-
 
 The following response codes are defined for the READ operation:
 
@@ -948,7 +928,8 @@ URI Template:
 
 
 URI Template Variables:
-: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
+: ps := Pub/sub REST API entry point (optional).
+The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
 
@@ -1007,7 +988,7 @@ A CoAP pub/sub Client may register links {{!RFC6690}} with a Resource
 Directory to enable discovery of created pub/sub topics. A pub/sub
 Client may use an RD to discover pub/sub Topics. A client which
 registers pub/sub Topics with an RD MUST use the context relation (con)
-{{?I-D.ietf-core-resource-directory}} to indicate that the context of
+{{!RFC9176}} to indicate that the context of
 the registered links is the pub/sub Broker.
 
 A CoAP pub/sub Broker may alternatively register links to its topics to
@@ -1020,7 +1001,7 @@ The pub/sub Broker triggers the RD to retrieve its links by sending a
 POST with an empty payload to the .well-known/core of the Resource
 Directory.  The RD server will then retrieve the links from the
 .well-known/core of the pub/sub Broker and incorporate them into the
-Resource Directory. See {{?I-D.ietf-core-resource-directory}} for
+Resource Directory. See {{!RFC9176}} for
 further details.
 
 
@@ -1064,7 +1045,7 @@ passed.
 # Security Considerations {#SecurityConsiderations}
 
 CoAP pub/sub re-uses CoAP {{!RFC7252}}, CoRE Resource Directory
-{{?I-D.ietf-core-resource-directory}}, and Web Linking {{?RFC5988}} and
+{{!RFC9176}}, and Web Linking {{?RFC5988}} and
 therefore the security considerations of those documents also apply to
 this specification. Additionally, a CoAP pub/sub Broker and the clients
 SHOULD authenticate each other and enforce access control policies. A

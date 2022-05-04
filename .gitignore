@@ -12,3 +12,4 @@ issues.json
 lib
 .vs
 .targets.mk
+.DS_Store
