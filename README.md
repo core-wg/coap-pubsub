@@ -2,7 +2,7 @@
 
 This is the working area for the Individual internet-draft, "Publish-Subscribe Broker for the Constrained Application Protocol (CoAP)".
 
-* [Editor's copy](https://core-wg.github.io/coap-pubsub/)  [![Build Status](https://travis-ci.org/core-wg/pubsub.svg?branch=master)](https://travis-ci.org/core-wg/pubsub)
+* [Editor's copy](https://core-wg.github.io/coap-pubsub/) 
 
 * [Most recent Internet-Draft](https://tools.ietf.org/html/draft-ietf-core-coap-pubsub)
 
