@@ -13,17 +13,17 @@ stand_alone: yes
 pi: [toc, sortrefs, symrefs, iprnotified]
 
 author:
-- ins: M. K. Koster
+- ins: M. Koster
   name: Michael Koster
   org: SmartThings
   email: Michael.Koster@smartthings.com
   
-- ins: A. K. Keranen
+- ins: A. Keranen
   name: Ari Keranen
   org: Ericsson
   email: ari.keranen@ericsson.com
 
-- ins: J. J. Jiménez
+- ins: J. Jiménez
   name: Jaime Jiménez
   org: Ericsson
   email: jaime.jimenez@ericsson.com
@@ -1139,7 +1139,7 @@ established with {{!RFC6690}} and appends to the definition of one CoAP Response
 
 # Acknowledgements {#acks}
 
-The authors would like to thank Hannes Tschofenig, Zach Shelby, Mohit Sethi,
+The authors would like to thank Klaus Hartke, Hannes Tschofenig, Zach Shelby, Mohit Sethi,
 Peter van der Stok, Tim Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen,
 and Olaf Bergmann for their contributions and reviews.
 
