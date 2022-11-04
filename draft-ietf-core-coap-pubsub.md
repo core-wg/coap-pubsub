@@ -10,8 +10,8 @@ number:
 date:
 consensus: true
 v: 3
-area: ART
-workgroup: CoRE Working Group
+area: "Applications and Real-Time"
+workgroup: "Constrained RESTful Environments"
 submissiontype: IETF  # also: "independent", "IAB", or "IRTF"
 
 keyword:
