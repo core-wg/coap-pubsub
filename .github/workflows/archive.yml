@@ -6,14 +6,11 @@ on:
   repository_dispatch:
     types: [archive]
   workflow_dispatch:
-<<<<<<< HEAD
     inputs:
       archive_full:
         description: 'Recreate the archive from scratch'
         default: false
         type: boolean
-=======
->>>>>>> 11822596029208b4fb7d68637caa4231a8caf686
 
 jobs:
   build:
@@ -23,17 +20,12 @@ jobs:
     - name: "Checkout"
       uses: actions/checkout@v2
 
-<<<<<<< HEAD
     # Note: No caching for this build!
 
     - name: "Update Archive"
       uses: martinthomson/i-d-template@v1
       env:
         ARCHIVE_FULL: ${{ inputs.archive_full }}
-=======
-    - name: "Update Archive"
-      uses: martinthomson/i-d-template@v1
->>>>>>> 11822596029208b4fb7d68637caa4231a8caf686
       with:
         make: archive
         token: ${{ github.token }}

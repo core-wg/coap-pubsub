@@ -1,7 +1,3 @@
 # Automatically generated CODEOWNERS
 # Regenerate with `make update-codeowners`
-<<<<<<< HEAD
 draft-ietf-core-coap-pubsub.md Michael.Koster@smartthings.com ari.keranen@ericsson.com jaime@iki.fi
-=======
-draft-ietf-core-coap-pubsub.md Michael.Koster@smartthings.com ari.keranen@ericsson.com jaime.jimenez@ericsson.com
->>>>>>> 11822596029208b4fb7d68637caa4231a8caf686
