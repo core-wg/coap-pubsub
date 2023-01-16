@@ -10,7 +10,7 @@ number:
 date:
 consensus: true
 v: 3
-area: "Applications and Real-Time"
+area: "Applications and Real-Time (ART)"
 workgroup: "Constrained RESTful Environments"
 submissiontype: IETF
 
