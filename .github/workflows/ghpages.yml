@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: "Checkout"
+<<<<<<< HEAD
       uses: actions/checkout@v3
 
     - name: "Setup"
@@ -37,6 +38,27 @@ jobs:
           .targets.mk
         key: i-d-${{ steps.setup.outputs.date }}
         restore-keys: i-d-
+=======
+      uses: actions/checkout@v2
+
+    - name: "Cache Setup"
+      id: cache-setup
+      run: |
+        mkdir -p "$HOME"/.cache/xml2rfc
+        echo "::set-output name=path::$HOME/.cache/xml2rfc"
+        date -u "+::set-output name=date::%FT%T"
+
+    - name: "Cache References"
+      uses: actions/cache@v2
+      with:
+        path: |
+          ${{ steps.cache-setup.outputs.path }}
+          .targets.mk
+        key: refcache-${{ steps.cache-setup.outputs.date }}
+        restore-keys: |
+          refcache-${{ steps.cache-setup.outputs.date }}
+          refcache-
+>>>>>>> 11822596029208b4fb7d68637caa4231a8caf686
 
     - name: "Build Drafts"
       uses: martinthomson/i-d-template@v1

@@ -21,3 +21,4 @@ draft-ietf-core-coap-pubsub.xml
 package-lock.json
 report.xml
 !requirements.txt
+.DS_Store

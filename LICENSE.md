@@ -1,4 +1,4 @@
 # License
 
 See the
-[guidelines for contributions](https://github.com/jaimejim/draft-ietf-core-coap-pubsub/blob/main/CONTRIBUTING.md).
+[guidelines for contributions](https://github.com/core-wg/pubsub/blob/master/CONTRIBUTING.md).
