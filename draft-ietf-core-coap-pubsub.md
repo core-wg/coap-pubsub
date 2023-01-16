@@ -12,7 +12,7 @@ consensus: true
 v: 3
 area: "Applications and Real-Time"
 workgroup: "Constrained RESTful Environments"
-submissiontype: IETF  # also: "independent", "IAB", or "IRTF"
+submissiontype: IETF
 
 keyword:
  - coap
