@@ -95,7 +95,7 @@ Topic:
 {{arch-fig}} shows a simple Publish/Subscribe architecture over CoAP. In it publishers submit their data over a RESTful interface a broker-managed resource (topic) and subscribers observe this resource using {{?RFC7641}}. Resource state information is updated between the CoAP clients and the Broker via topics. Topics are created by the broker but the initial
 
 
-The CoAP pub/sub Broker performs a store-and-forward of state update representations between CoAP Clients. Subscribers observing a resource will receive notifications on a best-effort basis. 
+The CoAP pub/sub Broker performs a store-and-forward of state update representations between CoAP Clients. Subscribers observing a resource will receive notifications on a best-effort basis.
 
 ~~~
           CoAP                     CoAP                      CoAP
