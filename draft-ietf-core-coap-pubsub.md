@@ -99,10 +99,6 @@ Publish-Subscribe (pub/sub):
   and subscriptions are matched by a Broker and publications are delivered
   by the Broker to subscribed receivers.
 
-CoAP pub/sub service:
-: A group of REST resources, as defined in this document, which together
-  implement the required features of this specification.
-
 CoAP pub/sub Broker:
 : A server node capable of receiving messages (publications) from and sending
   messages to other nodes, and able to match subscriptions and publications
