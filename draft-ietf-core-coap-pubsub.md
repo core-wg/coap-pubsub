@@ -175,34 +175,6 @@ time a representation is published to the topic. If the lifetime expires, the
 topic is removed from discovery responses, returns errors on subscription, and
 any outstanding subscriptions are cancelled.
 
-## Brokerless pub/sub
-
-In some use cases, it is desireable to use pub/sub semantics for peer-to-peer
-communication, but it is not feasible or desireable to include a separate node
-on the network to serve as a Broker. In other use cases, it is desireable to enable one-way-only communication, such as sensors pushing updates to a service.
-
-{{brokerless}} shows an arrangement for using CoAP pub/sub in a
-"Brokerless" configuration between peer nodes. Nodes in a Brokerless
-system may act as both Broker and client. A node that supports Broker
-functionality may be pre-configured with topics that expose services
-and resources. Brokerless peer nodes can be mixed with client and
-Broker nodes in a system with full interoperability.
-
-~~~~
-  Peer         pub/sub          Peer
-+-------+         |         +-------+
-| CoAP  |         |         | CoAP  |
-|pub/sub|---------|---------|pub/sub|
-|Client |         |         |Broker |
-+-------+         |         +-------+
-| CoAP  |         |         | CoAP  |
-|pub/sub|---------|---------|pub/sub|
-|Broker |         |         |Client |
-+-------+         |         +-------+
-
-~~~~
-{: #brokerless title='Brokerless pub/sub' artwork-align="center"}
-
 # CoAP pub/sub REST API {#sec-rest-api}
 
 This section defines the REST API exposed by a CoAP pub/sub Broker to pub/sub
@@ -335,9 +307,7 @@ Client                                          Broker
 ## CREATE {#sec-create}
 
 A CoAP pub/sub broker SHOULD allow Clients to create new topics on the
-broker using CREATE. Some exceptions are for fixed brokerless devices
-and pre-configured brokers in dedicated installations. A client wishing
-to create a topic MUST use a CoAP POST to the pub/sub API with a payload
+broker using CREATE. A client wishing to create a topic MUST use a CoAP POST to the pub/sub API with a payload
 indicating the desired topic. The topic specification sent in the
 payload MUST use a supported serialization of the CoRE link format
 {{!RFC6690}}. The target of the link MUST be a URI formatted
