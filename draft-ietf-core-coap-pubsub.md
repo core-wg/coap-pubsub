@@ -74,56 +74,44 @@ should also be familiar with the terms and concepts discussed in
 format {{!RFC6570}} is used to describe the REST API defined in
 this specification.
 
-This specification makes use of the following additional terminology:
-
-Topic:
-: A unique identifier for a particular item being published and/or subscribed
-  to. A Broker uses the topics to match subscriptions to publications. A reference to a Topic on a Broker
-  is a valid CoAP URI as defined in {{!RFC7252}}
+This specification makes use of the following terminology:
 
 Publish-Subscribe (pub/sub):
-: A messaging paradigm where messages are published to a Broker and potential
-  receivers can subscribe to the Broker to receive messages. The publishers
-  do not (need to) know where the message will be eventually sent: the publications
-  and subscriptions are matched by a Broker and publications are delivered
-  by the Broker to subscribed receivers.
+: A messaging paradigm where messages are published to a Broker and potential receivers can subscribe to the Broker to receive messages. The publishers do not (need to) know where the message will be eventually sent: the publications and subscriptions are matched by a Broker and publications are delivered by the Broker to subscribed receivers.
 
-CoAP pub/sub Broker:
-: A server node capable of receiving messages (publications) from and sending
-  messages to other nodes, and able to match subscriptions and publications
-  in order to route messages to the right destinations. The Broker can also
-  temporarily store publications to satisfy future subscriptions and pending notifications.
+Publish-Subscribe Broker:
+: A CoAP server capable of receiving messages (publications) from CoAP clients acting as publishers and forwarding them to CoAP clients acting as subscribers The Broker can also temporarily store publications to satisfy future subscriptions and pending notifications.
+
+CoAP Client (publisher or subscriber):
+: CoAP Clients can act as publishers or as subscribers. Publishers send CoAP messages to the Broker on specific topics. Subscribers have an ongoing observation relation (subscription) to a topic. Neither publishers nor subscribers need to have any knowledge each other; they just have to share the topic they are publishing and subscribing to.
+
+Topic:
+: An unique identifier for a particular item being published and/or subscribed to. A Broker uses the topics to match subscriptions to publications. A reference to a Topic on a Broker is a valid CoAP URI. Topics have to be created and configured before any data can be published. Clients may propose new topics to be created; however, it is up to the broker to choose if and how a topic is created. The broker also decides the URI of each topic.
 
 # Architecture {#architecture}
 
-## CoAP pub/sub Architecture
+## CoAP Publish-Subscribe Architecture
 
-{{arch-fig}} shows the architecture of a CoAP pub/sub service. CoAP pub/sub Clients interact
-with a CoAP pub/sub Broker through the CoAP pub/sub REST API which is hosted by
-the Broker. State information is updated between the Clients and the Broker.
-The CoAP pub/sub Broker performs a store-and-forward of state update representations
-between certain CoAP pub/sub Clients. Clients Subscribe to topics upon which
-representations are Published by other Clients, which are forwarded by the
-Broker to the subscribing clients. A CoAP pub/sub Broker may be used as a
-REST resource proxy, retaining the last published representation to supply
-in response to Read requests from Clients.
+{{arch-fig}} shows a simple Publish/Subscribe architecture over CoAP. In it publishers submit their data over a RESTful interface a broker-managed resource (topic) and subscribers observe this resource using {{?RFC7641}}. Resource state information is updated between the CoAP clients and the Broker via topics. Topics are created by the broker but the initial
 
-~~~~
-Clients        pub/sub         Broker
-+-------+         |
-| CoAP  |         |
-|pub/sub|---------|------+
-|Client |         |      |    +-------+
-+-------+         |      +----| CoAP  |
-                  |           |pub/sub|
-+-------+         |      +----|Broker |
-| CoAP  |         |      |    +-------+
-|pub/sub|---------|------+
-|Client |         |
-+-------+         |
 
-~~~~
-{: #arch-fig title='CoAP pub/sub Architecture' artwork-align="center"}
+The CoAP pub/sub Broker performs a store-and-forward of state update representations between CoAP Clients. Subscribers observing a resource will receive notifications on a best-effort basis. 
+
+~~~
+          CoAP                     CoAP                      CoAP
+         Clients                  Server                   Clients
+       ___________              __________    observe   ____________
+      |           |  publish   |          | .--------- |            |
+      | Publisher | ---------> |          | |--------> | Subscriber |
+      |___________|            |          | '--------> |____________|
+            .                  |          |                   .
+            .                  |  Broker  |                   .
+       ___________             |          |   observe   ____________
+      |           |  publish   |          | .--------- |            |
+      | Publisher | ---------> |          | |--------> | Subscriber |
+      |___________|            |__________| '--------> |____________|
+~~~
+{: #arch-fig title='Publish/Subscribe architecture over CoAP' artwork-align="center"}
 
 
 ## CoAP pub/sub Broker
