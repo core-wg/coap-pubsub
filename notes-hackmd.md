@@ -94,7 +94,7 @@ The interactions with the broker on the topics themselves are:
 So from the interaction pov these are the interactions present:
 
 | Subject            | core draft                              | t2trg draft (examples)                   | Comments                  |
-| ------------------ | --------------------------------------- | ---------------------------------------- | ------------------------- |
+|--------------------|-----------------------------------------|------------------------------------------|---------------------------|
 | Paths to broker    | `/ps/`                                  | `ps/topics`                              | samish                    |
 | Paths to topic     | `/ps/topic`                             | `/config` and `/data` per `/topic`       | config and data decoupled |
 | Broker discovery   | GET `rt=core.ps`                        | missing (RD)                             | -                         |
