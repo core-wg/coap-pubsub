@@ -76,6 +76,11 @@ this specification.
 
 This specification makes use of the following additional terminology:
 
+Topic:
+: A unique identifier for a particular item being published and/or subscribed
+  to. A Broker uses the topics to match subscriptions to publications. A reference to a Topic on a Broker
+  is a valid CoAP URI as defined in {{!RFC7252}}
+
 Publish-Subscribe (pub/sub):
 : A messaging paradigm where messages are published to a Broker and potential
   receivers can subscribe to the Broker to receive messages. The publishers
@@ -88,15 +93,6 @@ CoAP pub/sub Broker:
   messages to other nodes, and able to match subscriptions and publications
   in order to route messages to the right destinations. The Broker can also
   temporarily store publications to satisfy future subscriptions and pending notifications.
-
-CoAP pub/sub Client:
-: A CoAP client which is capable of publish or subscribe operations as defined
-  in this specification.
-
-Topic:
-: A unique identifier for a particular item being published and/or subscribed
-  to. A Broker uses the topics to match subscriptions to publications. A reference to a Topic on a Broker
-  is a valid CoAP URI as defined in {{!RFC7252}}
 
 # Architecture {#architecture}
 
