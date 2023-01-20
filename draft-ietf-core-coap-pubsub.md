@@ -53,29 +53,14 @@ connectivity and/or up-time.
 
 The Constrained Application Protocol (CoAP) {{!RFC7252}} supports
 machine-to-machine communication across networks of constrained
-devices. CoAP uses a request/response model where clients make requests to
-servers in order to request actions on resources. Depending on the situation
-the same device may act either as a server, a client, or both.
+devices (e.g., 8-bit microcontrollers with limited RAM and ROM) and constrained networks {{!RFC7228}}. CoAP uses a request/response model where clients make requests to servers in order to request actions on resources. Depending on the situation the same device may act either as a server, a client, or both.
 
-One important class of constrained devices includes devices that are intended
-to run for years from a small battery, or by scavenging energy from their
-environment. These devices have limited reachability because they spend most
-of their time in a sleeping state with no network connectivity. Devices may
-also have limited reachability due to certain middle-boxes, such as Network
-Address Translators (NATs) or firewalls. Such middle-boxes often prevent
-connecting to a device from the Internet unless the connection was initiated
-by the device.
+One important class of constrained devices includes devices that are intended to run for years from a small battery, or by scavenging energy from their environment. These devices have limited reachability because they spend most of their time in a sleeping state with no network connectivity. Devices may also have limited reachability due to certain middle-boxes, such as Network Address Translators (NATs) or firewalls. Such middle-boxes often prevent connecting to a device from the Internet unless the connection was initiated by the device.
 
-For some applications the client/server and request/response communication model
-is not optimal but publish-subscribe communication with potentially many senders
-and/or receivers and communication via topics rather than directly with
+For some applications the client/server and request/response communication model is not optimal but publish-subscribe communication with potentially many senders and/or receivers and communication via topics rather than directly with
 endpoints may fit better.
 
-This document specifies simple extensions to CoAP for enabling publish-subscribe
-communication using a Broker node that enables store-and-forward messaging
-between two or more nodes. This model facilitates communication of nodes with
-limited reachability, enables simple many-to-many communication, and eases
-integration with other publish-subscribe systems.
+This document specifies simple extensions to CoAP for enabling publish-subscribe communication using a Broker node that enables store-and-forward messaging between two or more nodes. This model facilitates communication of nodes with limited reachability, enables simple many-to-many communication, and eases integration with other publish-subscribe systems.
 
 ## Requirements Language
 
@@ -116,7 +101,7 @@ Topic:
 
 # Architecture {#architecture}
 
-## CoAP Pub/sub Architecture
+## CoAP pub/sub Architecture
 
 {{arch-fig}} shows the architecture of a CoAP pub/sub service. CoAP pub/sub Clients interact
 with a CoAP pub/sub Broker through the CoAP pub/sub REST API which is hosted by
@@ -146,7 +131,7 @@ Clients        pub/sub         Broker
 {: #arch-fig title='CoAP pub/sub Architecture' artwork-align="center"}
 
 
-## CoAP Pub/sub Broker
+## CoAP pub/sub Broker
 
 A CoAP pub/sub Broker is a CoAP Server that exposes a REST API for clients
 to use to initiate publish-subscribe interactions. Avoiding the need
@@ -155,7 +140,7 @@ reachable from all clients. The Broker also needs to have sufficient
 resources (storage, bandwidth, etc.) to host CoAP resource services,
 and potentially buffer messages, on behalf of the clients.
 
-## CoAP Pub/sub Client
+## CoAP pub/sub Client
 
 A CoAP pub/sub Client interacts with a CoAP pub/sub Broker using the CoAP pub/sub
 REST API defined in this document. Clients initiate interactions with a CoAP pub/sub Broker. A data source
@@ -164,7 +149,7 @@ REST API defined in this document. Clients initiate interactions with a CoAP pub
 the Broker. Application clients can make use of both publish and subscribe
 in order to exchange state updates with data sources and data sinks.
 
-## CoAP Pub/sub Topic
+## CoAP pub/sub Topic
 
 The clients and Broker use topics to identify a particular resource or
 object in a publish-subscribe system. Topics are conventionally formed
@@ -191,7 +176,7 @@ time a representation is published to the topic. If the lifetime expires, the
 topic is removed from discovery responses, returns errors on subscription, and
 any outstanding subscriptions are cancelled.
 
-## Brokerless Pub/sub
+## Brokerless pub/sub
 
 In some use cases, it is desireable to use pub/sub semantics for peer-to-peer
 communication, but it is not feasible or desireable to include a separate node
@@ -219,7 +204,7 @@ Broker nodes in a system with full interoperability.
 ~~~~
 {: #brokerless title='Brokerless pub/sub' artwork-align="center"}
 
-# CoAP Pub/sub REST API {#sec-rest-api}
+# CoAP pub/sub REST API {#sec-rest-api}
 
 This section defines the REST API exposed by a CoAP pub/sub Broker to pub/sub
 Clients.  The examples throughout this section assume the use of CoAP
@@ -278,7 +263,7 @@ URI Template:
 : {+ps}/{+topic}{?q\*}
 
 URI Template Variables:
-: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
+: ps := pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
 
@@ -407,7 +392,7 @@ URI Template:
 : {+ps}/{+topic}
 
 URI Template Variables:
-: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
+: ps := pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
 
@@ -536,7 +521,7 @@ URI Template:
 : {+ps}/{+topic}
 
 URI Template Variables:
-: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
+: ps := pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
 
@@ -650,7 +635,7 @@ URI Template:
 : {+ps}/{+topic}
 
 URI Template Variables:
-: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
+: ps := pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
 
@@ -720,7 +705,7 @@ URI Template:
 : {+ps}/{+topic}{?q\*}
 
 URI Template Variables:
-: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub
+: ps := pub/sub REST API entry point (optional). The entry point of the pub/sub
 REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
@@ -794,7 +779,7 @@ URI Template:
 : {+ps}/{+topic}
 
 URI Template Variables:
-: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub
+: ps := pub/sub REST API entry point (optional). The entry point of the pub/sub
 REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
@@ -869,7 +854,7 @@ URI Template:
 : {+ps}/{+topic}
 
 URI Template Variables:
-: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
+: ps := pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
 
 : topic := The desired topic to return links for (optional).
 
@@ -910,7 +895,7 @@ Client                                         Broker
 {: #remove-fig title='Example of REMOVE' artwork-align="center"}
 
 
-# CoAP Pub/sub Operation with Resource Directory
+# CoAP pub/sub Operation with Resource Directory
 
 A CoAP pub/sub Broker may register the base URI, which is the REST API entry point for a pub/sub service, with a Resource
 Directory. A pub/sub Client may use an RD to discover a pub/sub Broker.
