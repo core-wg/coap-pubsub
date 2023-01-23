@@ -166,7 +166,7 @@ A topic configuration is represented as a CoRAL document [I-D.ietf-core-coral] c
 
 Each property is represented as a link where the link relation type is the property type and the link target is the property value.
 
-<!-- TODO: Topic configuration discovery and representation are mimmicking the pattern shown in draft-ietf-ace-oscore-gm-admin-07 and draft-ietf-ace-key-groupcomm-16. I need to look at those and port them here. Along with their IANA rt and ct registrations. We won't use CoRAL for now but leave it open for it's use in the future. 
+<!-- TODO: Topic configuration discovery and representation are mimmicking the pattern shown in draft-ietf-ace-oscore-gm-admin-07 and draft-ietf-ace-key-groupcomm-16. I need to look at those and port them here. Along with their IANA rt and ct registrations. We won't use CoRAL for now but leave it open for it's use in the future.
 
 TODO (check https://www.ietf.org/archive/id/draft-ietf-ace-oscore-gm-admin-07.html#name-retrieve-a-group-configurat)
 
@@ -182,6 +182,8 @@ https://www.ietf.org/archive/id/draft-ietf-ace-oscore-gm-admin-07.html#section-5
 ## Topic Discovery {#topic-discovery}
 
 Topics can be discovered by a client on the basis of configuration properties and status properties. For example, a client could fetch a list of all topics that have a property of type "foo" or that have a property of type "bar" with the value 42. Alternatively, topics can also be discovered simply by getting the full list of all topics.
+
+<!-- Add ref to broker discovery-->
 
 ### Topic List Representation {#topic-list-representation}
 
@@ -331,7 +333,7 @@ Example:
 
 ## Publish/Subscribe {#pubsub}
 
-Unless a topic is configured to use a different mechanism, publish/ subscribe is performed as follows: A publisher publishes to a topic by submitting the data in a PUT request to a broker-managed "topic data resource".  This causes a change to the state of that resources. Any subscriber observing the resource {{!RFC7641}} at that time receives a notification about the change to the resource state.
+Unless a topic is configured to use a different mechanism, publish/ subscribe is performed as follows: A publisher publishes to a topic by submitting the data in a PUT request to a broker-managed "topic data resource".  This causes a change to the state of that resources. Any subscriber observing the resource {{!RFC7641}} at that time receives a notification about the change to the resource state. Observations are maintained and terminated as specified on{{!RFC7641}}.
 
 ~~~~~~~~~~~
                ___
@@ -351,7 +353,9 @@ Unless a topic is configured to use a different mechanism, publish/ subscribe is
 ~~~~~~~~~~~
 F{: #fig-config title='Resources of a Publish-Subscribe Broker' artwork-align="center"}
 
-The topic data resource (which is different from the resource holding the topic configuration) does not exist until some initial data has been published to it.  Before initial data has been published, the topic data resource yields a 4.04 (Not Found) response.  If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created".
+As shown in section {{topics}}, each topic contains two resources: topic configuration and topic data. In that section we explain the creation and configuration of the topic configuration resources. This section will explain the management of topic data resources.
+
+A topic data resource does not exist until some initial data has been published to it.  Before initial data has been published, the topic data resource yields a 4.04 (Not Found) response. If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created".
 
 All URIs for configuration and data resources are broker-generated. There does not need to be any URI pattern dependence between the URI where the data exists and the URI of the topic configuration.  Topic configuration and data resources might even be hosted on different servers.
 
@@ -360,17 +364,17 @@ All URIs for configuration and data resources are broker-generated. There does n
 When a topic is newly created, it is first placed by the server into the HALF CREATED state (see {{fig-life}}).  In this state, a client can read and update the configuration of the topic and delete the topic. A publisher can publish to the topic data resource.  However, a subscriber cannot yet observe the topic data resource.
 
 ~~~~~~~~~~~
-               HALF                       FULLY
-             CREATED                     CREATED
-               ___                         ___     Publish/
------------>  |   |  ------------------>  |   |  ------------.
-   Create     |___|        Publish        |___|  <-----------'
-                    \                   /          Subscribe
-               | ^   \       ___       /   | ^
-         Read/ | |    '-->  |   |  <--'    | | Read/
-        Update | |  Delete  |___|  Delete  | | Update
-               '-'                         '-'
-                           DELETED
+                HALF                       FULLY
+              CREATED                     CREATED
+                ___                         ___     Publish/
+------------>  |   |  ------------------>  |   |  ------------.
+    Create     |___|        Publish        |___|  <-----------'
+                     \                   /          Subscribe
+                | ^   \       ___       /   | ^
+          Read/ | |    '-->  |   |  <--'    | | Read/
+         Update | |  Delete  |___|  Delete  | | Update
+                '-'                         '-'
+                            DELETED
 ~~~~~~~~~~~
 F{: #fig-life title='Lifecycle of a Topic' artwork-align="center"}
 
@@ -382,13 +386,23 @@ When a client deletes a topic, the topic is placed into the DELETED state and sh
 
 The server hosting a data resource may have to handle a potentially very large number of publishers and subscribers at the same time. This means the server can easily become overwhelmed if it receives too many publications in a short period of time.
 
-In this situation, if a client is sending publications too fast, the server can return a 4.29 (Too Many Requests) response {{!RFC8516}}.  As described in {{!RFC 8516}}, the Max-Age option {{!RFC7252}} in this response indicates the number of seconds after which the client may retry. When a client receives a 4.29 (Too Many Requests) response, it should not send any new publication requests to the same topic data resource before the time indicated by the Max-Age option has passed.
+In this situation, if a client is sending publications too fast, the server SHOULD return a 4.29 (Too Many Requests) response {{!RFC8516}}.  As described in {{!RFC 8516}}, the Max-Age option {{!RFC7252}} in this response indicates the number of seconds after which the client may retry. The Broker MAY stop publishing messages from the client for the indicated time.
+
+When a client receives a 4.29 (Too Many Requests) response, it MUST NOT send any new publication requests to the same topic data resource before the time indicated by the Max-Age option has passed.
 
 ## Interactions {#Interactions}
 
+### Broker Discovery {#discover}
+
+TODO
+<!-- Add ref to topic discovery-->
+<!-- This section explains Broker Discovery-->
+
 ### Publish {#publish}
 
-A client can publish data to a topic by submitting it in a PUT request to the topic data URI.  The topic data URI is indicated by the status property of type <http://coreapps.org/pubsub#data> in the topic configuration.  (Note: The topic data URI is not identical to the topic URI!)
+A client can publish data to a topic by submitting it in a PUT request to the topic data URI. The topic data URI is indicated by the status property of type <http://coreapps.org/pubsub#data> in the topic configuration.  (Note: The topic data URI is not identical to the topic URI!)
+
+<!-- TODO: URI examples-->
 
 The data MUST be in the content format specified by the configuration
 property of type <http://coreapps.org/pubsub#accept> in the topic
@@ -408,7 +422,7 @@ Example:
    Uri-Path: data
    Uri-Path: 6578616d706c65
    Content-Format: 112
-   
+
    [...SenML data...]
 
 <= 2.04 Updated
@@ -476,7 +490,44 @@ Example:
 
 TODO.
 
-# IANA Considerations
+# IANA Considerations {#iana}
+
+This document registers one attribute value in the Resource Type (rt=) registry
+established with {{!RFC6690}} and appends to the definition of one CoAP Response Code in the CoRE Parameters Registry.
+
+<!-- TODO: Redo this section. Need to add the ct and rt similar to the ones below
+
+https://www.ietf.org/archive/id/draft-ietf-ace-oscore-gm-admin-07.html#name-resource-types
+
+https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.1
+
+https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.2 -->
+
+## Resource Type value 'core.ps'
+
+* Attribute Value: core.ps
+
+* Description: {{sec-rest-api}} of [[This document]]
+
+* Reference: [[This document]]
+
+* Notes: None
+
+## Resource Type value 'core.ps.discover'
+
+* Attribute Value: core.ps.discover
+
+* Description: {{sec-rest-api}} of [[This document]]
+
+* Reference: [[This document]]
+
+* Notes: None
+
+# Acknowledgements {#acks}
+
+The authors would like to thank Klaus Hartke, Hannes Tschofenig, Zach Shelby, Mohit Sethi, Peter van der Stok, Tim Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen, and Olaf Bergmann for their contributions and reviews.
+
+--- back
 
 
 <!-- Old text below here-->
