@@ -386,17 +386,98 @@ In this situation, if a client is sending publications too fast, the server can 
 
 ## Interactions {#Interactions}
 
-### Discovery {#discovery}
-
-<!-- Add ref to topic discovery-->
-
 ### Publish {#publish}
+
+A client can publish data to a topic by submitting it in a PUT request to the topic data URI.  The topic data URI is indicated by the status property of type <http://coreapps.org/pubsub#data> in the topic configuration.  (Note: The topic data URI is not identical to the topic URI!)
+
+The data MUST be in the content format specified by the configuration
+property of type <http://coreapps.org/pubsub#accept> in the topic
+configuration.
+
+On success, the server returns a 2.04 (Updated) response.  However, when data is published to the topic for the first time, the server may instead return a 2.01 (Created) response.
+
+If the request does not have an acceptable content format, the server returns a 4.15 (Unsupported Content Format) response.
+
+If the client is sending publications too fast, the server returns a
+4.29 (Too Many Requests) response [RFC8516].
+
+Example:
+
+=> 0.03 PUT
+   Uri-Path: pubsub
+   Uri-Path: data
+   Uri-Path: 6578616d706c65
+   Content-Format: 112
+   
+   [...SenML data...]
+
+<= 2.04 Updated
 
 ### Subscribe {#subscribe}
 
+A client can get the latest published data and subscribe to newly published data by observing the topic data URI with a GET request that includes the Observe option [RFC7641].
+
+On success, the server returns 2.05 (Content) notifications with the data.
+
+Example:
+
+=> 0.01 GET
+   Uri-Path: pubsub
+   Uri-Path: data
+   Uri-Path: 6578616d706c65
+   Observe: 0
+
+<= 2.05 Content
+   Content-Format: 112
+   Observe: 10001
+   Max-Age: 15
+
+   [...SenML data...]
+
+<= 2.05 Content
+   Content-Format: 112
+   Observe: 10002
+   Max-Age: 15
+
+   [...SenML data...]
+
+<= 2.05 Content
+   Content-Format: 112
+   Observe: 10003
+   Max-Age: 15
+
+   [...SenML data...]
+
 ### Unsubscribe {#unsubscribe}
 
+A client can unsubscribe simply by cancelling the observation as described in Section 3.6 of RFC 7641.
+
 ### Getting the Latest Published Data {#get-latest-data}
+
+A client can just get the latest published data by making a GET request to the topic data URI.
+
+On success, the server returns 2.05 (Content) response with the data.
+
+Example:
+
+=> 0.01 GET
+   Uri-Path: pubsub
+   Uri-Path: data
+   Uri-Path: 6578616d706c65
+
+
+<= 2.05 Content
+   Content-Format: 112
+   Max-Age: 15
+
+   [...SenML data...]
+
+# Security Considerations
+
+TODO.
+
+# IANA Considerations
+
 
 <!-- Old text below here-->
 
