@@ -39,7 +39,7 @@ normative:
   RFC7641:
 
 informative:
-  I-D.irtf-t2trg-coral-pubsub:
+  I-D.hartke-t2trg-coral-pubsub:
 
 entity:
   SELF: "[RFC-XXXX]"
@@ -404,7 +404,7 @@ When a topic is newly created, it is first placed by the server into the HALF CR
                 '-'                         '-'
                             DELETED
 ~~~~~~~~~~~
-F{: #fig-life title='Lifecycle of a Topic' artwork-align="center"}
+{: #fig-life title='Lifecycle of a Topic' artwork-align="center"}
 
 After a publisher publishes to the topic for the first time, the topic is placed into the FULLY CREATED state. In this state, a client can read and update the configuration of the topic and delete the topic; a publisher can publish to the topic data resource; and a subscriber can observe the topic data resource.
 
@@ -414,7 +414,7 @@ When a client deletes a topic, the topic is placed into the DELETED state and sh
 
 The server hosting a data resource may have to handle a potentially very large number of publishers and subscribers at the same time. This means the server can easily become overwhelmed if it receives too many publications in a short period of time.
 
-In this situation, if a client is sending publications too fast, the server SHOULD return a 4.29 (Too Many Requests) response {{!RFC8516}}.  As described in {{!RFC 8516}}, the Max-Age option {{!RFC7252}} in this response indicates the number of seconds after which the client may retry. The Broker MAY stop publishing messages from the client for the indicated time.
+In this situation, if a client is sending publications too fast, the server SHOULD return a 4.29 (Too Many Requests) response {{!RFC8516}}.  As described in {{!RFC8516}}, the Max-Age option {{!RFC7252}} in this response indicates the number of seconds after which the client may retry. The Broker MAY stop publishing messages from the client for the indicated time.
 
 When a client receives a 4.29 (Too Many Requests) response, it MUST NOT send any new publication requests to the same topic data resource before the time indicated by the Max-Age option has passed.
 
@@ -605,7 +605,7 @@ https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.
 
 * Attribute Value: core.ps
 
-* Description: {{sec-rest-api}} of [[This document]]
+* Description: XXX of [[This document]]
 
 * Reference: [[This document]]
 
@@ -615,7 +615,7 @@ https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.
 
 * Attribute Value: core.ps.discover
 
-* Description: {{sec-rest-api}} of [[This document]]
+* Description: XXX of [[This document]]
 
 * Reference: [[This document]]
 
@@ -623,6 +623,6 @@ https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.
 
 # Acknowledgements {#acks}
 
-The current version of this document contains a substantial contribution by Klaus Hartke's proposal {{I-D.irtf-t2trg-coral-pubsub}}, which defines the topic resource model and structure as well as the topic lifecycle and interactions.
+The current version of this document contains a substantial contribution by Klaus Hartke's proposal {{I-D.hartke-t2trg-coral-pubsub}}, which defines the topic resource model and structure as well as the topic lifecycle and interactions.
 
 The authors would like to also thank Hannes Tschofenig, Zach Shelby, Mohit Sethi, Peter van der Stok, Tim Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen, and Olaf Bergmann for their contributions and reviews.
