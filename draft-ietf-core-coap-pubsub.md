@@ -234,6 +234,7 @@ A client can list a collection of topics by making a GET request to the collecti
 On success, the server returns a 2.05 (Content) response with a representation of the list of all topics (see Section {{topic-configuration-representation}}) in the collection.
 
 Example:
+
 ~~~~~~~~~~~
 => 0.01 GET
    Uri-Path: pubsub
@@ -257,6 +258,7 @@ representation of a list of topics in the collection (see
 Section {{topic-list-representation}}) that match the filter.
 
 Example:
+
 ~~~~~~~~~~~
 => 0.05 FETCH
    Uri-Path: pubsub
@@ -284,6 +286,7 @@ On success, the server returns a 2.01 (Created) response indicating the topic UR
 <!-- error cases -->
 
 Example:
+
 ~~~~~~~~~~~
 => 0.02 POST
    Uri-Path: pubsub
@@ -305,7 +308,8 @@ A client can read the configuration of a topic by making a GET request to the to
 
 On success, the server returns a 2.05 (Content) response with a representation of the topic configuration (see Section 3.1.3).
 
-   Example:
+Example:
+
 ~~~~~~~~~~~
 => 0.01 GET
    Uri-Path: pubsub
@@ -327,6 +331,7 @@ A client can update the configuration of a topic by submitting the representatio
 On success, the server returns a 2.04 (Updated) response.
 
 Example:
+
 ~~~~~~~~~~~
 => 0.03 PUT
    Uri-Path: pubsub
@@ -350,6 +355,7 @@ When a topic is deleted, the broker SHOULD unsubscribe all subscribers by removi
 <!-- TODO: Document error cases -->
 
 Example:
+
 ~~~~~~~~~~~
 => 0.04 DELETE
    Uri-Path: pubsub
@@ -431,6 +437,7 @@ Brokers SHOULD expose a link to the entry point of the pubsub API at their .well
 <!-- is example correct? -->
 
 Example:
+
 ~~~~~~~~~~~
 => GET
    Uri-Path: ./well-known/core
@@ -472,6 +479,7 @@ If the client is sending publications too fast, the server returns a
 <!-- TODO: add participants (publisher and broker) here and in other diagrams-->
 
 Example:
+
 ~~~~~~~~~~~
 => 0.03 PUT
    Uri-Path: pubsub
@@ -515,6 +523,7 @@ Failure:
 : 4.04 "Not Found". Topic does not exist.
 
 Example:
+
 ~~~~~~~~~~~
 => 0.01 GET
    Uri-Path: pubsub
@@ -563,6 +572,7 @@ If the Broker can not return the requested content format it MUST return a respo
 <!-- TODO There are other potential error cases we need to document -->
 
 Example:
+
 ~~~~~~~~~~~
 => 0.01 GET
    Uri-Path: pubsub
