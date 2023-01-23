@@ -186,7 +186,7 @@ A topic configuration is represented as a CoRAL document {{?I-D.ietf-core-coral}
 
 Each property is represented as a link where the link relation type is the property type and the link target is the property value.
 
-<!-- TODO: 
+<!-- TODO:
 
 Contents of the topic configuration resource (which mandatory?):
 - content format ct
@@ -341,7 +341,7 @@ Example:
 
 ### Deleting a Topic {#topic-delete}
 
-A client can delete a topic by making a CoAP DELETE request on the topic URI. 
+A client can delete a topic by making a CoAP DELETE request on the topic URI.
 
 On success, the server returns a 2.02 (Deleted) response.
 
@@ -548,7 +548,7 @@ Example:
 
 A client can unsubscribe simply by cancelling the observation as described in Section 3.6 of {{!RFC7641}}. The client MUST either use CoAP GET with Observe using an Observe parameter of 1 or send a CoAP Reset message in response to a notification.
 
-<!--  do we want an example or is redundant? --> 
+<!--  do we want an example or is redundant? -->
 
 ### Read Latest Data {#read-data}
 
