@@ -436,6 +436,9 @@ If the client is sending publications too fast, the server returns a
 
 <!-- TODO: Other error cases: max_age? -->
 
+<!-- TODO: add senml payload example below -->
+<!-- TODO: add participants (publisher and broker) here and in other diagrams-->
+
 Example:
 ~~~~~~~~~~~
 => 0.03 PUT
@@ -445,6 +448,17 @@ Example:
    Content-Format: 112
 
    [...SenML data...]
+
+<= 2.01 Created
+
+
+=> 0.03 PUT
+   Uri-Path: pubsub
+   Uri-Path: data
+   Uri-Path: 6578616d706c65
+   Content-Format: 112
+
+   [...updated SenML data...]
 
 <= 2.04 Updated
 ~~~~~~~~~~~
