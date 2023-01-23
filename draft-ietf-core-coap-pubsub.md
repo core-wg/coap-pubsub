@@ -605,9 +605,9 @@ https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.
 
 * Attribute Value: core.ps
 
-* Description: XXX of [[This document]]
+* Description: XXX of This document
 
-* Reference: [[This document]]
+* Reference: This document
 
 * Notes: None
 
@@ -615,9 +615,9 @@ https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.
 
 * Attribute Value: core.ps.discover
 
-* Description: XXX of [[This document]]
+* Description: XXX of This document
 
-* Reference: [[This document]]
+* Reference: This document
 
 * Notes: None
 
