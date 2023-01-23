@@ -168,11 +168,17 @@ TODO.
 
 ### Topic Configuration Representation {#topic-configuration-representation}
 
-A topic configuration is represented as a CoRAL document [I-D.ietf-core-coral] containing the configuration properties and status properties of the topic as top-level elements.
+A topic configuration is represented as a CoRAL document {{?I-D.ietf-core-coral}} containing the configuration properties and status properties of the topic as top-level elements.
 
 Each property is represented as a link where the link relation type is the property type and the link target is the property value.
 
-<!-- TODO: Topic configuration discovery and representation are mimmicking the pattern shown in draft-ietf-ace-oscore-gm-admin-07 and draft-ietf-ace-key-groupcomm-16. I need to look at those and port them here. Along with their IANA rt and ct registrations. We won't use CoRAL for now but leave it open for it's use in the future.
+<!-- TODO: 
+
+Contents of the topic configuration resource:
+- content format
+- subscription lifetime
+
+Topic configuration discovery and representation are mimmicking the pattern shown in draft-ietf-ace-oscore-gm-admin-07 and draft-ietf-ace-key-groupcomm-16. I need to look at those and port them here. Along with their IANA rt and ct registrations. We won't use CoRAL for now but leave it open for it's use in the future.
 
 TODO (check https://www.ietf.org/archive/id/draft-ietf-ace-oscore-gm-admin-07.html#name-retrieve-a-group-configurat)
 
@@ -367,7 +373,7 @@ All URIs for configuration and data resources are broker-generated. There does n
 
 ### Topic Lifecycle {#topic-lifecycle}
 
-When a topic is newly created, it is first placed by the server into the HALF CREATED state (see {{fig-life}}).  In this state, a client can read and update the configuration of the topic and delete the topic. A publisher can publish to the topic data resource.  However, a subscriber cannot yet observe the topic data resource.
+When a topic is newly created, it is first placed by the server into the HALF CREATED state (see {{fig-life}}).  In this state, a client can read and update the configuration of the topic and delete the topic. A publisher can publish to the topic data resource.  However, a subscriber cannot yet observe the topic data resource nor read the latest data.
 
 ~~~~~~~~~~~
                 HALF                       FULLY
@@ -419,10 +425,10 @@ On success, the server returns a 2.04 (Updated) response.  However, when data is
 If the request does not have an acceptable content format, the server returns a 4.15 (Unsupported Content Format) response.
 
 If the client is sending publications too fast, the server returns a
-4.29 (Too Many Requests) response [RFC8516].
+4.29 (Too Many Requests) response {{!RFC8516}}.
 
 Example:
-
+~~~~~~~~~~~
 => 0.03 PUT
    Uri-Path: pubsub
    Uri-Path: data
@@ -432,15 +438,29 @@ Example:
    [...SenML data...]
 
 <= 2.04 Updated
+~~~~~~~~~~~
 
 ### Subscribe {#subscribe}
 
-A client can get the latest published data and subscribe to newly published data by observing the topic data URI with a GET request that includes the Observe option [RFC7641].
+A client can get the latest published data and subscribe to newly published data by observing the topic data URI with a GET request that includes the Observe option set to 0 {{!RFC7641}}.
 
-On success, the server returns 2.05 (Content) notifications with the data.
+On success, the broker MUST return 2.05 (Content) notifications with the data.
+
+If the topic is not yet in the fully created state (see {{topic-lifecycle}}) the broker SHOULD return a response code 4.04 (Not Found).
+
+<!-- TODO There are other potential error cases based on parameters from the  configuration file (subscription lifetime, topic content format...) -->
+
+The following response codes are defined for the Subscribe operation:
+
+<!-- TODO: Is this the best way to represent response codes? Are they needed?  Which other potential error cases exist based on parameters from the  configuration file (subscription lifetime, topic content format...)? -->
+
+Success:
+: 2.05 "Content". Successful subscribe, current value included
+Failure:
+: 4.04 "Not Found". Topic does not exist.
 
 Example:
-
+~~~~~~~~~~~
 => 0.01 GET
    Uri-Path: pubsub
    Uri-Path: data
@@ -467,6 +487,7 @@ Example:
    Max-Age: 15
 
    [...SenML data...]
+~~~~~~~~~~~
 
 ### Unsubscribe {#unsubscribe}
 
@@ -474,14 +495,20 @@ A client can unsubscribe simply by cancelling the observation as described in Se
 
 <!--  do we want an example or is redundant? --> 
 
-### Getting the Latest Published Data {#get-latest-data}
+### Read Latest Data {#read-data}
 
-A client can just get the latest published data by making a GET request to the topic data URI.
+A client can get the latest published data by making a GET request to the topic data URI in the broker.
 
-On success, the server returns 2.05 (Content) response with the data.
+On success, the server MUST return 2.05 (Content) response with the data.
+
+If the target URI does not match an existing resource or the topic is not in the fully created state (see {{topic-lifecycle}}), the broker SHOULD return a response code 4.04 (Not Found).
+
+If the Broker can not return the requested content format it MUST return a response code 4.15 (Unsupported Content Format).
+
+<!-- TODO There are other potential error cases we need to document -->
 
 Example:
-
+~~~~~~~~~~~
 => 0.01 GET
    Uri-Path: pubsub
    Uri-Path: data
@@ -493,6 +520,7 @@ Example:
    Max-Age: 15
 
    [...SenML data...]
+~~~~~~~~~~~
 
 # Security Considerations
 
