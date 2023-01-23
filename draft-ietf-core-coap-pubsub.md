@@ -65,7 +65,7 @@ This document applies the idea of a "Publish/Subscribe Broker" to Constrained RE
 
 {::boilerplate bcp14}
 
-## Terminology
+## Terminology {#terminology}
 
 This specification requires readers to be familiar with all the terms and
 concepts that are discussed in {{?RFC5988}} and {{!RFC6690}}. Readers
@@ -86,51 +86,280 @@ CoAP client (publisher or subscriber):
 : CoAP clients can act as publishers or as subscribers. Publishers send CoAP messages to the Broker on specific topics. Subscribers have an ongoing observation relation (subscription) to a topic. Neither publishers nor subscribers need to have any knowledge each other; they just have to share the topic they are publishing and subscribing to.
 
 topic:
-: An unique identifier for a particular item being published and/or subscribed to. A Broker uses the topics to match subscriptions to publications. A reference to a Topic on a Broker is a valid CoAP URI. Topics have to be created and configured before any data can be published. Clients may propose new topics to be created; however, it is up to the broker to choose if and how a topic is created. The broker also decides the URI of each topic.
-
-# Architecture {#architecture}
+: An unique identifier for a particular item being published and/or subscribed to. A Broker uses the topics to match subscriptions to publications. A reference to a Topic on a Broker is a valid CoAP URI. Topics have to be created and configured before any data can be published. Clients may propose new topics to be created; however, it is up to the broker to choose if and how a topic is created. The broker also decides the URI of each topic. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
 
 ## CoAP Publish-Subscribe Architecture
 
-{{arch-fig}} shows a simple Publish/Subscribe architecture over CoAP. In it, publishers submit their data over a RESTful interface a broker-managed resource (topic) and subscribers observe this resource using {{?RFC7641}}. Resource state information is updated between the CoAP clients and the Broker via topics. Topics are created by the broker but the initial configuration can be proposed by a client, normally a publisher.
+{{fig-arch}} shows a simple Publish/Subscribe architecture over CoAP. In it, publishers submit their data over a RESTful interface a broker-managed resource (topic) and subscribers observe this resource using {{?RFC7641}}. Resource state information is updated between the CoAP clients and the Broker via topics. Topics are created by the broker but the initial configuration can be proposed by a client, normally a publisher.
 
 The broker is responsible for the store-and-forward of state update representations between CoAP clients. Subscribers observing a resource will receive notifications, the delivery of which is done on a best-effort basis.
 
-~~~
-          CoAP                     CoAP                      CoAP
-         clients                  server                   clients
-       ___________              __________    observe   ____________
-      |           |  publish   |          | .--------- |            |
-      | publisher | ---------> |          | |--------> | subscriber |
-      |___________|            |          | '--------> |____________|
-            .                  |          |                   .
-            .                  |  broker  |                   .
-       ___________             |          |   observe   ____________
-      |           |  publish   |          | .--------- |            |
-      | publisher | ---------> |          | |--------> | subscriber |
-      |___________|            |__________| '--------> |____________|
-~~~
-{: #arch-fig title='Publish-subscribe architecture over CoAP' artwork-align="center"}
+~~~~~~~~~~~
+      CoAP                     CoAP                      CoAP
+     clients                  server                   clients
+   ___________              __________    observe   ____________
+  |           |  publish   |          | .--------- |            |
+  | publisher | ---------> |          | |--------> | subscriber |
+  |___________|            |          | '--------> |____________|
+        .                  |          |                   .
+        .                  |  broker  |                   .
+   ___________             |          |   observe   ____________
+  |           |  publish   |          | .--------- |            |
+  | publisher | ---------> |          | |--------> | subscriber |
+  |___________|            |__________| '--------> |____________|
+~~~~~~~~~~~
+{: #fig-arch title='Publish-subscribe architecture over CoAP' artwork-align="center"}
 
-## CoAP pub/sub Broker
+# Pub-Sub Topics {#topics}
 
-A CoAP pub/sub Broker is a CoAP Server that exposes a REST API for clients
-to use to initiate publish-subscribe interactions. Avoiding the need
-for direct reachability between clients, the Broker only needs to be
-reachable from all clients. The Broker also needs to have sufficient
-resources (storage, bandwidth, etc.) to host CoAP resource services,
-and potentially buffer messages, on behalf of the clients.
+The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}).
 
-## CoAP pub/sub Client
+<!-- Consider merging fig2 and fig3 in fig 2 and deleting the former-->
+~~~~~~~~~~~
+               ___
+       Topic  /   \
+  Collection  \___/
+                  \
+                   \____________________
+                    \___    \___        \___
+            Topics  /   \   /   \  ...  /   \
+                    \___/   \___/       \___/
+~~~~~~~~~~~
+{: #fig-topic title='Resources of a Publish-Subscribe Broker' artwork-align="center"}
 
-A CoAP pub/sub Client interacts with a CoAP pub/sub Broker using the CoAP pub/sub
-REST API defined in this document. Clients initiate interactions with a CoAP pub/sub Broker. A data source
-(e.g., sensor clients) can publish state updates to the Broker and data sinks
-(e.g., actuator clients) can read from or subscribe to state updates from
-the Broker. Application clients can make use of both publish and subscribe
-in order to exchange state updates with data sources and data sinks.
+## Topic Creation and Configuration
 
-## CoAP pub/sub Topic
+Each topic has a topic configuration. A CoAP client can create a new
+topic by submitting an initial configuration for the topic. It can
+also read and update the configuration of existing topics and delete
+them when they are no longer needed.
+
+The configuration of a topic itself consists of a set of properties.
+These fall into one of two categories: configuration properties and
+status properties. Configuration properties can be set by a client
+and describe the desired configuration of a topic.  Status properties
+are read-only, managed by the server, and provide information about
+the actual status of a topic.
+
+When a client submits a configuration to create a new topic or update
+an existing topic, it can only submit configuration properties. When
+a server returns the configuration of a topic, it returns both the
+configuration properties and the status properties of the topic.
+
+Every property has a type and a value.  The type takes the form of an
+IRI {{?RFC3987}}. This IRI serves only as an identifier; it must not be
+dereferenced by clients. The value can be either a Boolean value, an integer, a floating-point number, a date/time value, a byte string, a text string, or a resource reference in the form of a URI {{!RFC3986}}.
+
+### Configuration Properties
+
+The following configuration properties are defined:
+TODO.
+
+### Status Properties
+
+The following status properties are defined:
+TODO.
+
+### Topic Configuration Representation
+
+<!-- TODO: Topic configuration discovery and representation are mimmicking the pattern shown in draft-ietf-ace-oscore-gm-admin-07 and draft-ietf-ace-key-groupcomm-16. I need to look at those and port them here. Along with their IANA rt and ct registrations.
+
+TODO (check https://www.ietf.org/archive/id/draft-ietf-ace-oscore-gm-admin-07.html#name-retrieve-a-group-configurat)
+
+content format: application/pubsub+cbor
+
+https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html
+
+Make a section like 5.1 or 5.2 to describe a topic
+https://www.ietf.org/archive/id/draft-ietf-ace-oscore-gm-admin-07.html#section-5.1-->
+
+
+
+## Topic Discovery
+
+Topics can be discovered by a client on the basis of configuration properties and status properties. For example, a client could fetch a list of all topics that have a property of type "foo" or that have a property of type "bar" with the value 42. Alternatively, topics can also be discovered simply by getting the full list of all topics.
+
+
+
+### Topic List Representation
+
+A list of group configurations is represented as a document containing the corresponding group-configuration resources in the list. Each group-configuration is represented as a link, where the link target is the URI of the group-configuration resource.
+
+The list can be represented as a Link Format document {{?RFC6690}} or a CoRAL document {{?I-D.ietf-core-coral}}.
+
+
+### Filter Query Representation
+
+   TODO.
+
+## Interactions
+
+### Getting All Topics
+
+A client can list a collection of topics by making a GET request to the collection URI.
+
+On success, the server returns a 2.05 (Content) response with a representation of the list of all topics (see Section 3.2.1) in the collection.
+
+Example:
+~~~~~~~~~~~
+=> 0.01 GET
+   Uri-Path: pubsub
+   Uri-Path: topics
+
+<= 2.05 Content
+   Content-Format: 65536
+   item </pubsub/topics/1>
+   item </pubsub/topics/2>
+   item </pubsub/topics/3>
+~~~~~~~~~~~
+
+### Getting Topics by Properties
+
+   A client can filter a collection of topics by submitting the
+   representation of a topic filter (see Section 3.2.2) in a FETCH
+   request to the topic collection URI.
+
+   On success, the server returns a 2.05 (Content) response with a
+   representation of a list of topics in the collection (see
+   Section 3.2.1) that match the filter.
+
+   Example:
+~~~~~~~~~~~
+=> 0.05 FETCH
+   Uri-Path: pubsub
+   Uri-Path: topics
+   Content-Format: TODO
+      TODO
+
+<= 2.05 Content
+
+   Content-Format: 65536
+
+   item </pubsub/topics/1>
+   item </pubsub/topics/2>
+   item </pubsub/topics/3>
+~~~~~~~~~~~
+
+### Creating a Topic
+
+   A client can add a new topic to a collection of topics by submitting
+   a representation of the initial topic configuration (see
+   Section 3.1.3) in a POST request to the topic collection URI.
+
+   If client just wants all the default configuration properties, it can
+   simply submit an empty CoRAL document.
+
+   On success, the server returns a 2.01 (Created) response indicating
+   the topic URI of the new topic.
+
+   Example:
+~~~~~~~~~~~
+=> 0.02 POST
+   Uri-Path: pubsub
+   Uri-Path: topics
+   Content-Format: 65536
+
+   foo "xyz"
+   bar 42
+
+<= 2.01 Created
+   Location-Path: pubsub
+   Location-Path: topics
+   Location-Path: 1234
+~~~~~~~~~~~
+
+### Reading the Configuration of a Topic
+
+   A client can read the configuration of a topic by making a GET
+   request to the topic URI.
+
+   On success, the server returns a 2.05 (Content) response with a
+   representation of the topic configuration (see Section 3.1.3).
+
+   Example:
+~~~~~~~~~~~
+=> 0.01 GET
+   Uri-Path: pubsub
+   Uri-Path: topics
+   Uri-Path: 1234
+
+<= 2.05 Content
+   Content-Format: 65536
+   Max-Age: 300
+
+   foo "xyz"
+   bar 42
+~~~~~~~~~~~
+
+### Updating the Configuration of a Topic
+
+   A client can update the configuration of a topic by submitting the
+   representation of the updated topic configuration (see Section 3.1.3)
+   in a PUT request to the topic URI.  Any existing properties in the
+   configuration are replaced by this update.
+
+   On success, the server returns a 2.04 (Updated) response.
+
+   Example:
+~~~~~~~~~~~
+=> 0.03 PUT
+   Uri-Path: pubsub
+   Uri-Path: topics
+   Uri-Path: 1234
+   Content-Format: 65536
+
+   foo "abc"
+
+<= 2.04 Updated
+~~~~~~~~~~~
+
+### Deleting a Topic
+
+   A client can delete a topic by making a DELETE request on the topic
+   URI.
+
+   On success, the server returns a 2.02 (Deleted) response.
+
+   Any subscribers to the topic are automatically unsubscribed.
+
+   Example:
+~~~~~~~~~~~
+=> 0.04 DELETE
+   Uri-Path: pubsub
+   Uri-Path: topics
+   Uri-Path: 1234
+
+<= 2.02 Deleted
+~~~~~~~~~~~
+
+## Publish/Subscribe
+
+Unless a topic is configured to use a different mechanism, publish/ subscribe is performed as follows: A publisher publishes to a topic by submitting the data in a PUT request to a broker-managed "topic data resource".  This causes a change to the state of that resources. Any subscriber observing the resource {{!RFC7641}} at that time receives a notification about the change to the resource state.
+
+~~~~~~~~~~~
+               ___
+       Topic  /   \
+  Collection  \___/
+                  \
+                   \___________________________
+                    \          \               \
+                     \ ......   \ ......        \ ......
+                    : \___  :  : \___  :       : \___  :
+             Topic  : /   \ :  : /   \ :       : /   \ :
+     Configuration  : \___/ :  : \___/ :       : \___/ :
+                    :  _|_  :  :  _|_  :  ...  :  _|_  :
+             Topic  : /   \ :  : /   \ :       : /   \ :
+              Data  : \___/ :  : \___/ :       : \___/ :
+                    :.......:  :.......:       :.......:
+~~~~~~~~~~~
+F{: #fig-topic title='Resources of a Publish-Subscribe Broker' artwork-align="center"}
+
+
+
+
+
+<!-- Old text below here-->
+
 
 The clients and Broker use topics to identify a particular resource or
 object in a publish-subscribe system. Topics are conventionally formed
@@ -961,6 +1190,14 @@ to forward it to the subscribers.
 This document registers one attribute value in the Resource Type (rt=) registry
 established with {{!RFC6690}} and appends to the definition of one CoAP Response Code in the CoRE Parameters Registry.
 
+<!-- Need to add the ct and rt similar to the ones below
+
+https://www.ietf.org/archive/id/draft-ietf-ace-oscore-gm-admin-07.html#name-resource-types
+
+https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.1
+
+https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.2 -->
+
 ## Resource Type value 'core.ps'
 
 * Attribute Value: core.ps
@@ -972,7 +1209,6 @@ established with {{!RFC6690}} and appends to the definition of one CoAP Response
 * Notes: None
 
 ## Resource Type value 'core.ps.discover'
-
 
 * Attribute Value: core.ps.discover
 
