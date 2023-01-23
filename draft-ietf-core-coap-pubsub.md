@@ -470,7 +470,9 @@ Example:
 
 ### Unsubscribe {#unsubscribe}
 
-A client can unsubscribe simply by cancelling the observation as described in Section 3.6 of RFC 7641.
+A client can unsubscribe simply by cancelling the observation as described in Section 3.6 of {{!RFC7641}}. The client MUST either use CoAP GET with Observe using an Observe parameter of 1 or send a CoAP Reset message in response to a notification.
+
+<!--  do we want an example or is redundant? --> 
 
 ### Getting the Latest Published Data {#get-latest-data}
 
@@ -494,6 +496,7 @@ Example:
 
 # Security Considerations
 
+<!-- TODO: we may take content from prev versions but we have to spend some more time on the implications of the topic-config -->
 TODO.
 
 # IANA Considerations {#iana}
