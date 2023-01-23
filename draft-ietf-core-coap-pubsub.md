@@ -35,8 +35,14 @@ author:
   email: jaime@iki.fi
 
 normative:
+  RFC7252:
+  RFC7641:
 
 informative:
+  I-D.irtf-t2trg-coral-pubsub:
+
+entity:
+  SELF: "[RFC-XXXX]"
 
 --- abstract
 
@@ -525,9 +531,9 @@ https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.
 
 # Acknowledgements {#acks}
 
-The authors would like to thank Klaus Hartke, Hannes Tschofenig, Zach Shelby, Mohit Sethi, Peter van der Stok, Tim Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen, and Olaf Bergmann for their contributions and reviews.
+The current version of this document contains a substantial contribution by Klaus Hartke's proposal {{I-D.irtf-t2trg-coral-pubsub}}, which defines the topic resource model and structure as well as the topic lifecycle and interactions.
 
---- back
+The authors would like to also thank Hannes Tschofenig, Zach Shelby, Mohit Sethi, Peter van der Stok, Tim Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen, and Olaf Bergmann for their contributions and reviews.
 
 
 <!-- Old text below here-->
