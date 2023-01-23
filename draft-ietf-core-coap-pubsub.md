@@ -180,9 +180,11 @@ Each property is represented as a link where the link relation type is the prope
 
 <!-- TODO: 
 
-Contents of the topic configuration resource:
-- content format
+Contents of the topic configuration resource (which mandatory?):
+- content format ct
 - subscription lifetime
+- additional link target attributes and relation values
+
 
 Topic configuration discovery and representation are mimmicking the pattern shown in draft-ietf-ace-oscore-gm-admin-07 and draft-ietf-ace-key-groupcomm-16. I need to look at those and port them here. Along with their IANA rt and ct registrations. We won't use CoRAL for now but leave it open for it's use in the future.
 
@@ -263,9 +265,11 @@ Example:
 
 A client can add a new topic to a collection of topics by submitting a representation of the initial topic configuration (see Section {{topic-configuration-representation}}) in a POST request to the topic collection URI.
 
-The topic specification sent in the payload should use a supported serialization of the CoRE link format {{!RFC6690}} but other serializations may be used in the future.
+The topic specification sent in the payload should use a supported serialization of the CoRE link format {{!RFC6690}} but other serializations like {{?I-D.ietf-core-coral}} may be used in the future.
 
 On success, the server returns a 2.01 (Created) response indicating the topic URI of the new topic.
+
+<!-- error cases -->
 
 Example:
 ~~~~~~~~~~~
