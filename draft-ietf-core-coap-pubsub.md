@@ -160,9 +160,13 @@ TODO.
 The following status properties are defined:
 TODO.
 
-### Topic Configuration Representation
+### Topic Configuration Representation {#topic-configuration-representation}
 
-<!-- TODO: Topic configuration discovery and representation are mimmicking the pattern shown in draft-ietf-ace-oscore-gm-admin-07 and draft-ietf-ace-key-groupcomm-16. I need to look at those and port them here. Along with their IANA rt and ct registrations.
+A topic configuration is represented as a CoRAL document [I-D.ietf-core-coral] containing the configuration properties and status properties of the topic as top-level elements.
+
+Each property is represented as a link where the link relation type is the property type and the link target is the property value.
+
+<!-- TODO: Topic configuration discovery and representation are mimmicking the pattern shown in draft-ietf-ace-oscore-gm-admin-07 and draft-ietf-ace-key-groupcomm-16. I need to look at those and port them here. Along with their IANA rt and ct registrations. We won't use CoRAL for now but leave it open for it's use in the future. 
 
 TODO (check https://www.ietf.org/archive/id/draft-ietf-ace-oscore-gm-admin-07.html#name-retrieve-a-group-configurat)
 
@@ -175,30 +179,27 @@ https://www.ietf.org/archive/id/draft-ietf-ace-oscore-gm-admin-07.html#section-5
 
 
 
-## Topic Discovery
+## Topic Discovery {#topic-discovery}
 
 Topics can be discovered by a client on the basis of configuration properties and status properties. For example, a client could fetch a list of all topics that have a property of type "foo" or that have a property of type "bar" with the value 42. Alternatively, topics can also be discovered simply by getting the full list of all topics.
 
-
-
-### Topic List Representation
+### Topic List Representation {#topic-list-representation}
 
 A list of group configurations is represented as a document containing the corresponding group-configuration resources in the list. Each group-configuration is represented as a link, where the link target is the URI of the group-configuration resource.
 
 The list can be represented as a Link Format document {{?RFC6690}} or a CoRAL document {{?I-D.ietf-core-coral}}.
 
-
-### Filter Query Representation
+### Filter Query Representation {#filter-query-representation}
 
    TODO.
 
 ## Interactions
 
-### Getting All Topics
+### Getting All Topics {#topic-get-all}
 
 A client can list a collection of topics by making a GET request to the collection URI.
 
-On success, the server returns a 2.05 (Content) response with a representation of the list of all topics (see Section 3.2.1) in the collection.
+On success, the server returns a 2.05 (Content) response with a representation of the list of all topics (see Section {{topic-configuration-representation}}) in the collection.
 
 Example:
 ~~~~~~~~~~~
@@ -213,17 +214,17 @@ Example:
    item </pubsub/topics/3>
 ~~~~~~~~~~~
 
-### Getting Topics by Properties
+### Getting Topics by Properties {#topic-get-properties}
 
-   A client can filter a collection of topics by submitting the
-   representation of a topic filter (see Section 3.2.2) in a FETCH
-   request to the topic collection URI.
+A client can filter a collection of topics by submitting the
+representation of a topic filter (see Section {{filter-query-representation}}) in a FETCH
+request to the topic collection URI.
 
-   On success, the server returns a 2.05 (Content) response with a
-   representation of a list of topics in the collection (see
-   Section 3.2.1) that match the filter.
+On success, the server returns a 2.05 (Content) response with a
+representation of a list of topics in the collection (see
+Section {{topic-list-representation}}) that match the filter.
 
-   Example:
+Example:
 ~~~~~~~~~~~
 => 0.05 FETCH
    Uri-Path: pubsub
@@ -240,19 +241,15 @@ Example:
    item </pubsub/topics/3>
 ~~~~~~~~~~~
 
-### Creating a Topic
+### Creating a Topic {#topic-create}
 
-   A client can add a new topic to a collection of topics by submitting
-   a representation of the initial topic configuration (see
-   Section 3.1.3) in a POST request to the topic collection URI.
+A client can add a new topic to a collection of topics by submitting a representation of the initial topic configuration (see Section {{topic-configuration-representation}}) in a POST request to the topic collection URI.
 
-   If client just wants all the default configuration properties, it can
-   simply submit an empty CoRAL document.
+If client just wants all the default configuration properties, it can simply submit an empty CoRAL document.
 
-   On success, the server returns a 2.01 (Created) response indicating
-   the topic URI of the new topic.
+On success, the server returns a 2.01 (Created) response indicating the topic URI of the new topic.
 
-   Example:
+Example:
 ~~~~~~~~~~~
 => 0.02 POST
    Uri-Path: pubsub
@@ -268,7 +265,7 @@ Example:
    Location-Path: 1234
 ~~~~~~~~~~~
 
-### Reading the Configuration of a Topic
+### Reading the Configuration of a Topic {#topic-read-configuration}
 
    A client can read the configuration of a topic by making a GET
    request to the topic URI.
@@ -291,7 +288,7 @@ Example:
    bar 42
 ~~~~~~~~~~~
 
-### Updating the Configuration of a Topic
+### Updating the Configuration of a Topic {#topic-update-configuration}
 
    A client can update the configuration of a topic by submitting the
    representation of the updated topic configuration (see Section 3.1.3)
@@ -313,7 +310,7 @@ Example:
 <= 2.04 Updated
 ~~~~~~~~~~~
 
-### Deleting a Topic
+### Deleting a Topic {#topic-delete}
 
    A client can delete a topic by making a DELETE request on the topic
    URI.
@@ -332,7 +329,7 @@ Example:
 <= 2.02 Deleted
 ~~~~~~~~~~~
 
-## Publish/Subscribe
+## Publish/Subscribe {#pubsub}
 
 Unless a topic is configured to use a different mechanism, publish/ subscribe is performed as follows: A publisher publishes to a topic by submitting the data in a PUT request to a broker-managed "topic data resource".  This causes a change to the state of that resources. Any subscriber observing the resource {{!RFC7641}} at that time receives a notification about the change to the resource state.
 
@@ -352,11 +349,54 @@ Unless a topic is configured to use a different mechanism, publish/ subscribe is
               Data  : \___/ :  : \___/ :       : \___/ :
                     :.......:  :.......:       :.......:
 ~~~~~~~~~~~
-F{: #fig-topic title='Resources of a Publish-Subscribe Broker' artwork-align="center"}
+F{: #fig-config title='Resources of a Publish-Subscribe Broker' artwork-align="center"}
 
+The topic data resource (which is different from the resource holding the topic configuration) does not exist until some initial data has been published to it.  Before initial data has been published, the topic data resource yields a 4.04 (Not Found) response.  If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created".
 
+All URIs for configuration and data resources are broker-generated. There does not need to be any URI pattern dependence between the URI where the data exists and the URI of the topic configuration.  Topic configuration and data resources might even be hosted on different servers.
 
+### Topic Lifecycle {#topic-lifecycle}
 
+When a topic is newly created, it is first placed by the server into the HALF CREATED state (see {{fig-life}}).  In this state, a client can read and update the configuration of the topic and delete the topic. A publisher can publish to the topic data resource.  However, a subscriber cannot yet observe the topic data resource.
+
+~~~~~~~~~~~
+               HALF                       FULLY
+             CREATED                     CREATED
+               ___                         ___     Publish/
+----------->  |   |  ------------------>  |   |  ------------.
+   Create     |___|        Publish        |___|  <-----------'
+                    \                   /          Subscribe
+               | ^   \       ___       /   | ^
+         Read/ | |    '-->  |   |  <--'    | | Read/
+        Update | |  Delete  |___|  Delete  | | Update
+               '-'                         '-'
+                           DELETED
+~~~~~~~~~~~
+F{: #fig-life title='Lifecycle of a Topic' artwork-align="center"}
+
+After a publisher publishes to the topic for the first time, the topic is placed into the FULLY CREATED state. In this state, a client can read and update the configuration of the topic and delete the topic; a publisher can publish to the topic data resource; and a subscriber can observe the topic data resource.
+
+When a client deletes a topic, the topic is placed into the DELETED state and shortly after removed from the server. In this state, all subscribers are removed from the list of observers of the topic data resource and no further interactions with the topic are possible.
+
+### Rate Limiting {#rate-limit}
+
+The server hosting a data resource may have to handle a potentially very large number of publishers and subscribers at the same time. This means the server can easily become overwhelmed if it receives too many publications in a short period of time.
+
+In this situation, if a client is sending publications too fast, the server can return a 4.29 (Too Many Requests) response {{!RFC8516}}.  As described in {{!RFC 8516}}, the Max-Age option {{!RFC7252}} in this response indicates the number of seconds after which the client may retry. When a client receives a 4.29 (Too Many Requests) response, it should not send any new publication requests to the same topic data resource before the time indicated by the Max-Age option has passed.
+
+## Interactions {#Interactions}
+
+### Discovery {#discovery}
+
+<!-- Add ref to topic discovery-->
+
+### Publish {#publish}
+
+### Subscribe {#subscribe}
+
+### Unsubscribe {#unsubscribe}
+
+### Getting the Latest Published Data {#get-latest-data}
 
 <!-- Old text below here-->
 
