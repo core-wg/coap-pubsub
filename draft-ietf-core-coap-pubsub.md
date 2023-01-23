@@ -416,13 +416,16 @@ TODO
 
 ### Publish {#publish}
 
-A client can publish data to a topic by submitting it in a PUT request to the topic data URI. The topic data URI is indicated by the status property of type <http://coreapps.org/pubsub#data> in the topic configuration.  (Note: The topic data URI is not identical to the topic URI!)
+A topic must have been created in order to publish data to it (See Section {{topic-create}}) and be in the fully created state in order to the publish operation to work.
 
-<!-- TODO: URI examples-->
+A client can publish data to a topic by submitting the data in a PUT request to the topic data URI. The topic data URI is indicated by the status property of type <http://coreapps.org/pubsub#data> in the topic configuration. Please note that the topic data URI is not the same as the topic URI.
+
+<!-- change <http://coreapps.org/pubsub#data> TBD-data  once defined in the configuration section-->
 
 The data MUST be in the content format specified by the configuration
-property of type <http://coreapps.org/pubsub#accept> in the topic
-configuration.
+property <http://coreapps.org/pubsub#accept> in the topic configuration. Brokers MUST reject publish operations which do not use the specified content format.
+
+<!-- change <http://coreapps.org/pubsub#accept> TBD-accept once defined in the configuration section  -->
 
 On success, the server returns a 2.04 (Updated) response.  However, when data is published to the topic for the first time, the server may instead return a 2.01 (Created) response.
 
@@ -430,6 +433,8 @@ If the request does not have an acceptable content format, the server returns a 
 
 If the client is sending publications too fast, the server returns a
 4.29 (Too Many Requests) response {{!RFC8516}}.
+
+<!-- TODO: Other error cases: max_age? -->
 
 Example:
 ~~~~~~~~~~~
