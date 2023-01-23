@@ -116,11 +116,17 @@ The broker is responsible for the store-and-forward of state update representati
 ~~~~~~~~~~~
 {: #fig-arch title='Publish-subscribe architecture over CoAP' artwork-align="center"}
 
+This document describes two sets of interactions, interactions to configure topics and their lifecycle (see Section {{topic-configuration-interactions}})and interactions about the topic data (see Section {{topic-data-interactions}}).
+
+Topic configuration interactions are discovery, create, read configuration, update configuration, delete configuration and handle the management of the topics.
+
+Topic data interactions are publish, subscribe, unsubscribe, read and are oriented on how data is transferred from a publisher to a subscriber.
+
 # Pub-Sub Topics {#topics}
 
 The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}).
 
-<!-- Consider merging fig2 and fig3 in fig 2 and deleting the former-->
+<!-- TODO: Consider merging fig2 and fig3 in fig 2 and deleting the former-->
 ~~~~~~~~~~~
                ___
        Topic  /   \
@@ -189,8 +195,6 @@ https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html
 Make a section like 5.1 or 5.2 to describe a topic
 https://www.ietf.org/archive/id/draft-ietf-ace-oscore-gm-admin-07.html#section-5.1-->
 
-
-
 ## Topic Discovery {#topic-discovery}
 
 Topics can be discovered by a client on the basis of configuration properties and status properties. For example, a client could fetch a list of all topics that have a property of type "foo" or that have a property of type "bar" with the value 42. Alternatively, topics can also be discovered simply by getting the full list of all topics.
@@ -207,7 +211,7 @@ The list can be represented as a Link Format document {{?RFC6690}} or a CoRAL do
 
    TODO.
 
-## Interactions
+## Topic Configuration Interactions {#topic-configuration-interactions}
 
 ### Getting All Topics {#topic-get-all}
 
@@ -259,7 +263,7 @@ Example:
 
 A client can add a new topic to a collection of topics by submitting a representation of the initial topic configuration (see Section {{topic-configuration-representation}}) in a POST request to the topic collection URI.
 
-If client just wants all the default configuration properties, it can simply submit an empty CoRAL document.
+The topic specification sent in the payload should use a supported serialization of the CoRE link format {{!RFC6690}} but other serializations may be used in the future.
 
 On success, the server returns a 2.01 (Created) response indicating the topic URI of the new topic.
 
@@ -281,11 +285,9 @@ Example:
 
 ### Reading the Configuration of a Topic {#topic-read-configuration}
 
-   A client can read the configuration of a topic by making a GET
-   request to the topic URI.
+A client can read the configuration of a topic by making a GET request to the topic URI.
 
-   On success, the server returns a 2.05 (Content) response with a
-   representation of the topic configuration (see Section 3.1.3).
+On success, the server returns a 2.05 (Content) response with a representation of the topic configuration (see Section 3.1.3).
 
    Example:
 ~~~~~~~~~~~
@@ -304,14 +306,11 @@ Example:
 
 ### Updating the Configuration of a Topic {#topic-update-configuration}
 
-   A client can update the configuration of a topic by submitting the
-   representation of the updated topic configuration (see Section 3.1.3)
-   in a PUT request to the topic URI.  Any existing properties in the
-   configuration are replaced by this update.
+A client can update the configuration of a topic by submitting the representation of the updated topic configuration (see Section 3.1.3) in a PUT request to the topic URI. Any existing properties in the configuration are replaced by this update.
 
-   On success, the server returns a 2.04 (Updated) response.
+On success, the server returns a 2.04 (Updated) response.
 
-   Example:
+Example:
 ~~~~~~~~~~~
 => 0.03 PUT
    Uri-Path: pubsub
@@ -326,14 +325,15 @@ Example:
 
 ### Deleting a Topic {#topic-delete}
 
-   A client can delete a topic by making a DELETE request on the topic
-   URI.
+A client can delete a topic by making a CoAP DELETE request on the topic URI. 
 
-   On success, the server returns a 2.02 (Deleted) response.
+On success, the server returns a 2.02 (Deleted) response.
 
-   Any subscribers to the topic are automatically unsubscribed.
+When a topic is deleted, the broker SHOULD unsubscribe all subscribers by removing them from the list of observers and returning a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2.
 
-   Example:
+<!-- TODO: Document error cases -->
+
+Example:
 ~~~~~~~~~~~
 => 0.04 DELETE
    Uri-Path: pubsub
@@ -369,7 +369,7 @@ As shown in section {{topics}}, each topic contains two resources: topic configu
 
 A topic data resource does not exist until some initial data has been published to it.  Before initial data has been published, the topic data resource yields a 4.04 (Not Found) response. If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created".
 
-All URIs for configuration and data resources are broker-generated. There does not need to be any URI pattern dependence between the URI where the data exists and the URI of the topic configuration.  Topic configuration and data resources might even be hosted on different servers.
+All URIs for configuration and data resources are broker-generated. There does not need to be any URI pattern dependence between the URI where the data exists and the URI of the topic configuration. Topic configuration and data resources might even be hosted on different servers.
 
 ### Topic Lifecycle {#topic-lifecycle}
 
@@ -378,10 +378,10 @@ When a topic is newly created, it is first placed by the server into the HALF CR
 ~~~~~~~~~~~
                 HALF                       FULLY
               CREATED                     CREATED
-                ___                         ___     Publish/
+                ___                         ___     Publish
 ------------>  |   |  ------------------>  |   |  ------------.
     Create     |___|        Publish        |___|  <-----------'
-                     \                   /          Subscribe
+                     \                   /         Subscribe
                 | ^   \       ___       /   | ^
           Read/ | |    '-->  |   |  <--'    | | Read/
          Update | |  Delete  |___|  Delete  | | Update
@@ -402,13 +402,13 @@ In this situation, if a client is sending publications too fast, the server SHOU
 
 When a client receives a 4.29 (Too Many Requests) response, it MUST NOT send any new publication requests to the same topic data resource before the time indicated by the Max-Age option has passed.
 
-## Interactions {#Interactions}
-
 ### Broker Discovery {#discover}
 
 TODO
 <!-- Add ref to topic discovery-->
 <!-- This section explains Broker Discovery-->
+
+## Topic Data Interactions {#topic-data-interactions}
 
 ### Publish {#publish}
 
@@ -497,7 +497,7 @@ A client can unsubscribe simply by cancelling the observation as described in Se
 
 ### Read Latest Data {#read-data}
 
-A client can get the latest published data by making a GET request to the topic data URI in the broker.
+A client can get the latest published topic data by making a GET request to the topic data URI in the broker.
 
 On success, the server MUST return 2.05 (Content) response with the data.
 
@@ -521,6 +521,12 @@ Example:
 
    [...SenML data...]
 ~~~~~~~~~~~
+
+# URI Templates
+
+<!-- TODO: Maybe we want a section of the uri templates that could be used but that are not mandatory (nor recommended) to use in any case and are there just for example illustration
+
+Also put an example in which the topic configuration is hosted on one server and the topic data on another, to illustrate why discovery is always a must-->
 
 # Security Considerations
 
