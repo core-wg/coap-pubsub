@@ -750,35 +750,6 @@ Example in custom CBOR:
    }
 ~~~~~~~~~~~
 
-Example in CoRAL:
-
-~~~~~~~~~~~
-=> 0.02 POST
-   Uri-Path: manage
-   Content-Format: TBD1 (application/coral+cbor)
-
-   #using <http://coreapps.org/core.osc.gconf#>
-   sign_enc_alg 10
-   hkdf 5
-   pairwise_mode true
-   active true
-   group_name "gp4"
-   group_title "rooms 1 and 2"
-   app_group "room1"
-   app_group "room2"
-   as_uri <coap://as.example.com/token>
-
-<= 2.01 Created
-   Location-Path: manage
-   Location-Path: gp4
-   Content-Format: TBD1 (application/coral+cbor)
-
-   #using <http://coreapps.org/core.osc.gconf#>
-   group_name "gp4"
-   joining_uri <coap://[2001:db8::ab]/ace-group/gp4/>
-   as_uri <coap://as.example.com/token>
-~~~~~~~~~~~
-
 ## Retrieve a Group Configuration ## {#configuration-resource-get}
 
 This operation MUST be supported by the Group Manager and an Administrator.

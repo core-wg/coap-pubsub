@@ -95,10 +95,10 @@ topic:
 : An unique identifier for a particular item being published and/or subscribed to. A Broker uses the topics to match subscriptions to publications. A reference to a Topic on a Broker is a valid CoAP URI. Topics have to be created and configured before any data can be published. Clients may propose new topics to be created; however, it is up to the broker to choose if and how a topic is created. The broker also decides the URI of each topic. Topics are represented as a resource collection. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}. Interactions about the topic data are in {{topic-data-interactions}}.
 
 topic configuration:
-: TODO
+: TBD
 
 topic data:
-: TODO
+: TBD
 
 ## CoAP Publish-Subscribe Architecture
 
@@ -134,7 +134,7 @@ Topic data interactions are publish, subscribe, unsubscribe, read and are orient
 
 The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}).
 
-<!-- TODO: Consider merging fig2 and fig3 in fig 2 and deleting the former-->
+<!-- TBD: Consider merging fig2 and fig3 in fig 2 and deleting the former-->
 ~~~~~~~~~~~
                ___
        Topic  /   \
@@ -170,40 +170,48 @@ Every property has a type and a value.  The type takes the form of an
 IRI {{?RFC3987}}. This IRI serves only as an identifier; it must not be
 dereferenced by clients. The value can be either a Boolean value, an integer, a floating-point number, a date/time value, a byte string, a text string, or a resource reference in the form of a URI {{!RFC3986}}.
 
+<!-- topic creation with POST also creates the topic data part but empty ]
+      Write an example also with a response from the collection-->
+
 ### Configuration Properties
 
 The following configuration properties are defined:
-TODO.
+TBD.
 
 ### Status Properties
 
 The following status properties are defined:
-TODO.
+TBD.
 
 ### Topic Configuration Representation {#topic-configuration-representation}
 
-A topic configuration is represented as a CoRAL document {{?I-D.ietf-core-coral}} containing the configuration properties and status properties of the topic as top-level elements.
+A topic configuration is represented as a CBOR map containing the configuration properties and status properties of the topic as top-level elements.
 
-Each property is represented as a link where the link relation type is the property type and the link target is the property value.
+Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in Section 7.
 
-<!-- TODO:
+#### Default Values
+
+
+<!-- TBD:
+
 
 Contents of the topic configuration resource (which mandatory?):
 - content format ct
 - subscription lifetime
 - additional link target attributes and relation values
+- link to key distribution center (pubsub profile in ACE)
+  - like a server hint 
 
+Topic configuration discovery and representation are mimicking the pattern shown in draft-ietf-ace-oscore-gm-admin-07 and draft-ietf-ace-key-groupcomm-16. I need to look at those and port them here. Along with their IANA rt and ct registrations. We won't use CoRAL for now but leave it open for it's use in the future.
 
-Topic configuration discovery and representation are mimmicking the pattern shown in draft-ietf-ace-oscore-gm-admin-07 and draft-ietf-ace-key-groupcomm-16. I need to look at those and port them here. Along with their IANA rt and ct registrations. We won't use CoRAL for now but leave it open for it's use in the future.
-
-TODO (check https://www.ietf.org/archive/id/draft-ietf-ace-oscore-gm-admin-07.html#name-retrieve-a-group-configurat)
+TBD (check https://www.ietf.org/archive/id/draft-ietf-ace-oscore-gm-admin-07.html#name-retrieve-a-group-configurat)
 
 content format: application/pubsub+cbor
 
 https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html
 
 Make a section like 5.1 or 5.2 to describe a topic
-https://www.ietf.org/archive/id/draft-ietf-ace-oscore-gm-admin-07.html#section-5.1-->
+https://www.ietf.org/archive/id/draft-ietf-ace-oscore-gm-admin-07.html#section-5.1  -->
 
 ## Topic Discovery {#topic-discovery}
 
@@ -221,17 +229,37 @@ A list of group configurations is represented as a document containing the corre
 
 The list can be represented as a Link Format document {{?RFC6690}} or a CoRAL document {{?I-D.ietf-core-coral}}.
 
-### Filter Query Representation {#filter-query-representation}
+## Topic Collection Interactions {#topic-collection-interactions}
 
-   TODO.
+<!--
 
-## Topic Configuration Interactions {#topic-configuration-interactions}
+- Topic collection interactions 
 
-### Getting All Topics {#topic-get-all}
 
-A client can list a collection of topics by making a GET request to the collection URI.
+
+
+sample topics:
+ 'as_uri'
+ 'topic_name'
+ 'topic_data_uri'
+ 'kcd'
+
+
+-->
+
+
+### Retrieving all topics {#topic-get-all}
+<!--
+GET to /topic-collection
+retrieve all topics
+response is link format 
+-->
+
+A client can request a collection of the topics present in the broker by making a GET request to the collection URI.
 
 On success, the server returns a 2.05 (Content) response with a representation of the list of all topics (see Section {{topic-configuration-representation}}) in the collection.
+
+<!-- Access control? Admin?-->
 
 Example:
 
@@ -241,17 +269,22 @@ Example:
    Uri-Path: topics
 
 <= 2.05 Content
-   Content-Format: 65536
-   item </pubsub/topics/1>
-   item </pubsub/topics/2>
-   item </pubsub/topics/3>
+   Content-Format: 40 (application/link-format)
+   <coap://base-url/pubsub/topics/1>rt="core.pubsub",
+   <coap://base-url/pubsub/topics/2>rt="core.pubsub",
+   <coap://base-url/pubsub/topics/3>rt="core.pubsub"
 ~~~~~~~~~~~
 
 ### Getting Topics by Properties {#topic-get-properties}
+<!-- 
+FETCH to /topic-collection with filter
+retrieve only the topics that match the filter
+request is cbor
+response is link format
+-->
 
 A client can filter a collection of topics by submitting the
-representation of a topic filter (see Section {{filter-query-representation}}) in a FETCH
-request to the topic collection URI.
+representation of a topic filter (see Section {{filter-query-representation}})  in a FETCH request to the topic collection URI.
 
 On success, the server returns a 2.05 (Content) response with a
 representation of a list of topics in the collection (see
@@ -263,19 +296,29 @@ Example:
 => 0.05 FETCH
    Uri-Path: pubsub
    Uri-Path: topics
-   Content-Format: TODO
-      TODO
+   Content-Format: TBD (application/pubsub+cbor)
+
+   {
+       "prop1" : x,
+       "prop2" : y,
+       "prop3" : z
+   }
 
 <= 2.05 Content
-
-   Content-Format: 65536
-
-   item </pubsub/topics/1>
-   item </pubsub/topics/2>
-   item </pubsub/topics/3>
+   Content-Format: 40 (application/link-format)
+   <coap://base-url/pubsub/topics/1>rt="core.pubsub",
+   <coap://base-url/pubsub/topics/2>rt="core.pubsub",
+   <coap://base-url/pubsub/topics/3>rt="core.pubsub"
 ~~~~~~~~~~~
 
 ### Creating a Topic {#topic-create}
+<!--
+POST to /topic-collection
+create new topic
+request is cbor
+response (created) is cbor including the link to new topic-config resource
+creator proposes topic name but broker approves
+-->
 
 A client can add a new topic to a collection of topics by submitting a representation of the initial topic configuration (see Section {{topic-configuration-representation}}) in a POST request to the topic collection URI.
 
@@ -283,26 +326,56 @@ The topic specification sent in the payload should use a supported serialization
 
 On success, the server returns a 2.01 (Created) response indicating the topic URI of the new topic.
 
-<!-- error cases -->
+If a topic manager (TBD) is present in the broker, the topic creation  may require manager approval subject to certain conditions (TBD). If the conditions are not fulfilled, the manager MUST respond with a 4.03 (Forbidden) error. The response MUST have Content-Format set to "application/core-pubsub+cbor".
 
-Example:
+The broker MUST respond with a 4.00 (Bad Request) error in the following scenarios:
+
+- If any received parameter is specified multiple times, invalid or not recognized (malformed).
+
+- If the Authorization Server with URI specified in the 'as_uri' parameter is not trusted and there is no alternative AS.
+
+<!-- TBD a coap endpoint creating a topic may specify topic_data_uri different than that used by the broker. The broker may then simply forward observation requests the topic_data_uri
+
+if the topic_data_uri is empty the broker will assign 
+-->
 
 ~~~~~~~~~~~
 => 0.02 POST
    Uri-Path: pubsub
    Uri-Path: topics
-   Content-Format: 65536
+   Content-Format: TBD2 (application/core-pubsub+cbor)
 
-   foo "xyz"
-   bar 42
+   {
+     "topic_name" : sensor23,
+     "as_uri" : "coap://as.example.com/token"
+   }
 
 <= 2.01 Created
    Location-Path: pubsub
-   Location-Path: topics
-   Location-Path: 1234
+   Location-Path: sensor23
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+
+   {
+     "group_name" : "sensor23",
+     "topic_data_uri" : "coap://pubsub-broker-uri/topics/sensor23/"
+     "as_uri" : "coap://as.example.com/token"
+   }
 ~~~~~~~~~~~
 
+## Topic Configuration Interactions {#topic-configuration-interactions}
+
 ### Reading the Configuration of a Topic {#topic-read-configuration}
+
+<!-- 
+GET to /topic-config
+retrieve a topic configuration
+response is cbor
+
+FETCH to /topic-conf with filter
+retrieve only certain parameters from the configuration
+request is cbor
+response is cbor
+-->
 
 A client can read the configuration of a topic by making a GET request to the topic URI.
 
@@ -326,6 +399,18 @@ Example:
 
 ### Updating the Configuration of a Topic {#topic-update-configuration}
 
+<!--
+PUT to /topic-conf
+override the whole configuration
+request is cbor
+response is cbor
+
+PATCH to /topic-conf
+rewrite few parameters
+request is cbor 
+response is cbor
+-->
+
 A client can update the configuration of a topic by submitting the representation of the updated topic configuration (see Section 3.1.3) in a PUT request to the topic URI. Any existing properties in the configuration are replaced by this update.
 
 On success, the server returns a 2.04 (Updated) response.
@@ -346,13 +431,18 @@ Example:
 
 ### Deleting a Topic {#topic-delete}
 
+<!--
+DELETE to /topic-conf
+delete configuration and data
+-->
+
 A client can delete a topic by making a CoAP DELETE request on the topic URI.
 
 On success, the server returns a 2.02 (Deleted) response.
 
 When a topic is deleted, the broker SHOULD unsubscribe all subscribers by removing them from the list of observers and returning a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2.
 
-<!-- TODO: Document error cases -->
+<!-- TBD: Document error cases -->
 
 Example:
 
@@ -384,10 +474,11 @@ Unless a topic is configured to use a different mechanism, publish/ subscribe is
              Topic  : /   \ :  : /   \ :       : /   \ :
               Data  : \___/ :  : \___/ :       : \___/ :
                     :.......:  :.......:       :.......:
+                     topic 1    topic 2         topic n
 ~~~~~~~~~~~
-F{: #fig-config title='Resources of a Publish-Subscribe Broker' artwork-align="center"}
+{: #fig-config title='Configuration and Data resources of a topic' artwork-align="center"}
 
-As shown in section {{topics}}, each topic contains two resources: topic configuration and topic data. In that section we explain the creation and configuration of the topic configuration resources. This section will explain the management of topic data resources.
+As shown in section {{topics}}, each topic contains two resources: topic configuration and topic data. In that section we explained the creation and configuration of the topic configuration resources. This section will explain the management of topic data resources.
 
 A topic data resource does not exist until some initial data has been published to it.  Before initial data has been published, the topic data resource yields a 4.04 (Not Found) response. If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created".
 
@@ -426,7 +517,7 @@ When a client receives a 4.29 (Too Many Requests) response, it MUST NOT send any
 
 ### Broker Discovery {#broker-discovery}
 
-<!-- TODO: This section explains Broker Discovery, needs more work -->
+<!-- TBD: This section explains Broker Discovery, needs more work -->
 
 Clients MAY discover brokers by using CoAP Simple Discovery or through a Resource Directory (RD) {{!RFC9167}}. Brokers MAY register with a RD by following the steps on Section 5 of {{!RFC9167}} with the link relation rt=core.ps.
 
@@ -445,7 +536,7 @@ Example:
 
 
 <= 2.05 Content
-    </ps/>;rt=core.ps;rt=core.ps.discover;ct=40
+    </ps/>;rt=core.ps;ct=40
 ~~~~~~~~~~~
 
 
@@ -473,10 +564,10 @@ If the request does not have an acceptable content format, the server returns a 
 If the client is sending publications too fast, the server returns a
 4.29 (Too Many Requests) response {{!RFC8516}}.
 
-<!-- TODO: Other error cases: max_age? -->
+<!-- TBD: Other error cases: max_age? -->
 
-<!-- TODO: add senml payload example below -->
-<!-- TODO: add participants (publisher and broker) here and in other diagrams-->
+<!-- TBD: add senml payload example below -->
+<!-- TBD: add participants (publisher and broker) here and in other diagrams-->
 
 Example:
 
@@ -511,11 +602,11 @@ On success, the broker MUST return 2.05 (Content) notifications with the data.
 
 If the topic is not yet in the fully created state (see {{topic-lifecycle}}) the broker SHOULD return a response code 4.04 (Not Found).
 
-<!-- TODO There are other potential error cases based on parameters from the  configuration file (subscription lifetime, topic content format...) -->
+<!-- TBD There are other potential error cases based on parameters from the  configuration file (subscription lifetime, topic content format...) -->
 
 The following response codes are defined for the Subscribe operation:
 
-<!-- TODO: Is this the best way to represent response codes? Are they needed?  Which other potential error cases exist based on parameters from the  configuration file (subscription lifetime, topic content format...)? -->
+<!-- TBD: Is this the best way to represent response codes? Are they needed?  Which other potential error cases exist based on parameters from the  configuration file (subscription lifetime, topic content format...)? -->
 
 Success:
 : 2.05 "Content". Successful subscribe, current value included
@@ -555,7 +646,7 @@ Example:
 
 ### Unsubscribe {#unsubscribe}
 
-A client can unsubscribe simply by cancelling the observation as described in Section 3.6 of {{!RFC7641}}. The client MUST either use CoAP GET with Observe using an Observe parameter of 1 or send a CoAP Reset message in response to a notification.
+A client can unsubscribe simply by cancelling the observation as described in Section 3.6 of {{!RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification.
 
 <!--  do we want an example or is redundant? -->
 
@@ -569,7 +660,7 @@ If the target URI does not match an existing resource or the topic is not in the
 
 If the Broker can not return the requested content format it MUST return a response code 4.15 (Unsupported Content Format).
 
-<!-- TODO There are other potential error cases we need to document -->
+<!-- TBD There are other potential error cases we need to document -->
 
 Example:
 
@@ -589,21 +680,21 @@ Example:
 
 # URI Templates
 
-<!-- TODO: Maybe we want a section of the uri templates that could be used but that are not mandatory (nor recommended) to use in any case and are there just for example illustration
+<!-- TBD: Maybe we want a section of the uri templates that could be used but that are not mandatory (nor recommended) to use in any case and are there just for example illustration
 
 Also put an example in which the topic configuration is hosted on one server and the topic data on another, to illustrate why discovery is always a must-->
 
 # Security Considerations
 
-<!-- TODO: we may take content from prev versions but we have to spend some more time on the implications of the topic-config -->
-TODO.
+<!-- TBD: we may take content from prev versions but we have to spend some more time on the implications of the topic-config -->
+TBD.
 
 # IANA Considerations {#iana}
 
 This document registers one attribute value in the Resource Type (rt=) registry
 established with {{!RFC6690}} and appends to the definition of one CoAP Response Code in the CoRE Parameters Registry.
 
-<!-- TODO: Redo this section. Need to add the ct and rt similar to the ones below
+<!-- TBD: Redo this section. Need to add the ct and rt similar to the ones below
 
 https://www.ietf.org/archive/id/draft-ietf-ace-oscore-gm-admin-07.html#name-resource-types
 
