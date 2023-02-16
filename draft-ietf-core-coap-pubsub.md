@@ -104,7 +104,7 @@ topic data:
 
 ## CoAP Publish-Subscribe Architecture
 
-<!-- Some major changes are the topic configuration resource and the topic management. Interactions about topic data are separated. Topic configuration resource is now fundamental. Moving away from URI templates (/topicconfig /topicdata), using resource types instead.   -->
+<!-- Some major changes are the topic configuration resource and the topic management. Interactions about topic data are separated. Topic configuration resource is now fundamental. Moving away from URI templates (/topicconfig /topicdata), using resource types instead. -->
 
 {{fig-arch}} shows a simple Publish/Subscribe architecture over CoAP. In it, publishers submit their data over a RESTful interface a broker-managed resource (topic) and subscribers observe this resource using {{?RFC7641}}. Resource state information is updated between the CoAP clients and the Broker via topics. Topics are created by the broker but the initial configuration can be proposed by a client, normally a publisher.
 
@@ -465,7 +465,7 @@ Example:
 
 ~~~~~~~~~~~
 
-<!--### Partial update of a topic Configuration {#topic-update-configuration}
+<!--### Partial update of a topic Configuration {#topic-update-configuration} -->
 
 <!--
 PATCH to /topic-conf
