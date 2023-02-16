@@ -754,6 +754,28 @@ Also put an example in which the topic configuration is hosted on one server and
 
 # CoAP Pubsub Parameters {#pubsub-parameters}
 
+This document defines parameters used in the messages exchanged between a client and the broker during the topic creation and configuration process (see {{topic-configuration-representation}}). The table below summarizes them and specifies the CBOR key to use instead of the full descriptive name.
+
+Note that the media type application/core-pubsub+cbor MUST be used when these parameters are transported in the respective message fields.
+
+~~~~~~~~~~~
++-----------------+----------+--------------+------------+
+| Name            | CBOR Key | CBOR Type    | Reference  |
++-----------------+----------+--------------+------------+
+| topic_name      | TBD      | tstr         | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
+| rt              | TBD      | tstr         | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
+| group-name      | TBD      | tstr         | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
+| as_uri          | TBD      | tstr         | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
+| conf_filter     | TBD      | array        | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
+~~~~~~~~~~~
+{: #fig-CoAP-Pubsub-Parameters title="CoAP Pubsub Parameters" artwork-align="center"}
+
+
 # Security Considerations
 
 <!-- TBD: we may take content from prev versions but we have to spend some more time on the implications of the topic-config -->
