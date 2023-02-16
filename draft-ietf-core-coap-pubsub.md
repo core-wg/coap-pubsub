@@ -67,7 +67,7 @@ For these nodes, the client/server-oriented architecture of REST can be challeng
 
 This document applies the idea of a "Publish/Subscribe Broker" to Constrained RESTful Environments.  The broker enables store-and- forward data exchange between nodes, thereby facilitating the communication of nodes with limited reachability, providing simple many-to-many communication, and easing integration with other publish/subscribe systems.
 
-<!-- 
+<!--
 TBD once concluded the main drafting, verify every single example, specially the part of the topic configuration representation
 -->
 
@@ -215,7 +215,7 @@ Contents of the topic configuration resource (which mandatory?):
 - subscription lifetime
 - additional link target attributes and relation values
 - link to key distribution center (pubsub profile in ACE)
-  - like a server hint 
+  - like a server hint
 
 Topic configuration discovery and representation are mimicking the pattern shown in draft-ietf-ace-oscore-gm-admin-07 and draft-ietf-ace-key-groupcomm-16. I need to look at those and port them here. Along with their IANA rt and ct registrations. We won't use CoRAL for now but leave it open for it's use in the future.
 
@@ -252,7 +252,7 @@ These are the interactions that can happen at the topic collection level.
 <!--
 GET to /topic-collection
 retrieve all topics
-response is link format 
+response is link format
 -->
 
 A client can request a collection of the topics present in the broker by making a GET request to the collection URI.
@@ -276,7 +276,7 @@ Example:
 ~~~~~~~~~~~
 
 ### Getting Topics by Properties {#topic-get-properties}
-<!-- 
+<!--
 FETCH to /topic-collection with filter
 retrieve only the topics that match the filter
 request is cbor
@@ -336,7 +336,7 @@ The broker MUST respond with a 4.00 (Bad Request) error in the following scenari
 
 <!-- TBD a coap endpoint creating a topic may specify topic_data_uri different than that used by the broker. The broker may then simply forward observation requests the topic_data_uri
 
-if the topic_data_uri is empty the broker will assign 
+if the topic_data_uri is empty the broker will assign
 -->
 
 ~~~~~~~~~~~
@@ -368,13 +368,13 @@ These are the interactions that can happen at the topic configuration level.
 
 ### Getting a topic configuration  {#topic-get-configuration}
 
-<!-- 
+<!--
 GET to /topic-config
 retrieve a topic configuration
 response is cbor
 -->
 
-A client can read the configuration of a topic by making a GET request to the topic configuration URI. 
+A client can read the configuration of a topic by making a GET request to the topic configuration URI.
 
 On success, the server returns a 2.05 (Content) response with a representation of the topic configuration. The response has as payload the representation of the topic configuration as specified in {{topic-configuration-representation}}.
 
@@ -398,12 +398,12 @@ Example:
      "group_title" : "Topic 1234 on broker xyz",
      foo
      bar
-     
+
    }
 ~~~~~~~~~~~
 
 ### Getting part of a topic configuration by filter {#topic-fetch-configuration}
-<!-- 
+<!--
 FETCH to /topic-conf with filter
 retrieve only certain parameters from the configuration
 request is cbor
@@ -491,7 +491,7 @@ Example:
 <!--
 PATCH to /topic-conf
 rewrite few parameters
-request is cbor 
+request is cbor
 response is cbor
 -->
 
