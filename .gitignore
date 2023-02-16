@@ -14,3 +14,4 @@ draft-ietf-core-coap-pubsub.xml
 lib
 report.xml
 venv/
+reference/topic-param.md
