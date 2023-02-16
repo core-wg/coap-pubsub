@@ -97,10 +97,10 @@ topic:
 : An unique identifier for a particular item being published and/or subscribed to. A Broker uses the topics to match subscriptions to publications. A reference to a Topic on a Broker is a valid CoAP URI. Topics have to be created and configured before any data can be published. Clients may propose new topics to be created; however, it is up to the broker to choose if and how a topic is created. The broker also decides the URI of each topic. Topics are represented as a resource collection. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}. Interactions about the topic data are in {{topic-data-interactions}}.
 
 topic configuration:
-: TBD
+: Every topic is composed of two URIs topic configuration and topic data. The topic configuration resource is used by a client to create, configure, update and delete configuration topics (see {#topics}).
 
 topic data:
-: TBD
+: Every topic is composed of two URIs topic configuration and topic data. The topic data resource is used by publishers and subscribers to publish (POST) and subscribe (GET with Observe) to data (see {#topics}).
 
 ## CoAP Publish-Subscribe Architecture
 
