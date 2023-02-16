@@ -136,68 +136,79 @@ Topic data interactions are publish, subscribe, unsubscribe, read and are orient
 
 # Pub-Sub Topics {#topics}
 
-The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}).
+The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}). Each topic has a topic configuration and a topic data resources. Topic configuration is used by a client creating or administering the topic and topic data is used by the publishers and subscribers to the topic.
 
-<!-- TBD: Consider merging fig2 and fig3 in fig 2 and deleting the former-->
 ~~~~~~~~~~~
                ___
        Topic  /   \
   Collection  \___/
                   \
-                   \____________________
-                    \___    \___        \___
-            Topics  /   \   /   \  ...  /   \
-                    \___/   \___/       \___/
+                   \___________________________
+                    \          \               \
+                     \ ......   \ ......        \ ......
+                    : \___  :  : \___  :       : \___  :
+             Topic  : /   \ :  : /   \ :       : /   \ :
+     Configuration  : \___/ :  : \___/ :       : \___/ :
+                    :  _|_  :  :  _|_  :  ...  :  _|_  :
+             Topic  : /   \ :  : /   \ :       : /   \ :
+              Data  : \___/ :  : \___/ :       : \___/ :
+                    :.......:  :.......:       :.......:
+                     topic 1    topic 2         topic n
 ~~~~~~~~~~~
-{: #fig-topic title='Resources of a Publish-Subscribe Broker' artwork-align="center"}
+{: #fig-topic title='Configuration and Data resources of a topic' artwork-align="center"}
+
+## Collection Representation
+
+Each topic-configuration is represented as a link, where the link target is the URI of the topic-configuration resource.
+
+Each topic-data is represented as a link, where the link target is the URI of the topic-data resource.
+
+The list can be represented as a Link Format document {{RFC6690}}. The link to each topic-configuration resource specifies the link target attribute 'rt' (Resource Type), with value "core.pubsub.conf" defined in this document.
 
 ## Topic Creation and Configuration
 
-Each topic has a topic configuration. A CoAP client can create a new
-topic by submitting an initial configuration for the topic. It can
-also read and update the configuration of existing topics and delete
-them when they are no longer needed.
+A CoAP client can create a new topic by submitting an initial configuration for the topic (see {{topic-create}}). It can also read and update the configuration of existing topics and delete them when they are no longer needed (see {{topic-configuration-interactions}}).
 
-The configuration of a topic itself consists of a set of properties.
-These fall into one of two categories: configuration properties and
-status properties. Configuration properties can be set by a client
-and describe the desired configuration of a topic.  Status properties
-are read-only, managed by the server, and provide information about
-the actual status of a topic.
+The configuration of a topic itself consists of a set of properties. These fall into one of two categories: configuration properties and status properties.
 
-When a client submits a configuration to create a new topic or update
-an existing topic, it can only submit configuration properties. When
-a server returns the configuration of a topic, it returns both the
-configuration properties and the status properties of the topic.
+Configuration properties can be set by a client and describe the desired configuration of a topic. Status properties are read-only, managed by the server, and provide information about the actual status of a topic.
 
-Every property has a type and a value.  The type takes the form of an
-IRI {{?RFC3987}}. This IRI serves only as an identifier; it must not be
-dereferenced by clients. The value can be either a Boolean value, an integer, a floating-point number, a date/time value, a byte string, a text string, or a resource reference in the form of a URI {{!RFC3986}}.
+When a client submits a configuration to create a new topic or update an existing topic, it can only submit configuration properties. When a server returns the configuration of a topic, it returns both the configuration properties and the status properties of the topic.
 
-<!-- topic creation with POST also creates the topic data part but empty ]
-      Write an example also with a response from the collection-->
+### Configuration Properties {#configuration-properties}
 
-### Configuration Properties
+The CBOR map includes the following configuration parameters, whose CBOR abbreviations are defined in {{pubsub-parameters}} of this document.
 
-The following configuration properties are defined:
-TBD.
+* 'topic_name', with value the topic name of the a topic group encoded as a CBOR text string.
+
+* 'topic_data_uri', with value the URI of the topic data resource for subscribing to a pubsub topic encoded as a CBOR text string.
 
 ### Status Properties
 
-The following status properties are defined:
-TBD.
+The CBOR map includes the following status parameters, whose CBOR abbreviations are defined in {{pubsub-parameters}} of this document.
+
+<!-- TBD is rt used? -->
+* 'rt'  with value the resource type "core.pubsub.conf" associated with topic-configuration resources, encoded as a CBOR text string.
+
+* 'conf_filter', is a CBOR map containing a CBOR array and with CBOR abbreviation defined in {{pubsub-parameters}}. It is used when with FETCH when retrieving a partial representation of a topic configuration (see {{topic-fetch-configuration}}).
+
+* 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the topic, encoded as a CBOR text string. Candidate clients that can configure topics will have to obtain an Access Token from that Authorization Server, before starting the topic configuration or creation.
+
+* 'kcd???' TBD
+
+* 'ace-pubsub-profile'?? TBD
 
 ### Topic Configuration Representation {#topic-configuration-representation}
 
 A topic configuration is represented as a CBOR map containing the configuration properties and status properties of the topic as top-level elements.
 
-Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in Section 7.
+Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in {{pubsub-parameters}}.
 
 #### Default Values
 
+TBD
 
-<!-- TBD:
-
+<!--
 
 Contents of the topic configuration resource (which mandatory?):
 - content format ct
@@ -235,22 +246,7 @@ The list can be represented as a Link Format document {{?RFC6690}} or a CoRAL do
 
 ## Topic Collection Interactions {#topic-collection-interactions}
 
-<!--
-
-- Topic collection interactions 
-
-
-
-
-sample topics:
- 'as_uri'
- 'topic_name'
- 'topic_data_uri'
- 'kcd'
-
-
--->
-
+These are the interactions that can happen at the topic collection level.
 
 ### Retrieving all topics {#topic-get-all}
 <!--
@@ -367,6 +363,8 @@ if the topic_data_uri is empty the broker will assign
 ~~~~~~~~~~~
 
 ## Topic Configuration Interactions {#topic-configuration-interactions}
+
+These are the interactions that can happen at the topic configuration level.
 
 ### Getting a topic configuration  {#topic-get-configuration}
 
@@ -527,24 +525,6 @@ Example:
 
 Unless a topic is configured to use a different mechanism, publish/ subscribe is performed as follows: A publisher publishes to a topic by submitting the data in a PUT request to a broker-managed "topic data resource".  This causes a change to the state of that resources. Any subscriber observing the resource {{!RFC7641}} at that time receives a notification about the change to the resource state. Observations are maintained and terminated as specified on{{!RFC7641}}.
 
-~~~~~~~~~~~
-               ___
-       Topic  /   \
-  Collection  \___/
-                  \
-                   \___________________________
-                    \          \               \
-                     \ ......   \ ......        \ ......
-                    : \___  :  : \___  :       : \___  :
-             Topic  : /   \ :  : /   \ :       : /   \ :
-     Configuration  : \___/ :  : \___/ :       : \___/ :
-                    :  _|_  :  :  _|_  :  ...  :  _|_  :
-             Topic  : /   \ :  : /   \ :       : /   \ :
-              Data  : \___/ :  : \___/ :       : \___/ :
-                    :.......:  :.......:       :.......:
-                     topic 1    topic 2         topic n
-~~~~~~~~~~~
-{: #fig-config title='Configuration and Data resources of a topic' artwork-align="center"}
 
 As shown in section {{topics}}, each topic contains two resources: topic configuration and topic data. In that section we explained the creation and configuration of the topic configuration resources. This section will explain the management of topic data resources.
 
@@ -607,10 +587,13 @@ Example:
     </ps/>;rt=core.ps;ct=40
 ~~~~~~~~~~~
 
-
 For details topic discovery please see {{topic-discovery}}.
 
 ## Topic Data Interactions {#topic-data-interactions}
+
+TBD
+
+<!-- Add an image that shows a topic data URI hosted in a different endpoint than the broker-->
 
 ### Publish {#publish}
 
@@ -754,6 +737,14 @@ Also put an example in which the topic configuration is hosted on one server and
 
 # CoAP Pubsub Parameters {#pubsub-parameters}
 
+<!--
+sample topics:
+ 'as_uri'
+ 'topic_name'
+ 'topic_data_uri'
+ 'kcd'
+-->
+
 This document defines parameters used in the messages exchanged between a client and the broker during the topic creation and configuration process (see {{topic-configuration-representation}}). The table below summarizes them and specifies the CBOR key to use instead of the full descriptive name.
 
 Note that the media type application/core-pubsub+cbor MUST be used when these parameters are transported in the respective message fields.
@@ -764,13 +755,15 @@ Note that the media type application/core-pubsub+cbor MUST be used when these pa
 +-----------------+----------+--------------+------------+
 | topic_name      | TBD      | tstr         | [RFC-XXXX] |
 +-----------------+----------+--------------+------------+
-| rt              | TBD      | tstr         | [RFC-XXXX] |
+| topic_data_uri  | TBD      | tstr         | [RFC-XXXX] |
 +-----------------+----------+--------------+------------+
-| group-name      | TBD      | tstr         | [RFC-XXXX] |
+| rt              | TBD      | tstr         | [RFC-XXXX] |
 +-----------------+----------+--------------+------------+
 | as_uri          | TBD      | tstr         | [RFC-XXXX] |
 +-----------------+----------+--------------+------------+
 | conf_filter     | TBD      | array        | [RFC-XXXX] |
++-----------------+----------+--------------+------------+
+| kcd???          | TBD      | tstr / int   | [RFC-XXXX] |
 +-----------------+----------+--------------+------------+
 ~~~~~~~~~~~
 {: #fig-CoAP-Pubsub-Parameters title="CoAP Pubsub Parameters" artwork-align="center"}
