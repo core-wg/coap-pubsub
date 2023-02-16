@@ -67,6 +67,10 @@ For these nodes, the client/server-oriented architecture of REST can be challeng
 
 This document applies the idea of a "Publish/Subscribe Broker" to Constrained RESTful Environments.  The broker enables store-and- forward data exchange between nodes, thereby facilitating the communication of nodes with limited reachability, providing simple many-to-many communication, and easing integration with other publish/subscribe systems.
 
+<!-- 
+TBD once concluded the main drafting, verify every single example, specially the part of the topic configuration representation
+-->
+
 ## Requirements Language
 
 {::boilerplate bcp14}
@@ -364,22 +368,21 @@ if the topic_data_uri is empty the broker will assign
 
 ## Topic Configuration Interactions {#topic-configuration-interactions}
 
-### Reading the Configuration of a Topic {#topic-read-configuration}
+### Getting a topic configuration  {#topic-get-configuration}
 
 <!-- 
 GET to /topic-config
 retrieve a topic configuration
 response is cbor
-
-FETCH to /topic-conf with filter
-retrieve only certain parameters from the configuration
-request is cbor
-response is cbor
 -->
 
-A client can read the configuration of a topic by making a GET request to the topic URI.
+A client can read the configuration of a topic by making a GET request to the topic configuration URI. 
 
-On success, the server returns a 2.05 (Content) response with a representation of the topic configuration (see Section 3.1.3).
+On success, the server returns a 2.05 (Content) response with a representation of the topic configuration. The response has as payload the representation of the topic configuration as specified in {{topic-configuration-representation}}.
+
+If a topic manager (TBD) is present in the broker, retrieving topic information may require manager approval subject to certain conditions (TBD). If the conditions are not fulfilled, the manager MUST respond with a 4.03 (Forbidden) error. The response MUST have Content-Format set to "application/core-pubsub+cbor".
+
+The response payload is a CBOR map, whose possible entries are specified in {{topic-configuration-representation}} and use the same abbreviations defined in {{pubsub-parameters}}.
 
 Example:
 
@@ -390,11 +393,60 @@ Example:
    Uri-Path: 1234
 
 <= 2.05 Content
-   Content-Format: 65536
-   Max-Age: 300
+   Content-Format: TBD2 (application/core-pubsub+cbor)
 
-   foo "xyz"
-   bar 42
+   {
+     "group_name" : "1234",
+     "group_title" : "Topic 1234 on broker xyz",
+     foo
+     bar
+     
+   }
+~~~~~~~~~~~
+
+### Getting part of a topic configuration by filter {#topic-fetch-configuration}
+<!-- 
+FETCH to /topic-conf with filter
+retrieve only certain parameters from the configuration
+request is cbor
+response is cbor
+-->
+
+A client can read the configuration of a topic by making a FETCH request to the topic configuration URI with a filter for specific parameters. This is done in order to retrieve part of the current topic configuration.
+
+The request contains a CBOR map with a configuration filter or 'conf_filter', a CBOR array and with CBOR abbreviation defined in {{pubsub-parameters}}. Each element of the array specifies one requested configuration parameter or status parameter of the current group configuration (see {{topic-configuration-representation}}).
+
+On success, the server returns a 2.05 (Content) response with a representation of the topic configuration. The response has as payload the partial representation of the topic configuration as specified in {{topic-configuration-representation}}.
+
+If a topic manager (TBD) is present in the broker, retrieving topic information may require manager approval subject to certain conditions (TBD). If the conditions are not fulfilled, the manager MUST respond with a 4.03 (Forbidden) error.
+
+The response payload is a CBOR map, whose possible entries are specified in {{topic-configuration-representation}} and use the same abbreviations defined in {{pubsub-parameters}}.
+
+Both request and response MUST have Content-Format set to "application/core-pubsub+cbor".
+
+
+Example:
+
+~~~~~~~~~~~
+=> 0.05 FETCH
+   Uri-Path: pubsub
+   Uri-Path: topics
+   Uri-Path: 1234
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+
+   {
+     "conf_filter" : [foo,
+                      bar",]
+   }
+
+<= 2.05 Content
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+
+   {
+     "foo" : 10,
+     "bar" : 5
+   }
+
 ~~~~~~~~~~~
 
 ### Updating the Configuration of a Topic {#topic-update-configuration}
@@ -404,14 +456,11 @@ PUT to /topic-conf
 override the whole configuration
 request is cbor
 response is cbor
-
-PATCH to /topic-conf
-rewrite few parameters
-request is cbor 
-response is cbor
 -->
 
-A client can update the configuration of a topic by submitting the representation of the updated topic configuration (see Section 3.1.3) in a PUT request to the topic URI. Any existing properties in the configuration are replaced by this update.
+A client can update the configuration of a topic by submitting the representation of the updated topic configuration (see Section 3.1.3) in a PUT or POST request to the topic URI. Any existing properties in the configuration are overwritten by this update.
+
+<!-- TBD details need to be added once the configuration resource structure is defined-->
 
 On success, the server returns a 2.04 (Updated) response.
 
@@ -422,27 +471,46 @@ Example:
    Uri-Path: pubsub
    Uri-Path: topics
    Uri-Path: 1234
-   Content-Format: 65536
+   Content-Format: TBD2 (application/core-pubsub+cbor)
 
-   foo "abc"
+   {
+     "foo" : 11,
+     "bar" : 5
+   }
 
-<= 2.04 Updated
+<= 2.04 Changed
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+
+   {
+     "foo" : 11,
+     "bar" : 5
+   }
+
 ~~~~~~~~~~~
 
-### Deleting a Topic {#topic-delete}
+<!--### Partial update of a topic Configuration {#topic-update-configuration}
+
+<!--
+PATCH to /topic-conf
+rewrite few parameters
+request is cbor 
+response is cbor
+-->
+
+### Deleting a Topic Configuration {#topic-delete}
 
 <!--
 DELETE to /topic-conf
 delete configuration and data
 -->
 
-A client can delete a topic by making a CoAP DELETE request on the topic URI.
+A client can delete a topic by making a CoAP DELETE request on the topic configuration URI.
 
 On success, the server returns a 2.02 (Deleted) response.
 
-When a topic is deleted, the broker SHOULD unsubscribe all subscribers by removing them from the list of observers and returning a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2.
+When a topic configuration is deleted, the broker SHOULD also delete the topic data resource, unsubscribe all subscribers by removing them from the list of observers and returning a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2.
 
-<!-- TBD: Document error cases -->
+<!-- TBD: Document error cases and add access control -->
 
 Example:
 
@@ -683,6 +751,8 @@ Example:
 <!-- TBD: Maybe we want a section of the uri templates that could be used but that are not mandatory (nor recommended) to use in any case and are there just for example illustration
 
 Also put an example in which the topic configuration is hosted on one server and the topic data on another, to illustrate why discovery is always a must-->
+
+# CoAP Pubsub Parameters {#pubsub-parameters}
 
 # Security Considerations
 
