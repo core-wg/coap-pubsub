@@ -426,7 +426,7 @@ Example:
 
 ~~~~~~~~~~~
 
-### Updating the Configuration of a Topic {#topic-update-configuration}
+### Updating the Topic Configuration {#topic-update-configuration}
 
 <!--
 PUT to /topic-conf
