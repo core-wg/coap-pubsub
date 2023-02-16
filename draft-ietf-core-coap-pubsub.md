@@ -67,9 +67,7 @@ For these nodes, the client/server-oriented architecture of REST can be challeng
 
 This document applies the idea of a "Publish/Subscribe Broker" to Constrained RESTful Environments.  The broker enables store-and- forward data exchange between nodes, thereby facilitating the communication of nodes with limited reachability, providing simple many-to-many communication, and easing integration with other publish/subscribe systems.
 
-<!--
-TBD once concluded the main drafting, verify every single example, specially the part of the topic configuration representation
--->
+<!-- TBD once concluded the main drafting, verify every single example, specially the part of the topic configuration representation -->
 
 ## Requirements Language
 
