@@ -263,7 +263,7 @@ response is link format
 -->
 
 A client can filter a collection of topics by submitting the
-representation of a topic filter (see Section {{filter-query-representation}})  in a FETCH request to the topic collection URI.
+representation of a topic filter (see Section {{topic-fetch-configuration}})  in a FETCH request to the topic collection URI.
 
 On success, the server returns a 2.05 (Content) response with a
 representation of a list of topics in the collection (see
