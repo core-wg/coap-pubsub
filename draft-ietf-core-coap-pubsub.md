@@ -1,16 +1,22 @@
 ---
-title: Publish-Subscribe Broker for the Constrained Application Protocol (CoAP)
-abbrev: Publish-Subscribe Broker for CoAP
-docname: draft-ietf-core-coap-pubsub-latest
+title: "Publish-Subscribe Broker for the Constrained Application Protocol (CoAP)"
+abbrev: "Publish-Subscribe Broker for CoAP"
 category: std
 
+docname: draft-ietf-core-coap-pubsub-latest
 ipr: trust200902
-area: ART
-workgroup: CoRE Working Group
-keyword: CoAP, PubSub
 
-stand_alone: yes
-pi: [toc, sortrefs, symrefs]
+number:
+date:
+consensus: true
+v: 3
+area: "Applications and Real-Time (ART)"
+workgroup: "Constrained RESTful Environments"
+submissiontype: IETF
+
+keyword:
+ - coap
+ - pubsub
 
 author:
 - ins: M. Koster
@@ -23,10 +29,14 @@ author:
   organization: Ericsson
   email: ari.keranen@ericsson.com
 
-- ins: J. Jiménez
-  name: Jaime Jiménez
+- ins: J. Jimenez
+  name: Jaime Jimenez
   organization: Ericsson
   email: jaime@iki.fi
+
+normative:
+
+informative:
 
 --- abstract
 
