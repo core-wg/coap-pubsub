@@ -194,7 +194,7 @@ The CBOR map includes the following status parameters, whose CBOR abbreviations 
 
 * 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the topic, encoded as a CBOR text string. Candidate clients that can configure topics will have to obtain an Access Token from that Authorization Server, before starting the topic configuration or creation.
 
-* 'kcd???' TBD
+* 'kdc' TBD link to key distribution center
 
 * 'ace-pubsub-profile'?? TBD
 
@@ -208,25 +208,6 @@ Unless specified otherwise, these are defined in this document and their CBOR ab
 
 TBD
 
-<!--
-
-Contents of the topic configuration resource (which mandatory?):
-- content format ct
-- subscription lifetime
-- additional link target attributes and relation values
-- link to key distribution center (pubsub profile in ACE)
-  - like a server hint
-
-Topic configuration discovery and representation are mimicking the pattern shown in draft-ietf-ace-oscore-gm-admin-07 and draft-ietf-ace-key-groupcomm-16. I need to look at those and port them here. Along with their IANA rt and ct registrations. We won't use CoRAL for now but leave it open for it's use in the future.
-
-TBD (check https://www.ietf.org/archive/id/draft-ietf-ace-oscore-gm-admin-07.html#name-retrieve-a-group-configurat)
-
-content format: application/pubsub+cbor
-
-https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html
-
-Make a section like 5.1 or 5.2 to describe a topic
-https://www.ietf.org/archive/id/draft-ietf-ace-oscore-gm-admin-07.html#section-5.1  -->
 
 ## Topic Discovery {#topic-discovery}
 
