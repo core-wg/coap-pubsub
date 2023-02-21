@@ -185,6 +185,12 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 The CBOR map includes the following status parameters, whose CBOR abbreviations are defined in {{pubsub-parameters}} of this document.
 
+<!-- TBD New properties
+data persistence: do we want the broker to cache some of the last resource representations? how long? Do we have opinions on message size too?
+qos: do we want to reflect similar qos properties as mqtt does too?
+limits: do we limit the ammount of subscribers? message size, memory use?
+security: tls, authentication (who can subscribe or publish), access control, oscore... -->
+
 <!-- TBD is rt used? -->
 * 'rt'  with value the resource type "core.pubsub.conf" associated with topic-configuration resources, encoded as a CBOR text string.
 
