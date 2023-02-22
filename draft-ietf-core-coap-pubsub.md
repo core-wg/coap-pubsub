@@ -97,10 +97,10 @@ topic:
 : An unique identifier for a particular item being published and/or subscribed to. A Broker uses the topics to match subscriptions to publications. A reference to a Topic on a Broker is a valid CoAP URI. Topics have to be created and configured before any data can be published. Clients may propose new topics to be created; however, it is up to the broker to choose if and how a topic is created. The broker also decides the URI of each topic. Topics are represented as a resource collection. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}. Interactions about the topic data are in {{topic-data-interactions}}.
 
 topic configuration:
-: Every topic is composed of two URIs topic configuration and topic data. The topic configuration resource is used by a client to create, configure, update and delete configuration topics (see {#topics}).
+: Every topic is composed of two URIs topic configuration and topic data. The topic configuration resource is used by a client to create, configure, update and delete configuration topics (see {{topics}}).
 
 topic data:
-: Every topic is composed of two URIs topic configuration and topic data. The topic data resource is used by publishers and subscribers to publish (POST) and subscribe (GET with Observe) to data (see {#topics}).
+: Every topic is composed of two URIs topic configuration and topic data. The topic data resource is used by publishers and subscribers to publish (POST) and subscribe (GET with Observe) to data (see {{topics}}).
 
 ## CoAP Publish-Subscribe Architecture
 
@@ -173,6 +173,12 @@ Configuration properties can be set by a client and describe the desired configu
 
 When a client submits a configuration to create a new topic or update an existing topic, it can only submit configuration properties. When a server returns the configuration of a topic, it returns both the configuration properties and the status properties of the topic.
 
+<!-- TBD New properties
+data persistence: do we want the broker to cache some of the last resource representations? how long? Do we have opinions on message size too?
+qos: do we want to reflect similar qos properties as mqtt does too?
+limits: do we limit the amount of subscribers? message size, memory use?
+security: tls, authentication (who can subscribe or publish), access control, oscore... -->
+
 ### Configuration Properties {#configuration-properties}
 
 The CBOR map includes the following configuration parameters, whose CBOR abbreviations are defined in {{pubsub-parameters}} of this document.
@@ -181,26 +187,29 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 * 'topic_data_uri', with value the URI of the topic data resource for subscribing to a pubsub topic encoded as a CBOR text string.
 
+<!-- TBD ACE goes out of the doc and is added as a extensible property coming from ACE. I just add an IANA ref to that. 
+Discovery as a function of the authorization status of the client -->
+
+
+<!-- ace goes out-->
+* 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the topic, encoded as a CBOR text string. Candidate clients that can configure topics will have to obtain an Access Token from that Authorization Server, before starting the topic configuration or creation.
+
+<!-- ace goes out-->
+* 'ace-pubsub-profile'?? TBD
+
 ### Status Properties
 
 The CBOR map includes the following status parameters, whose CBOR abbreviations are defined in {{pubsub-parameters}} of this document.
 
-<!-- TBD New properties
-data persistence: do we want the broker to cache some of the last resource representations? how long? Do we have opinions on message size too?
-qos: do we want to reflect similar qos properties as mqtt does too?
-limits: do we limit the ammount of subscribers? message size, memory use?
-security: tls, authentication (who can subscribe or publish), access control, oscore... -->
-
 <!-- TBD is rt used? -->
+<!-- rt for the collection entry point-->
+
 * 'rt'  with value the resource type "core.pubsub.conf" associated with topic-configuration resources, encoded as a CBOR text string.
 
+<!-- introduce it some-->
 * 'conf_filter', is a CBOR map containing a CBOR array and with CBOR abbreviation defined in {{pubsub-parameters}}. It is used when with FETCH when retrieving a partial representation of a topic configuration (see {{topic-fetch-configuration}}).
 
-* 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the topic, encoded as a CBOR text string. Candidate clients that can configure topics will have to obtain an Access Token from that Authorization Server, before starting the topic configuration or creation.
-
 * 'kdc' TBD link to key distribution center
-
-* 'ace-pubsub-profile'?? TBD
 
 ### Topic Configuration Representation {#topic-configuration-representation}
 
@@ -377,13 +386,11 @@ Example:
 
 <= 2.05 Content
    Content-Format: TBD2 (application/core-pubsub+cbor)
-
    {
      "group_name" : "1234",
      "group_title" : "Topic 1234 on broker xyz",
      foo
      bar
-
    }
 ~~~~~~~~~~~
 
@@ -685,6 +692,16 @@ Example:
 A client can unsubscribe simply by cancelling the observation as described in Section 3.6 of {{!RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification.
 
 <!--  do we want an example or is redundant? -->
+
+### Delete topic data {#delete-topic-data}
+
+<!--* DELETE /topic-data/TOPICNAME
+   Intended for: publishers that can also make the topic half-created again
+   Goal: make the topic half-created again
+   Request: no payload.
+-->
+
+A client can unsubscribe simply by cancelling the observation as described in Section 3.6 of {{!RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification.
 
 ### Read Latest Data {#read-data}
 
