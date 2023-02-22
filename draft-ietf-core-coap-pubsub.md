@@ -71,7 +71,7 @@ This document applies the idea of a "Publish/Subscribe Broker" to Constrained RE
 
 ## Requirements Language
 
-{::boilerplate bcp14}
+{::boilerplate bcp14-tagged}
 
 ## Terminology {#terminology}
 
@@ -88,25 +88,26 @@ publish-subscribe (pub/sub):
 : A messaging paradigm where messages are published to a Broker and potential receivers can subscribe to the Broker to receive messages. The publishers do not (need to) know where the message will be eventually sent: the publications and subscriptions are matched by a Broker and publications are delivered by the Broker to subscribed receivers.
 
 publish-subscribe broker:
-: A CoAP server capable of receiving messages (publications) from CoAP clients acting as publishers and forwarding them to CoAP clients acting as subscribers The Broker can also temporarily store publications to satisfy future subscriptions and pending notifications.
+: A CoAP server capable of receiving messages (publications) from CoAP clients acting as publishers and forwarding them to CoAP clients acting as subscribers.
+  The Broker can also temporarily store publications to satisfy future subscriptions and pending notifications.
 
 CoAP client (publisher or subscriber):
-: CoAP clients can act as publishers or as subscribers. Publishers send CoAP messages to the Broker on specific topics. Subscribers have an ongoing observation relation (subscription) to a topic. Neither publishers nor subscribers need to have any knowledge each other; they just have to share the topic they are publishing and subscribing to.
+: CoAP clients can act as publishers or as subscribers. Publishers send CoAP messages to the Broker on specific topics. Subscribers have an ongoing observation relation (subscription) to a topic. Neither publishers nor subscribers need to have any knowledge of each other; they just have to share the topic they are publishing and subscribing to.
 
 topic:
 : An unique identifier for a particular item being published and/or subscribed to. A Broker uses the topics to match subscriptions to publications. A reference to a Topic on a Broker is a valid CoAP URI. Topics have to be created and configured before any data can be published. Clients may propose new topics to be created; however, it is up to the broker to choose if and how a topic is created. The broker also decides the URI of each topic. Topics are represented as a resource collection. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}. Interactions about the topic data are in {{topic-data-interactions}}.
 
 topic configuration:
-: Every topic is composed of two URIs topic configuration and topic data. The topic configuration resource is used by a client to create, configure, update and delete configuration topics (see {#topics}).
+: Every topic is composed of two URIs: topic configuration and topic data. The topic configuration resource is used by a client to create, configure, update and delete the configuration of topics (see {#topics}).
 
 topic data:
-: Every topic is composed of two URIs topic configuration and topic data. The topic data resource is used by publishers and subscribers to publish (POST) and subscribe (GET with Observe) to data (see {#topics}).
+: Every topic is composed of two URIs: topic configuration and topic data. The topic data resource is used by publishers and subscribers to publish (POST) and subscribe (GET with Observe) to data (see {#topics}).
 
 ## CoAP Publish-Subscribe Architecture
 
 <!-- Some major changes are the topic configuration resource and the topic management. Interactions about topic data are separated. Topic configuration resource is now fundamental. Moving away from URI templates (/topicconfig /topicdata), using resource types instead. -->
 
-{{fig-arch}} shows a simple Publish/Subscribe architecture over CoAP. In it, publishers submit their data over a RESTful interface a broker-managed resource (topic) and subscribers observe this resource using {{?RFC7641}}. Resource state information is updated between the CoAP clients and the Broker via topics. Topics are created by the broker but the initial configuration can be proposed by a client, normally a publisher.
+{{fig-arch}} shows a simple Publish/Subscribe architecture over CoAP. In it, publishers submit their data over a RESTful interface to a broker-managed resource (topic) and subscribers observe this resource using {{?RFC7641}}. Resource state information is updated between the CoAP clients and the Broker via topics. Topics are created by the broker but the initial configuration can be proposed by a client, normally a publisher.
 
 The broker is responsible for the store-and-forward of state update representations between CoAP clients. Subscribers observing a resource will receive notifications, the delivery of which is done on a best-effort basis.
 
@@ -126,7 +127,7 @@ The broker is responsible for the store-and-forward of state update representati
 ~~~~~~~~~~~
 {: #fig-arch title='Publish-subscribe architecture over CoAP' artwork-align="center"}
 
-This document describes two sets of interactions, interactions to configure topics and their lifecycle (see Section {{topic-configuration-interactions}})and interactions about the topic data (see Section {{topic-data-interactions}}).
+This document describes two sets of interactions, interactions to configure topics and their lifecycle (see {{topic-configuration-interactions}}) and interactions about the topic data (see {{topic-data-interactions}}).
 
 Topic configuration interactions are discovery, create, read configuration, update configuration, delete configuration and handle the management of the topics.
 
@@ -194,7 +195,7 @@ security: tls, authentication (who can subscribe or publish), access control, os
 <!-- TBD is rt used? -->
 * 'rt'  with value the resource type "core.pubsub.conf" associated with topic-configuration resources, encoded as a CBOR text string.
 
-* 'conf_filter', is a CBOR map containing a CBOR array and with CBOR abbreviation defined in {{pubsub-parameters}}. It is used when with FETCH when retrieving a partial representation of a topic configuration (see {{topic-fetch-configuration}}).
+* 'conf_filter', is a CBOR map containing a CBOR array and with CBOR abbreviation defined in {{pubsub-parameters}}. It is used with FETCH when retrieving a partial representation of a topic configuration (see {{topic-fetch-configuration}}).
 
 * 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the topic, encoded as a CBOR text string. Candidate clients that can configure topics will have to obtain an Access Token from that Authorization Server, before starting the topic configuration or creation.
 
@@ -224,6 +225,8 @@ Topics can be discovered by a client on the basis of configuration properties an
 For broker discovery please see {{broker-discovery}}.
 
 ### Topic List Representation {#topic-list-representation}
+
+??? group configuration ???
 
 A list of group configurations is represented as a document containing the corresponding group-configuration resources in the list. Each group-configuration is represented as a link, where the link target is the URI of the group-configuration resource.
 
@@ -508,10 +511,10 @@ Example:
 
 ## Publish/Subscribe {#pubsub}
 
-Unless a topic is configured to use a different mechanism, publish/ subscribe is performed as follows: A publisher publishes to a topic by submitting the data in a PUT request to a broker-managed "topic data resource".  This causes a change to the state of that resources. Any subscriber observing the resource {{!RFC7641}} at that time receives a notification about the change to the resource state. Observations are maintained and terminated as specified on{{!RFC7641}}.
+Unless a topic is configured to use a different mechanism, publish/ subscribe is performed as follows: A publisher publishes to a topic by submitting the data in a PUT request to a broker-managed "topic data resource".  This causes a change to the state of that resources. Any subscriber observing the resource {{!RFC7641}} at that time receives a notification about the change to the resource state. Observations are maintained and terminated as specified in {{!RFC7641}}.
 
 
-As shown in section {{topics}}, each topic contains two resources: topic configuration and topic data. In that section we explained the creation and configuration of the topic configuration resources. This section will explain the management of topic data resources.
+As shown in {{topics}}, each topic contains two resources: topic configuration and topic data. In that section we explained the creation and configuration of the topic configuration resources. This section will explain the management of topic data resources.
 
 A topic data resource does not exist until some initial data has been published to it.  Before initial data has been published, the topic data resource yields a 4.04 (Not Found) response. If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created".
 
