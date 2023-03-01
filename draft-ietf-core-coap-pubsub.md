@@ -40,6 +40,7 @@ normative:
 
 informative:
   I-D.hartke-t2trg-coral-pubsub:
+  I-D.ietf-ace-oscore-gm-admin:
 
 entity:
   SELF: "[RFC-XXXX]"
@@ -164,7 +165,7 @@ The configuration side of a "publish/subscribe broker" consists of a collection 
 
 Each topic-configuration is represented as a link, where the link target is the URI of the topic-configuration resource.
 
-Each topic-data is represented as a link, where the link target is the URI of the topic-data resource.
+Each topic-data is represented as a link, where the link target is the URI of the topic-data resource. A topic-data link is an entry within the topic-configuration called 'topic_data_uri' (see {{configuration-properties}}).
 
 The list can be represented as a Link Format document {{RFC6690}}. The link to each topic-configuration resource specifies the link target attribute 'rt' (Resource Type), with value "core.pubsub.conf" defined in this document.
 
@@ -195,12 +196,9 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 <!-- TBD ACE goes out of the doc and is added as a extensible property coming from ACE. I just add an IANA ref to that. 
 Discovery as a function of the authorization status of the client -->
 
-
 <!-- ace goes out-->
-* 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the topic, encoded as a CBOR text string. Candidate clients that can configure topics will have to obtain an Access Token from that Authorization Server, before starting the topic configuration or creation.
-
-<!-- ace goes out-->
-* 'ace-pubsub-profile'?? TBD
+<!-- v* 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the topic, encoded as a CBOR text string. Candidate clients that can configure topics will have to obtain an Access Token from that Authorization Server, before starting the topic configuration or creation.-->
+<!-- * 'ace-pubsub-profile'?? TBD-->
 
 ### Status Properties
 
@@ -238,11 +236,9 @@ For broker discovery please see {{broker-discovery}}.
 
 ### Topic List Representation {#topic-list-representation}
 
-??? group configuration ???
+A list of topic configurations is represented as a document containing the corresponding topic-configuration resources in the list. Each topic-configuration is represented as a link, where the link target is the URI of the topic-configuration resource.
 
-A list of group configurations is represented as a document containing the corresponding group-configuration resources in the list. Each group-configuration is represented as a link, where the link target is the URI of the group-configuration resource.
-
-The list can be represented as a Link Format document {{?RFC6690}} or a CoRAL document {{?I-D.ietf-core-coral}}.
+The list can be represented as a Link Format document {{?RFC6690}}
 
 ## Topic Collection Interactions {#topic-collection-interactions}
 
@@ -817,6 +813,6 @@ https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.
 
 # Acknowledgements {#acks}
 
-The current version of this document contains a substantial contribution by Klaus Hartke's proposal {{I-D.hartke-t2trg-coral-pubsub}}, which defines the topic resource model and structure as well as the topic lifecycle and interactions.
+The current version of this document contains a substantial contribution by Klaus Hartke's proposal {{I-D.hartke-t2trg-coral-pubsub}}, which defines the topic resource model and structure as well as the topic lifecycle and interactions. It also follows a similar architectural design as that provided by Marco Tiloca's {{I-D.ietf-ace-oscore-gm-admin}}.
 
-The authors would like to also thank Marco Tiloca, Hannes Tschofenig, Zach Shelby, Mohit Sethi, Peter van der Stok, Tim Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen, and Olaf Bergmann for their valuable contributions and reviews.
+The authors would like to also thank Carsten Bormann, Hannes Tschofenig, Zach Shelby, Mohit Sethi, Peter van der Stok, Tim Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen, and Olaf Bergmann for their valuable contributions and reviews.
