@@ -801,7 +801,7 @@ https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.
 * Reference: This document
 
 * Notes: None
-* 
+*
 * ## Resource Type value 'core.ps.conf'
 
 * Attribute Value: core.ps
@@ -811,7 +811,7 @@ https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.
 * Reference: This document
 
 * Notes: None
-* 
+*
 * ## Resource Type value 'core.ps.data'
 
 * Attribute Value: core.ps
