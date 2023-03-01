@@ -294,9 +294,9 @@ Example:
 
 <= 2.05 Content
    Content-Format: 40 (application/link-format)
-   <coap://base-url/pubsub/topics/1>rt="core.pubsub",
-   <coap://base-url/pubsub/topics/2>rt="core.pubsub",
-   <coap://base-url/pubsub/topics/3>rt="core.pubsub"
+   <coap://base-url/ps/tc/a>rt="core.ps.conf",
+   <coap://base-url/ps/tc/b>rt="core.ps.conf",
+   <coap://base-url/ps/tc/c>rt="core.ps.conf"
 ~~~~~~~~~~~
 
 ### Getting Topics by Properties {#topic-get-properties}
@@ -323,16 +323,12 @@ Example:
    Content-Format: TBD (application/pubsub+cbor)
 
    {
-       "prop1" : x,
-       "prop2" : y,
-       "prop3" : z
+       "topic_name" : a
    }
 
 <= 2.05 Content
    Content-Format: 40 (application/link-format)
-   <coap://base-url/pubsub/topics/1>rt="core.pubsub",
-   <coap://base-url/pubsub/topics/2>rt="core.pubsub",
-   <coap://base-url/pubsub/topics/3>rt="core.pubsub"
+   <coap://base-url/ps/tc/a>rt="core.ps.conf"
 ~~~~~~~~~~~
 
 ### Creating a Topic {#topic-create}
@@ -368,10 +364,9 @@ if the topic_data_uri is empty the broker will assign
    Uri-Path: pubsub
    Uri-Path: topics
    Content-Format: TBD2 (application/core-pubsub+cbor)
-
+   TBD (this should be a CBOR map)
    {
-     "topic_name" : sensor23,
-     "as_uri" : "coap://as.example.com/token"
+     "topic_name" : sensor23
    }
 
 <= 2.01 Created
@@ -379,10 +374,10 @@ if the topic_data_uri is empty the broker will assign
    Location-Path: sensor23
    Content-Format: TBD2 (application/core-pubsub+cbor)
 
+   TBD (this should be a CBOR map)
    {
      "topic_name" : "sensor23",
-     "topic_data_uri" : "coap://pubsub-broker-uri/topics/sensor23/"
-     "as_uri" : "coap://as.example.com/token"
+     "topic_data_uri" : "coap://mybroker/td/sensor23"
    }
 ~~~~~~~~~~~
 
@@ -416,6 +411,7 @@ Example:
 
 <= 2.05 Content
    Content-Format: TBD2 (application/core-pubsub+cbor)
+   TBD (this should be a CBOR map)
    {
      "topic_name" : "1234",
      foo
@@ -451,7 +447,7 @@ Example:
    Uri-Path: topics
    Uri-Path: 1234
    Content-Format: TBD2 (application/core-pubsub+cbor)
-
+   TBD (this should be a CBOR map)
    {
      "conf_filter" : [foo,
                       bar",]
@@ -459,7 +455,7 @@ Example:
 
 <= 2.05 Content
    Content-Format: TBD2 (application/core-pubsub+cbor)
-
+   TBD (this should be a CBOR map)
    {
      "foo" : 10,
      "bar" : 5
@@ -491,6 +487,7 @@ Example:
    Uri-Path: 1234
    Content-Format: TBD2 (application/core-pubsub+cbor)
 
+   TBD (this should be a CBOR map)
    {
      "foo" : 11,
      "bar" : 5
@@ -499,6 +496,7 @@ Example:
 <= 2.04 Changed
    Content-Format: TBD2 (application/core-pubsub+cbor)
 
+   TBD (this should be a CBOR map)
    {
      "foo" : 11,
      "bar" : 5
@@ -545,7 +543,6 @@ Example:
 
 Unless a topic is configured to use a different mechanism, publish/ subscribe is performed as follows: A publisher publishes to a topic by submitting the data in a PUT request to a broker-managed "topic data resource".  This causes a change to the state of that resources. Any subscriber observing the resource {{!RFC7641}} at that time receives a notification about the change to the resource state. Observations are maintained and terminated as specified in {{!RFC7641}}.
 
-
 As shown in {{topics}}, each topic contains two resources: topic configuration and topic data. In that section we explained the creation and configuration of the topic configuration resources. This section will explain the management of topic data resources.
 
 A topic data resource does not exist until some initial data has been published to it.  Before initial data has been published, the topic data resource yields a 4.04 (Not Found) response. If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created".
@@ -554,7 +551,7 @@ All URIs for configuration and data resources are broker-generated. There does n
 
 ### Topic Lifecycle {#topic-lifecycle}
 
-When a topic is newly created, it is first placed by the server into the HALF CREATED state (see {{fig-life}}).  In this state, v. A publisher can publish to the topic data resource.  However, a subscriber cannot yet observe the topic data resource nor read the latest data.
+When a topic is newly created, it is first placed by the server into the HALF CREATED state (see {{fig-life}}).  In this state, a client can read and update the configuration of the topic and delete the topic. A publisher can publish to the topic data resource.  However, a subscriber cannot yet observe the topic data resource nor read the latest data.
 
 ~~~~~~~~~~~
                 HALF                       FULLY
@@ -566,7 +563,7 @@ When a topic is newly created, it is first placed by the server into the HALF CR
                 | ^   \       ___       /   | ^
           Read/ | |    '-->  |   |  <--'    | | Read/
          Update | |  Delete  |___|  Delete  | | Update
-                '-'                         '-'
+                '-'  Config         Config  '-'
                             DELETED
 ~~~~~~~~~~~
 {: #fig-life title='Lifecycle of a Topic' artwork-align="center"}
@@ -575,7 +572,7 @@ After a publisher publishes to the topic for the first time, the topic is placed
 
 When a client deletes a topic configuration, the topic is placed into the DELETED state and shortly after removed from the server. In this state, all subscribers are removed from the list of observers of the topic data resource and no further interactions with the topic are possible.
 
-When a client deletes a topic data, the topic is placed into the HALF CREATED state, where clients can read, update and delete the configuration of the topic.
+When a client deletes a topic data, the topic is placed into the HALF CREATED state, where clients can read, update and delete the configuration of the topic and awaits for a publisher to begin publication.
 
 ### Rate Limiting {#rate-limit}
 
@@ -587,9 +584,7 @@ When a client receives a 4.29 (Too Many Requests) response, it MUST NOT send any
 
 ## Topic Data Interactions {#topic-data-interactions}
 
-TBD
-
-<!-- Add an image that shows a topic data URI hosted in a different endpoint than the broker-->
+TBD: intro and image that shows a topic data URI hosted in a different endpoint than the broker
 
 ### Publish {#publish}
 
