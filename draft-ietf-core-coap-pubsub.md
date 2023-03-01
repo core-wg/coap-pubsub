@@ -751,15 +751,15 @@ This document defines parameters used in the messages exchanged between a client
 Note that the media type application/core-pubsub+cbor MUST be used when these parameters are transported in the respective message fields.
 
 ~~~~~~~~~~~
-+-----------------+----------+--------------+------------+
-| Name            | CBOR Key | CBOR Type    | Reference  |
-+-----------------+----------+--------------+------------+
-| topic_name      | TBD      | tstr         | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| topic_data_uri  | TBD      | tstr         | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| conf_filter     | TBD      | array        | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
++-----------------+-----------+--------------+------------+
+| Name            | CBOR Key  | CBOR Type    | Reference  |
++-----------------+-----------+--------------+------------+
+| topic_name      | TBD1      | tstr         | [RFC-XXXX] |
++-----------------+-----------+--------------+------------+
+| topic_data_uri  | TBD2      | tstr         | [RFC-XXXX] |
++-----------------+-----------+--------------+------------+
+| conf_filter     | TBD3      | array        | [RFC-XXXX] |
++-----------------+-----------+--------------+------------+
 ~~~~~~~~~~~
 {: #fig-CoAP-Pubsub-Parameters title="CoAP Pubsub Parameters" artwork-align="center"}
 
