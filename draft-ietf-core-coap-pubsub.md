@@ -264,15 +264,9 @@ A Broker can offer a topic discovery entry point to enable clients to find topic
 
 The interactions with topic collections are further defined in {{topic-collection-interactions}}.
 
-A topic collection is composed of one or more topic configuration resources that contain the properties that define the topics themselves (see Section {{topic-configuration-representation}}). Topic configurations are identified by the resource type "core.ps.conf".
+A topic collection is a group of topic configuration resources that define the properties of the topics themselves (see Section {{topic-configuration-representation}}). Each topic configuration is represented as a link to its corresponding resource URI. The list can be represented as a Link Format document {{?RFC6690}}. Topic configuration resources are identified by the resource type "core.ps.conf".
 
-Within each topic configuration resource there is a set of configuration properties (see Section {{configuration-properties}}). The 'topic_data_uri' property contains the URI of the topic data resource that a CoAP client can subscribe to.
-
-### Topic List Representation {#topic-list-representation}
-
-A list of topic configurations is represented as a document containing the corresponding topic-configuration resources in the list. Each topic-configuration is represented as a link, where the link target is the URI of the topic-configuration resource.
-
-The list can be represented as a Link Format document {{?RFC6690}}
+Within each topic configuration resource there is a set of configuration properties (see Section {{configuration-properties}}). The 'topic_data_uri' property contains the URI of the topic data resource that a CoAP client can subscribe to. Resources exposing resources of the topic data type are expected to use the resource type 'core.ps.data'.
 
 ## Topic Collection Interactions {#topic-collection-interactions}
 
@@ -287,7 +281,7 @@ response is link format
 
 A client can request a collection of the topics present in the broker by making a GET request to the collection URI.
 
-On success, the server returns a 2.05 (Content) response with a representation of the list of all topics (see Section {{topic-configuration-representation}}) in the collection.
+On success, the server returns a 2.05 (Content) response with a representation of the list of all topic configurations (see Section {{topic-configuration-representation}}) in the collection.
 
 Depending on the permission set each client MAY receive a different list of topics that they are authorized to read.
 
