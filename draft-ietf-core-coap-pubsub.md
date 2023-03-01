@@ -105,10 +105,7 @@ topic configuration:
 topic data:
 : Every topic is composed of two URIs: topic configuration and topic data. The topic data resource is used by publishers and subscribers to publish (POST) and subscribe (GET with Observe) to data (see {#topics}).
 
-
 ## CoAP Publish-Subscribe Architecture
-
-<!-- Some major changes are the topic configuration resource and the topic management. Interactions about topic data are separated. Topic configuration resource is now fundamental. Moving away from URI templates (/topicconfig /topicdata), using resource types instead. -->
 
 {{fig-arch}} shows a simple Publish/Subscribe architecture over CoAP. In it, publishers submit their data over a RESTful interface to a broker-managed resource (topic) and subscribers observe this resource using {{?RFC7641}}. Resource state information is updated between the CoAP clients and the Broker via topics. Topics are created by the broker but the initial configuration can be proposed by a client, normally a publisher.
 
@@ -204,14 +201,7 @@ Discovery as a function of the authorization status of the client -->
 
 The CBOR map includes the following status parameters, whose CBOR abbreviations are defined in {{pubsub-parameters}} of this document.
 
-<!-- TBD is rt used? -->
-<!-- rt for the collection entry point-->
-
-* 'rt'  with value the resource type "core.pubsub.conf" associated with topic-configuration resources, encoded as a CBOR text string.
-
 * 'conf_filter', is a CBOR map containing a CBOR array and with CBOR abbreviation defined in {{pubsub-parameters}}. It is used with FETCH when retrieving a partial representation of a topic configuration (see {{topic-fetch-configuration}}).
-
-* 'kdc' TBD link to key distribution center
 
 ### Topic Configuration Representation {#topic-configuration-representation}
 
@@ -222,7 +212,6 @@ Unless specified otherwise, these are defined in this document and their CBOR ab
 #### Default Values
 
 TBD
-
 
 ## Topic Discovery {#topic-discovery}
 
@@ -255,7 +244,7 @@ A client can request a collection of the topics present in the broker by making 
 
 On success, the server returns a 2.05 (Content) response with a representation of the list of all topics (see Section {{topic-configuration-representation}}) in the collection.
 
-<!-- Access control? Admin?-->
+Depending on the permission set each client MAY receive a different list of topics that they are authorized to read.
 
 Example:
 
@@ -528,15 +517,15 @@ All URIs for configuration and data resources are broker-generated. There does n
 
 ### Topic Lifecycle {#topic-lifecycle}
 
-When a topic is newly created, it is first placed by the server into the HALF CREATED state (see {{fig-life}}).  In this state, a client can read and update the configuration of the topic and delete the topic. A publisher can publish to the topic data resource.  However, a subscriber cannot yet observe the topic data resource nor read the latest data.
+When a topic is newly created, it is first placed by the server into the HALF CREATED state (see {{fig-life}}).  In this state, v. A publisher can publish to the topic data resource.  However, a subscriber cannot yet observe the topic data resource nor read the latest data.
 
 ~~~~~~~~~~~
                 HALF                       FULLY
-              CREATED                     CREATED
-                ___                         ___     Publish
------------->  |   |  ------------------>  |   |  ------------.
-    Create     |___|        Publish        |___|  <-----------'
-                     \                   /         Subscribe
+              CREATED       Delete        CREATED
+                ___       Topic Data        ___     Publish
+------------>  |   |  <------------------  |   |  ------------.
+    Create     |___|  ------------------>  |___|  <-----------'
+                     \      Publish      /         Subscribe
                 | ^   \       ___       /   | ^
           Read/ | |    '-->  |   |  <--'    | | Read/
          Update | |  Delete  |___|  Delete  | | Update
@@ -547,7 +536,9 @@ When a topic is newly created, it is first placed by the server into the HALF CR
 
 After a publisher publishes to the topic for the first time, the topic is placed into the FULLY CREATED state. In this state, a client can read and update the configuration of the topic and delete the topic; a publisher can publish to the topic data resource; and a subscriber can observe the topic data resource.
 
-When a client deletes a topic, the topic is placed into the DELETED state and shortly after removed from the server. In this state, all subscribers are removed from the list of observers of the topic data resource and no further interactions with the topic are possible.
+When a client deletes a topic configuration, the topic is placed into the DELETED state and shortly after removed from the server. In this state, all subscribers are removed from the list of observers of the topic data resource and no further interactions with the topic are possible.
+
+When a client deletes a topic data, the topic is placed into the HALF CREATED state, where clients can read, update and delete the configuration of the topic.
 
 ### Rate Limiting {#rate-limit}
 
