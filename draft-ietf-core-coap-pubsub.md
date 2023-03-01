@@ -758,13 +758,7 @@ Note that the media type application/core-pubsub+cbor MUST be used when these pa
 +-----------------+----------+--------------+------------+
 | topic_data_uri  | TBD      | tstr         | [RFC-XXXX] |
 +-----------------+----------+--------------+------------+
-| rt              | TBD      | tstr         | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| as_uri          | TBD      | tstr         | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
 | conf_filter     | TBD      | array        | [RFC-XXXX] |
-+-----------------+----------+--------------+------------+
-| kcd???          | TBD      | tstr / int   | [RFC-XXXX] |
 +-----------------+----------+--------------+------------+
 ~~~~~~~~~~~
 {: #fig-CoAP-Pubsub-Parameters title="CoAP Pubsub Parameters" artwork-align="center"}
