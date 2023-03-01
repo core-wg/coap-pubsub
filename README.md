@@ -3,7 +3,7 @@
 This is the working area for the IETF [CORE Working Group](https://datatracker.ietf.org/wg/core/documents/) Internet-Draft, "Publish-Subscribe Broker for the Constrained Application Protocol (CoAP)".
 
 * [Editor's Copy](https://core-wg.github.io/coap-pubsub/#go.draft-ietf-core-coap-pubsub.html)
-* [ps-rev copy](https://core-wg.github.io/coap-pubsub/ps-rev/draft-ietf-core-coap-pubsub.html#name-coap-publish-subscribe-arch)
+* [ps-rev copy](https://core-wg.github.io/coap-pubsub/ps-rev/draft-ietf-core-coap-pubsub.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-core-coap-pubsub)
 * [Working Group Draft](https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub)
 * [Compare Editor's Copy to Working Group Draft](https://core-wg.github.io/coap-pubsub/#go.draft-ietf-core-coap-pubsub.diff)

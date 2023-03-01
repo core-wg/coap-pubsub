@@ -148,8 +148,10 @@ The configuration side of a "publish/subscribe broker" consists of a collection 
                     \          \               \
                      \ ......   \ ......        \ ......
                     : \___  :  : \___  :       : \___  :
-             Topic  : /   \ :  : /   \ :       : /   \ :
-     Configuration  : \___/ :  : \___/ :       : \___/ :
+             Topic  : / + \ :  : / + \ :       : / + \ :
+     Configuration  : \_|_/ :  : \_|_/ :       : \_|_/ :
+                    ....|....  ....|....       ....|....
+                    ....|....  ....|....       ....|....
                     :  _|_  :  :  _|_  :  ...  :  _|_  :
              Topic  : /   \ :  : /   \ :       : /   \ :
               Data  : \___/ :  : \___/ :       : \___/ :
