@@ -94,15 +94,15 @@ publish-subscribe broker:
 CoAP client (publisher or subscriber):
 : CoAP clients can act as publishers or as subscribers. Publishers send CoAP messages to the Broker on specific topics. Subscribers have an ongoing observation relation (subscription) to a topic. Neither publishers nor subscribers need to have any knowledge of each other; they just have to share the topic they are publishing and subscribing to.
 
+<!-- TBD redo this-->
 topic:
 : An unique identifier for a particular item being published and/or subscribed to. A Broker uses the topics to match subscriptions to publications. A reference to a Topic on a Broker is a valid CoAP URI. Topics have to be created and configured before any data can be published. Clients may propose new topics to be created; however, it is up to the broker to choose if and how a topic is created. The broker also decides the URI of each topic. Topics are represented as a resource collection. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}. Interactions about the topic data are in {{topic-data-interactions}}.
 
 topic configuration:
-
-: Every topic is composed of two URIs: topic configuration and topic data. The topic configuration resource is used by a client to create, configure, update and delete the configuration of topics (see {#topics}).
+: Every topic is composed of a topic configuration resource which is used by a client to create, configure, update and delete the configuration of topics (see {#topics}).
 
 topic data:
-: Every topic is composed of two URIs: topic configuration and topic data. The topic data resource is used by publishers and subscribers to publish (POST) and subscribe (GET with Observe) to data (see {#topics}).
+: topic configurations may contain a property called topic data. The topic data resource is used by publishers and subscribers to publish (POST) and subscribe (GET with Observe) to data (see {#topics}).
 
 ## CoAP Publish-Subscribe Architecture
 
@@ -232,15 +232,41 @@ Unless specified otherwise, these are defined in this document and their CBOR ab
 
 TBD
 
-## Topic Discovery {#topic-discovery}
+## Discovery
+
+Discovery involves that of the Broker, topic collections, topic configurations and topic data.
+
+### Broker Discovery {#broker-discovery}
+
+<!-- TBD: This section explains Broker Discovery, needs more work -->
+
+CoAP clients MAY discover brokers by using CoAP Simple Discovery, via multicast, through a Resource Directory (RD) {{!RFC9167}} or by other means specified in extensions to {{!RFC7252}}. Brokers MAY register with a RD by following the steps on Section 5 of {{!RFC9167}} with the resource type set to "core.ps" as defined in {{iana}} of this document.
+
+Brokers SHOULD expose a link to the entry point of the pubsub API at their .well-known/core location {{!RFC6690}}. The specific resource path is left for implementations, examples in this document may use the "/ps" path.
+
+Example:
+
+~~~~~~~~~~~
+=> GET
+   Uri-Path: ./well-known/core
+   Resource-Type: core.ps
+
+
+<= 2.05 Content
+    </ps/>;rt=core.ps;ct=40
+~~~~~~~~~~~
+
+### Topic Discovery {#topic-discovery}
 
 <!-- section needs more work -->
 
-A Broker can offer a topic discovery entry point to enable clients to find topics of interest on the basis of configuration properties and status properties.
+A Broker can offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point thus represents a collection of related resources as specified in {{?RFC6690}} and is identified by the resource type "core.ps.coll".
 
-Topics can be discovered by a client on the basis of configuration properties and status properties. For example, a client could fetch a list of all topics that have a property of type "foo" or that have a property of type "bar" with the value 42. Alternatively, topics can also be discovered simply by getting the full list of all topics.
+The interactions with topic collections are further defined in {{topic-collection-interactions}}.
 
-For broker discovery please see {{broker-discovery}}.
+A topic collection is composed of one or more topic configuration resources that contain the properties that define the topics themselves (see Section {{topic-configuration-representation}}). Topic configurations are identified by the resource type "core.ps.conf".
+
+Within each topic configuration resource there is a set of configuration properties (see Section {{configuration-properties}}). The 'topic_data_uri' property contains the URI of the topic data resource that a CoAP client can subscribe to.
 
 ### Topic List Representation {#topic-list-representation}
 
@@ -564,32 +590,6 @@ The server hosting a data resource may have to handle a potentially very large n
 In this situation, if a client is sending publications too fast, the server SHOULD return a 4.29 (Too Many Requests) response {{!RFC8516}}.  As described in {{!RFC8516}}, the Max-Age option {{!RFC7252}} in this response indicates the number of seconds after which the client may retry. The Broker MAY stop publishing messages from the client for the indicated time.
 
 When a client receives a 4.29 (Too Many Requests) response, it MUST NOT send any new publication requests to the same topic data resource before the time indicated by the Max-Age option has passed.
-
-### Broker Discovery {#broker-discovery}
-
-<!-- TBD: This section explains Broker Discovery, needs more work -->
-
-Clients MAY discover brokers by using CoAP Simple Discovery or through a Resource Directory (RD) {{!RFC9167}}. Brokers MAY register with a RD by following the steps on Section 5 of {{!RFC9167}} with the link relation rt=core.ps.
-
-<!-- do we use the `ps` uri template as entry point or not? -->
-
-Brokers SHOULD expose a link to the entry point of the pubsub API at their .well-known/core location {{!RFC6690}}.
-
-<!-- is example correct? -->
-
-Example:
-
-~~~~~~~~~~~
-=> GET
-   Uri-Path: ./well-known/core
-   Resource-Type: core.ps
-
-
-<= 2.05 Content
-    </ps/>;rt=core.ps;ct=40
-~~~~~~~~~~~
-
-For details topic discovery please see {{topic-discovery}}.
 
 ## Topic Data Interactions {#topic-data-interactions}
 
