@@ -190,7 +190,7 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 * 'topic_data_uri', with value the URI of the topic data resource for subscribing to a pubsub topic encoded as a CBOR text string.
 
-<!-- TBD ACE goes out of the doc and is added as a extensible property coming from ACE. I just add an IANA ref to that. 
+<!-- TBD ACE goes out of the doc and is added as a extensible property coming from ACE. I just add an IANA ref to that.
 Discovery as a function of the authorization status of the client -->
 
 <!-- ace goes out-->
