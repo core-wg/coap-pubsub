@@ -763,7 +763,6 @@ Note that the media type application/core-pubsub+cbor MUST be used when these pa
 ~~~~~~~~~~~
 {: #fig-CoAP-Pubsub-Parameters title="CoAP Pubsub Parameters" artwork-align="center"}
 
-
 # Security Considerations
 
 <!-- TBD: we may take content from prev versions but we have to spend some more time on the implications of the topic-config -->
@@ -801,8 +800,8 @@ https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.
 * Reference: This document
 
 * Notes: None
-*
-* ## Resource Type value 'core.ps.conf'
+
+## Resource Type value 'core.ps.conf'
 
 * Attribute Value: core.ps
 
@@ -811,8 +810,8 @@ https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.
 * Reference: This document
 
 * Notes: None
-*
-* ## Resource Type value 'core.ps.data'
+
+## Resource Type value 'core.ps.data'
 
 * Attribute Value: core.ps
 
