@@ -312,7 +312,7 @@ representation of a topic filter (see Section {{topic-fetch-configuration}})  in
 
 On success, the server returns a 2.05 (Content) response with a
 representation of a list of topics in the collection (see
-Section {{topic-list-representation}}) that match the filter.
+Section {{topic-discovery}}) that match the filter.
 
 Example:
 
