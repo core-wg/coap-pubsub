@@ -68,7 +68,7 @@ For these nodes, the client/server-oriented architecture of REST can be challeng
 
 This document applies the idea of a "Publish/Subscribe Broker" to Constrained RESTful Environments.  The broker enables store-and- forward data exchange between nodes, thereby facilitating the communication of nodes with limited reachability, providing simple many-to-many communication, and easing integration with other publish/subscribe systems.
 
-<!-- TBD once concluded the main drafting, verify every single example, specially the part of the topic configuration representation -->
+<!-- TBD once concluded the main drafting, verify every single example, specially the part of the topic configuration representation and the cbor-diag-->
 
 ## Requirements Language
 
@@ -90,7 +90,6 @@ publish-subscribe (pub/sub):
 
 publish-subscribe broker:
 : A CoAP server capable of receiving messages (publications) from CoAP clients acting as publishers and forwarding them to CoAP clients acting as subscribers.
-  The Broker can also temporarily store publications to satisfy future subscriptions and pending notifications.
 
 CoAP client (publisher or subscriber):
 : CoAP clients can act as publishers or as subscribers. Publishers send CoAP messages to the Broker on specific topics. Subscribers have an ongoing observation relation (subscription) to a topic. Neither publishers nor subscribers need to have any knowledge of each other; they just have to share the topic they are publishing and subscribing to.
@@ -132,6 +131,24 @@ This document describes two sets of interactions, interactions to configure topi
 Topic configuration interactions are discovery, create, read configuration, update configuration, delete configuration and handle the management of the topics.
 
 Topic data interactions are publish, subscribe, unsubscribe, read and are oriented on how data is transferred from a publisher to a subscriber.
+
+## Managing Topics {#managing-topics}
+
+{{fig-api}} shows the resources of a Topic Collection that can be managed at the Broker.
+
+~~~~~~~~~~~
+             ___
+   Topic    /   \
+Collection  \___/
+                 \
+                  \____________________
+                   \___    \___        \___
+                   /   \   /   \  ...  /   \        Topic
+                   \___/   \___/       \___/   Configurations
+~~~~~~~~~~~
+{: #fig-api title="Resources of a Broker" artwork-align="center"}
+
+The Broker exports a topic-collection resource, with resource type "core.ps.coll" defined in {{iana}} of this document. The interfaces for the topic-collection resource is defined in {{topic-collection-interactions}}.
 
 # Pub-Sub Topics {#topics}
 
@@ -186,9 +203,11 @@ security: tls, authentication (who can subscribe or publish), access control, os
 
 The CBOR map includes the following configuration parameters, whose CBOR abbreviations are defined in {{pubsub-parameters}} of this document.
 
-* 'topic_name', with value the topic name of the a topic group encoded as a CBOR text string.
+* 'topic_name', with value the topic name encoded as a CBOR text string.
 
 * 'topic_data_uri', with value the URI of the topic data resource for subscribing to a pubsub topic encoded as a CBOR text string.
+
+* 'rt', with value the resource type "core.ps.conf" associated with topic configuration resources, encoded as a CBOR text string
 
 <!-- TBD ACE goes out of the doc and is added as a extensible property coming from ACE. I just add an IANA ref to that.
 Discovery as a function of the authorization status of the client -->
@@ -341,7 +360,7 @@ if the topic_data_uri is empty the broker will assign
    Content-Format: TBD2 (application/core-pubsub+cbor)
 
    {
-     "group_name" : "sensor23",
+     "topic_name" : "sensor23",
      "topic_data_uri" : "coap://pubsub-broker-uri/topics/sensor23/"
      "as_uri" : "coap://as.example.com/token"
    }
@@ -378,8 +397,7 @@ Example:
 <= 2.05 Content
    Content-Format: TBD2 (application/core-pubsub+cbor)
    {
-     "group_name" : "1234",
-     "group_title" : "Topic 1234 on broker xyz",
+     "topic_name" : "1234",
      foo
      bar
    }
@@ -395,7 +413,7 @@ response is cbor
 
 A client can read the configuration of a topic by making a FETCH request to the topic configuration URI with a filter for specific parameters. This is done in order to retrieve part of the current topic configuration.
 
-The request contains a CBOR map with a configuration filter or 'conf_filter', a CBOR array and with CBOR abbreviation defined in {{pubsub-parameters}}. Each element of the array specifies one requested configuration parameter or status parameter of the current group configuration (see {{topic-configuration-representation}}).
+The request contains a CBOR map with a configuration filter or 'conf_filter', a CBOR array and with CBOR abbreviation defined in {{pubsub-parameters}}. Each element of the array specifies one requested configuration parameter or status parameter of the current topic configuration (see {{topic-configuration-representation}}).
 
 On success, the server returns a 2.05 (Content) response with a representation of the topic configuration. The response has as payload the partial representation of the topic configuration as specified in {{topic-configuration-representation}}.
 
@@ -404,7 +422,6 @@ If a topic manager (TBD) is present in the broker, retrieving topic information 
 The response payload is a CBOR map, whose possible entries are specified in {{topic-configuration-representation}} and use the same abbreviations defined in {{pubsub-parameters}}.
 
 Both request and response MUST have Content-Format set to "application/core-pubsub+cbor".
-
 
 Example:
 
@@ -792,9 +809,29 @@ https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.
 
 * Notes: None
 
-## Resource Type value 'core.ps.discover'
+## Resource Type value 'core.ps.coll'
 
-* Attribute Value: core.ps.discover
+* Attribute Value: core.ps
+
+* Description: XXX of This document
+
+* Reference: This document
+
+* Notes: None
+* 
+* ## Resource Type value 'core.ps.conf'
+
+* Attribute Value: core.ps
+
+* Description: XXX of This document
+
+* Reference: This document
+
+* Notes: None
+* 
+* ## Resource Type value 'core.ps.data'
+
+* Attribute Value: core.ps
 
 * Description: XXX of This document
 
