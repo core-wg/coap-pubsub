@@ -468,8 +468,6 @@ response is cbor
 
 A client can update the configuration of a topic by submitting the representation of the updated topic  (see Section 3.1.3) in a PUT or POST request to the topic URI. Any existing properties in the configuration are overwritten by this update.
 
-<!-- TBD details need to be added once the configuration resource structure is defined-->
-
 On success, the server returns a 2.04 (Changed) response and the current full resource representation. The broker may chose not to overwrite parameters that are not explicitly modified in the request.
 
 Example:
@@ -523,9 +521,9 @@ Example:
 
 ~~~~~~~~~~~
 => 0.04 DELETE
-   Uri-Path: pubsub
-   Uri-Path: topics
-   Uri-Path: 1234
+   Uri-Path: ps
+   Uri-Path: tc
+   Uri-Path: h9392
 
 <= 2.02 Deleted
 ~~~~~~~~~~~
