@@ -92,13 +92,13 @@ publishers and subscribers:
 : CoAP clients can act as publishers or as subscribers. Publishers create topics and send CoAP messages (publications) to the broker on specific topics. Subscribers have an ongoing observation relation (subscription) to a topic. Publishers and subscribers do not need to have any knowledge of each other, but they must share the topic they are publishing and subscribing to.
 
 topic resource:
-: An entry within a topic collection in a broker. Topics are created and configured before any data can be published.  CoAP clients can propose new topics to be created, but it is up to the broker to decide whether and how a topic is created. The broker also decides the URI of each topic. The creation, configuration, and discovery of topics at a broker are specified in {{topics}}. Interactions about the topic data are in {{topic-data-interactions}}.
+: An entry within a topic collection in a broker. Topics are created and configured before any data can be published.  CoAP clients can propose new topics to be created, but it is up to the broker to decide whether and how a topic is created. The broker also decides the URI of each topic. The creation, configuration, and discovery of topics at a broker are specified in {{topics}}. Interactions about the topic-data are in {{topic-data-interactions}}.
 
-topic data resource:
-: Topic resources may contain a property called "topic data". The topic data resource is a CoAP URI used by publishers and subscribers to publish (POST) and subscribe (GET with Observe) to data (see {{topics}}).
+topic-data resource:
+: Topic resources contain a property called "topic-data". The topic-data resource is a CoAP URI used by publishers and subscribers to publish (POST) and subscribe (GET with Observe) to data (see {{topics}}).
 
 broker:
-: A CoAP server that hosts one or more topic collections containing topic resources. The broker is responsible for the store-and-forward of state update representations when the topic data URI points to a resource hosted on the broker. The broker is also responsible of handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
+: A CoAP server that hosts one or more topic collections containing topic resources. The broker is responsible for the store-and-forward of state update representations when the topic-data URI points to a resource hosted on the broker. The broker is also responsible of handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
 
 ## CoAP Publish-Subscribe Architecture
 
