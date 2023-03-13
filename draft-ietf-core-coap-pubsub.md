@@ -597,11 +597,11 @@ Example of first publication:
    Uri-Path: 6578616d706c65
    Content-Format: 110
 
-   { 
+   {
       "n": "temperature",
-      "u": "Cel", 
-      "t": 1621452122, 
-      "v": 23.5 
+      "u": "Cel",
+      "t": 1621452122,
+      "v": 23.5
    }
 
 <= 2.01 Created
@@ -616,11 +616,11 @@ Example of subsequent publication:
    Uri-Path: 6578616d706c65
    Content-Format: 110
 
-   { 
+   {
       "n": "temperature",
-      "u": "Cel", 
-      "t": 182734122, 
-      "v": 22.5 
+      "u": "Cel",
+      "t": 182734122,
+      "v": 22.5
    }
 
 <= 2.04 Updated
@@ -722,11 +722,11 @@ Example:
    Content-Format: 110
    Max-Age: 15
 
-   { 
+   {
       "n": "temperature",
-      "u": "Cel", 
-      "t": 1621452122, 
-      "v": 23.5 
+      "u": "Cel",
+      "t": 1621452122,
+      "v": 23.5
    }
 ~~~~~~~~~~~
 
