@@ -255,8 +255,6 @@ Example:
 
 ### Topic Discovery {#topic-discovery}
 
-<!-- section needs more work -->
-
 A Broker can offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point thus represents a collection of related resources as specified in {{?RFC6690}} and is identified by the resource type "core.ps.coll".
 
 The interactions with topic collections are further defined in {{topic-collection-interactions}}.
@@ -504,19 +502,11 @@ Example:
 
 ### Deleting a Topic Resource {#topic-delete}
 
-<!--
-DELETE to /topic-conf
-delete  and data
--->
-
 A client can delete a topic by making a CoAP DELETE request on the topic resource URI.
 
 On success, the server returns a 2.02 (Deleted) response.
 
 When a topic resource is deleted, the broker SHOULD also delete the topic data resource, unsubscribe all subscribers by removing them from the list of observers and returning a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2.
-
-<!-- TBD: Document error cases and add access control -->
-
 Example:
 
 ~~~~~~~~~~~
@@ -681,13 +671,13 @@ Example:
 
 A CoAP client can unsubscribe simply by cancelling the observation as described in Section 3.6 of {{!RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification.
 
-### Delete topic data {#delete-topic-data}
+### Delete topic data resource {#delete-topic-data}
 
 A publisher MAY delete a topic by making a CoAP DELETE request on the 'topic_data' URI.
 
 On success, the server returns a 2.02 (Deleted) response.
 
-When a topic_data resource is deleted, the broker SHOULD also delete the 'topic_data' parameter in the topic resopurce, unsubscribe all subscribers by removing them from the list of observers and return a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2. The topic is then set back to the half created state as per {{topic-lifecycle}}.
+When a topic_data resource is deleted, the broker SHOULD also delete the 'topic_data' parameter in the topic resource, unsubscribe all subscribers by removing them from the list of observers and return a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2. The topic is then set back to the half created state as per {{topic-lifecycle}}.
 
 Example:
 
@@ -700,15 +690,15 @@ Example:
 <= 2.02 Deleted
 ~~~~~~~~~~~
 
-### Read Latest Data {#read-data}
+### Read latest data {#read-data}
 
-A client can get the latest published topic data by making a GET request to the 'topic_data' URI in the broker. Please note that discovery of such URI is a required step (see {{topic-discovery}})
+A client can get the latest published topic data by making a GET request to the 'topic_data' URI in the broker. Please note that discovery of the 'topic_data' parameter is a required previous step (see {{topic-get-resource}}).
 
 On success, the server MUST return 2.05 (Content) response with the data.
 
 If the target URI does not match an existing resource or the topic is not in the fully created state (see {{topic-lifecycle}}), the broker SHOULD return a response code 4.04 (Not Found).
 
-If the Broker can not return the requested content format it MUST return a response code 4.15 (Unsupported Content Format).
+If the broker can not return the requested content format it MUST return a response code 4.15 (Unsupported Content Format).
 
 Example:
 
