@@ -577,98 +577,100 @@ TBD: intro and image that shows a topic data URI hosted in a different endpoint 
 
 ### Publish {#publish}
 
-A topic must have been created in order to publish data to it (See Section {{topic-create}}) and be in the fully created state in order to the publish operation to work.
+A topic must have been created in order to publish data to it (See Section {{topic-create}}) and be in the half-created state in order to the publish operation to work (see {{topic-lifecycle}}).
 
-A client can publish data to a topic by submitting the data in a PUT request to the topic data URI. The topic data URI is indicated by the property of type <http://coreapps.org/pubsub#data> in the topic resource. Please note that the topic data URI is not the same as the topic URI.
+A client can publish data to a topic by submitting the data in a PUT request to the 'topic_data' URI as indicated in its topic resource property. Please note that the 'topic_data' URI is not the same as the topic URI used for configuring the topic (see {{topic-resource-representation}}).
 
-<!-- change <http://coreapps.org/pubsub#data> TBD-data  once defined in the configuration section-->
-
-The data MUST be in the content format specified by the configuration
-property <http://coreapps.org/pubsub#accept> in the topic resource. Brokers MUST reject publish operations which do not use the specified content format.
-
-<!-- change <http://coreapps.org/pubsub#accept> TBD-accept once defined in the configuration section  -->
-
-On success, the server returns a 2.04 (Updated) response.  However, when data is published to the topic for the first time, the server may instead return a 2.01 (Created) response.
+On success, the server returns a 2.04 (Updated) response. However, when data is published to the topic for the first time, the server instead MUST return a 2.01 (Created) response and set the topic in the fully-created state (see {{topic-lifecycle}}).
 
 If the request does not have an acceptable content format, the server returns a 4.15 (Unsupported Content Format) response.
 
 If the client is sending publications too fast, the server returns a
 4.29 (Too Many Requests) response {{!RFC8516}}.
 
-<!-- TBD: Other error cases: max_age? -->
-
-<!-- TBD: add senml payload example below -->
-<!-- TBD: add participants (publisher and broker) here and in other diagrams-->
-
-Example:
+Example of first publication:
 
 ~~~~~~~~~~~
 => 0.03 PUT
    Uri-Path: ps
    Uri-Path: data
    Uri-Path: 6578616d706c65
-   Content-Format: 112
+   Content-Format: 110
 
-   [...SenML data...]
+   { 
+      "n": "temperature",
+      "u": "Cel", 
+      "t": 1621452122, 
+      "v": 23.5 
+   }
 
 <= 2.01 Created
+~~~~~~~~~~~
 
+Example of subsequent publication:
 
+~~~~~~~~~~~
 => 0.03 PUT
-   Uri-Path: pubsub
+   Uri-Path: ps
    Uri-Path: data
    Uri-Path: 6578616d706c65
-   Content-Format: 112
+   Content-Format: 110
 
-   [...updated SenML data...]
+   { 
+      "n": "temperature",
+      "u": "Cel", 
+      "t": 182734122, 
+      "v": 22.5 
+   }
 
 <= 2.04 Updated
 ~~~~~~~~~~~
 
 ### Subscribe {#subscribe}
 
-A client can get the latest published data and subscribe to newly published data by observing the topic data URI with a GET request that includes the Observe option set to 0 {{!RFC7641}}.
+A client can subscribe to a topic by sending a CoAP GET request with the Observe set to '0' to subscribe to resource updates. {{!RFC7641}}.
 
 On success, the broker MUST return 2.05 (Content) notifications with the data.
 
 If the topic is not yet in the fully created state (see {{topic-lifecycle}}) the broker SHOULD return a response code 4.04 (Not Found).
 
-<!-- TBD There are other potential error cases based on parameters from the  configuration file (subscription lifetime, topic content format...) -->
-
 The following response codes are defined for the Subscribe operation:
 
-<!-- TBD: Is this the best way to represent response codes? Are they needed?  Which other potential error cases exist based on parameters from the  configuration file (subscription lifetime, topic content format...)? -->
-
 Success:
-: 2.05 "Content". Successful subscribe, current value included
+: 2.05 "Content". Successful subscribe with observe response, current value included in the response.
+
 Failure:
 : 4.04 "Not Found". Topic does not exist.
+
+TBD: Do we want to treat max_clients as an error?
+
+If the 'max_clients' parameter has been reached, the server must treat that as specified in section 4.1 of {{!RFC7641}}. The response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
 
 Example:
 
 ~~~~~~~~~~~
 => 0.01 GET
-   Uri-Path: pubsub
+   Uri-Path: ps
    Uri-Path: data
    Uri-Path: 6578616d706c65
    Observe: 0
 
 <= 2.05 Content
-   Content-Format: 112
+   Content-Format: 110
    Observe: 10001
    Max-Age: 15
 
    [...SenML data...]
 
 <= 2.05 Content
-   Content-Format: 112
+   Content-Format: 110
    Observe: 10002
    Max-Age: 15
 
    [...SenML data...]
 
 <= 2.05 Content
-   Content-Format: 112
+   Content-Format: 110
    Observe: 10003
    Max-Age: 15
 
@@ -677,23 +679,30 @@ Example:
 
 ### Unsubscribe {#unsubscribe}
 
-A client can unsubscribe simply by cancelling the observation as described in Section 3.6 of {{!RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification.
-
-<!--  do we want an example or is redundant? -->
+A CoAP client can unsubscribe simply by cancelling the observation as described in Section 3.6 of {{!RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification.
 
 ### Delete topic data {#delete-topic-data}
 
-<!--* DELETE /topic-data/TOPICNAME
-   Intended for: publishers that can also make the topic half-created again
-   Goal: make the topic half-created again
-   Request: no payload.
--->
+A publisher MAY delete a topic by making a CoAP DELETE request on the 'topic_data' URI.
 
-A client can unsubscribe simply by cancelling the observation as described in Section 3.6 of {{!RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification.
+On success, the server returns a 2.02 (Deleted) response.
+
+When a topic_data resource is deleted, the broker SHOULD also delete the 'topic_data' parameter in the topic resopurce, unsubscribe all subscribers by removing them from the list of observers and return a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2. The topic is then set back to the half created state as per {{topic-lifecycle}}.
+
+Example:
+
+~~~~~~~~~~~
+=> 0.04 DELETE
+   Uri-Path: ps
+   Uri-Path: data
+   Uri-Path: 6578616d706c65
+
+<= 2.02 Deleted
+~~~~~~~~~~~
 
 ### Read Latest Data {#read-data}
 
-A client can get the latest published topic data by making a GET request to the topic data URI in the broker.
+A client can get the latest published topic data by making a GET request to the 'topic_data' URI in the broker. Please note that discovery of such URI is a required step (see {{topic-discovery}})
 
 On success, the server MUST return 2.05 (Content) response with the data.
 
@@ -701,22 +710,24 @@ If the target URI does not match an existing resource or the topic is not in the
 
 If the Broker can not return the requested content format it MUST return a response code 4.15 (Unsupported Content Format).
 
-<!-- TBD There are other potential error cases we need to document -->
-
 Example:
 
 ~~~~~~~~~~~
 => 0.01 GET
-   Uri-Path: pubsub
+   Uri-Path: ps
    Uri-Path: data
    Uri-Path: 6578616d706c65
 
-
 <= 2.05 Content
-   Content-Format: 112
+   Content-Format: 110
    Max-Age: 15
 
-   [...SenML data...]
+   { 
+      "n": "temperature",
+      "u": "Cel", 
+      "t": 1621452122, 
+      "v": 23.5 
+   }
 ~~~~~~~~~~~
 
 # URI Templates
