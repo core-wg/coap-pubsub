@@ -86,16 +86,19 @@ this specification.
 This specification makes use of the following terminology:
 
 publish-subscribe (pub/sub):
-: A messaging paradigm in which messages are published to a broker, and potential receivers can subscribe to the broker to receive messages. Publishers do not need to know where the message will be eventually sent. The broker matches publications and subscriptions, and delivers publications to subscribed receivers.
+: A messaging paradigm in which messages are published to a broker, and potential receivers can subscribe to a broker to receive messages. Message producers do not need to know where the message will be eventually sent. The broker matches publications and subscriptions, and delivers publications to subscribed receivers.
 
 publishers and subscribers:
-: CoAP clients can act as publishers or as subscribers. Publishers create topics and send CoAP messages (publications) to the broker on specific topics. Subscribers have an ongoing observation relation (subscription) to a topic. Publishers and subscribers do not need to have any knowledge of each other, but they must share the topic they are publishing and subscribing to.
+: CoAP clients can act as publishers or as subscribers. Publishers propose topics for creation and send CoAP messages (publications) to the broker on specific topics. Subscribers have an ongoing observation relation (subscription) to a topic. Publishers and subscribers do not need to have any knowledge of each other, but they must know the topic they are publishing and subscribing to.
+
+topic collection:
+: A resource collection is a group of related resources that share a common base URI. In this case the the topic collection contains resources of the type "topic resource". CoAP clients can discover and interact with the resources in a collection by sending CoAP requests to the URI of the collection. 
 
 topic resource:
-: An entry within a topic collection in a broker. Topics are created and configured before any data can be published.  CoAP clients can propose new topics to be created, but it is up to the broker to decide whether and how a topic is created. The broker also decides the URI of each topic. The creation, configuration, and discovery of topics at a broker are specified in {{topics}}. Interactions about the topic-data are in {{topic-data-interactions}}.
+: An entry within a topic collection in a broker. Topics are created and configured before any data can be published.  CoAP clients can propose new topics to be created, but it is up to the broker to decide whether and how a topic is created. The broker also decides the URI of each topic resource and of the topic-data resource when hosted at the broker. The creation, configuration, and discovery of topics at a broker are specified in {{topics}}. Interactions about the topic-data are defined in {{topic-data-interactions}}.
 
 topic-data resource:
-: Topic resources contain a property called "topic-data". The topic-data resource is a CoAP URI used by publishers and subscribers to publish (POST) and subscribe (GET with Observe) to data (see {{topics}}).
+: Topic resources contain a property called "topic-data". The topic-data resource is a CoAP URI used by publishers and subscribers to publish (PUT) and subscribe (GET with Observe) to data (see {{topics}}).
 
 broker:
 : A CoAP server that hosts one or more topic collections containing topic resources. The broker is responsible for the store-and-forward of state update representations when the topic-data URI points to a resource hosted on the broker. The broker is also responsible of handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
@@ -140,7 +143,7 @@ Collection  \___/
                   \____________________
                    \___    \___        \___
                    /   \   /   \  ...  /   \        Topic
-                   \___/   \___/       \___/   Configurations
+                   \___/   \___/       \___/      Resources
 ~~~~~~~~~~~
 {: #fig-api title="Resources of a Broker" artwork-align="center"}
 
@@ -160,16 +163,17 @@ The configuration side of a "publish/subscribe broker" consists of a collection 
                      \ ......   \ ......        \ ......
                     : \___  :  : \___  :       : \___  :
              Topic  : / + \ :  : / + \ :       : / + \ :
-     Configuration  : \_|_/ :  : \_|_/ :       : \_|_/ :
+          Resource  : \_|_/ :  : \_|_/ :       : \_|_/ :
                     ....|....  ....|....       ....|....
                     ....|....  ....|....       ....|....
-                    :  _|_  :  :  _|_  :  ...  :  _|_  :
-             Topic  : /   \ :  : /   \ :       : /   \ :
-              Data  : \___/ :  : \___/ :       : \___/ :
+             Topic  :  _|_  :  :  _|_  :  ...  :  _|_  :
+              Data  : /   \ :  : /   \ :       : /   \ :
+          Resource  : \___/ :  : \___/ :       : \___/ :
                     :.......:  :.......:       :.......:
+                   \_________/\_________/ ... \_________/
                      topic 1    topic 2         topic n
 ~~~~~~~~~~~
-{: #fig-topic title='Configuration and Data resources of a topic' artwork-align="center"}
+{: #fig-topic title='Topic and topic-data resources of a topic' artwork-align="center"}
 
 ## Collection Representation
 
