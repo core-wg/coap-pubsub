@@ -17,9 +17,9 @@
         - [x] broker
         - [x] topic
     - Topic Collection interactions
-        - [ ] Fix examples
+        - [x] Fix examples
         - [x] get all
-        - [ ] fetch
+        - [x] fetch
             - MT,CB: Mostly "selection" = selecting a subset of the entries in the collection
                 - ... WHERE ...
             - JJ: "Retrieve links to topic-data collection resources whose property X has a value that matches with the specified one
@@ -27,7 +27,7 @@
         - [x] post/create
     - Topic Resource interactions
         - Topic Resource = Topic configuration plus other information on a topic
-        - [ ] Fix examples
+        - [x] Fix examples
         - [x] get
         - [x] fetch [projection? ]
             - CB: Mostly "projection" = selecting a subset of the properties 
@@ -44,17 +44,17 @@
     - [x] Pubs sub general process
     - [x] Topic Lifecycle
     - [ ] Topic data interaction image 2.7
-    - [ ] Fix examples
+    - [x] Fix examples
     - CB: Senml, IPSO bare data
     - [x] Publish
     - [x] Subscribe
-    - [ ] Unsubscribe. Maybe a bit thin. Missing example.
-    - [ ] Delete. Maybe a bit thin. Missing example
-        - [ ] send 404s to all subs (show example, no new content)
+    - [x] Unsubscribe. Maybe a bit thin. Missing example.
+    - [x] Delete. Maybe a bit thin. Missing example
+        - [x] send 404s to all subs (show example, no new content)
     - [x] Read latest data
 - **Support Sections**
-    - [ ] Remove Section: Uri Templates (empty)
-    - [ ] Pubsub Parameters (need to check)
+    - [x] Remove Section: Uri Templates (empty)
+    - [x] Pubsub Parameters (need to check)
     - [ ] Security Considerations (empty)
     - [ ] IANA -> TBD for now (need to check)
 

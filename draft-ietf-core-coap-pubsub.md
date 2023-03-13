@@ -136,8 +136,8 @@ Topic data interactions are publish, subscribe, unsubscribe, read and are orient
 ~~~~~~~~~~~
              ___
    Topic    /   \
-Collection  \___/
-                 \
+ Collection \___/
+  Resource       \
                   \____________________
                    \___    \___        \___
                    /   \   /   \  ...  /   \        Topic
@@ -152,10 +152,10 @@ The Broker exports a topic-collection resource, with resource type "core.ps.coll
 The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}). Each topic has a topic and a topic data resources. The topic resource is used by a client creating or administering a topic. The topic data resource is used by the publishers and the subscribers to a topic.
 
 ~~~~~~~~~~~
-               ___
-       Topic  /   \
-  Collection  \___/
-                  \
+              ___
+    Topic    /   \
+  Collection \___/
+   Resource       \
                    \___________________________
                     \          \               \
                      \ ......   \ ......        \ ......
@@ -720,12 +720,6 @@ Example:
    }
 ~~~~~~~~~~~
 
-# URI Templates
-
-<!-- TBD: Maybe we want a section of the uri templates that could be used but that are not mandatory (nor recommended) to use in any case and are there just for example illustration
-
-Also put an example in which the topic configuration is hosted on one server and the topic data on another, to illustrate why discovery is always a must-->
-
 # CoAP Pubsub Parameters {#pubsub-parameters}
 
 This document defines parameters used in the messages exchanged between a client and the broker during the topic creation and configuration process (see {{topic-resource-representation}}). The table below summarizes them and specifies the CBOR key to use instead of the full descriptive name.
@@ -753,6 +747,8 @@ Note that the media type application/core-pubsub+cbor MUST be used when these pa
 TBD.
 
 # IANA Considerations {#iana}
+
+TBD.
 
 This document registers one attribute value in the Resource Type (rt=) registry
 established with {{!RFC6690}} and appends to the definition of one CoAP Response Code in the CoRE Parameters Registry.
