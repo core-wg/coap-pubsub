@@ -213,7 +213,21 @@ Unless specified otherwise, these are defined in this document and their CBOR ab
 
 #### Default Values
 
-TBD
+Below are the defined default values for the topic parameters:
+
+* 'topic_name': There is no default value. This field is required and must be specified by the client or broker.
+
+* 'topic_data': There is no default value. This field is required and must be specified by the client or broker.
+
+* 'resource_type': The default value is "core.ps.conf".
+
+* 'media_type': The default value is an empty string, indicating that no media type is specified.
+
+* 'target_attribute': The default value is an empty string, indicating that no attribute is specified.
+
+* 'expiration_date': The default value is an empty string, indicating that no expiration date is specified. If this field is not present, the topic will not expire automatically.
+
+* 'max_subscribers': The default value is -1, indicating that there is no limit to the number of subscribers allowed. If this field is not present, the pubsub system will not limit the number of subscribers for the topic.
 
 ## Discovery
 
