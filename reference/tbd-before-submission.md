@@ -1,7 +1,7 @@
 # Final Pass
 
 - **Introduction**
-    - [ ] Terminology. Since we made the `topic_data_uri` part of the topic configuration, we implicitly made the term `topic` = `topic-configuration` . Should I remove the term topic-configuration and just `topic` or say that they are used as synonyms in the document?
+    - [x] Terminology. Since we made the `topic_data_uri` part of the topic configuration, we implicitly made the term `topic` = `topic-configuration` . Should I remove the term topic-configuration and just `topic` or say that they are used as synonyms in the document?
         - CB: keep word topic for the abstract concept. "Topic resource", "Topic Data Resource".
         - CB,MT: change title: "A publish-subscribe architecture for the Constrained....", and abstract, and many other places
     - [x] Architecture and Managing Topics

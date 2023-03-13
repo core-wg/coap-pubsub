@@ -68,8 +68,6 @@ For these nodes, the client/server-oriented architecture of REST can be challeng
 
 This document applies the idea of publish-subscribe to Constrained RESTful Environments. It introduces a broker that allows to create, discover subscribe and publish on topics. The broker enables store-and-forward data exchange between CoAP endpoints, thereby facilitating the communication of nodes with limited reachability, providing simple many-to-many communication, and easing integration with other publish/subscribe systems.
 
-<!-- TBD once concluded the main drafting, verify every single example, specially the part of the topic configuration representation and the cbor-diag-->
-
 ## Requirements Language
 
 {::boilerplate bcp14-tagged}
@@ -179,7 +177,7 @@ The configuration side of a "publish/subscribe broker" consists of a collection 
 
 Each topic resource is represented as a link, where the link target is the URI of the topic resource.
 
-Each topic-data is represented as a link, where the link target is the URI of the topic-data resource. A topic-data link is an entry within the topic resource called 'topic_data_uri' (see {{configuration-properties}}).
+Each topic-data is represented as a link, where the link target is the URI of the topic-data resource. A topic-data link is an entry within the topic resource called 'topic_data' (see {{topic-properties}}).
 
 The list can be represented as a Link Format document {{RFC6690}}. The link to each topic resource specifies the link target attribute 'rt' (Resource Type), with value "core.pubsub.conf" defined in this document.
 
@@ -187,44 +185,29 @@ The list can be represented as a Link Format document {{RFC6690}}. The link to e
 
 A CoAP client can create a new topic by submitting an initial configuration for the topic (see {{topic-create}}). It can also read and update the configuration of existing topics and delete them when they are no longer needed (see {{topic-resource-interactions}}).
 
-The configuration of a topic itself consists of a set of properties. These fall into one of two categories: configuration properties and status properties.
+The configuration of a topic itself consists of a set of properties that can be set by a client or by the broker.
 
-Configuration properties can be set by a client and describe the desired configuration of a topic. Status properties are read-only, managed by the server, and provide information about the actual status of a topic.
-
-When a client submits a configuration to create a new topic or update an existing topic, it can only submit configuration properties. When a server returns the configuration of a topic, it returns both the configuration properties and the status properties of the topic.
-
-<!-- TBD New properties
-data persistence: do we want the broker to cache some of the last resource representations? how long? Do we have opinions on message size too?
-qos: do we want to reflect similar qos properties as mqtt does too?
-limits: do we limit the amount of subscribers? message size, memory use?
-security: tls, authentication (who can subscribe or publish), access control, oscore... -->
-
-### Configuration Properties {#configuration-properties}
+### Topic Properties {#topic-properties}
 
 The CBOR map includes the following configuration parameters, whose CBOR abbreviations are defined in {{pubsub-parameters}} of this document.
 
-* 'topic_name', with value the topic name encoded as a CBOR text string.
+* 'topic_name': A required field used as an application identifier. It encodes the topic name as a CBOR text string. Examples of topic names include human-readable strings (e.g., "room2"), UUIDs, or other values.
 
-* 'topic_data_uri', with value the URI of the topic data resource for subscribing to a pubsub topic encoded as a CBOR text string.
+* 'topic_data': A required field containing the CoAP URI of the topic data resource for subscribing to a pubsub topic. It encodes the URI as a CBOR text string.
 
-* 'rt', with value the resource type "core.ps.conf" associated with topic resources, encoded as a CBOR text string
+* 'resource_type': A required field used to indicate the resource type associated with topic resources. It encodes the resource type as a CBOR text string. The value should be "core.ps.conf".
 
-<!-- TBD ACE goes out of the doc and is added as a extensible property coming from ACE. I just add an IANA ref to that.
-Discovery as a function of the authorization status of the client -->
+* 'media_type': An optional field used to indicate the media type of the topic data resource. It encodes the media type as a CBOR text string. Example media types include "application/json".
 
-<!-- ace goes out-->
-<!-- v* 'as_uri', with value the URI of the Authorization Server associated with the Group Manager for the topic, encoded as a CBOR text string. Candidate clients that can configure topics will have to obtain an Access Token from that Authorization Server, before starting the topic configuration or creation.-->
-<!-- * 'ace-pubsub-profile'?? TBD-->
+* 'target_attribute': An optional field used to indicate the attribute or property of the topic_data resource. It encodes the attribute as a CBOR text string. Example attributes include "temperature".
 
-### Status Properties
+* 'expiration_date': An optional field used to indicate the expiration date of the topic. It encodes the expiration date as a CBOR text string. The value should be a date string in ISO 8601 format (e.g., "2023-03-31T23:59:59Z"). The pubsub system can use this field to automatically remove topics that are no longer valid.
 
-The CBOR map includes the following status parameters, whose CBOR abbreviations are defined in {{pubsub-parameters}} of this document.
-
-* 'conf_filter', is a CBOR map containing a CBOR array and with CBOR abbreviation defined in {{pubsub-parameters}}. It is used with FETCH when retrieving a partial representation of a topic resource (see {{topic-fetch-resource}}).
+* 'max_subscribers': An optional field used to indicate the maximum number of subscribers allowed for the topic. It encodes the maximum number as a CBOR integer. If this field is not present, there is no limit to the number of subscribers allowed. The pubsub system can use this field to limit the number of subscribers for a topic.
 
 ### Topic Resource Representation {#topic-resource-representation}
 
-A topic is represented as a CBOR map containing the configuration properties and status properties of the topic as top-level elements.
+A topic is represented as a CBOR map containing the configuration properties of the topic as top-level elements.
 
 Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in {{pubsub-parameters}}.
 
@@ -266,7 +249,7 @@ The interactions with topic collections are further defined in {{topic-collectio
 
 A topic collection is a group of topic resources that define the properties of the topics themselves (see Section {{topic-resource-representation}}). Each topic resource is represented as a link to its corresponding resource URI. The list can be represented as a Link Format document {{?RFC6690}}. Topic resources are identified by the resource type "core.ps.conf".
 
-Within each topic resource there is a set of configuration properties (see Section {{configuration-properties}}). The 'topic_data_uri' property contains the URI of the topic data resource that a CoAP client can subscribe to. Resources exposing resources of the topic data type are expected to use the resource type 'core.ps.data'.
+Within each topic resource there is a set of configuration properties (see Section {{topic-properties}}). The 'topic_data_uri' property contains the URI of the topic data resource that a CoAP client can subscribe to. Resources exposing resources of the topic data type are expected to use the resource type 'core.ps.data'.
 
 ## Topic Collection Interactions {#topic-collection-interactions}
 
@@ -429,7 +412,7 @@ response is cbor
 
 A client can read the configuration of a topic by making a FETCH request to the topic resource URI with a filter for specific parameters. This is done in order to retrieve part of the current topic resource.
 
-The request contains a CBOR map with a configuration filter or 'conf_filter', a CBOR array and with CBOR abbreviation defined in {{pubsub-parameters}}. Each element of the array specifies one requested configuration parameter or status parameter of the current topic resource (see {{topic-resource-representation}}).
+The request contains a CBOR map with a configuration filter or 'conf_filter', a CBOR array with CBOR abbreviation. Each element of the array specifies one requested configuration parameter of the current topic resource (see {{topic-resource-representation}}).
 
 On success, the server returns a 2.05 (Content) response with a representation of the topic resource. The response has as payload the partial representation of the topic resource as specified in {{topic-resource-representation}}.
 
@@ -590,7 +573,7 @@ TBD: intro and image that shows a topic data URI hosted in a different endpoint 
 
 A topic must have been created in order to publish data to it (See Section {{topic-create}}) and be in the fully created state in order to the publish operation to work.
 
-A client can publish data to a topic by submitting the data in a PUT request to the topic data URI. The topic data URI is indicated by the status property of type <http://coreapps.org/pubsub#data> in the topic resource. Please note that the topic data URI is not the same as the topic URI.
+A client can publish data to a topic by submitting the data in a PUT request to the topic data URI. The topic data URI is indicated by the property of type <http://coreapps.org/pubsub#data> in the topic resource. Please note that the topic data URI is not the same as the topic URI.
 
 <!-- change <http://coreapps.org/pubsub#data> TBD-data  once defined in the configuration section-->
 
