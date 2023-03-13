@@ -1,6 +1,6 @@
 ---
-title: "Publish-Subscribe Broker for the Constrained Application Protocol (CoAP)"
-abbrev: "Publish-Subscribe Broker for CoAP"
+title: "A publish-subscribe architecture for the Constrained Application Protocol (CoAP)"
+abbrev: "A publish-subscribe architecture for CoAP"
 category: std
 
 docname: draft-ietf-core-coap-pubsub-latest
@@ -21,8 +21,8 @@ keyword:
 author:
 - ins: M. Koster
   name: Michael Koster
-  organization: SmartThings
-  email: Michael.Koster@smartthings.com
+  organization: Unaffiliated
+  email: michaeljohnkoster@gmail.com
 
 - ins: A. Keranen
   name: Ari Keranen
