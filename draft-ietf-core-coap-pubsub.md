@@ -35,7 +35,7 @@ normative:
   RFC8516:
   RFC9167:
 informative:
-  RFC5988:
+  RFC8288:
   I-D.hartke-t2trg-coral-pubsub:
   I-D.ietf-ace-oscore-gm-admin:
 
@@ -62,7 +62,7 @@ This document applies the idea of publish-subscribe to Constrained RESTful Envir
 ## Terminology {#terminology}
 
 This specification requires readers to be familiar with all the terms and
-concepts that are discussed in {{?RFC5988}} and {{!RFC6690}}. Readers
+concepts that are discussed in {{?RFC8288}} and {{!RFC6690}}. Readers
 should also be familiar with the terms and concepts discussed in
 {{!RFC7252}} and {{!RFC9167}}. The URI template
 format {{!RFC6570}} is used to describe the REST API defined in
