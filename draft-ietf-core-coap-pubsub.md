@@ -263,7 +263,7 @@ The interactions with topic collections are further defined in {{topic-collectio
 
 A topic collection is a group of topic resources that define the properties of the topics themselves (see Section {{topic-resource-representation}}). Each topic resource is represented as a link to its corresponding resource URI. The list can be represented as a Link Format document {{?RFC6690}}. Topic resources are identified by the resource type "core.ps.conf".
 
-Within each topic resource there is a set of configuration properties (see Section {{topic-properties}}). The 'topic_data_uri' property contains the URI of the topic data resource that a CoAP client can subscribe to. Resources exposing resources of the topic data type are expected to use the resource type 'core.ps.data'.
+Within each topic resource there is a set of configuration properties (see Section {{topic-properties}}). The 'topic_data' property contains the URI of the topic data resource that a CoAP client can subscribe to. Resources exposing resources of the topic data type are expected to use the resource type 'core.ps.data'.
 
 ## Topic Collection Interactions {#topic-collection-interactions}
 
@@ -347,7 +347,7 @@ If a topic manager is present in the broker, the topic creation  may require man
 
 The broker MUST respond with a 4.00 (Bad Request) error if any received parameter is specified multiple times, invalid or not recognized.
 
-A CoAP endpoint creating a topic may specify a 'topic_data' URI different than that used by the broker. The broker may then simply forward observation requests the topic_data_uri
+A CoAP endpoint creating a topic may specify a 'topic_data' URI different than that used by the broker. The broker may then simply forward the observation requests to the 'topic_data' URI.
 
 If the 'topic_data' is empty the broker will assign a resource for a publisher to publish to.
 
@@ -369,7 +369,7 @@ If the 'topic_data' is empty the broker will assign a resource for a publisher t
    TBD (this should be a CBOR map)
    {
      "topic_name" : "living_room_sensor",
-     "topic_data_uri" : "coap://[2001:db8::2]/ps/tc/h9392"
+     "topic_data" : "coap://[2001:db8::2]/ps/tc/h9392"
      "resource_type" : "core.ps.conf"
    }
 ~~~~~~~~~~~
@@ -406,7 +406,7 @@ Example:
    Content-Format: TBD2 (application/core-pubsub+cbor)
    {
       "topic_name" : "living_room_sensor",
-      "topic_data_uri" : "coap://[2001:db8::2]/ps/tc/h9392",
+      "topic_data" : "coap://[2001:db8::2]/ps/tc/h9392",
       "resource_type": "core.ps.conf",
       "media_type": "application/senml-cbor",
       "target_attribute": "temperature",
@@ -440,22 +440,19 @@ Example:
 
 ~~~~~~~~~~~
 => 0.05 FETCH
-   Uri-Path: pubsub
-   Uri-Path: topics
-   Uri-Path: 1234
+   Uri-Path: ps
+   Uri-Path: tc
+   Uri-Path: h9392
    Content-Format: TBD2 (application/core-pubsub+cbor)
-   TBD (this should be a CBOR map)
    {
-     "conf_filter" : [foo,
-                      bar",]
+     "conf_filter" : [topic_data, media_type]
    }
 
 <= 2.05 Content
    Content-Format: TBD2 (application/core-pubsub+cbor)
-   TBD (this should be a CBOR map)
    {
-     "foo" : 10,
-     "bar" : 5
+     "topic_data" : "coap://[2001:db8::2]/ps/tc/h9392",
+     "media_type": "application/senml-cbor"
    }
 
 ~~~~~~~~~~~
@@ -473,21 +470,23 @@ A client can update the configuration of a topic by submitting the representatio
 
 <!-- TBD details need to be added once the configuration resource structure is defined-->
 
-On success, the server returns a 2.04 (Updated) response.
+On success, the server returns a 2.04 (Changed) response and the current full resource representation. The broker may chose not to overwrite parameters that are not explicitly modified in the request.
 
 Example:
 
 ~~~~~~~~~~~
 => 0.03 PUT
-   Uri-Path: pubsub
-   Uri-Path: topics
-   Uri-Path: 1234
+   Uri-Path: ps
+   Uri-Path: tc
+   Uri-Path: h9392
    Content-Format: TBD2 (application/core-pubsub+cbor)
 
-   TBD (this should be a CBOR map)
    {
-     "foo" : 11,
-     "bar" : 5
+      "topic_name" : "living_room_sensor",
+      "topic_data" : "coap://[2001:db8::2]/ps/tc/h9392",
+      "target_attribute": "temperature",
+      "expiration_date": "2023-04-28T23:59:59Z",
+      "max_subscribers": 2
    }
 
 <= 2.04 Changed
@@ -495,20 +494,15 @@ Example:
 
    TBD (this should be a CBOR map)
    {
-     "foo" : 11,
-     "bar" : 5
+      "topic_name" : "living_room_sensor",
+      "topic_data" : "coap://[2001:db8::2]/ps/tc/h9392",
+      "resource_type": "core.ps.conf",
+      "media_type": "application/senml-cbor",
+      "target_attribute": "temperature",
+      "expiration_date": "2023-04-28T23:59:59Z",
+      "max_subscribers": 2
    }
-
 ~~~~~~~~~~~
-
-<!--### Partial update of a topic Configuration {#topic-update-resource} -->
-
-<!--
-PATCH to /topic-conf
-rewrite few parameters
-request is cbor
-response is cbor
--->
 
 ### Deleting a Topic Resource {#topic-delete}
 
@@ -744,7 +738,7 @@ Note that the media type application/core-pubsub+cbor MUST be used when these pa
 | Name            | CBOR Key  | CBOR Type    | Reference  |
 |-----------------|-----------|--------------|------------|
 | topic_name      | TBD1      | tstr         | [RFC-XXXX] |
-| topic_data_uri  | TBD2      | tstr         | [RFC-XXXX] |
+| topic_data      | TBD2      | tstr         | [RFC-XXXX] |
 | resource_type   | TBD3      | tstr         | [RFC-XXXX] |
 | media_type      | TBD4      | tstr (opt)   | [RFC-XXXX] |
 | target_attribute| TBD5      | tstr (opt)   | [RFC-XXXX] |
