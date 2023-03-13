@@ -86,25 +86,19 @@ this specification.
 This specification makes use of the following terminology:
 
 publish-subscribe (pub/sub):
-: A messaging paradigm where messages are published to a Broker and potential receivers can subscribe to the Broker to receive messages. The publishers do not (need to) know where the message will be eventually sent: the publications and subscriptions are matched by a Broker and publications are delivered by the Broker to subscribed receivers.
+: A messaging paradigm in which messages are published to a broker, and potential receivers can subscribe to the broker to receive messages. Publishers do not need to know where the message will be eventually sent. The broker matches publications and subscriptions, and delivers publications to subscribed receivers.
 
-publish-subscribe broker:
-: A CoAP server capable of receiving messages (publications) from CoAP clients acting as publishers and forwarding them to CoAP clients acting as subscribers.
+publishers and subscribers:
+: CoAP clients can act as publishers or as subscribers. Publishers create topics and send CoAP messages (publications) to the broker on specific topics. Subscribers have an ongoing observation relation (subscription) to a topic. Publishers and subscribers do not need to have any knowledge of each other, but they must share the topic they are publishing and subscribing to.
 
-CoAP client (publisher or subscriber):
-: CoAP clients can act as publishers or as subscribers. Publishers send CoAP messages to the Broker on specific topics. Subscribers have an ongoing observation relation (subscription) to a topic. Neither publishers nor subscribers need to have any knowledge of each other; they just have to share the topic they are publishing and subscribing to.
+topic resource:
+: An entry within a topic collection in a broker. Topics are created and configured before any data can be published.  CoAP clients can propose new topics to be created, but it is up to the broker to decide whether and how a topic is created. The broker also decides the URI of each topic. The creation, configuration, and discovery of topics at a broker are specified in {{topics}}. Interactions about the topic data are in {{topic-data-interactions}}.
 
-Broker:
-: In this specification a broker is a CoAP server that is hosting one or more topic collections. A Broker uses the topics to match subscriptions to publications. The broker is responsible for the store-and-forward of state update representations between CoAP clients acting as subscribers and those CoAP clients acting as publishers.
+topic data resource:
+: Topic resources may contain a property called "topic data". The topic data resource is a CoAP URI used by publishers and subscribers to publish (POST) and subscribe (GET with Observe) to data (see {{topics}}).
 
-topic:
-: A resource within a topic collection in a broker. An unique identifier for a particular item being published and/or subscribed to. A reference to a topic on a Broker is a valid CoAP URI. Topics are created and configured before any data can be published. Clients may propose new topics to be created; however, it is up to the broker to choose if and how a topic is created. The broker also decides the URI of each topic. Topics are represented as a resource collection. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}. Interactions about the topic data are in {{topic-data-interactions}}.
-
-topic configuration:
-: Every topic is composed of a topic configuration resource which is used by a client to create, configure, update and delete the configuration of topics (see {#topics}).
-
-topic data:
-: topic configurations may contain a property called topic data. The topic data resource is used by publishers and subscribers to publish (POST) and subscribe (GET with Observe) to data (see {#topics}).
+broker:
+: A CoAP server that hosts one or more topic collections containing topic resources. The broker is responsible for the store-and-forward of state update representations when the topic data URI points to a resource hosted on the broker. The broker is also responsible of handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
 
 ## CoAP Publish-Subscribe Architecture
 
