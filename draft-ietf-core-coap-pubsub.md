@@ -736,12 +736,14 @@ Note that the media type application/core-pubsub+cbor MUST be used when these pa
 ~~~~~~~~~~~
 +-----------------+-----------+--------------+------------+
 | Name            | CBOR Key  | CBOR Type    | Reference  |
-+-----------------+-----------+--------------+------------+
+|-----------------|-----------|--------------|------------|
 | topic_name      | TBD1      | tstr         | [RFC-XXXX] |
-+-----------------+-----------+--------------+------------+
 | topic_data_uri  | TBD2      | tstr         | [RFC-XXXX] |
-+-----------------+-----------+--------------+------------+
-| conf_filter     | TBD3      | array        | [RFC-XXXX] |
+| resource_type   | TBD3      | tstr         | [RFC-XXXX] |
+| media_type      | TBD4      | tstr (opt)   | [RFC-XXXX] |
+| target_attribute| TBD5      | tstr (opt)   | [RFC-XXXX] |
+| expiration_date | TBD6      | tstr (opt)   | [RFC-XXXX] |
+| max_subscribers | TBD7      | uint (opt)   | [RFC-XXXX] |
 +-----------------+-----------+--------------+------------+
 ~~~~~~~~~~~
 {: #fig-CoAP-Pubsub-Parameters title="CoAP Pubsub Parameters" artwork-align="center"}
