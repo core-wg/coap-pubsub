@@ -197,7 +197,7 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 * 'resource_type': A required field used to indicate the resource type associated with topic resources. It encodes the resource type as a CBOR text string. The value should be "core.ps.conf".
 
-* 'media_type': An optional field used to indicate the media type of the topic data resource. It encodes the media type as a CBOR text string. Example media types include "application/json".
+* 'media_type': An optional field used to indicate the media type of the topic data resource. It encodes the media type as a CBOR text string (e.g.,"application/json").
 
 * 'target_attribute': An optional field used to indicate the attribute or property of the topic_data resource. It encodes the attribute as a CBOR text string. Example attributes include "temperature".
 
@@ -250,7 +250,7 @@ Example:
 
 
 <= 2.05 Content
-    </ps/>;rt=core.ps;ct=40
+    </ps>;rt=core.ps;ct=40
 ~~~~~~~~~~~
 
 ### Topic Discovery {#topic-discovery}
@@ -291,9 +291,8 @@ Example:
 
 <= 2.05 Content
    Content-Format: 40 (application/link-format)
-   <coap://base-url/ps/tc/a>rt="core.ps.conf",
-   <coap://base-url/ps/tc/b>rt="core.ps.conf",
-   <coap://base-url/ps/tc/c>rt="core.ps.conf"
+   </ps/temperature>;rt="core.ps.conf",
+   </ps/humidity>;rt="core.ps.conf"
 ~~~~~~~~~~~
 
 ### Getting Topics by Properties {#topic-get-properties}
@@ -320,12 +319,13 @@ Example:
    Content-Format: TBD (application/pubsub+cbor)
 
    {
-       "topic_name" : a
+      "target_attribute" : temperature
    }
 
 <= 2.05 Content
    Content-Format: 40 (application/link-format)
-   <coap://base-url/ps/tc/a>rt="core.ps.conf"
+   </ps/temperature>rt="core.ps.conf"
+   </ps/temperature2>rt="core.ps.conf"
 ~~~~~~~~~~~
 
 ### Creating a Topic {#topic-create}
@@ -341,40 +341,36 @@ A client can add a new topic to a collection of topics by submitting a represent
 
 The topic specification sent in the payload should use a supported serialization of the CoRE link format {{!RFC6690}} but other serializations like {{?I-D.ietf-core-coral}} may be used in the future.
 
-On success, the server returns a 2.01 (Created) response indicating the topic URI of the new topic.
+On success, the server returns a 2.01 (Created) response indicating the topic URI of the new topic and the current representation of the topic resource.
 
-If a topic manager (TBD) is present in the broker, the topic creation  may require manager approval subject to certain conditions (TBD). If the conditions are not fulfilled, the manager MUST respond with a 4.03 (Forbidden) error. The response MUST have Content-Format set to "application/core-pubsub+cbor".
+If a topic manager is present in the broker, the topic creation  may require manager approval subject to certain conditions. If the conditions are not fulfilled, the manager MUST respond with a 4.03 (Forbidden) error. The response MUST have Content-Format set to "application/core-pubsub+cbor".
 
-The broker MUST respond with a 4.00 (Bad Request) error in the following scenarios:
+The broker MUST respond with a 4.00 (Bad Request) error if any received parameter is specified multiple times, invalid or not recognized.
 
-- If any received parameter is specified multiple times, invalid or not recognized (malformed).
+A CoAP endpoint creating a topic may specify a 'topic_data' URI different than that used by the broker. The broker may then simply forward observation requests the topic_data_uri
 
-- If the Authorization Server with URI specified in the 'as_uri' parameter is not trusted and there is no alternative AS.
-
-<!-- TBD a coap endpoint creating a topic may specify topic_data_uri different than that used by the broker. The broker may then simply forward observation requests the topic_data_uri
-
-if the topic_data_uri is empty the broker will assign
--->
+If the 'topic_data' is empty the broker will assign a resource for a publisher to publish to.
 
 ~~~~~~~~~~~
 => 0.02 POST
    Uri-Path: pubsub
    Uri-Path: topics
    Content-Format: TBD2 (application/core-pubsub+cbor)
-   TBD (this should be a CBOR map)
+   TBD (this should be a CBOR map with the mandatory parameters)
    {
-     "topic_name" : sensor23
+     "topic_name" : "living_room_sensor"
+     "resource_type" : "core.ps.conf"
    }
 
 <= 2.01 Created
-   Location-Path: pubsub
-   Location-Path: sensor23
+   Location-Path: ps/h9392
    Content-Format: TBD2 (application/core-pubsub+cbor)
 
    TBD (this should be a CBOR map)
    {
-     "topic_name" : "sensor23",
-     "topic_data_uri" : "coap://mybroker/td/sensor23"
+     "topic_name" : "living_room_sensor",
+     "topic_data_uri" : "coap://[2001:db8::2]/ps/h9392"
+     "resource_type" : "core.ps.conf"
    }
 ~~~~~~~~~~~
 
@@ -735,14 +731,6 @@ Also put an example in which the topic configuration is hosted on one server and
 
 # CoAP Pubsub Parameters {#pubsub-parameters}
 
-<!--
-sample topics:
- 'as_uri'
- 'topic_name'
- 'topic_data_uri'
- 'kcd'
--->
-
 This document defines parameters used in the messages exchanged between a client and the broker during the topic creation and configuration process (see {{topic-resource-representation}}). The table below summarizes them and specifies the CBOR key to use instead of the full descriptive name.
 
 Note that the media type application/core-pubsub+cbor MUST be used when these parameters are transported in the respective message fields.
@@ -792,7 +780,7 @@ https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.
 
 ## Resource Type value 'core.ps.coll'
 
-* Attribute Value: core.ps
+* Attribute Value: core.ps.coll
 
 * Description: XXX of This document
 
@@ -802,7 +790,7 @@ https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.
 
 ## Resource Type value 'core.ps.conf'
 
-* Attribute Value: core.ps
+* Attribute Value: core.ps.conf
 
 * Description: XXX of This document
 
@@ -812,7 +800,7 @@ https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.
 
 ## Resource Type value 'core.ps.data'
 
-* Attribute Value: core.ps
+* Attribute Value: core.ps.data
 
 * Description: XXX of This document
 
