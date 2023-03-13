@@ -50,7 +50,7 @@ entity:
 The Constrained Application Protocol (CoAP), and related extensions are intended
 to support machine-to-machine communication in systems where one or more
 nodes are resource constrained, in particular for low power wireless sensor
-networks. This document defines a publish-subscribe Broker for CoAP that
+networks. This document defines a publish-subscribe architecture for CoAP that
 extends the capabilities of CoAP for supporting nodes with long breaks in
 connectivity and/or up-time.
 
@@ -66,7 +66,7 @@ One important class of constrained devices includes devices that are intended to
 
 For these nodes, the client/server-oriented architecture of REST can be challenging when interactions are not initiated by the devices themselves. A publish/subscribe-oriented architecture where nodes are separated by a broker and data is exchanged via topics might fit these nodes better.
 
-This document applies the idea of a "Publish/Subscribe Broker" to Constrained RESTful Environments.  The broker enables store-and- forward data exchange between nodes, thereby facilitating the communication of nodes with limited reachability, providing simple many-to-many communication, and easing integration with other publish/subscribe systems.
+This document applies the idea of publish-subscribe to Constrained RESTful Environments. It introduces a broker that allows to create, discover subscribe and publish on topics. The broker enables store-and-forward data exchange between CoAP endpoints, thereby facilitating the communication of nodes with limited reachability, providing simple many-to-many communication, and easing integration with other publish/subscribe systems.
 
 <!-- TBD once concluded the main drafting, verify every single example, specially the part of the topic configuration representation and the cbor-diag-->
 
