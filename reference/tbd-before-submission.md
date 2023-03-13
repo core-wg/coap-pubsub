@@ -7,9 +7,9 @@
     - [x] Architecture and Managing Topics
 - **Pubsub topics**
     - Configuration properties (topic_resource)
-        - [ ] 'topic_name' (human readable field (e.g. "room2")), 'application identifier' (e.g., uuid), 'topic_data_uri', 'rt', 'target attributes' of data resource (including media type, via ct; media types available for patch)
+        - [~] 'topic_name' (human readable field (e.g. "room2")), 'application identifier' (e.g., uuid), 'topic_data_uri', 'rt', 'target attributes' of data resource (including media type, via ct; media types available for patch)
     - Status properties
-        - [ ] Default values. 
+        - [x] Default values. 
         - CB: Mention that the names used are not cast in stone and are just examples. Discovery is still needed.
         - MT, CB: maybe merged both conf and status sections. Add a 'expiration date' property, 'max-client'
 - **Discovery and Configuration**
@@ -23,7 +23,7 @@
             - MT,CB: Mostly "selection" = selecting a subset of the entries in the collection
                 - ... WHERE ...
             - JJ: "Retrieve links to topic-data collection resources whose property X has a value that matches with the specified one
-            - [ ] move to this section 'conf_filter' (part of the search, not of the resource itself)
+            - [x] move to this section 'conf_filter' (part of the search, not of the resource itself)
         - [x] post/create
     - Topic Resource interactions
         - Topic Resource = Topic configuration plus other information on a topic
