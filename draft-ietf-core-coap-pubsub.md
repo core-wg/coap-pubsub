@@ -286,13 +286,13 @@ Example:
 
 ~~~~~~~~~~~
 => 0.01 GET
-   Uri-Path: pubsub
-   Uri-Path: topics
+   Uri-Path: ps
+   Uri-Path: tc
 
 <= 2.05 Content
    Content-Format: 40 (application/link-format)
-   </ps/temperature>;rt="core.ps.conf",
-   </ps/humidity>;rt="core.ps.conf"
+   </ps/tc/temperature>;rt="core.ps.conf",
+   </ps/tc/humidity>;rt="core.ps.conf"
 ~~~~~~~~~~~
 
 ### Getting Topics by Properties {#topic-get-properties}
@@ -308,24 +308,26 @@ representation of a topic filter (see Section {{topic-fetch-resource}})  in a FE
 
 On success, the server returns a 2.05 (Content) response with a
 representation of a list of topics in the collection (see
-Section {{topic-discovery}}) that match the filter.
+Section {{topic-discovery}}) that match the filter in CoRE link format {{!RFC6690}}.
 
 Example:
 
 ~~~~~~~~~~~
 => 0.05 FETCH
-   Uri-Path: pubsub
-   Uri-Path: topics
+   Uri-Path: ps
+   Uri-Path: tc
    Content-Format: TBD (application/pubsub+cbor)
 
    {
-      "target_attribute" : temperature
+     "resource_type" : "core.ps.conf",
+     "target_attribute" : "temperature"
    }
 
 <= 2.05 Content
    Content-Format: 40 (application/link-format)
-   </ps/temperature>rt="core.ps.conf"
-   </ps/temperature2>rt="core.ps.conf"
+   </living_room_sensor>;anchor="coap://[2001:db8::2]/ps/tc/h9392",
+   </kitchen_sensor>;anchor="coap://[2001:db8::2]/ps/tc/f3192"
+
 ~~~~~~~~~~~
 
 ### Creating a Topic {#topic-create}
@@ -339,8 +341,6 @@ creator proposes topic name but broker approves
 
 A client can add a new topic to a collection of topics by submitting a representation of the initial topic resource (see Section {{topic-resource-representation}}) in a POST request to the topic collection URI.
 
-The topic specification sent in the payload should use a supported serialization of the CoRE link format {{!RFC6690}} but other serializations like {{?I-D.ietf-core-coral}} may be used in the future.
-
 On success, the server returns a 2.01 (Created) response indicating the topic URI of the new topic and the current representation of the topic resource.
 
 If a topic manager is present in the broker, the topic creation  may require manager approval subject to certain conditions. If the conditions are not fulfilled, the manager MUST respond with a 4.03 (Forbidden) error. The response MUST have Content-Format set to "application/core-pubsub+cbor".
@@ -353,8 +353,8 @@ If the 'topic_data' is empty the broker will assign a resource for a publisher t
 
 ~~~~~~~~~~~
 => 0.02 POST
-   Uri-Path: pubsub
-   Uri-Path: topics
+   Uri-Path: ps
+   Uri-Path: tc
    Content-Format: TBD2 (application/core-pubsub+cbor)
    TBD (this should be a CBOR map with the mandatory parameters)
    {
@@ -369,7 +369,7 @@ If the 'topic_data' is empty the broker will assign a resource for a publisher t
    TBD (this should be a CBOR map)
    {
      "topic_name" : "living_room_sensor",
-     "topic_data_uri" : "coap://[2001:db8::2]/ps/h9392"
+     "topic_data_uri" : "coap://[2001:db8::2]/ps/tc/h9392"
      "resource_type" : "core.ps.conf"
    }
 ~~~~~~~~~~~
@@ -398,18 +398,22 @@ Example:
 
 ~~~~~~~~~~~
 => 0.01 GET
-   Uri-Path: pubsub
-   Uri-Path: topics
-   Uri-Path: 1234
+   Uri-Path: ps
+   Uri-Path: tc
+   Uri-Path: h9392
 
 <= 2.05 Content
    Content-Format: TBD2 (application/core-pubsub+cbor)
-   TBD (this should be a CBOR map)
    {
-     "topic_name" : "1234",
-     foo
-     bar
+      "topic_name" : "living_room_sensor",
+      "topic_data_uri" : "coap://[2001:db8::2]/ps/tc/h9392",
+      "resource_type": "core.ps.conf",
+      "media_type": "application/senml-cbor",
+      "target_attribute": "temperature",
+      "expiration_date": "",
+      "max_subscribers": -1
    }
+
 ~~~~~~~~~~~
 
 ### Getting part of a topic resource by filter {#topic-fetch-resource}
