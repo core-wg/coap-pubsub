@@ -1,58 +1,49 @@
 ---
-title: "A publish-subscribe architecture for the Constrained Application Protocol (CoAP)"
-abbrev: "A publish-subscribe architecture for CoAP"
-category: std
-
-docname: draft-ietf-core-coap-pubsub-latest
-ipr: trust200902
-
-number:
-date:
-consensus: true
 v: 3
-area: "Applications and Real-Time (ART)"
-workgroup: "Constrained RESTful Environments"
-submissiontype: IETF
 
-keyword:
- - coap
- - pubsub
+docname: draft-ietf-core-coap-pubsub-12
+cat: std
+consensus: yes
+stream: IETF
+title: A publish-subscribe architecture for the Constrained Application Protocol (CoAP)
+abbrev: COREPUBSUB
+area: Applications
+wg: CoRE
+venue:
+  mail: core@ietf.org
+  github: core-wg/coap-pubsub
 
 author:
 - ins: M. Koster
   name: Michael Koster
-  organization: Unaffiliated
+  org: Unaffiliated
   email: michaeljohnkoster@gmail.com
-
 - ins: A. Keranen
   name: Ari Keranen
-  organization: Ericsson
+  org: Ericsson
   email: ari.keranen@ericsson.com
-
 - ins: J. Jimenez
   name: Jaime Jimenez
-  organization: Ericsson
+  org: Ericsson
   email: jaime@iki.fi
 
 normative:
+  RFC6570:
+  RFC6690:
   RFC7252:
   RFC7641:
-
+  RFC8516:
+  RFC9167:
 informative:
+  RFC5988:
   I-D.hartke-t2trg-coral-pubsub:
   I-D.ietf-ace-oscore-gm-admin:
 
-entity:
-  SELF: "[RFC-XXXX]"
-
 --- abstract
 
-The Constrained Application Protocol (CoAP), and related extensions are intended
-to support machine-to-machine communication in systems where one or more
-nodes are resource constrained, in particular for low power wireless sensor
-networks. This document defines a publish-subscribe architecture for CoAP that
+This document describes a publish-subscribe architecture for CoAP that
 extends the capabilities of CoAP for supporting nodes with long breaks in
-connectivity and/or up-time.
+connectivity and/or up-time. The Constrained Application Protocol (CoAP) is used by CoAP clients both to publish and to subscribe via a known topic resource.
 
 --- middle
 
@@ -60,17 +51,13 @@ connectivity and/or up-time.
 
 The Constrained Application Protocol (CoAP) {{!RFC7252}} supports
 machine-to-machine communication across networks of constrained
-devices and constrained networks {{!RFC7228}}. CoAP uses a request/response model where clients make requests to servers in order to request actions on resources. Depending on the situation the same device may act either as a server, a client, or both.
+devices and constrained networks. CoAP uses a request/response model where clients make requests to servers in order to request actions on resources. Depending on the situation the same device may act either as a server, a client, or both.
 
 One important class of constrained devices includes devices that are intended to run for years from a small battery, or by scavenging energy from their environment. These devices have limited reachability because they spend most of their time in a sleeping state with no network connectivity. Another important class of nodes are devices with limited reachability due to middle-boxes like Network Address Translators (NATs) and firewalls.
 
 For these nodes, the client/server-oriented architecture of REST can be challenging when interactions are not initiated by the devices themselves. A publish/subscribe-oriented architecture where nodes are separated by a broker and data is exchanged via topics might fit these nodes better.
 
 This document applies the idea of publish-subscribe to Constrained RESTful Environments. It introduces a broker that allows to create, discover subscribe and publish on topics. The broker enables store-and-forward data exchange between CoAP endpoints, thereby facilitating the communication of nodes with limited reachability, providing simple many-to-many communication, and easing integration with other publish/subscribe systems.
-
-## Requirements Language
-
-{::boilerplate bcp14-tagged}
 
 ## Terminology {#terminology}
 
@@ -100,6 +87,8 @@ topic-data resource:
 
 broker:
 : A CoAP server that hosts one or more topic collections containing topic resources. The broker is responsible for the store-and-forward of state update representations when the topic-data URI points to a resource hosted on the broker. The broker is also responsible of handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
+
+{::boilerplate bcp14-tagged}
 
 ## CoAP Publish-Subscribe Architecture
 
@@ -801,7 +790,7 @@ https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.
 
 * Notes: None
 
-# Acknowledgements {#acks}
+# Acknowledgements
 
 The current version of this document contains a substantial contribution by Klaus Hartke's proposal {{I-D.hartke-t2trg-coral-pubsub}}, which defines the topic resource model and structure as well as the topic lifecycle and interactions. It also follows a similar architectural design as that provided by Marco Tiloca's {{I-D.ietf-ace-oscore-gm-admin}}.
 
