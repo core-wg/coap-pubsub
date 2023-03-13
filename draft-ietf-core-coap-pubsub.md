@@ -369,7 +369,7 @@ If the 'topic_data' is empty the broker will assign a resource for a publisher t
    TBD (this should be a CBOR map)
    {
      "topic_name" : "living_room_sensor",
-     "topic_data" : "coap://[2001:db8::2]/ps/tc/h9392/data"
+     "topic_data" : "coap://[2001:db8::2]/ps/data/6578616d706c65"
      "resource_type" : "core.ps.conf"
    }
 ~~~~~~~~~~~
@@ -406,7 +406,7 @@ Example:
    Content-Format: TBD2 (application/core-pubsub+cbor)
    {
       "topic_name" : "living_room_sensor",
-      "topic_data" : "coap://[2001:db8::2]/ps/tc/h9392/data",
+      "topic_data" : "coap://[2001:db8::2]/ps/data/6578616d706c65",
       "resource_type": "core.ps.conf",
       "media_type": "application/senml-cbor",
       "target_attribute": "temperature",
@@ -451,7 +451,7 @@ Example:
 <= 2.05 Content
    Content-Format: TBD2 (application/core-pubsub+cbor)
    {
-     "topic_data" : "coap://[2001:db8::2]/ps/tc/h9392/data",
+     "topic_data" : "coap://[2001:db8::2]/ps/data/6578616d706c65",
      "media_type": "application/senml-cbor"
    }
 
@@ -481,7 +481,7 @@ Example:
 
    {
       "topic_name" : "living_room_sensor",
-      "topic_data" : "coap://[2001:db8::2]/ps/tc/h9392/data",
+      "topic_data" : "coap://[2001:db8::2]/ps/data/6578616d706c65",
       "target_attribute": "temperature",
       "expiration_date": "2023-04-28T23:59:59Z",
       "max_subscribers": 2
@@ -493,7 +493,7 @@ Example:
    TBD (this should be a CBOR map)
    {
       "topic_name" : "living_room_sensor",
-      "topic_data" : "coap://[2001:db8::2]/ps/tc/h9392/data",
+      "topic_data" : "coap://[2001:db8::2]/ps/data/6578616d706c65",
       "resource_type": "core.ps.conf",
       "media_type": "application/senml-cbor",
       "target_attribute": "temperature",
@@ -604,7 +604,7 @@ Example:
 
 ~~~~~~~~~~~
 => 0.03 PUT
-   Uri-Path: pubsub
+   Uri-Path: ps
    Uri-Path: data
    Uri-Path: 6578616d706c65
    Content-Format: 112
