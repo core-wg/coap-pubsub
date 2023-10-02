@@ -109,18 +109,18 @@ The broker is responsible for the store-and-forward of state update representati
 ~~~~ aasvg
      CoAP                      CoAP                   CoAP
      clients                  server                  clients
-   ┌───────────┐           ┌──────────┐  observe    ┌────────────┐
-   │           │ publish   │          │◀────────────│            │
-   │ publisher ├──────────▶│          ├────────────▶│ subscriber │
+   +-----------.           +----------+  observe    +------------+
+   │           │ publish   │          │◀────────────+            │
+   │ publisher +──────────▶│          ├────────────▶│ subscriber │
    │           │           │          ├────────────▶│            │
-   └───────────┘           │          │             └────────────┘
+   +-----------+           │          │             +------------+
         ┄                  │  broker  │                  ┄
         ┄                  │          │                  ┄
-   ┌───────────┐           │          │  observe    ┌────────────┐
-   │           │ publish   │          │◀────────────│            │
-   │ publisher ├──────────▶│          ├────────────▶│ subscriber │
+   +-----------+           │          │  observe    +------------+
+   │           │ publish   │          │◀────────────+            │
+   │ publisher +──────────▶│          ├────────────▶│ subscriber │
    │           │           │          ├────────────▶│            │
-   └───────────┘           └──────────┘             └────────────┘
+   +-----------+           +----------+             +------------+
 ~~~~
 {: #fig-arch title='Publish-subscribe architecture over CoAP' artwork-align="center"}
 
