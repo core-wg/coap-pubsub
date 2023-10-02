@@ -14,6 +14,10 @@ venue:
   github: core-wg/coap-pubsub
 
 author:
+- ins: J. Jimenez
+  name: Jaime Jimenez
+  org: Ericsson
+  email: jaime@iki.fi
 - ins: M. Koster
   name: Michael Koster
   org: Unaffiliated
@@ -22,10 +26,6 @@ author:
   name: Ari Keranen
   org: Ericsson
   email: ari.keranen@ericsson.com
-- ins: J. Jimenez
-  name: Jaime Jimenez
-  org: Ericsson
-  email: jaime@iki.fi
 
 normative:
   RFC6570:
