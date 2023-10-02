@@ -130,7 +130,7 @@ Topic resource interactions are discovery, create, read configuration, update co
 Topic data interactions are publish, subscribe, unsubscribe, read and are oriented on how data is transferred from a publisher to a subscriber.
 
 <!--
-Throughout the document there is a number of TBDs that need updating, mostly content formats or cbor data representations 
+Throughout the document there is a number of TBDs that need updating, mostly content formats or cbor data representations
 -->
 
 ## Managing Topics {#managing-topics}
