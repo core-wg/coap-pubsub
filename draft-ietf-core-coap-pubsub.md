@@ -251,7 +251,7 @@ Brokers SHOULD expose a link to the entry point of the pubsub API at their .well
 
 Example:
 
-~~~~~~~~~~~
+~~~~
 => GET
    Uri-Path: ./well-known/core
    Resource-Type: core.ps
@@ -259,7 +259,7 @@ Example:
 
 <= 2.05 Content
     </ps>;rt=core.ps;ct=40
-~~~~~~~~~~~
+~~~~
 
 ### Topic Discovery {#topic-discovery}
 
@@ -273,7 +273,7 @@ Within a topic, there is the 'topic_data' property containing the URI of the top
 
 Below is an example discovery via .well-known/core that returns a topic collection resource and one observable topic under it.
 
-~~~~~~~~~~~
+~~~~
 => 0.01 GET
    Uri-Path: .well-known/core
 
@@ -281,7 +281,7 @@ Below is an example discovery via .well-known/core that returns a topic collecti
    Content-Format: 40 (application/link-format)
    </ps>; rt=core.ps.coll,
    </ps/4f17f5>; ct=application/link-format; rt=core.ps.conf; obs
-~~~~~~~~~~~
+~~~~
 
 ## Topic Collection Interactions {#topic-collection-interactions}
 
@@ -297,7 +297,7 @@ Depending on the permission set each client MAY receive a different list of topi
 
 Example:
 
-~~~~~~~~~~~
+~~~~
 => 0.01 GET
    Uri-Path: ps
 
@@ -305,7 +305,7 @@ Example:
    Content-Format: 40 (application/link-format)
    </ps/temperature>;rt="core.ps.conf",
    </ps/humidity>;rt="core.ps.conf"
-~~~~~~~~~~~
+~~~~
 
 ### Getting Topics by Properties {#topic-get-properties}
 <!--
@@ -328,7 +328,7 @@ Example:
 TODO: this example and why I was using /ps/tc, tc seems redundant
 -->
 
-~~~~~~~~~~~
+~~~~
 => 0.05 FETCH
    Uri-Path: ps
    Content-Format: TBD (application/pubsub+cbor)
@@ -343,7 +343,7 @@ TODO: this example and why I was using /ps/tc, tc seems redundant
    </living_room_sensor>;anchor="coap://[2001:db8::2]/ps/h9392";rt="core.ps.conf",
    </kitchen_sensor>;anchor="coap://[2001:db8::2]/ps/f3192";rt="core.ps.conf",
 
-~~~~~~~~~~~
+~~~~
 
 ### Creating a Topic {#topic-create}
 <!--
@@ -369,7 +369,7 @@ If a topic manager is present in the broker, the topic creation  may require man
 
 The broker MUST respond with a 4.00 (Bad Request) error if any received parameter is specified multiple times, invalid or not recognized.
 
-~~~~~~~~~~~
+~~~~
 => 0.02 POST
    Uri-Path: ps
    Content-Format: TBD2 (application/core-pubsub+cbor)
@@ -389,7 +389,7 @@ The broker MUST respond with a 4.00 (Bad Request) error if any received paramete
      "topic_data" : "ps/data/1bd0d6d"
      "resource_type" : "core.ps.conf"
    }
-~~~~~~~~~~~
+~~~~
 
 ## Topic Resource Interactions {#topic-resource-interactions}
 
@@ -413,7 +413,7 @@ The response payload is a CBOR map, whose possible entries are specified in {{to
 
 For example, below is a request on the topic "ps/h9392":
 
-~~~~~~~~~~~
+~~~~
 => 0.01 GET
    Uri-Path: ps
    Uri-Path: h9392
@@ -430,7 +430,7 @@ For example, below is a request on the topic "ps/h9392":
       "max_subscribers": 100
    }
 
-~~~~~~~~~~~
+~~~~
 
 ### Getting part of a topic resource by filter {#topic-fetch-resource}
 <!--
@@ -454,7 +454,7 @@ Both request and response MUST have Content-Format set to "application/core-pubs
 
 Example:
 
-~~~~~~~~~~~
+~~~~
 => 0.05 FETCH
    Uri-Path: ps
    Uri-Path: h9392
@@ -470,7 +470,7 @@ Example:
      "media_type": "application/senml-cbor"
    }
 
-~~~~~~~~~~~
+~~~~
 
 ### Updating the Topic Resource {#topic-update-resource}
 
@@ -489,7 +489,7 @@ Note that updating the "topic_data" path will automatically cancel all existing 
 
 Example:
 
-~~~~~~~~~~~
+~~~~
 => 0.03 PUT
    Uri-Path: ps
    Uri-Path: h9392
@@ -516,7 +516,7 @@ Example:
       "expiration_date": "2023-04-28T23:59:59Z",
       "max_subscribers": 2
    }
-~~~~~~~~~~~
+~~~~
 
 ### Deleting a Topic Resource {#topic-delete}
 
@@ -528,13 +528,13 @@ When a topic resource is deleted, the broker SHOULD also delete the topic data r
 
 Example:
 
-~~~~~~~~~~~
+~~~~
 => 0.04 DELETE
    Uri-Path: ps
    Uri-Path: h9392
 
 <= 2.02 Deleted
-~~~~~~~~~~~
+~~~~
 
 ## Publish/Subscribe {#pubsub}
 
@@ -625,7 +625,7 @@ If the client is sending publications too fast, the server returns a
 
 Example of first publication:
 
-~~~~~~~~~~~
+~~~~
 => 0.03 PUT
    Uri-Path: ps
    Uri-Path: data
@@ -640,11 +640,11 @@ Example of first publication:
    }
 
 <= 2.01 Created
-~~~~~~~~~~~
+~~~~
 
 Example of subsequent publication:
 
-~~~~~~~~~~~
+~~~~
 => 0.03 PUT
    Uri-Path: ps
    Uri-Path: data
@@ -659,7 +659,7 @@ Example of subsequent publication:
    }
 
 <= 2.04 Updated
-~~~~~~~~~~~
+~~~~
 
 ### Subscribe {#subscribe}
 
@@ -683,7 +683,7 @@ If the 'max_clients' parameter has been reached, the server must treat that as s
 
 Example:
 
-~~~~~~~~~~~
+~~~~
 => 0.01 GET
    Uri-Path: ps
    Uri-Path: data
@@ -710,7 +710,7 @@ Example:
    Max-Age: 15
 
    [...SenML data...]
-~~~~~~~~~~~
+~~~~
 
 ### Unsubscribe {#unsubscribe}
 
@@ -726,14 +726,14 @@ When a topic_data resource is deleted, the broker SHOULD also delete the 'topic_
 
 Example:
 
-~~~~~~~~~~~
+~~~~
 => 0.04 DELETE
    Uri-Path: ps
    Uri-Path: data
    Uri-Path: 1bd0d6d
 
 <= 2.02 Deleted
-~~~~~~~~~~~
+~~~~
 
 ### Read latest data {#read-data}
 
@@ -747,7 +747,7 @@ If the broker can not return the requested content format it MUST return a respo
 
 Example:
 
-~~~~~~~~~~~
+~~~~
 => 0.01 GET
    Uri-Path: ps
    Uri-Path: data
@@ -763,7 +763,7 @@ Example:
       "t": 1621452122,
       "v": 23.5
    }
-~~~~~~~~~~~
+~~~~
 
 # CoAP Pubsub Parameters {#pubsub-parameters}
 
@@ -771,7 +771,7 @@ This document defines parameters used in the messages exchanged between a client
 
 Note that the media type application/core-pubsub+cbor MUST be used when these parameters are transported in the respective message fields.
 
-~~~~~~~~~~~
+~~~~
 +-----------------+-----------+--------------+------------+
 | Name            | CBOR Key  | CBOR Type    | Reference  |
 |-----------------|-----------|--------------|------------|
@@ -783,7 +783,7 @@ Note that the media type application/core-pubsub+cbor MUST be used when these pa
 | expiration_date | TBD6      | tstr (opt)   | [RFC-XXXX] |
 | max_subscribers | TBD7      | uint (opt)   | [RFC-XXXX] |
 +-----------------+-----------+--------------+------------+
-~~~~~~~~~~~
+~~~~
 {: #fig-CoAP-Pubsub-Parameters title="CoAP Pubsub Parameters" artwork-align="center"}
 
 # Security Considerations
@@ -812,7 +812,7 @@ Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with the RFC n
 
 IANA is asked to register the following entries in the "CoAP Pubsub Parameters" registry.
 
-~~~~~~~~~~~
+~~~
 Name: topic_name
 CBOR Key: TBD1
 CBOR Type: tstr
@@ -867,13 +867,13 @@ Name: core.ps.data
 CBOR Key: TBD11
 CBOR Type: tstr
 Reference: [RFC-XXXX]
-~~~~~~~~~~~
+~~~
 
 ## Resource Types # {#iana-rt}
 
 IANA is asked to enter the following values in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group.
 
-~~~~~~~~~~~
+~~~
 Value: core.ps
 Description: Publish-Subscribe Broker
 Reference: [RFC-XXXX]
@@ -889,7 +889,7 @@ Reference: [RFC-XXXX]
 Value: core.ps.data
 Description: Topic-data resource of a Publish-Subscribe Broker
 Reference: [RFC-XXXX]
-~~~~~~~~~~~
+~~~
 
 # Acknowledgements
 
