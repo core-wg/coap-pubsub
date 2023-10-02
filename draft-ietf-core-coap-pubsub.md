@@ -28,7 +28,7 @@ author:
   email: jaime@iki.fi
 - ins: M. Koster
   name: Michael Koster
-  org: Unaffiliated
+  org: Dogtiger Labs
   email: michaeljohnkoster@gmail.com
 - ins: A. Keranen
   name: Ari Keranen
