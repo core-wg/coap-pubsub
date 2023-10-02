@@ -582,7 +582,7 @@ When a client receives a 4.29 (Too Many Requests) response, it MUST NOT send any
 
 Interactions with the topic_data resource are covered in this section. The interactions with topic_data are same as that of any other CoAP resource.
 
-One variant is where the resource is hosted. While the broker can create a topic_data resource when the topic is created, the client can select to host the data in a different CoAP server than that of the topic resource.
+One variant shown in {{fig-external-server}} is where the resource is hosted. While the broker can create a topic_data resource when the topic is created, the client can select to host the data in a different CoAP server than that of the topic resource.
 
 ~~~~ aasvg
          CoAP server 1
@@ -609,7 +609,7 @@ One variant is where the resource is hosted. While the broker can create a topic
                                             │
  └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
 ~~~~
-{: #fig-api title="topic data hosted externally" artwork-align="center"}
+{: #fig-external-server title="topic data hosted externally" artwork-align="center"}
 
 ### Publish {#publish}
 
