@@ -99,7 +99,6 @@ topic-data resource:
 broker:
 : A CoAP server that hosts one or more topic collections containing topic resources. The broker is responsible for the store-and-forward of state update representations when the topic-data URI points to a resource hosted on the broker. The broker is also responsible of handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
 
-
 ## CoAP Publish-Subscribe Architecture
 
 {{fig-arch}} shows a simple Publish/Subscribe architecture over CoAP. In it, publishers submit their data over a RESTful interface to a broker-managed resource (topic) and subscribers observe this resource using {{?RFC7641}}. Resource state information is updated between the CoAP clients and the broker via topics. Topics are created by the broker but the initial configuration can be proposed by a client, normally a publisher.
@@ -107,20 +106,20 @@ broker:
 The broker is responsible for the store-and-forward of state update representations between CoAP clients. Subscribers observing a resource will receive notifications, the delivery of which is done on a best-effort basis.
 
 ~~~~ aasvg
-     CoAP                      CoAP                   CoAP
-     clients                  server                  clients
-   +-----------.           +----------+  observe    +------------+
-   │           │ publish   │          │◀────────────+            │
-   │ publisher +──────────▶│          ├────────────▶│ subscriber │
-   │           │           │          ├────────────▶│            │
-   +-----------+           │          │             +------------+
-        ┄                  │  broker  │                  ┄
-        ┄                  │          │                  ┄
-   +-----------+           │          │  observe    +------------+
-   │           │ publish   │          │◀────────────+            │
-   │ publisher +──────────▶│          ├────────────▶│ subscriber │
-   │           │           │          ├────────────▶│            │
-   +-----------+           +----------+             +------------+
+     CoAP                      CoAP                 CoAP
+     clients                  server                clients
+   +-----------.          +----------+  observe  +-----------+
+   │           │ publish  │          │<----------+           │
+   │ publisher +--------->├          +---------->| subscribe │
+   │           │          │          +---------->│           │
+   +-----------+          │          │           +-----------+
+        ...               │  broker  │                ...
+        ...               │          │                ...
+   +-----------+          │          │  observe  +-----------+
+   │           │ publish  │          │<----------+           │
+   │ publisher +--------->│          +---------->| subscribe │
+   │           │          │          +---------->│           │
+   +-----------+          +----------+           +-----------+
 ~~~~
 {: #fig-arch title='Publish-subscribe architecture over CoAP' artwork-align="center"}
 
@@ -587,8 +586,7 @@ One variant shown in {{fig-external-server}} is where the resource is hosted. Wh
 ~~~~ aasvg
          CoAP server 1
         [central-ps.example.com]
- ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
-                                            │
+ ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─.
  │              ___                                 CoAP server 2
       Topic    /   \                        │      [2001:db8::2:1]
  │  Collection \___/
@@ -605,9 +603,7 @@ One variant shown in {{fig-external-server}} is where the resource is hosted. Wh
                 Data  : /   \ :             │
  │          Resource  : \___/ :
                       :.......:             │
- │
-                                            │
- └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
+ . ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─┘
 ~~~~
 {: #fig-external-server title="topic data hosted externally" artwork-align="center"}
 
