@@ -301,6 +301,8 @@ On success, the server returns a 2.05 (Content) response with a representation o
 
 Depending on the permission set each client MAY receive a different list of topics that they are authorized to read.
 
+If there are existing topic_data resources under the collection resource, those will also be present in the response.
+
 Example:
 
 ~~~~
@@ -333,6 +335,7 @@ Example:
 
 <!--
 TODO: this example and why I was using /ps/tc, tc seems redundant
+update this example.
 -->
 
 ~~~~
@@ -341,14 +344,11 @@ TODO: this example and why I was using /ps/tc, tc seems redundant
    Content-Format: TBD (application/pubsub+cbor)
 
    {
-     "resource_type" : "core.ps.conf",
-     "target_attribute" : "temperature"
+     "resource_type" : "core.ps.data"
    }
 
 <= 2.05 Content
-   Content-Format: 40 (application/link-format)
-   </living_room_sensor>;anchor="coap://[2001:db8::2]/ps/h9392";rt="core.ps.conf",
-   </kitchen_sensor>;anchor="coap://[2001:db8::2]/ps/f3192";rt="core.ps.conf",
+   </ps/data/62e4f8d>; rt=core.ps.data; obs
 
 ~~~~
 
