@@ -245,55 +245,77 @@ Below are the defined default values for the topic parameters:
 
 ## Discovery
 
+<!--
+TODO: This section requires careful review.
+-->
+
 Discovery involves that of the broker, topic collections, topic resources and topic data.
 
 ### Broker Discovery {#broker-discovery}
 
-<!-- TBD: This section explains Broker Discovery, needs more work -->
-
 CoAP clients MAY discover brokers by using CoAP Simple Discovery, via multicast, through a Resource Directory (RD) {{!RFC9167}} or by other means specified in extensions to {{!RFC7252}}. Brokers MAY register with a RD by following the steps on Section 5 of {{!RFC9167}} with the resource type set to "core.ps" as defined in {{iana}} of this document.
 
-Brokers SHOULD expose a link to the entry point of the pubsub API at their .well-known/core location {{!RFC6690}}. The specific resource path is left for implementations, examples in this document may use the "/ps" path.
+### Topic Collection Discovery
+
+A Broker SHOULD offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point thus represents a collection of related resources as specified in {{?RFC6690}} and is identified by the resource type "core.ps.coll". The specific resource path is left for implementations, examples in this document may use the "/ps" path.
+
+The interactions with topic collections are further defined in {{topic-collection-interactions}}.
 
 Example:
 
 ~~~~
 => GET
    Uri-Path: ./well-known/core
-   Resource-Type: core.ps
-
 
 <= 2.05 Content
-    </ps>;rt=core.ps;ct=40
+   Content-Format: 40 (application/link-format)
+   </ps1>;rt="core.ps.coll";ct=40,
+   </ps2>;rt="core.ps.coll";ct=40,
+   </ps1/h9392>;rt="core.ps.conf",
+   </ps2/other/path/2e3570>; ct=application/link-format; rt=core.ps.conf; obs,
+   </ps1/data/62e4f8d>; rt=core.ps.data; obs
+   </ps2/otherdata/86fe8fd>; rt=core.ps.data; obs
 ~~~~
 
 ### Topic Discovery {#topic-discovery}
 
-A Broker can offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point thus represents a collection of related resources as specified in {{?RFC6690}} and is identified by the resource type "core.ps.coll".
-
-The interactions with topic collections are further defined in {{topic-collection-interactions}}.
-
 Each topic collection is a group of topic resources. Topic resources contain a set of properties (see Section {{topic-properties}}), each topic resource is represented as a link to its corresponding resource URI. Each topic resource is identified by the resource type "core.ps.conf".
 
-Within a topic, there is the 'topic_data' property containing the URI of the topic data resource that a CoAP client can subscribe and publish to. Resources exposing resources of the topic data type are expected to use the resource type 'core.ps.data'.
-
-Below is an example discovery via .well-known/core that returns a topic collection resource and one observable topic under it.
+Below is an example discovery via .well-known/core with rt=core.ps.conf that returns a list of topics.
 
 ~~~~
 => 0.01 GET
    Uri-Path: .well-known/core
+   Resource-Type: core.ps.conf
 
 <= 2.05 Content
    Content-Format: 40 (application/link-format)
-   </ps>; rt=core.ps.coll,
-   </ps/4f17f5>; ct=application/link-format; rt=core.ps.conf; obs
+   </ps1/h9392>;rt="core.ps.conf",
+   </ps2/other/path/2e3570>; ct=application/link-format; rt=core.ps.conf; obs,
+~~~~
+
+### Topic Data Discovery
+
+Within a topic, there is the 'topic_data' property containing the URI of the topic data resource that a CoAP client can subscribe and publish to. Resources exposing resources of the topic data type are expected to use the resource type 'core.ps.data'.
+
+Below is an example discovery via .well-known/core that returns list of topic_data resources.
+
+~~~~
+=> 0.01 GET
+   Uri-Path: .well-known/core
+   Resource-Type: core.ps.data
+
+<= 2.05 Content
+   Content-Format: 40 (application/link-format)
+   </ps1/data/62e4f8d>; rt=core.ps.data; obs
+   </ps2/otherdata/86fe8fd>; rt=core.ps.data; obs
 ~~~~
 
 ## Topic Collection Interactions {#topic-collection-interactions}
 
-These are the interactions that can happen at the topic collection level.
+These are the interactions that can happen directly with a specific topic collection.
 
-### Retrieving all topics {#topic-get-all}
+### Retrieving all topic and topic_data {#topic-get-all}
 
 A client can request a collection of the topics present in the broker by making a GET request to the collection URI.
 
