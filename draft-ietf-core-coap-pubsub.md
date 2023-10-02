@@ -96,7 +96,7 @@ broker:
 
 The broker is responsible for the store-and-forward of state update representations between CoAP clients. Subscribers observing a resource will receive notifications, the delivery of which is done on a best-effort basis.
 
-~~~~~~~~~~~
+~~~~
      CoAP                      CoAP                   CoAP
      clients                  server                  clients
    ┌───────────┐           ┌──────────┐  observe    ┌────────────┐
@@ -111,7 +111,7 @@ The broker is responsible for the store-and-forward of state update representati
    │ publisher ├──────────▶│          ├────────────▶│ subscriber │
    │           │           │          ├────────────▶│            │
    └───────────┘           └──────────┘             └────────────┘
-~~~~~~~~~~~
+~~~~
 {: #fig-arch title='Publish-subscribe architecture over CoAP' artwork-align="center"}
 
 This document describes two sets of interactions, interactions to configure topics and their lifecycle (see {{topic-resource-interactions}}) and interactions about the topic data (see {{topic-data-interactions}}).
@@ -124,7 +124,7 @@ Topic data interactions are publish, subscribe, unsubscribe, read and are orient
 
 {{fig-api}} shows the resources of a Topic Collection that can be managed at the Broker.
 
-~~~~~~~~~~~
+~~~~ goat
              ___
    Topic    /   \
  Collection \___/
@@ -133,7 +133,7 @@ Topic data interactions are publish, subscribe, unsubscribe, read and are orient
                    \___    \___        \___
                    /   \   /   \  ...  /   \        Topic
                    \___/   \___/       \___/      Resources
-~~~~~~~~~~~
+~~~~
 {: #fig-api title="Resources of a Broker" artwork-align="center"}
 
 The Broker exports a topic-collection resource, with resource type "core.ps.coll" defined in {{iana}} of this document. The interfaces for the topic-collection resource is defined in {{topic-collection-interactions}}.
@@ -142,7 +142,7 @@ The Broker exports a topic-collection resource, with resource type "core.ps.coll
 
 The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}). Each topic has a topic and a topic data resources. The topic resource is used by a client creating or administering a topic. The topic data resource is used by the publishers and the subscribers to a topic.
 
-~~~~~~~~~~~
+~~~~ goat
               ___
     Topic    /   \
   Collection \___/
@@ -161,7 +161,7 @@ The configuration side of a "publish/subscribe broker" consists of a collection 
                     :.......:  :.......:       :.......:
                    \_________/\_________/ ... \_________/
                      topic 1    topic 2         topic n
-~~~~~~~~~~~
+~~~~
 {: #fig-topic title='Topic and topic-data resources of a topic' artwork-align="center"}
 
 ## Collection Representation
