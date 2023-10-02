@@ -152,7 +152,7 @@ The Broker exports a topic-collection resource, with resource type "core.ps.coll
 
 The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}). Each topic has a topic and a topic data resources. The topic resource is used by a client creating or administering a topic. The topic data resource is used by the publishers and the subscribers to a topic.
 
-~~~~ 
+~~~~
               ___
     Topic    /   \
   Collection \___/
