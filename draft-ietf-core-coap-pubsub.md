@@ -342,7 +342,7 @@ creator proposes topic name but broker approves
 A client can add a new topic to a collection of topics by submitting a representation of the initial topic resource (see Section {{topic-resource-representation}}) in a POST request to the topic collection URI. The topic MUST contain at least a subset of the {{topic-properties}} , namely: topic_name and resource_type.
 
 A CoAP endpoint creating a topic MAY specify a 'topic_data' URI different than that used by the broker. The broker may then simply forward the observation requests to the 'topic_data' URI.
-<!-- 
+<!--
 TODO: Expand the topic_data hosted elsewhere section
 -->
 
