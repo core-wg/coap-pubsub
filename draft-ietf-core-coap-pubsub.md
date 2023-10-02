@@ -168,7 +168,7 @@ Each topic resource is represented as a link, where the link target is the URI o
 
 Each topic-data is represented as a link, where the link target is the URI of the topic-data resource. A topic-data link is an entry within the topic resource called 'topic_data' (see {{topic-properties}}).
 
-The list can be represented as a Link Format document {{RFC6690}}. The link to each topic resource specifies the link target attribute 'rt' (Resource Type), with value "core.pubsub.conf" defined in this document.
+The list can be represented as a Link Format document {{RFC6690}}. The link to each topic resource specifies the link target attribute 'rt' (Resource Type), with value "core.ps.conf" defined in this document.
 
 ## Topic Creation and Configuration
 
@@ -182,7 +182,11 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 * 'topic_name': A required field used as an application identifier. It encodes the topic name as a CBOR text string. Examples of topic names include human-readable strings (e.g., "room2"), UUIDs, or other values.
 
-* 'topic_data': A required field containing the CoAP URI of the topic data resource for subscribing to a pubsub topic. It encodes the URI as a CBOR text string.
+* 'topic_data': A required field (optional during creation) containing the CoAP URI of the topic data resource for subscribing to a pubsub topic. It encodes the URI as a CBOR text string. This property may contain a fully formed URL including scheme and host or just the resource path depending on where the topic data is hosted.
+
+<!--
+TODO: Confirm with Cabo and Marco
+-->
 
 * 'resource_type': A required field used to indicate the resource type associated with topic resources. It encodes the resource type as a CBOR text string. The value should be "core.ps.conf".
 
@@ -220,7 +224,7 @@ Below are the defined default values for the topic parameters:
 
 ## Discovery
 
-Discovery involves that of the Broker, topic collections, topic resources and topic data.
+Discovery involves that of the broker, topic collections, topic resources and topic data.
 
 ### Broker Discovery {#broker-discovery}
 
@@ -248,20 +252,27 @@ A Broker can offer a topic discovery entry point to enable clients to find topic
 
 The interactions with topic collections are further defined in {{topic-collection-interactions}}.
 
-A topic collection is a group of topic resources that define the properties of the topics themselves (see Section {{topic-resource-representation}}). Each topic resource is represented as a link to its corresponding resource URI. The list can be represented as a Link Format document {{?RFC6690}}. Topic resources are identified by the resource type "core.ps.conf".
+Each topic collection is a group of topic resources. Topic resources contain a set of properties (see Section {{topic-properties}}), each topic resource is represented as a link to its corresponding resource URI. Each topic resource is identified by the resource type "core.ps.conf".
 
-Within each topic resource there is a set of configuration properties (see Section {{topic-properties}}). The 'topic_data' property contains the URI of the topic data resource that a CoAP client can subscribe to. Resources exposing resources of the topic data type are expected to use the resource type 'core.ps.data'.
+Within a topic, there is the 'topic_data' property containing the URI of the topic data resource that a CoAP client can subscribe and publish to. Resources exposing resources of the topic data type are expected to use the resource type 'core.ps.data'.
+
+Below is an example discovery via .well-known/core that returns a topic collection resource and one observable topic under it.
+
+~~~~~~~~~~~
+=> 0.01 GET
+   Uri-Path: .well-known/core
+
+<= 2.05 Content
+   Content-Format: 40 (application/link-format)
+   </ps>; rt=core.ps.coll,
+   </ps/4f17f5>; ct=application/link-format; rt=core.ps.conf; obs
+~~~~~~~~~~~
 
 ## Topic Collection Interactions {#topic-collection-interactions}
 
 These are the interactions that can happen at the topic collection level.
 
 ### Retrieving all topics {#topic-get-all}
-<!--
-GET to /topic-collection
-retrieve all topics
-response is link format
--->
 
 A client can request a collection of the topics present in the broker by making a GET request to the collection URI.
 
@@ -274,12 +285,11 @@ Example:
 ~~~~~~~~~~~
 => 0.01 GET
    Uri-Path: ps
-   Uri-Path: tc
 
 <= 2.05 Content
    Content-Format: 40 (application/link-format)
-   </ps/tc/temperature>;rt="core.ps.conf",
-   </ps/tc/humidity>;rt="core.ps.conf"
+   </ps/temperature>;rt="core.ps.conf",
+   </ps/humidity>;rt="core.ps.conf"
 ~~~~~~~~~~~
 
 ### Getting Topics by Properties {#topic-get-properties}
@@ -291,7 +301,7 @@ response is link format
 -->
 
 A client can filter a collection of topics by submitting the
-representation of a topic filter (see Section {{topic-fetch-resource}})  in a FETCH request to the topic collection URI.
+representation of a topic filter (see Section {{topic-fetch-resource}}) in a FETCH request to the topic collection URI.
 
 On success, the server returns a 2.05 (Content) response with a
 representation of a list of topics in the collection (see
@@ -299,10 +309,13 @@ Section {{topic-discovery}}) that match the filter in CoRE link format {{!RFC669
 
 Example:
 
+<!--
+TODO: this example and why I was using /ps/tc, tc seems redundant
+-->
+
 ~~~~~~~~~~~
 => 0.05 FETCH
    Uri-Path: ps
-   Uri-Path: tc
    Content-Format: TBD (application/pubsub+cbor)
 
    {
@@ -312,8 +325,8 @@ Example:
 
 <= 2.05 Content
    Content-Format: 40 (application/link-format)
-   </living_room_sensor>;anchor="coap://[2001:db8::2]/ps/tc/h9392",
-   </kitchen_sensor>;anchor="coap://[2001:db8::2]/ps/tc/f3192"
+   </living_room_sensor>;anchor="coap://[2001:db8::2]/ps/h9392";rt="core.ps.conf",
+   </kitchen_sensor>;anchor="coap://[2001:db8::2]/ps/f3192";rt="core.ps.conf",
 
 ~~~~~~~~~~~
 
@@ -326,17 +339,20 @@ response (created) is cbor including the link to new topic-config resource
 creator proposes topic name but broker approves
 -->
 
-A client can add a new topic to a collection of topics by submitting a representation of the initial topic resource (see Section {{topic-resource-representation}}) in a POST request to the topic collection URI.
+A client can add a new topic to a collection of topics by submitting a representation of the initial topic resource (see Section {{topic-resource-representation}}) in a POST request to the topic collection URI. The topic MUST contain at least a subset of the {{topic-properties}} , namely: topic_name and resource_type.
+
+A CoAP endpoint creating a topic MAY specify a 'topic_data' URI different than that used by the broker. The broker may then simply forward the observation requests to the 'topic_data' URI.
+<!-- 
+TODO: Expand the topic_data hosted elsewhere section
+-->
+
+If the 'topic_data' is empty the broker will assign a resource for a publisher to publish to.
 
 On success, the server returns a 2.01 (Created) response indicating the topic URI of the new topic and the current representation of the topic resource.
 
 If a topic manager is present in the broker, the topic creation  may require manager approval subject to certain conditions. If the conditions are not fulfilled, the manager MUST respond with a 4.03 (Forbidden) error. The response MUST have Content-Format set to "application/core-pubsub+cbor".
 
 The broker MUST respond with a 4.00 (Bad Request) error if any received parameter is specified multiple times, invalid or not recognized.
-
-A CoAP endpoint creating a topic may specify a 'topic_data' URI different than that used by the broker. The broker may then simply forward the observation requests to the 'topic_data' URI.
-
-If the 'topic_data' is empty the broker will assign a resource for a publisher to publish to.
 
 ~~~~~~~~~~~
 => 0.02 POST
@@ -356,7 +372,7 @@ If the 'topic_data' is empty the broker will assign a resource for a publisher t
    TBD (this should be a CBOR map)
    {
      "topic_name" : "living_room_sensor",
-     "topic_data" : "coap://[2001:db8::2]/ps/data/6578616d706c65"
+     "topic_data" : "ps/data/1bd0d6d"
      "resource_type" : "core.ps.conf"
    }
 ~~~~~~~~~~~
@@ -381,24 +397,23 @@ If a topic manager (TBD) is present in the broker, retrieving topic information 
 
 The response payload is a CBOR map, whose possible entries are specified in {{topic-resource-representation}} and use the same abbreviations defined in {{pubsub-parameters}}.
 
-Example:
+For example, below is a request on the topic "ps/h9392":
 
 ~~~~~~~~~~~
 => 0.01 GET
    Uri-Path: ps
-   Uri-Path: tc
    Uri-Path: h9392
 
 <= 2.05 Content
    Content-Format: TBD2 (application/core-pubsub+cbor)
    {
       "topic_name" : "living_room_sensor",
-      "topic_data" : "coap://[2001:db8::2]/ps/data/6578616d706c65",
+      "topic_data" : "ps/data/1bd0d6d",
       "resource_type": "core.ps.conf",
       "media_type": "application/senml-cbor",
       "target_attribute": "temperature",
-      "expiration_date": "",
-      "max_subscribers": -1
+      "expiration_date": "2023-04-05T23:59:59Z",
+      "max_subscribers": 100
    }
 
 ~~~~~~~~~~~

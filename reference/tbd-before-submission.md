@@ -1,5 +1,43 @@
 # Final Pass
 
+- **Hackathon implementation**
+    - Discovery
+        - [x] GET /.well-known/core to discover collection
+          - [ ] Use core.ps rt
+        - [x] GET topic to discover topic configuration
+        - [x] GET /ps to retrieve all topics
+          - [ ] Use core.ps.conf rt
+          - [ ] Use FETCH
+    - Configuration
+        - [x] POST topic to create topic
+        - [x] PUT topic to configure topic
+        - [ ] DELETE topic to delete topic
+    - Topic Data
+        - [x] PUT on topic_data to publish
+        - [x] GET + observe on topic_data to Subscribe
+        - [x] GET on topic_data to get last measurement
+        - [ ] Delete to delete topic_data
+- **Using pubsub**
+    - Topic data Resource interactions
+        - Resource used to exchange data in this topic
+    - [x] Pubs sub general process
+    - [x] Topic Lifecycle
+    - [ ] Topic data interaction image 2.7
+    - [x] Fix examples
+    - CB: Senml, IPSO bare data
+    - [x] Publish
+    - [x] Subscribe
+    - [x] Unsubscribe. Maybe a bit thin. Missing example.
+    - [x] Delete. Maybe a bit thin. Missing example
+        - [x] send 404s to all subs (show example, no new content)
+    - [x] Read latest data
+- **Support Sections**
+    - [x] Remove Section: Uri Templates (empty)
+    - [x] Pubsub Parameters (need to check)
+    - [ ] Security Considerations (empty)
+    - [ ] IANA -> TBD for now (need to check)
+
+
 - **Introduction**
     - [x] Terminology. Since we made the `topic_data_uri` part of the topic configuration, we implicitly made the term `topic` = `topic-configuration` . Should I remove the term topic-configuration and just `topic` or say that they are used as synonyms in the document?
         - CB: keep word topic for the abstract concept. "Topic resource", "Topic Data Resource".
