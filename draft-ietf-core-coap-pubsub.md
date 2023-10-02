@@ -816,6 +816,14 @@ The profile relies on protocol-specific transport profiles of ACE for communicat
 
 The document outlines the provisioning and enforcement of authorization information for Clients to act as Publishers and/or Subscribers. Additionally, it specifies the provisioning of keying material and security parameters that Clients use to protect their communications end-to-end through the Broker.
 
+## Caching and Freshness
+
+A broker could become overloaded if it always had to provide the most recent cached resource representation of a topic_data to a subscriber. On deployments with a large number of clients and with many topic resources this would represent a big burden on the broker.
+
+For this reason is it recommended to consider changing the default Max-Age Option, which has a value of 60 in CoAP, in order to cater to different deployment scenarios.
+
+For example, the broker could choose not to cache anything, therefore it SHOULD explicitly include a Max-Age Option with a value of zero seconds. For more information about caching and freshness in CoAP, please check {{!RFC7252}} and {{!RFC7641}}
+
 # IANA Considerations {#iana}
 
 <!-- TBD: This section is structured similarly as:
