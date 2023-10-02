@@ -97,18 +97,20 @@ broker:
 The broker is responsible for the store-and-forward of state update representations between CoAP clients. Subscribers observing a resource will receive notifications, the delivery of which is done on a best-effort basis.
 
 ~~~~~~~~~~~
-      CoAP                     CoAP                      CoAP
-     clients                  server                   clients
-   ___________              __________    observe   ____________
-  |           |  publish   |          | .--------- |            |
-  | publisher | ---------> |          | |--------> | subscriber |
-  |___________|            |          | '--------> |____________|
-        .                  |          |                   .
-        .                  |  broker  |                   .
-   ___________             |          |   observe   ____________
-  |           |  publish   |          | .--------- |            |
-  | publisher | ---------> |          | |--------> | subscriber |
-  |___________|            |__________| '--------> |____________|
+     CoAP                      CoAP                   CoAP
+     clients                  server                  clients
+   ┌───────────┐           ┌──────────┐  observe    ┌────────────┐
+   │           │ publish   │          │◀────────────│            │
+   │ publisher ├──────────▶│          ├────────────▶│ subscriber │
+   │           │           │          ├────────────▶│            │
+   └───────────┘           │          │             └────────────┘
+        ┄                  │  broker  │                  ┄
+        ┄                  │          │                  ┄
+   ┌───────────┐           │          │  observe    ┌────────────┐
+   │           │ publish   │          │◀────────────│            │
+   │ publisher ├──────────▶│          ├────────────▶│ subscriber │
+   │           │           │          ├────────────▶│            │
+   └───────────┘           └──────────┘             └────────────┘
 ~~~~~~~~~~~
 {: #fig-arch title='Publish-subscribe architecture over CoAP' artwork-align="center"}
 
@@ -534,7 +536,7 @@ URIs for topic resources are broker-generated (see {{topic-create}}). URIs for t
 
 ### Topic Lifecycle {#topic-lifecycle}
 
-When a topic is newly created, it is first placed by the server into the HALF CREATED state (see {{fig-life}}).  In this state, a client can read and update the configuration of the topic and delete the topic. A publisher can publish to the topic data resource.  However, a subscriber cannot yet observe the topic data resource nor read the latest data.
+When a topic is newly created, it is first placed by the server into the HALF CREATED state (see {{fig-life}}). In this state, a client can read and update the configuration of the topic and delete the topic. A publisher can publish to the topic data resource.  However, a subscriber cannot yet observe the topic data resource nor read the latest data.
 
 ~~~~~~~~~~~
                 HALF                       FULLY
@@ -567,7 +569,10 @@ When a client receives a 4.29 (Too Many Requests) response, it MUST NOT send any
 
 ## Topic Data Interactions {#topic-data-interactions}
 
-TBD: intro and image that shows a topic data URI hosted in a different endpoint than the broker
+Interactions with the topic_data resource are covered in this section. In principle the behavior is the same as that of any other CoAP resource.
+One variant is that the topic_data might be hosted in a different CoAP server than that of the topic resource.
+
+
 
 ### Publish {#publish}
 
