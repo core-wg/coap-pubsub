@@ -108,18 +108,18 @@ The broker is responsible for the store-and-forward of state update representati
 ~~~~ aasvg
      CoAP                      CoAP                 CoAP
      clients                  server                clients
-   +-----------.          +----------+  observe  +-----------+
-   │           │ publish  │          │<----------+           │
-   │ publisher +--------->├          +---------->| subscribe │
-   │           │          │          +---------->│           │
-   +-----------+          │          │           +-----------+
-        ...               │  broker  │                ...
-        ...               │          │                ...
-   +-----------+          │          │  observe  +-----------+
-   │           │ publish  │          │<----------+           │
-   │ publisher +--------->│          +---------->| subscribe │
-   │           │          │          +---------->│           │
-   +-----------+          +----------+           +-----------+
+   .-----------.          .----------.  observe  .-----------.
+   |           | publish  |          |<----------+           |
+   | publisher +--------->+          +---------->| subscribe |
+   |           |          |          +---------->|           |
+   '-----------'          |          |           '-----------'
+        ...               |  broker  |                ...
+        ...               |          |                ...
+   .-----------.          |          |  observe  .-----------.
+   |           | publish  |          |<----------+           |
+   | publisher +--------->|          +---------->| subscribe |
+   |           |          |          +---------->|           |
+   '-----------'          '----------'           '-----------'
 ~~~~
 {: #fig-arch title='Publish-subscribe architecture over CoAP' artwork-align="center"}
 
@@ -584,26 +584,27 @@ Interactions with the topic_data resource are covered in this section. The inter
 One variant shown in {{fig-external-server}} is where the resource is hosted. While the broker can create a topic_data resource when the topic is created, the client can select to host the data in a different CoAP server than that of the topic resource.
 
 ~~~~ aasvg
-         CoAP server 1
-        [central-ps.example.com]
- ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─.
- │              ___                                 CoAP server 2
-      Topic    /   \                        │      [2001:db8::2:1]
- │  Collection \___/
-     Resource       \                       │   ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─
- │                   \___________                                  │
-                      \          \          │   │
- │                     \ ......   \ ......       .........         │
-                      : \___  :  : \___  :  │   │:  ___  : Topic
- │             Topic  : / + \ :  : / + \───────────/   \ : Data    │
-            Resource  : \_|_/ :  : \___/ :  │   │: \___/ : Resource
- │                    ....|....  .........       :.......:         │
-                      ....|....             │   │
- │             Topic  :  _|_  :                  ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
-                Data  : /   \ :             │
- │          Resource  : \___/ :
-                      :.......:             │
- . ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─┘
+    
+   [central-ps.example.com]
+   CoAP server 1
+  .----------------------------------------.
+  |            ___                         |      
+  |  Topic    /   \                        |    [2001:db8::2:1]
+  |Collection \___/                        |    CoAP server 2
+  | Resource       \                       |   .------------------.
+  |                 \___________           |   |                  |
+  |                  \          \          |   |                  |
+  |                   \ ......   \ ......  |   |.........         |
+  |                  : \___  :  : \___  :  |   |:  ___  : Topic   |
+  |           Topic  : / + \ :  : / + \-----------/   \ : Data    |
+  |        Resource  : \_|_/ :  : \___/ :  |   |: \___/ : Resource|
+  |                  ....|....  .........  |   |:.......:         |
+  |                  ....|....             |   |                  |
+  |           Topic  :  _|_  :             |   '------------------'
+  |            Data  : /   \ :             |
+  |        Resource  : \___/ :             |
+  |                  :.......:             |
+  '----------------------------------------'
 ~~~~
 {: #fig-external-server title="topic data hosted externally" artwork-align="center"}
 
