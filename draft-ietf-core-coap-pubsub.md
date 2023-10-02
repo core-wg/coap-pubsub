@@ -69,6 +69,8 @@ This document applies the idea of publish-subscribe to Constrained RESTful Envir
 
 ## Terminology {#terminology}
 
+{::boilerplate bcp14-tagged}
+
 This specification requires readers to be familiar with all the terms and
 concepts that are discussed in {{?RFC8288}} and {{!RFC6690}}. Readers
 should also be familiar with the terms and concepts discussed in
@@ -78,6 +80,7 @@ this specification.
 
 This specification makes use of the following terminology:
 
+{:vspace}
 publish-subscribe (pub/sub):
 : A messaging paradigm in which messages are published to a broker, and potential receivers can subscribe to a broker to receive messages. Message producers do not need to know where the message will be eventually sent. The broker matches publications and subscriptions, and delivers publications to subscribed receivers.
 
@@ -96,7 +99,6 @@ topic-data resource:
 broker:
 : A CoAP server that hosts one or more topic collections containing topic resources. The broker is responsible for the store-and-forward of state update representations when the topic-data URI points to a resource hosted on the broker. The broker is also responsible of handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
 
-{::boilerplate bcp14-tagged}
 
 ## CoAP Publish-Subscribe Architecture
 
