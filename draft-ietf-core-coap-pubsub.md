@@ -46,6 +46,7 @@ informative:
   RFC8288:
   I-D.hartke-t2trg-coral-pubsub:
   I-D.ietf-ace-oscore-gm-admin:
+  I-D.ietf-ace-pubsub-profile:
 
 entity:
   SELF: "[RFC-XXXX]"
@@ -230,7 +231,7 @@ Below are the defined default values for the topic parameters:
 
 * 'topic_data': There is no default value. This field is required and must be specified by the client or broker.
 
-* 'resource_type': The default value is "core.ps.conf".
+* 'resource_type': The default value for a topic resource is "core.ps.conf".
 
 * 'media_type': The default value is an empty string, indicating that no media type is specified.
 
@@ -791,13 +792,29 @@ Note that the media type application/core-pubsub+cbor MUST be used when these pa
 
 # Security Considerations
 
-<!-- TBD: we may take content from prev versions but we have to spend some more time on the implications of the topic-config -->
-TBD.
+The security considerations discussed in this document cover various aspects related to the publish-subscribe architecture and the management of topics, administrators, and the change of topic configuration.
 
-## Change of topic configuration
+## Change of Topic Configuration
+
+When a topic configuration changes, it may result in disruptions for the subscribers. Some potential issues that may arise include:
+
+* Limiting the number of subscribers will cause to cancel ongoing subscriptions until max_subscribers has been reached.
+* Changing the topic_data value will cancel all ongoing subscriptions.
+* Changing of the expiration_date may cause to cancel ongoing subscriptions if the topic expires at an earlier data.
+
+To address these potential issues, it is vital to have an administration process in place for topic configurations, including monitoring, validation, and enforcement of security policies and procedures.
+
+It is also recommended for subscribers to subscribe to the topic configuration resource in order to receive notifications of topic parameter changes.
 
 ## Topic Administrators
 
+In a publish-subscribe architecture, it is essential to ensure that topic administrators are trustworthy and authorized to perform their duties. This includes the ability to create, modify, and delete topics, enforce proper access control policies, and handle potential security issues arising from topic management.
+
+The draft {{ietf-ace-pubsub-profile}} defines an application profile of the Authentication and Authorization for Constrained Environments (ACE) framework. The profile is designed to enable secure group communication for the architecture defined in this document "{{&SELF}}" (See {{fig-arch}}).
+
+The profile relies on protocol-specific transport profiles of ACE for communication security, server authentication, and proof-of-possession for a key that is owned by the Client and bound to an OAuth 2.0 Access Token.
+
+The document outlines the provisioning and enforcement of authorization information for Clients to act as Publishers and/or Subscribers. Additionally, it specifies the provisioning of keying material and security parameters that Clients use to protect their communications end-to-end through the Broker.
 
 # IANA Considerations {#iana}
 
