@@ -706,8 +706,6 @@ Success:
 Failure:
 : 4.04 "Not Found". Topic does not exist.
 
-TBD: Do we want to treat max_clients as an error?
-
 If the 'max_clients' parameter has been reached, the server must treat that as specified in section 4.1 of {{!RFC7641}}. The response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
 
 Example:
