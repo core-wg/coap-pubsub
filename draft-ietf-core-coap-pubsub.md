@@ -129,6 +129,10 @@ Topic resource interactions are discovery, create, read configuration, update co
 
 Topic data interactions are publish, subscribe, unsubscribe, read and are oriented on how data is transferred from a publisher to a subscriber.
 
+<!--
+Throughout the document there is a number of TBDs that need updating, mostly content formats or cbor data representations 
+-->
+
 ## Managing Topics {#managing-topics}
 
 {{fig-api}} shows the resources of a Topic Collection that can be managed at the Broker.
@@ -527,7 +531,6 @@ Example:
 ~~~~~~~~~~~
 => 0.04 DELETE
    Uri-Path: ps
-   Uri-Path: tc
    Uri-Path: h9392
 
 <= 2.02 Deleted
@@ -627,7 +630,7 @@ Example of first publication:
 => 0.03 PUT
    Uri-Path: ps
    Uri-Path: data
-   Uri-Path: 6578616d706c65
+   Uri-Path: 1bd0d6d
    Content-Format: 110
 
    {
@@ -646,7 +649,7 @@ Example of subsequent publication:
 => 0.03 PUT
    Uri-Path: ps
    Uri-Path: data
-   Uri-Path: 6578616d706c65
+   Uri-Path: 1bd0d6d
    Content-Format: 110
 
    {
@@ -685,7 +688,7 @@ Example:
 => 0.01 GET
    Uri-Path: ps
    Uri-Path: data
-   Uri-Path: 6578616d706c65
+   Uri-Path: 1bd0d6d
    Observe: 0
 
 <= 2.05 Content
@@ -728,7 +731,7 @@ Example:
 => 0.04 DELETE
    Uri-Path: ps
    Uri-Path: data
-   Uri-Path: 6578616d706c65
+   Uri-Path: 1bd0d6d
 
 <= 2.02 Deleted
 ~~~~~~~~~~~
@@ -749,7 +752,7 @@ Example:
 => 0.01 GET
    Uri-Path: ps
    Uri-Path: data
-   Uri-Path: 6578616d706c65
+   Uri-Path: 1bd0d6d
 
 <= 2.05 Content
    Content-Format: 110
