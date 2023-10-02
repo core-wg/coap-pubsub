@@ -1,14 +1,22 @@
 ---
-v: 3
-
+stand_alone: true
+ipr: trust200902
 docname: draft-ietf-core-coap-pubsub-latest
-cat: std
-consensus: yes
-stream: IETF
 title: A publish-subscribe architecture for the Constrained Application Protocol (CoAP)
-abbrev: COREPUBSUB
-area: Applications
-wg: CoRE
+area: Applications and Real-Time Area (art)
+wg: Internet Engineering Task Force
+kw: CoRE
+cat: std
+consensus: true
+submissiontype: IETF
+pi:
+  strict: 'yes'
+  toc: 'yes'
+  tocdepth: '4'
+  symrefs: 'yes'
+  sortrefs: 'yes'
+  compact: 'yes'
+  subcompact: 'no'
 venue:
   mail: core@ietf.org
   github: core-wg/coap-pubsub
