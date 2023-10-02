@@ -584,11 +584,11 @@ Interactions with the topic_data resource are covered in this section. The inter
 One variant shown in {{fig-external-server}} is where the resource is hosted. While the broker can create a topic_data resource when the topic is created, the client can select to host the data in a different CoAP server than that of the topic resource.
 
 ~~~~ aasvg
-    
+
    [central-ps.example.com]
    CoAP server 1
   .----------------------------------------.
-  |            ___                         |      
+  |            ___                         |
   |  Topic    /   \                        |    [2001:db8::2:1]
   |Collection \___/                        |    CoAP server 2
   | Resource       \                       |   .------------------.
