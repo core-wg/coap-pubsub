@@ -412,7 +412,7 @@ For example, below is a request on the topic "ps/h9392":
       "resource_type": "core.ps.conf",
       "media_type": "application/senml-cbor",
       "target_attribute": "temperature",
-      "expiration_date": "2023-04-05T23:59:59Z",
+      "expiration_date": "2023-04-00T23:59:59Z",
       "max_subscribers": 100
    }
 
@@ -443,7 +443,6 @@ Example:
 ~~~~~~~~~~~
 => 0.05 FETCH
    Uri-Path: ps
-   Uri-Path: tc
    Uri-Path: h9392
    Content-Format: TBD2 (application/core-pubsub+cbor)
    {
@@ -453,7 +452,7 @@ Example:
 <= 2.05 Content
    Content-Format: TBD2 (application/core-pubsub+cbor)
    {
-     "topic_data" : "coap://[2001:db8::2]/ps/data/6578616d706c65",
+     "topic_data" : "ps/data/1bd0d6d",
      "media_type": "application/senml-cbor"
    }
 
@@ -472,18 +471,19 @@ A client can update the configuration of a topic by submitting the representatio
 
 On success, the server returns a 2.04 (Changed) response and the current full resource representation. The broker may chose not to overwrite parameters that are not explicitly modified in the request.
 
+Note that updating the "topic_data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Similarly, decreasing max_subscribers will also cause that some subscribers get unsubscribed. Unsubscribed endpoints SHOULD receive a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2.
+
 Example:
 
 ~~~~~~~~~~~
 => 0.03 PUT
    Uri-Path: ps
-   Uri-Path: tc
    Uri-Path: h9392
    Content-Format: TBD2 (application/core-pubsub+cbor)
 
    {
       "topic_name" : "living_room_sensor",
-      "topic_data" : "coap://[2001:db8::2]/ps/data/6578616d706c65",
+      "topic_data" : "ps/data/1bd0d6d",
       "target_attribute": "temperature",
       "expiration_date": "2023-04-28T23:59:59Z",
       "max_subscribers": 2
@@ -495,7 +495,7 @@ Example:
    TBD (this should be a CBOR map)
    {
       "topic_name" : "living_room_sensor",
-      "topic_data" : "coap://[2001:db8::2]/ps/data/6578616d706c65",
+      "topic_data" : "ps/data/1bd0d6d",
       "resource_type": "core.ps.conf",
       "media_type": "application/senml-cbor",
       "target_attribute": "temperature",
@@ -511,6 +511,7 @@ A client can delete a topic by making a CoAP DELETE request on the topic resourc
 On success, the server returns a 2.02 (Deleted) response.
 
 When a topic resource is deleted, the broker SHOULD also delete the topic data resource, unsubscribe all subscribers by removing them from the list of observers and returning a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2.
+
 Example:
 
 ~~~~~~~~~~~
