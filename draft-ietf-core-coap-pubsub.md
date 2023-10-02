@@ -134,7 +134,7 @@ Topic data interactions are publish, subscribe, unsubscribe, read and are orient
 
 {{fig-api}} shows the resources of a Topic Collection that can be managed at the Broker.
 
-~~~~
+~~~~ aasvg
              ___
    Topic    /   \
  Collection \___/
