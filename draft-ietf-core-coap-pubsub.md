@@ -357,7 +357,6 @@ The broker MUST respond with a 4.00 (Bad Request) error if any received paramete
 ~~~~~~~~~~~
 => 0.02 POST
    Uri-Path: ps
-   Uri-Path: tc
    Content-Format: TBD2 (application/core-pubsub+cbor)
    TBD (this should be a CBOR map with the mandatory parameters)
    {
@@ -525,13 +524,13 @@ Example:
 
 ## Publish/Subscribe {#pubsub}
 
-Unless a topic is configured to use a different mechanism, publish/ subscribe is performed as follows: A publisher publishes to a topic by submitting the data in a PUT request to a broker-managed "topic data resource".  This causes a change to the state of that resources. Any subscriber observing the resource {{!RFC7641}} at that time receives a notification about the change to the resource state. Observations are maintained and terminated as specified in {{!RFC7641}}.
+The overview of the publish/subscribe mechanism over CoAP is as follows: a publisher publishes to a topic by submitting the data in a PUT request to a topic_data resource and subscribers subscribe to a topic by submitting a GET request with the Observe option active to a topic_data resource. When resource state changes, subscribers observing the resource {{!RFC7641}} at that time will receive a notification.
 
 As shown in {{topics}}, each topic contains two resources: topic resource and topic data. In that section we explained the creation and configuration of the topic resources. This section will explain the management of topic data resources.
 
-A topic data resource does not exist until some initial data has been published to it.  Before initial data has been published, the topic data resource yields a 4.04 (Not Found) response. If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created".
+A topic data resource does not exist until some initial data has been published to it.  Before initial data has been published, the topic data resource yields a 4.04 (Not Found) response. If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created" (see {{topic-lifecycle}}).
 
-URIs for topic resources are broker-generated. URIs for topic-data MAY also be broker-generated or client-generated. There does not need to be any URI pattern dependence between the URI where the data exists and the URI of the topic resource. Topic resource and data resources might even be hosted on different servers.
+URIs for topic resources are broker-generated (see {{topic-create}}). URIs for topic-data MAY be broker-generated or client-generated. There is no necessary URI pattern dependence between the URI where the data exists and the URI of the topic resource. Topic resource and data resources might even be hosted on different servers.
 
 ### Topic Lifecycle {#topic-lifecycle}
 
