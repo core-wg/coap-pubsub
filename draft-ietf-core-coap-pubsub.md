@@ -217,6 +217,8 @@ TODO: Confirm with Cabo and Marco
 
 * 'max_subscribers': An optional field used to indicate the maximum number of subscribers allowed for the topic. It encodes the maximum number as a CBOR integer. If this field is not present, there is no limit to the number of subscribers allowed. The pubsub system can use this field to limit the number of subscribers for a topic.
 
+* 'observer_check': An optional field used to control the frequency at which the server hosting the topic_data will send a notification in a confirmable message to the observer. This prevents a client that is no longer interested or has disconnected from remaining indefinitely in the list of observers. Note that if the topic_data is not hosted by the broker but by another CoAP server it is up to that server to apply the observer_check value.
+
 ### Topic Resource Representation {#topic-resource-representation}
 
 A topic is represented as a CBOR map containing the configuration properties of the topic as top-level elements.
@@ -241,7 +243,7 @@ Below are the defined default values for the topic parameters:
 
 * 'max_subscribers': The default value is -1, indicating that there is no limit to the number of subscribers allowed. If this field is not present, the pubsub system will not limit the number of subscribers for the topic.
 
-* 'observer_check': The default value is '86400', as defined in {{!RFC7641}}, which corresponds to 24 hours. This parameter controls the frequency at which the server hosting the topic_data will send a notification in a confirmable message to the observer. This prevents a client that is no longer interested or has disconnected from remaining indefinitely in the list of observers. Note that if the topic_data is not hosted by the broker but by another CoAP server it is up to that server to apply the observer_check value.
+* 'observer_check': The default value is '86400', as defined in {{!RFC7641}}, which corresponds to 24 hours.
 
 ## Discovery
 
