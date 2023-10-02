@@ -1,7 +1,7 @@
 ---
 v: 3
 
-docname: draft-ietf-core-coap-pubsub-12
+docname: draft-ietf-core-coap-pubsub-latest
 cat: std
 consensus: yes
 stream: IETF
