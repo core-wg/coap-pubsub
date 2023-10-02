@@ -164,7 +164,7 @@ The configuration side of a "publish/subscribe broker" consists of a collection 
                     \          \               \
                      \ ......   \ ......        \ ......
                     : \___  :  : \___  :       : \___  :
-             Topic  : / + \ :  : / + \ :       : / + \ :
+             Topic  : / * \ :  : / * \ :       : / * \ :
           Resource  : \_|_/ :  : \_|_/ :       : \_|_/ :
                     ....|....  ....|....       ....|....
                     ....|....  ....|....       ....|....
@@ -599,7 +599,7 @@ One variant shown in {{fig-external-server}} is where the resource is hosted. Wh
   |                  \          \          |   |                  |
   |                   \ ......   \ ......  |   |.........         |
   |                  : \___  :  : \___  :  |   |:  ___  : Topic   |
-  |           Topic  : / + \ :  : / + \-----------/   \ : Data    |
+  |           Topic  : / * \ :  : / * \----(---(--/   \ : Data    |
   |        Resource  : \_|_/ :  : \___/ :  |   |: \___/ : Resource|
   |                  ....|....  .........  |   |:.......:         |
   |                  ....|....             |   |                  |
