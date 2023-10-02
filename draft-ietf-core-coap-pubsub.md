@@ -241,6 +241,8 @@ Below are the defined default values for the topic parameters:
 
 * 'max_subscribers': The default value is -1, indicating that there is no limit to the number of subscribers allowed. If this field is not present, the pubsub system will not limit the number of subscribers for the topic.
 
+* 'observer_check': The default value is '86400', as defined in {{!RFC7641}}, which corresponds to 24 hours. This parameter controls the frequency at which the server hosting the topic_data will send a notification in a confirmable message to the observer. This prevents a client that is no longer interested or has disconnected from remaining indefinitely in the list of observers. Note that if the topic_data is not hosted by the broker but by another CoAP server it is up to that server to apply the observer_check value.
+
 ## Discovery
 
 Discovery involves that of the broker, topic collections, topic resources and topic data.
@@ -307,8 +309,9 @@ Example:
 
 <= 2.05 Content
    Content-Format: 40 (application/link-format)
-   </ps/temperature>;rt="core.ps.conf",
-   </ps/humidity>;rt="core.ps.conf"
+   </ps/h9392>;rt="core.ps.conf",
+   </ps/2e3570>; ct=application/link-format; rt=core.ps.conf; obs,
+   </ps/data/62e4f8d>; rt=core.ps.data; obs
 ~~~~
 
 ### Getting Topics by Properties {#topic-get-properties}
@@ -719,6 +722,12 @@ Example:
 ### Unsubscribe {#unsubscribe}
 
 A CoAP client can unsubscribe simply by cancelling the observation as described in Section 3.6 of {{!RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification.
+
+In some circumstances, it may be desirable to cancel an observation and release the resources allocated by the broker. In this case, a client MAY explicitly deregister by issuing a GET request that has the Token field set to the token of the observation to be cancelled and includes an Observe Option with the value set to 1 (deregister).
+
+As per {{!RFC7641}} a server that transmits notifications mostly in non-confirmable messages MUST send a notification in a confirmable message instead of a non-confirmable message at least every 24 hours.
+
+This value can be modified at the broker by the administrator of a topic by modifying the parameter "observer_check" on {{topic-resource-representation}}. This would allow to change the rate at which different implementations verify that a subscriber is still interested in observing a topic_data resource.
 
 ### Delete topic data resource {#delete-topic-data}
 
