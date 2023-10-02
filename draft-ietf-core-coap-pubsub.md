@@ -549,17 +549,18 @@ URIs for topic resources are broker-generated (see {{topic-create}}). URIs for t
 When a topic is newly created, it is first placed by the server into the HALF CREATED state (see {{fig-life}}). In this state, a client can read and update the configuration of the topic and delete the topic. A publisher can publish to the topic data resource.  However, a subscriber cannot yet observe the topic data resource nor read the latest data.
 
 ~~~~ aasvg
-                HALF                       FULLY
-              CREATED       Delete        CREATED
-                ___       Topic Data        ___     Publish
------------->  |   |  <------------------  |   |  ------------.
-    Create     |___|  ------------------>  |___|  <-----------'
-                     \      Publish      /         Subscribe
-                | ^   \       ___       /   | ^
-          Read/ | |    '-->  |   |  <--'    | | Read/
-         Update | |  Delete  |___|  Delete  | | Update
-                '-'  Topic          Topic   '-'
-                            DELETED
+                HALF                          FULLY
+              CREATED          Delete        CREATED
+                ____         Topic Data       ____     Publish
+------------>  |    |  <-------------------  |    |  ------------.
+   Create      |    |                        |    |               |
+               |____|  ------------------->  |____|  <-----------'
+                      \      Publish      /            Subscribe
+               |   ^   \       ___       /   |   ^
+         Read/ |   |    '-->  |   |  <--'    |   | Read/
+        Update |   |  Delete  |___|  Delete  |   | Update
+                '-'  Topic          Topic     '-' 
+                             DELETED
 ~~~~
 {: #fig-life title='Lifecycle of a Topic' artwork-align="center"}
 
