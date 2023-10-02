@@ -47,6 +47,9 @@ informative:
   I-D.hartke-t2trg-coral-pubsub:
   I-D.ietf-ace-oscore-gm-admin:
 
+entity:
+  SELF: "[RFC-XXXX]"
+
 --- abstract
 
 This document describes a publish-subscribe architecture for CoAP that
@@ -791,18 +794,18 @@ Note that the media type application/core-pubsub+cbor MUST be used when these pa
 <!-- TBD: we may take content from prev versions but we have to spend some more time on the implications of the topic-config -->
 TBD.
 
+## Change of topic configuration
+
+## Topic Administrators
+
+
 # IANA Considerations {#iana}
 
-
-<!-- TBD: Redo this section. Need to add the ct and rt similar to the ones below
-
+<!-- TBD: This section is structured similarly as:
 https://www.ietf.org/archive/id/draft-ietf-ace-oscore-gm-admin-07.html#name-resource-types
-
 https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.1
-
-https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.2 -->
-
-# IANA Considerations {#iana}
+https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.2
+-->
 
 This document has the following actions for IANA.
 
