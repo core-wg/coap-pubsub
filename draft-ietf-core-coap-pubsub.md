@@ -810,7 +810,7 @@ It is also recommended for subscribers to subscribe to the topic configuration r
 
 In a publish-subscribe architecture, it is essential to ensure that topic administrators are trustworthy and authorized to perform their duties. This includes the ability to create, modify, and delete topics, enforce proper access control policies, and handle potential security issues arising from topic management.
 
-The draft {{ietf-ace-pubsub-profile}} defines an application profile of the Authentication and Authorization for Constrained Environments (ACE) framework. The profile is designed to enable secure group communication for the architecture defined in this document "{{&SELF}}" (See {{fig-arch}}).
+The draft {{I-D.ietf-ace-pubsub-profile}} defines an application profile of the Authentication and Authorization for Constrained Environments (ACE) framework. The profile is designed to enable secure group communication for the architecture defined in this document "{{&SELF}}" (See {{fig-arch}}).
 
 The profile relies on protocol-specific transport profiles of ACE for communication security, server authentication, and proof-of-possession for a key that is owned by the Client and bound to an OAuth 2.0 Access Token.
 
