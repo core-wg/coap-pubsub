@@ -106,7 +106,7 @@ broker:
 
 The broker is responsible for the store-and-forward of state update representations between CoAP clients. Subscribers observing a resource will receive notifications, the delivery of which is done on a best-effort basis.
 
-~~~~
+~~~~ aasvg
      CoAP                      CoAP                   CoAP
      clients                  server                  clients
    ┌───────────┐           ┌──────────┐  observe    ┌────────────┐
@@ -152,7 +152,7 @@ The Broker exports a topic-collection resource, with resource type "core.ps.coll
 
 The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}). Each topic has a topic and a topic data resources. The topic resource is used by a client creating or administering a topic. The topic data resource is used by the publishers and the subscribers to a topic.
 
-~~~~
+~~~~ aasvg
               ___
     Topic    /   \
   Collection \___/
@@ -548,7 +548,7 @@ URIs for topic resources are broker-generated (see {{topic-create}}). URIs for t
 
 When a topic is newly created, it is first placed by the server into the HALF CREATED state (see {{fig-life}}). In this state, a client can read and update the configuration of the topic and delete the topic. A publisher can publish to the topic data resource.  However, a subscriber cannot yet observe the topic data resource nor read the latest data.
 
-~~~~~~~~~~~
+~~~~ aasvg
                 HALF                       FULLY
               CREATED       Delete        CREATED
                 ___       Topic Data        ___     Publish
@@ -560,7 +560,7 @@ When a topic is newly created, it is first placed by the server into the HALF CR
          Update | |  Delete  |___|  Delete  | | Update
                 '-'  Topic          Topic   '-'
                             DELETED
-~~~~~~~~~~~
+~~~~
 {: #fig-life title='Lifecycle of a Topic' artwork-align="center"}
 
 After a publisher publishes to the topic for the first time, the topic is placed into the FULLY CREATED state. In this state, a client can read, update and delete the topic; a publisher can publish to the topic data resource; and a subscriber can observe the topic data resource.
