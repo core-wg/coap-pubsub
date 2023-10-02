@@ -587,7 +587,6 @@ Interactions with the topic_data resource are covered in this section. The inter
 One variant shown in {{fig-external-server}} is where the resource is hosted. While the broker can create a topic_data resource when the topic is created, the client can select to host the data in a different CoAP server than that of the topic resource.
 
 ~~~~ aasvg
-
    [central-ps.example.com]
    CoAP server 1
   .----------------------------------------.
@@ -794,10 +793,6 @@ TBD.
 
 # IANA Considerations {#iana}
 
-TBD.
-
-This document registers one attribute value in the Resource Type (rt=) registry
-established with {{!RFC6690}} and appends to the definition of one CoAP Response Code in the CoRE Parameters Registry.
 
 <!-- TBD: Redo this section. Need to add the ct and rt similar to the ones below
 
@@ -807,45 +802,94 @@ https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.
 
 https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.2 -->
 
-## Resource Type value 'core.ps'
+# IANA Considerations {#iana}
 
-* Attribute Value: core.ps
+This document has the following actions for IANA.
 
-* Description: XXX of This document
+Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with the RFC number of this specification and delete this paragraph.
 
-* Reference: This document
+## CoAP Pubsub Parameters ## {#iana-coap-pubsub-parameters}
 
-* Notes: None
+IANA is asked to register the following entries in the "CoAP Pubsub Parameters" registry.
 
-## Resource Type value 'core.ps.coll'
+~~~~~~~~~~~
+Name: topic_name
+CBOR Key: TBD1
+CBOR Type: tstr
+Reference: [RFC-XXXX]
 
-* Attribute Value: core.ps.coll
+Name: topic_data
+CBOR Key: TBD2
+CBOR Type: tstr
+Reference: [RFC-XXXX]
 
-* Description: XXX of This document
+Name: resource_type
+CBOR Key: TBD3
+CBOR Type: tstr
+Reference: [RFC-XXXX]
 
-* Reference: This document
+Name: media_type
+CBOR Key: TBD4
+CBOR Type: tstr (opt)
+Reference: [RFC-XXXX]
 
-* Notes: None
+Name: target_attribute
+CBOR Key: TBD5
+CBOR Type: tstr (opt)
+Reference: [RFC-XXXX]
 
-## Resource Type value 'core.ps.conf'
+Name: expiration_date
+CBOR Key: TBD6
+CBOR Type: tstr (opt)
+Reference: [RFC-XXXX]
 
-* Attribute Value: core.ps.conf
+Name: max_subscribers
+CBOR Key: TBD7
+CBOR Type: uint (opt)
+Reference: [RFC-XXXX]
 
-* Description: XXX of This document
+Name: core.ps
+CBOR Key: TBD8
+CBOR Type: tstr
+Reference: [RFC-XXXX]
 
-* Reference: This document
+Name: core.ps.coll
+CBOR Key: TBD9
+CBOR Type: tstr
+Reference: [RFC-XXXX]
 
-* Notes: None
+Name: core.ps.conf
+CBOR Key: TBD10
+CBOR Type: tstr
+Reference: [RFC-XXXX]
 
-## Resource Type value 'core.ps.data'
+Name: core.ps.data
+CBOR Key: TBD11
+CBOR Type: tstr
+Reference: [RFC-XXXX]
+~~~~~~~~~~~
 
-* Attribute Value: core.ps.data
+## Resource Types # {#iana-rt}
 
-* Description: XXX of This document
+IANA is asked to enter the following values in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group.
 
-* Reference: This document
+~~~~~~~~~~~
+Value: core.ps
+Description: Publish-Subscribe Broker
+Reference: [RFC-XXXX]
 
-* Notes: None
+Value: core.ps.coll
+Description: Topic-collection resource of a Publish-Subscribe Broker
+Reference: [RFC-XXXX]
+
+Value: core.ps.conf
+Description: Topic-configuration resource of a Publish-Subscribe Broker
+Reference: [RFC-XXXX]
+
+Value: core.ps.data
+Description: Topic-data resource of a Publish-Subscribe Broker
+Reference: [RFC-XXXX]
+~~~~~~~~~~~
 
 # Acknowledgements
 
