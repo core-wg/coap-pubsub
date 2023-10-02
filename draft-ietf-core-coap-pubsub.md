@@ -558,7 +558,7 @@ When a topic is newly created, it is first placed by the server into the HALF CR
                |   ^   \       ___       /   |   ^
          Read/ |   |    '-->  |   |  <--'    |   | Read/
         Update |   |  Delete  |___|  Delete  |   | Update
-                '-'  Topic          Topic     '-'
+                '-'   Topic          Topic    '-'
                              DELETED
 ~~~~
 {: #fig-life title='Lifecycle of a Topic' artwork-align="center"}
