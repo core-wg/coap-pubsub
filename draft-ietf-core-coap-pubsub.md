@@ -579,10 +579,36 @@ When a client receives a 4.29 (Too Many Requests) response, it MUST NOT send any
 
 ## Topic Data Interactions {#topic-data-interactions}
 
-Interactions with the topic_data resource are covered in this section. In principle the behavior is the same as that of any other CoAP resource.
-One variant is that the topic_data might be hosted in a different CoAP server than that of the topic resource.
+Interactions with the topic_data resource are covered in this section. The interactions with topic_data are same as that of any other CoAP resource.
 
+One variant is where the resource is hosted. While the broker can create a topic_data resource when the topic is created, the client can select to host the data in a different CoAP server than that of the topic resource.
 
+~~~~ aasvg
+         CoAP server 1
+        [central-ps.example.com]
+ ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
+                                            │
+ │              ___                                 CoAP server 2
+      Topic    /   \                        │      [2001:db8::2:1]
+ │  Collection \___/
+     Resource       \                       │   ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─
+ │                   \___________                                  │
+                      \          \          │   │
+ │                     \ ......   \ ......       .........         │
+                      : \___  :  : \___  :  │   │:  ___  : Topic
+ │             Topic  : / + \ :  : / + \───────────/   \ : Data    │
+            Resource  : \_|_/ :  : \___/ :  │   │: \___/ : Resource
+ │                    ....|....  .........       :.......:         │
+                      ....|....             │   │
+ │             Topic  :  _|_  :                  ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
+                Data  : /   \ :             │
+ │          Resource  : \___/ :
+                      :.......:             │
+ │
+                                            │
+ └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
+~~~~
+{: #fig-api title="topic data hosted externally" artwork-align="center"}
 
 ### Publish {#publish}
 
