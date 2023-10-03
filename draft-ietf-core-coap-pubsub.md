@@ -805,7 +805,7 @@ https://github.com/core-wg/coap-pubsub/issues/42
 
 ### Subscribe to a subset of topic_data resources  {#wildcard}
 
-Some implementations may want to subscribe to multiple topic_data resources with one single request. That is possible by using FETCH with 
+Some implementations may want to subscribe to multiple topic_data resources with one single request. That is possible by using FETCH with
 
 
 -->
