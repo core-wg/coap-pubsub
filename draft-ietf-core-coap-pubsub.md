@@ -1,51 +1,61 @@
 ---
-title: "Publish-Subscribe Broker for the Constrained Application Protocol (CoAP)"
-abbrev: "Publish-Subscribe Broker for CoAP"
-category: std
-
-docname: draft-ietf-core-coap-pubsub-latest
+stand_alone: true
 ipr: trust200902
-
-number:
-date:
+docname: draft-ietf-core-coap-pubsub-latest
+title: A publish-subscribe architecture for the Constrained Application Protocol (CoAP)
+area: Applications and Real-Time Area (art)
+wg: Internet Engineering Task Force
+kw: CoRE
+cat: std
 consensus: true
-v: 3
-area: "Applications and Real-Time (ART)"
-workgroup: "Constrained RESTful Environments"
 submissiontype: IETF
-
-keyword:
- - coap
- - pubsub
+pi:
+  strict: 'yes'
+  toc: 'yes'
+  tocdepth: '4'
+  symrefs: 'yes'
+  sortrefs: 'yes'
+  compact: 'yes'
+  subcompact: 'no'
+venue:
+  mail: core@ietf.org
+  github: core-wg/coap-pubsub
 
 author:
-- ins: M. Koster
-  name: Michael Koster
-  organization: SmartThings
-  email: Michael.Koster@smartthings.com
-
-- ins: A. Keranen
-  name: Ari Keranen
-  organization: Ericsson
-  email: ari.keranen@ericsson.com
-
 - ins: J. Jimenez
   name: Jaime Jimenez
-  organization: Ericsson
+  org: Ericsson
   email: jaime@iki.fi
+- ins: M. Koster
+  name: Michael Koster
+  org: Dogtiger Labs
+  email: michaeljohnkoster@gmail.com
+- ins: A. Keranen
+  name: Ari Keranen
+  org: Ericsson
+  email: ari.keranen@ericsson.com
 
 normative:
-
+  RFC6570:
+  RFC6690:
+  RFC7252:
+  RFC7641:
+  RFC8516:
+  RFC9167:
 informative:
+  RFC8288:
+  I-D.hartke-t2trg-coral-pubsub:
+  I-D.ietf-ace-oscore-gm-admin:
+  I-D.ietf-ace-pubsub-profile:
+
+entity:
+  SELF: "[RFC-XXXX]"
 
 --- abstract
 
-The Constrained Application Protocol (CoAP), and related extensions are intended
-to support machine-to-machine communication in systems where one or more
-nodes are resource constrained, in particular for low power wireless sensor
-networks. This document defines a publish-subscribe Broker for CoAP that
+This document describes a publish-subscribe architecture for CoAP that
 extends the capabilities of CoAP for supporting nodes with long breaks in
-connectivity and/or up-time.
+connectivity and/or up-time. The Constrained Application Protocol (CoAP) is used by CoAP clients both to publish and to subscribe via a known topic resource.
 
 --- middle
 
@@ -53,1007 +63,907 @@ connectivity and/or up-time.
 
 The Constrained Application Protocol (CoAP) {{!RFC7252}} supports
 machine-to-machine communication across networks of constrained
-devices. CoAP uses a request/response model where clients make requests to
-servers in order to request actions on resources. Depending on the situation
-the same device may act either as a server, a client, or both.
+devices and constrained networks. CoAP uses a request/response model where clients make requests to servers in order to request actions on resources. Depending on the situation the same device may act either as a server, a client, or both.
 
-One important class of constrained devices includes devices that are intended
-to run for years from a small battery, or by scavenging energy from their
-environment. These devices have limited reachability because they spend most
-of their time in a sleeping state with no network connectivity. Devices may
-also have limited reachability due to certain middle-boxes, such as Network
-Address Translators (NATs) or firewalls. Such middle-boxes often prevent
-connecting to a device from the Internet unless the connection was initiated
-by the device.
+One important class of constrained devices includes devices that are intended to run for years from a small battery, or by scavenging energy from their environment. These devices have limited reachability because they spend most of their time in a sleeping state with no network connectivity. Another important class of nodes are devices with limited reachability due to middle-boxes like Network Address Translators (NATs) and firewalls.
 
-For some applications the client/server and request/response communication model
-is not optimal but publish-subscribe communication with potentially many senders
-and/or receivers and communication via topics rather than directly with
-endpoints may fit better.
+For these nodes, the client/server-oriented architecture of REST can be challenging when interactions are not initiated by the devices themselves. A publish/subscribe-oriented architecture where nodes are separated by a broker and data is exchanged via topics might fit these nodes better.
 
-This document specifies simple extensions to CoAP for enabling publish-subscribe
-communication using a Broker node that enables store-and-forward messaging
-between two or more nodes. This model facilitates communication of nodes with
-limited reachability, enables simple many-to-many communication, and eases
-integration with other publish-subscribe systems.
+This document applies the idea of publish-subscribe to Constrained RESTful Environments. It introduces a broker that allows to create, discover subscribe and publish on topics. The broker enables store-and-forward data exchange between CoAP endpoints, thereby facilitating the communication of nodes with limited reachability, providing simple many-to-many communication, and easing integration with other publish/subscribe systems.
 
-## Requirements Language
+## Terminology {#terminology}
 
-{::boilerplate bcp14}
-
-## Terminology
+{::boilerplate bcp14-tagged}
 
 This specification requires readers to be familiar with all the terms and
-concepts that are discussed in {{?RFC5988}} and {{!RFC6690}}. Readers
+concepts that are discussed in {{?RFC8288}} and {{!RFC6690}}. Readers
 should also be familiar with the terms and concepts discussed in
 {{!RFC7252}} and {{!RFC9167}}. The URI template
 format {{!RFC6570}} is used to describe the REST API defined in
 this specification.
 
-This specification makes use of the following additional terminology:
+This specification makes use of the following terminology:
 
-Publish-Subscribe (pub/sub):
-: A messaging paradigm where messages are published to a Broker and potential
-  receivers can subscribe to the Broker to receive messages. The publishers
-  do not (need to) know where the message will be eventually sent: the publications
-  and subscriptions are matched by a Broker and publications are delivered
-  by the Broker to subscribed receivers.
+{:vspace}
+publish-subscribe (pub/sub):
+: A messaging paradigm in which messages are published to a broker, and potential receivers can subscribe to a broker to receive messages. Message producers do not need to know where the message will be eventually sent. The broker matches publications and subscriptions, and delivers publications to subscribed receivers.
 
-CoAP pub/sub service:
-: A group of REST resources, as defined in this document, which together
-  implement the required features of this specification.
+publishers and subscribers:
+: CoAP clients can act as publishers or as subscribers. Publishers propose topics for creation and send CoAP messages (publications) to the broker on specific topics. Subscribers have an ongoing observation relation (subscription) to a topic. Publishers and subscribers do not need to have any knowledge of each other, but they must know the topic they are publishing and subscribing to.
 
-CoAP pub/sub Broker:
-: A server node capable of receiving messages (publications) from and sending
-  messages to other nodes, and able to match subscriptions and publications
-  in order to route messages to the right destinations. The Broker can also
-  temporarily store publications to satisfy future subscriptions and pending notifications.
+topic collection:
+: A resource collection is a group of related resources that share a common base URI. In this case the the topic collection contains resources of the type "topic resource". CoAP clients can discover and interact with the resources in a collection by sending CoAP requests to the URI of the collection.
 
-CoAP pub/sub Client:
-: A CoAP client which is capable of publish or subscribe operations as defined
-  in this specification.
+topic resource:
+: An entry within a topic collection in a broker. Topics are created and configured before any data can be published.  CoAP clients can propose new topics to be created, but it is up to the broker to decide whether and how a topic is created. The broker also decides the URI of each topic resource and of the topic-data resource when hosted at the broker. The creation, configuration, and discovery of topics at a broker are specified in {{topics}}. Interactions about the topic-data are defined in {{topic-data-interactions}}.
 
-Topic:
-: A unique identifier for a particular item being published and/or subscribed
-  to. A Broker uses the topics to match subscriptions to publications. A reference to a Topic on a Broker
-  is a valid CoAP URI as defined in {{!RFC7252}}
+topic-data resource:
+: Topic resources contain a property called "topic-data". The topic-data resource is a CoAP URI used by publishers and subscribers to publish (PUT) and subscribe (GET with Observe) to data (see {{topics}}).
 
-# Architecture {#architecture}
+broker:
+: A CoAP server that hosts one or more topic collections containing topic resources. The broker is responsible for the store-and-forward of state update representations when the topic-data URI points to a resource hosted on the broker. The broker is also responsible of handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
 
-## CoAP Pub/sub Architecture
+## CoAP Publish-Subscribe Architecture
 
-{{arch-fig}} shows the architecture of a CoAP pub/sub service. CoAP pub/sub Clients interact
-with a CoAP pub/sub Broker through the CoAP pub/sub REST API which is hosted by
-the Broker. State information is updated between the Clients and the Broker.
-The CoAP pub/sub Broker performs a store-and-forward of state update representations
-between certain CoAP pub/sub Clients. Clients Subscribe to topics upon which
-representations are Published by other Clients, which are forwarded by the
-Broker to the subscribing clients. A CoAP pub/sub Broker may be used as a
-REST resource proxy, retaining the last published representation to supply
-in response to Read requests from Clients.
+{{fig-arch}} shows a simple Publish/Subscribe architecture over CoAP. In it, publishers submit their data over a RESTful interface to a broker-managed resource (topic) and subscribers observe this resource using {{?RFC7641}}. Resource state information is updated between the CoAP clients and the broker via topics. Topics are created by the broker but the initial configuration can be proposed by a client, normally a publisher.
+
+The broker is responsible for the store-and-forward of state update representations between CoAP clients. Subscribers observing a resource will receive notifications, the delivery of which is done on a best-effort basis.
+
+~~~~ aasvg
+     CoAP                      CoAP                 CoAP
+     clients                  server                clients
+   .-----------.          .----------.  observe  .-----------.
+   |           | publish  |          |<----------+           |
+   | publisher +--------->+          +---------->| subscribe |
+   |           |          |          +---------->|           |
+   '-----------'          |          |           '-----------'
+        ...               |  broker  |                ...
+        ...               |          |                ...
+   .-----------.          |          |  observe  .-----------.
+   |           | publish  |          |<----------+           |
+   | publisher +--------->|          +---------->| subscribe |
+   |           |          |          +---------->|           |
+   '-----------'          '----------'           '-----------'
+~~~~
+{: #fig-arch title='Publish-subscribe architecture over CoAP' artwork-align="center"}
+
+This document describes two sets of interactions, interactions to configure topics and their lifecycle (see {{topic-resource-interactions}}) and interactions about the topic data (see {{topic-data-interactions}}).
+
+Topic resource interactions are discovery, create, read configuration, update configuration, delete configuration and handle the management of the topics.
+
+Topic data interactions are publish, subscribe, unsubscribe, read and are oriented on how data is transferred from a publisher to a subscriber.
+
+<!--
+Throughout the document there is a number of TBDs that need updating, mostly content formats or cbor data representations
+-->
+
+## Managing Topics {#managing-topics}
+
+{{fig-api}} shows the resources of a Topic Collection that can be managed at the Broker.
+
+~~~~ aasvg
+             ___
+   Topic    /   \
+ Collection \___/
+  Resource       \
+                  \____________________
+                   \___    \___        \___
+                   /   \   /   \  ...  /   \        Topic
+                   \___/   \___/       \___/      Resources
+~~~~
+{: #fig-api title="Resources of a Broker" artwork-align="center"}
+
+The Broker exports a topic-collection resource, with resource type "core.ps.coll" defined in {{iana}} of this document. The interfaces for the topic-collection resource is defined in {{topic-collection-interactions}}.
+
+# Pub-Sub Topics {#topics}
+
+The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}). Each topic has a topic and a topic data resources. The topic resource is used by a client creating or administering a topic. The topic data resource is used by the publishers and the subscribers to a topic.
+
+~~~~ aasvg
+              ___
+    Topic    /   \
+  Collection \___/
+   Resource       \
+                   \___________________________
+                    \          \               \
+                     \ ......   \ ......        \ ......
+                    : \___  :  : \___  :       : \___  :
+             Topic  : / * \ :  : / * \ :       : / * \ :
+          Resource  : \_|_/ :  : \_|_/ :       : \_|_/ :
+                    ....|....  ....|....       ....|....
+                    ....|....  ....|....       ....|....
+             Topic  :  _|_  :  :  _|_  :  ...  :  _|_  :
+              Data  : /   \ :  : /   \ :       : /   \ :
+          Resource  : \___/ :  : \___/ :       : \___/ :
+                    :.......:  :.......:       :.......:
+                   \_________/\_________/ ... \_________/
+                     topic 1    topic 2         topic n
+~~~~
+{: #fig-topic title='Topic and topic-data resources of a topic' artwork-align="center"}
+
+## Collection Representation
+
+Each topic resource is represented as a link, where the link target is the URI of the topic resource.
+
+Each topic-data is represented as a link, where the link target is the URI of the topic-data resource. A topic-data link is an entry within the topic resource called 'topic_data' (see {{topic-properties}}).
+
+The list can be represented as a Link Format document {{RFC6690}}. The link to each topic resource specifies the link target attribute 'rt' (Resource Type), with value "core.ps.conf" defined in this document.
+
+## Topic Creation and Configuration
+
+A CoAP client can create a new topic by submitting an initial configuration for the topic (see {{topic-create}}). It can also read and update the configuration of existing topics and delete them when they are no longer needed (see {{topic-resource-interactions}}).
+
+The configuration of a topic itself consists of a set of properties that can be set by a client or by the broker.
+
+### Topic Properties {#topic-properties}
+
+The CBOR map includes the following configuration parameters, whose CBOR abbreviations are defined in {{pubsub-parameters}} of this document.
+
+* 'topic_name': A required field used as an application identifier. It encodes the topic name as a CBOR text string. Examples of topic names include human-readable strings (e.g., "room2"), UUIDs, or other values.
+
+* 'topic_data': A required field (optional during creation) containing the CoAP URI of the topic data resource for subscribing to a pubsub topic. It encodes the URI as a CBOR text string. This property may contain a fully formed URL including scheme and host or just the resource path depending on where the topic data is hosted.
+
+<!--
+TODO: Confirm with Cabo and Marco
+-->
+
+* 'resource_type': A required field used to indicate the resource type associated with topic resources. It encodes the resource type as a CBOR text string. The value should be "core.ps.conf".
+
+* 'media_type': An optional field used to indicate the media type of the topic data resource. It encodes the media type as a CBOR text string (e.g.,"application/json").
+
+* 'target_attribute': An optional field used to indicate the attribute or property of the topic_data resource. It encodes the attribute as a CBOR text string. Example attributes include "temperature".
+
+* 'expiration_date': An optional field used to indicate the expiration date of the topic. It encodes the expiration date as a CBOR text string. The value should be a date string in ISO 8601 format (e.g., "2023-03-31T23:59:59Z"). The pubsub system can use this field to automatically remove topics that are no longer valid.
+
+* 'max_subscribers': An optional field used to indicate the maximum number of subscribers allowed for the topic. It encodes the maximum number as a CBOR integer. If this field is not present, there is no limit to the number of subscribers allowed. The pubsub system can use this field to limit the number of subscribers for a topic.
+
+* 'observer_check': An optional field used to control the frequency at which the server hosting the topic_data will send a notification in a confirmable message to the observer. This prevents a client that is no longer interested or has disconnected from remaining indefinitely in the list of observers. Note that if the topic_data is not hosted by the broker but by another CoAP server it is up to that server to apply the observer_check value.
+
+### Topic Resource Representation {#topic-resource-representation}
+
+A topic is represented as a CBOR map containing the configuration properties of the topic as top-level elements.
+
+Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in {{pubsub-parameters}}.
+
+#### Default Values
+
+Below are the defined default values for the topic parameters:
+
+* 'topic_name': There is no default value. This field is required and must be specified by the client or broker.
+
+* 'topic_data': There is no default value. This field is required and must be specified by the client or broker.
+
+* 'resource_type': The default value for a topic resource is "core.ps.conf".
+
+* 'media_type': The default value is an empty string, indicating that no media type is specified.
+
+* 'target_attribute': The default value is an empty string, indicating that no attribute is specified.
+
+* 'expiration_date': The default value is an empty string, indicating that no expiration date is specified. If this field is not present, the topic will not expire automatically.
+
+* 'max_subscribers': The default value is -1, indicating that there is no limit to the number of subscribers allowed. If this field is not present, the pubsub system will not limit the number of subscribers for the topic.
+
+* 'observer_check': The default value is '86400', as defined in {{!RFC7641}}, which corresponds to 24 hours.
+
+## Discovery
+
+<!--
+TODO: This section requires careful review.
+-->
+
+Discovery involves that of the broker, topic collections, topic resources and topic data.
+
+### Broker Discovery {#broker-discovery}
+
+CoAP clients MAY discover brokers by using CoAP Simple Discovery, via multicast, through a Resource Directory (RD) {{!RFC9167}} or by other means specified in extensions to {{!RFC7252}}. Brokers MAY register with a RD by following the steps on Section 5 of {{!RFC9167}} with the resource type set to "core.ps" as defined in {{iana}} of this document.
+
+### Topic Collection Discovery
+
+A Broker SHOULD offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point thus represents a collection of related resources as specified in {{?RFC6690}} and is identified by the resource type "core.ps.coll". The specific resource path is left for implementations, examples in this document may use the "/ps" path.
+
+The interactions with topic collections are further defined in {{topic-collection-interactions}}.
+
+Example:
 
 ~~~~
-Clients        pub/sub         Broker
-+-------+         |
-| CoAP  |         |
-|pub/sub|---------|------+
-|Client |         |      |    +-------+
-+-------+         |      +----| CoAP  |
-                  |           |pub/sub|
-+-------+         |      +----|Broker |
-| CoAP  |         |      |    +-------+
-|pub/sub|---------|------+
-|Client |         |
-+-------+         |
+=> GET
+   Uri-Path: ./well-known/core
+
+<= 2.05 Content
+   Content-Format: 40 (application/link-format)
+   </ps1>;rt="core.ps.coll";ct=40,
+   </ps2>;rt="core.ps.coll";ct=40,
+   </ps1/h9392>;rt="core.ps.conf",
+   </ps2/other/path/2e3570>; ct=application/link-format; rt=core.ps.conf; obs,
+   </ps1/data/62e4f8d>; rt=core.ps.data; obs
+   </ps2/otherdata/86fe8fd>; rt=core.ps.data; obs
+~~~~
+
+### Topic Discovery {#topic-discovery}
+
+Each topic collection is a group of topic resources. Topic resources contain a set of properties (see Section {{topic-properties}}), each topic resource is represented as a link to its corresponding resource URI. Each topic resource is identified by the resource type "core.ps.conf".
+
+Below is an example discovery via .well-known/core with rt=core.ps.conf that returns a list of topics.
 
 ~~~~
-{: #arch-fig title='CoAP pub/sub Architecture' artwork-align="center"}
+=> 0.01 GET
+   Uri-Path: .well-known/core
+   Resource-Type: core.ps.conf
 
+<= 2.05 Content
+   Content-Format: 40 (application/link-format)
+   </ps1/h9392>;rt="core.ps.conf",
+   </ps2/other/path/2e3570>; ct=application/link-format; rt=core.ps.conf; obs,
+~~~~
 
-## CoAP Pub/sub Broker
+### Topic Data Discovery
 
-A CoAP pub/sub Broker is a CoAP Server that exposes a REST API for clients
-to use to initiate publish-subscribe interactions. Avoiding the need
-for direct reachability between clients, the Broker only needs to be
-reachable from all clients. The Broker also needs to have sufficient
-resources (storage, bandwidth, etc.) to host CoAP resource services,
-and potentially buffer messages, on behalf of the clients.
+Within a topic, there is the 'topic_data' property containing the URI of the topic data resource that a CoAP client can subscribe and publish to. Resources exposing resources of the topic data type are expected to use the resource type 'core.ps.data'.
 
-## CoAP Pub/sub Client
-
-A CoAP pub/sub Client interacts with a CoAP pub/sub Broker using the CoAP pub/sub
-REST API defined in this document. Clients initiate interactions with a CoAP pub/sub Broker. A data source
-(e.g., sensor clients) can publish state updates to the Broker and data sinks
-(e.g., actuator clients) can read from or subscribe to state updates from
-the Broker. Application clients can make use of both publish and subscribe
-in order to exchange state updates with data sources and data sinks.
-
-## CoAP Pub/sub Topic
-
-The clients and Broker use topics to identify a particular resource or
-object in a publish-subscribe system. Topics are conventionally formed
-as a hierarchy, e.g. "/sensors/weather/barometer/pressure" or
-"/EP-33543/sen/3303/0/5700".  The topics are hosted by a Broker and
-all the clients using the Broker share the same namespace for
-topics.
-
-Every CoAP pub/sub topic has an associated link, consisting of a reference
-path on the Broker using URI path {{!RFC3986}} construction and link
-attributes {{!RFC6690}}. Every topic is associated with zero or more
-stored representations and a content-format specified in the link. A
-CoAP pub/sub topic value may alternatively consist of a collection of one or
-more sub-topics, consisting of links to the sub-topic URIs and
-indicated by a link-format content-format. Sub-topics are also topics and
-may have their own sub-topics, forming a tree structure of unique paths that
-is implemented using URIs. The full URI of a topic includes a scheme and
-authority for the Broker, for example
-"coaps://192.0.2.13:5684/EP-33543/sen/3303/0/5700".
-
-A Topic may have a lifetime defined by using the CoAP Max-Age option on topic
-creation, or on publish operations to the topic. The lifetime is refreshed each
-time a representation is published to the topic. If the lifetime expires, the
-topic is removed from discovery responses, returns errors on subscription, and
-any outstanding subscriptions are cancelled.
-
-## Brokerless Pub/sub
-
-In some use cases, it is desireable to use pub/sub semantics for peer-to-peer
-communication, but it is not feasible or desireable to include a separate node
-on the network to serve as a Broker. In other use cases, it is desireable to enable one-way-only communication, such as sensors pushing updates to a service.
-
-{{brokerless}} shows an arrangement for using CoAP pub/sub in a
-"Brokerless" configuration between peer nodes. Nodes in a Brokerless
-system may act as both Broker and client. A node that supports Broker
-functionality may be pre-configured with topics that expose services
-and resources. Brokerless peer nodes can be mixed with client and
-Broker nodes in a system with full interoperability.
+Below is an example discovery via .well-known/core that returns list of topic_data resources.
 
 ~~~~
-  Peer         pub/sub          Peer
-+-------+         |         +-------+
-| CoAP  |         |         | CoAP  |
-|pub/sub|---------|---------|pub/sub|
-|Client |         |         |Broker |
-+-------+         |         +-------+
-| CoAP  |         |         | CoAP  |
-|pub/sub|---------|---------|pub/sub|
-|Broker |         |         |Client |
-+-------+         |         +-------+
+=> 0.01 GET
+   Uri-Path: .well-known/core
+   Resource-Type: core.ps.data
+
+<= 2.05 Content
+   Content-Format: 40 (application/link-format)
+   </ps1/data/62e4f8d>; rt=core.ps.data; obs
+   </ps2/otherdata/86fe8fd>; rt=core.ps.data; obs
+~~~~
+
+## Topic Collection Interactions {#topic-collection-interactions}
+
+These are the interactions that can happen directly with a specific topic collection.
+
+### Retrieving all topic and topic_data {#topic-get-all}
+
+A client can request a collection of the topics present in the broker by making a GET request to the collection URI.
+
+On success, the server returns a 2.05 (Content) response with a representation of the list of all topic resources (see Section {{topic-resource-representation}}) in the collection.
+
+Depending on the permission set each client MAY receive a different list of topics that they are authorized to read.
+
+If there are existing topic_data resources under the collection resource, those will also be present in the response.
+
+Example:
 
 ~~~~
-{: #brokerless title='Brokerless pub/sub' artwork-align="center"}
+=> 0.01 GET
+   Uri-Path: ps
 
-# CoAP Pub/sub REST API {#sec-rest-api}
+<= 2.05 Content
+   Content-Format: 40 (application/link-format)
+   </ps/h9392>;rt="core.ps.conf",
+   </ps/2e3570>; ct=application/link-format; rt=core.ps.conf; obs,
+   </ps/data/62e4f8d>; rt=core.ps.data; obs
+~~~~
 
-This section defines the REST API exposed by a CoAP pub/sub Broker to pub/sub
-Clients.  The examples throughout this section assume the use of CoAP
-{{!RFC7252}}. A CoAP pub/sub Broker implementing this specification SHOULD
-support the DISCOVERY, CREATE, PUBLISH, SUBSCRIBE, UNSUBSCRIBE, READ,
-and REMOVE operations defined in this section. Optimized implementations
-MAY support a subset of the operations as required by particular constrained
-use cases.
+### Getting Topics by Properties {#topic-get-properties}
+<!--
+FETCH to /topic-collection with filter
+retrieve only the topics that match the filter
+request is cbor
+response is link format
+-->
 
-## DISCOVERY {#discover}
+A client can filter a collection of topics by submitting the
+representation of a topic filter (see Section {{topic-fetch-resource}}) in a FETCH request to the topic collection URI.
 
-CoAP pub/sub Clients discover CoAP pub/sub Brokers by using CoAP Simple
-Discovery or through a Resource Directory (RD)
-{{!RFC9167}}. A CoAP pub/sub Broker SHOULD
-indicate its presence and availability on a network by exposing a link
-to the entry point of its pub/sub API at its .well-known/core location {{!RFC6690}}. A CoAP
-pub/sub Broker MAY register its pub/sub REST API entry point with a Resource
-Directory. {{discover-fig}} shows an example of a client discovering a
-local pub/sub API using CoAP Simple Discovery. A Broker wishing to
-advertise the CoAP pub/sub API for Simple Discovery or through a
-Resource Directory MUST use the link relation rt=core.ps. A Broker MAY
-advertise its supported content formats and other attributes in the
-link to its pub/sub API.
+On success, the server returns a 2.05 (Content) response with a
+representation of a list of topics in the collection (see
+Section {{topic-discovery}}) that match the filter in CoRE link format {{!RFC6690}}.
 
-A CoAP pub/sub Broker MAY offer a topic discovery entry point to enable Clients
-to find topics of interest, either by topic name or by link attributes
-which may be registered when the topic is
-created. {{discover-topic-fig}} shows an example of a client looking
-for a topic with a resource type (rt) of "temperature" using
-Discover. The client then receives the URI of the resource and its
-content-format. A pub/sub Broker wishing to advertise topic discovery
-MUST use the relation rt=core.ps.discover in the link.
+Example:
 
-A CoAP pub/sub Broker MAY provide topic discovery functionality through the
-.well-known/core resource. Links to topics may be exposed at
-.well-known/core in addition to links to the pub/sub
-API. {{discover-topic-wk-fig}} shows an example of topic discovery
-through .well-known/core.
+<!--
+TODO: this example and why I was using /ps/tc, tc seems redundant
+update this example.
+-->
 
-Topics in the broker may be created in hierarchies (see {{sec-create}}) with
-parent topics having sub-topics. For a discovery the broker may choose
-to not expose the sub-topics in order to limit amount of topic links
-sent in a discovery response. The client can then perform discovery
-for the parent topics it wants to discover the sub-topics.
+~~~~
+=> 0.05 FETCH
+   Uri-Path: ps
+   Content-Format: TBD (application/pubsub+cbor)
 
-The DISCOVER interface is specified as follows:
+   {
+     "resource_type" : "core.ps.data"
+   }
 
-Interaction:
-: Client -> Broker
+<= 2.05 Content
+   </ps/data/62e4f8d>; rt=core.ps.data; obs
 
-Method:
-: GET
+~~~~
 
-URI Template:
+### Creating a Topic {#topic-create}
+<!--
+POST to /topic-collection
+create new topic
+request is cbor
+response (created) is cbor including the link to new topic-config resource
+creator proposes topic name but broker approves
+-->
 
-: {+ps}/{+topic}{?q\*}
+A client can add a new topic to a collection of topics by submitting a representation of the initial topic resource (see Section {{topic-resource-representation}}) in a POST request to the topic collection URI. The topic MUST contain at least a subset of the {{topic-properties}} , namely: topic_name and resource_type.
 
-URI Template Variables:
-: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
+A CoAP endpoint creating a topic MAY specify a 'topic_data' URI different than that used by the broker. The broker may then simply forward the observation requests to the 'topic_data' URI.
+<!--
+TODO: Expand the topic_data hosted elsewhere section
+-->
 
-: topic := The desired topic to return links for (optional).
+If the 'topic_data' is empty the broker will assign a resource for a publisher to publish to.
 
-: q := Query Filter (optional). MAY contain a query filter list as per
- {{!RFC6690}} Section 4.1.
+On success, the server returns a 2.01 (Created) response indicating the topic URI of the new topic and the current representation of the topic resource.
 
-Content-Format:
-: application/link-format
+If a topic manager is present in the broker, the topic creation  may require manager approval subject to certain conditions. If the conditions are not fulfilled, the manager MUST respond with a 4.03 (Forbidden) error. The response MUST have Content-Format set to "application/core-pubsub+cbor".
 
-The following response codes are defined for the DISCOVER operation:
+The broker MUST respond with a 4.00 (Bad Request) error if any received parameter is specified multiple times, invalid or not recognized.
+
+~~~~
+=> 0.02 POST
+   Uri-Path: ps
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+   TBD (this should be a CBOR map with the mandatory parameters)
+   {
+     "topic_name" : "living_room_sensor"
+     "resource_type" : "core.ps.conf"
+   }
+
+<= 2.01 Created
+   Location-Path: ps/h9392
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+
+   TBD (this should be a CBOR map)
+   {
+     "topic_name" : "living_room_sensor",
+     "topic_data" : "ps/data/1bd0d6d"
+     "resource_type" : "core.ps.conf"
+   }
+~~~~
+
+## Topic Resource Interactions {#topic-resource-interactions}
+
+These are the interactions that can happen at the topic resource level.
+
+### Getting a topic resource  {#topic-get-resource}
+
+<!--
+GET to /topic-config
+retrieve a topic configuration
+response is cbor
+-->
+
+A client can read the configuration of a topic by making a GET request to the topic resource URI.
+
+On success, the server returns a 2.05 (Content) response with a representation of the topic resource. The response has as payload the representation of the topic resource as specified in {{topic-resource-representation}}.
+
+If a topic manager (TBD) is present in the broker, retrieving topic information may require manager approval subject to certain conditions (TBD). If the conditions are not fulfilled, the manager MUST respond with a 4.03 (Forbidden) error. The response MUST have Content-Format set to "application/core-pubsub+cbor".
+
+The response payload is a CBOR map, whose possible entries are specified in {{topic-resource-representation}} and use the same abbreviations defined in {{pubsub-parameters}}.
+
+For example, below is a request on the topic "ps/h9392":
+
+~~~~
+=> 0.01 GET
+   Uri-Path: ps
+   Uri-Path: h9392
+
+<= 2.05 Content
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+   {
+      "topic_name" : "living_room_sensor",
+      "topic_data" : "ps/data/1bd0d6d",
+      "resource_type": "core.ps.conf",
+      "media_type": "application/senml-cbor",
+      "target_attribute": "temperature",
+      "expiration_date": "2023-04-00T23:59:59Z",
+      "max_subscribers": 100
+   }
+
+~~~~
+
+### Getting part of a topic resource by filter {#topic-fetch-resource}
+<!--
+FETCH to /topic-conf with filter
+retrieve only certain parameters from the configuration
+request is cbor
+response is cbor
+-->
+
+A client can read the configuration of a topic by making a FETCH request to the topic resource URI with a filter for specific parameters. This is done in order to retrieve part of the current topic resource.
+
+The request contains a CBOR map with a configuration filter or 'conf_filter', a CBOR array with CBOR abbreviation. Each element of the array specifies one requested configuration parameter of the current topic resource (see {{topic-resource-representation}}).
+
+On success, the server returns a 2.05 (Content) response with a representation of the topic resource. The response has as payload the partial representation of the topic resource as specified in {{topic-resource-representation}}.
+
+If a topic manager (TBD) is present in the broker, retrieving topic information may require manager approval subject to certain conditions (TBD). If the conditions are not fulfilled, the manager MUST respond with a 4.03 (Forbidden) error.
+
+The response payload is a CBOR map, whose possible entries are specified in {{topic-resource-representation}} and use the same abbreviations defined in {{pubsub-parameters}}.
+
+Both request and response MUST have Content-Format set to "application/core-pubsub+cbor".
+
+Example:
+
+~~~~
+=> 0.05 FETCH
+   Uri-Path: ps
+   Uri-Path: h9392
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+   {
+     "conf_filter" : [topic_data, media_type]
+   }
+
+<= 2.05 Content
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+   {
+     "topic_data" : "ps/data/1bd0d6d",
+     "media_type": "application/senml-cbor"
+   }
+
+~~~~
+
+### Updating the Topic Resource {#topic-update-resource}
+
+<!--
+PUT to /topic-conf
+override the whole configuration
+request is cbor
+response is cbor
+-->
+
+A client can update the configuration of a topic by submitting the representation of the updated topic  (see Section 3.1.3) in a PUT or POST request to the topic URI. Any existing properties in the configuration are overwritten by this update.
+
+On success, the server returns a 2.04 (Changed) response and the current full resource representation. The broker may chose not to overwrite parameters that are not explicitly modified in the request.
+
+Note that updating the "topic_data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Similarly, decreasing max_subscribers will also cause that some subscribers get unsubscribed. Unsubscribed endpoints SHOULD receive a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2.
+
+Example:
+
+~~~~
+=> 0.03 PUT
+   Uri-Path: ps
+   Uri-Path: h9392
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+
+   {
+      "topic_name" : "living_room_sensor",
+      "topic_data" : "ps/data/1bd0d6d",
+      "target_attribute": "temperature",
+      "expiration_date": "2023-04-28T23:59:59Z",
+      "max_subscribers": 2
+   }
+
+<= 2.04 Changed
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+
+   TBD (this should be a CBOR map)
+   {
+      "topic_name" : "living_room_sensor",
+      "topic_data" : "ps/data/1bd0d6d",
+      "resource_type": "core.ps.conf",
+      "media_type": "application/senml-cbor",
+      "target_attribute": "temperature",
+      "expiration_date": "2023-04-28T23:59:59Z",
+      "max_subscribers": 2
+   }
+~~~~
+
+### Deleting a Topic Resource {#topic-delete}
+
+A client can delete a topic by making a CoAP DELETE request on the topic resource URI.
+
+On success, the server returns a 2.02 (Deleted) response.
+
+When a topic resource is deleted, the broker SHOULD also delete the topic data resource, unsubscribe all subscribers by removing them from the list of observers and returning a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2.
+
+Example:
+
+~~~~
+=> 0.04 DELETE
+   Uri-Path: ps
+   Uri-Path: h9392
+
+<= 2.02 Deleted
+~~~~
+
+## Publish/Subscribe {#pubsub}
+
+The overview of the publish/subscribe mechanism over CoAP is as follows: a publisher publishes to a topic by submitting the data in a PUT request to a topic_data resource and subscribers subscribe to a topic by submitting a GET request with the Observe option active to a topic_data resource. When resource state changes, subscribers observing the resource {{!RFC7641}} at that time will receive a notification.
+
+As shown in {{topics}}, each topic contains two resources: topic resource and topic data. In that section we explained the creation and configuration of the topic resources. This section will explain the management of topic data resources.
+
+A topic data resource does not exist until some initial data has been published to it.  Before initial data has been published, the topic data resource yields a 4.04 (Not Found) response. If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created" (see {{topic-lifecycle}}).
+
+URIs for topic resources are broker-generated (see {{topic-create}}). URIs for topic-data MAY be broker-generated or client-generated. There is no necessary URI pattern dependence between the URI where the data exists and the URI of the topic resource. Topic resource and data resources might even be hosted on different servers.
+
+### Topic Lifecycle {#topic-lifecycle}
+
+When a topic is newly created, it is first placed by the server into the HALF CREATED state (see {{fig-life}}). In this state, a client can read and update the configuration of the topic and delete the topic. A publisher can publish to the topic data resource.  However, a subscriber cannot yet observe the topic data resource nor read the latest data.
+
+~~~~ aasvg
+                HALF                          FULLY
+              CREATED          Delete        CREATED
+                ____         Topic Data       ____     Publish
+------------>  |    |  <-------------------  |    |  ------------.
+   Create      |    |                        |    |               |
+               |____|  ------------------->  |____|  <-----------'
+                      \      Publish      /            Subscribe
+               |   ^   \       ___       /   |   ^
+         Read/ |   |    '-->  |   |  <--'    |   | Read/
+        Update |   |  Delete  |___|  Delete  |   | Update
+                '-'   Topic          Topic    '-'
+                             DELETED
+~~~~
+{: #fig-life title='Lifecycle of a Topic' artwork-align="center"}
+
+After a publisher publishes to the topic for the first time, the topic is placed into the FULLY CREATED state. In this state, a client can read, update and delete the topic; a publisher can publish to the topic data resource; and a subscriber can observe the topic data resource.
+
+When a client deletes a topic resource, the topic is placed into the DELETED state and shortly after removed from the server. In this state, all subscribers are removed from the list of observers of the topic data resource and no further interactions with the topic are possible.
+
+When a client deletes a topic data, the topic is placed into the HALF CREATED state, where clients can read, update and delete the topic and awaits for a publisher to begin publication.
+
+### Rate Limiting {#rate-limit}
+
+The server hosting a data resource may have to handle a potentially very large number of publishers and subscribers at the same time. This means the server can easily become overwhelmed if it receives too many publications in a short period of time.
+
+In this situation, if a client is sending publications too fast, the server SHOULD return a 4.29 (Too Many Requests) response {{!RFC8516}}.  As described in {{!RFC8516}}, the Max-Age option {{!RFC7252}} in this response indicates the number of seconds after which the client may retry. The Broker MAY stop publishing messages from the client for the indicated time.
+
+When a client receives a 4.29 (Too Many Requests) response, it MUST NOT send any new publication requests to the same topic data resource before the time indicated by the Max-Age option has passed.
+
+## Topic Data Interactions {#topic-data-interactions}
+
+Interactions with the topic_data resource are covered in this section. The interactions with topic_data are same as that of any other CoAP resource.
+
+One variant shown in {{fig-external-server}} is where the resource is hosted. While the broker can create a topic_data resource when the topic is created, the client can select to host the data in a different CoAP server than that of the topic resource.
+
+~~~~ aasvg
+         [central-ps.example.com]
+               CoAP server 1
+  .----------------------------------------.
+  |            ___                         |
+  |  Topic    /   \                        |      [2001:db8::2:1]
+  |Collection \___/                        |       CoAP server 2
+  | Resource       \                       |   .------------------.
+  |                 \___________           |   |                  |
+  |                  \          \          |   |                  |
+  |                   \ ......   \ ......  |   |.........         |
+  |                  : \___  :  : \___  :  |   |:  ___  : Topic   |
+  |           Topic  : / * \ :  : / * \----(---(--/   \ : Data    |
+  |        Resource  : \_|_/ :  : \___/ :  |   |: \___/ : Resource|
+  |                  ....|....  .........  |   |:.......:         |
+  |                  ....|....             |   |                  |
+  |           Topic  :  _|_  :             |   '------------------'
+  |            Data  : /   \ :             |
+  |        Resource  : \___/ :             |
+  |                  :.......:             |
+  '----------------------------------------'
+~~~~
+{: #fig-external-server title="topic data hosted externally" artwork-align="center"}
+
+### Publish {#publish}
+
+A topic must have been created in order to publish data to it (See Section {{topic-create}}) and be in the half-created state in order to the publish operation to work (see {{topic-lifecycle}}).
+
+A client can publish data to a topic by submitting the data in a PUT request to the 'topic_data' URI as indicated in its topic resource property. Please note that the 'topic_data' URI is not the same as the topic URI used for configuring the topic (see {{topic-resource-representation}}).
+
+On success, the server returns a 2.04 (Updated) response. However, when data is published to the topic for the first time, the server instead MUST return a 2.01 (Created) response and set the topic in the fully-created state (see {{topic-lifecycle}}).
+
+If the request does not have an acceptable content format, the server returns a 4.15 (Unsupported Content Format) response.
+
+If the client is sending publications too fast, the server returns a
+4.29 (Too Many Requests) response {{!RFC8516}}.
+
+Example of first publication:
+
+~~~~
+=> 0.03 PUT
+   Uri-Path: ps
+   Uri-Path: data
+   Uri-Path: 1bd0d6d
+   Content-Format: 110
+
+   {
+      "n": "temperature",
+      "u": "Cel",
+      "t": 1621452122,
+      "v": 23.5
+   }
+
+<= 2.01 Created
+~~~~
+
+Example of subsequent publication:
+
+~~~~
+=> 0.03 PUT
+   Uri-Path: ps
+   Uri-Path: data
+   Uri-Path: 1bd0d6d
+   Content-Format: 110
+
+   {
+      "n": "temperature",
+      "u": "Cel",
+      "t": 182734122,
+      "v": 22.5
+   }
+
+<= 2.04 Updated
+~~~~
+
+### Subscribe {#subscribe}
+
+A client can subscribe to a topic by sending a CoAP GET request with the Observe set to '0' to subscribe to resource updates. {{!RFC7641}}.
+
+On success, the broker MUST return 2.05 (Content) notifications with the data.
+
+If the topic is not yet in the fully created state (see {{topic-lifecycle}}) the broker SHOULD return a response code 4.04 (Not Found).
+
+The following response codes are defined for the Subscribe operation:
 
 Success:
-: 2.05 "Content" with an application/link-format payload containing
-  one or more matching entries for the Broker resource. A pub/sub
-  Broker SHOULD use the value "/ps/" for the base URI of the pub/sub
-  API wherever possible.
-
-Failure:
-: 4.04 "Not Found" is returned in case no matching entry is found for
-  a unicast request.
-
-Failure:
-: 4.00 "Bad Request" is returned in case of a malformed request for a unicast
-  request.
-
-Failure:
-: No error response to a multicast request.
-
-~~~~
-Client                                          Broker
-  |                                               |
-  | ------ GET /.well-known/core?rt=core.ps ---->>|
-  | -- Content-Format: application/link-format ---|
-  |                                               |
-  | <<--- 2.05 Content                            |
-  | </ps/>;rt=core.ps;rt=core.ps.discover;ct=40 --|
-  |                                               |
-
-~~~~
-{: #discover-fig title='Example of DISCOVER pub/sub function' artwork-align="center"}
-
-
-~~~~
-Client                                          Broker
-  |                                               |
-  | ---------- GET /ps/?rt="temperature" ------->>|
-  |    Content-Format: application/link-format    |
-  |                                               |
-  | <<-- 2.05 Content                             |
-  |   </ps/currentTemp>;rt="temperature";ct=50 ---|
-  |                                               |
-
-~~~~
-{: #discover-topic-fig title='Example of DISCOVER topic' artwork-align="center"}
-
-
-~~~~
-Client                                          Broker
-  |                                               |
-  | -------- GET /.well-known/core?ct=50 ------->>|
-  |    Content-Format: application/link-format    |
-  |                                               |
-  | <<-- 2.05 Content                             |
-  |   </ps/currentTemp>;rt="temperature";ct=50 ---|
-  |                                               |
-
-~~~~
-{: #discover-topic-wk-fig title='Example of DISCOVER topic' artwork-align="center"}
-
-## CREATE {#sec-create}
-
-A CoAP pub/sub broker SHOULD allow Clients to create new topics on the
-broker using CREATE. Some exceptions are for fixed brokerless devices
-and pre-configured brokers in dedicated installations. A client wishing
-to create a topic MUST use a CoAP POST to the pub/sub API with a payload
-indicating the desired topic. The topic specification sent in the
-payload MUST use a supported serialization of the CoRE link format
-{{!RFC6690}}. The target of the link MUST be a URI formatted
-string. The client MUST indicate the desired content format for
-publishes to the topic by using the ct (Content Format) link attribute
-in the link-format payload. Additional link target attributes and relation
-values MAY be included in the topic specification link when a topic is created.
-
-The client MAY indicate the lifetime of the topic by including the Max-Age
-option in the CREATE request.
-
-Topic hierarchies can be created by creating parent topics. A parent
-topic is created with a POST using ct (Content Format) link attribute
-value which describes a supported serialization of the CoRE link
-format {{!RFC6690}}, such as application/link-format (ct=40) or its
-JSON or CBOR serializations.  If a topic is created which describes a
-link serialization, that topic may then have sub-topics created under
-it as shown in {{create-sub-fig}}.
-
-Ony one level in the topic hierarchy may be created as a result of a CREATE
-operation, unless create on PUBLISH is supported (see {{sec-publish}}).
-The topic string used in the link target MUST NOT contain the "/" character.
-
-A topic creator MUST include exactly one content format link attribute value (ct) in the create payload. If the content format option is not included or if the option is repeated, the Broker MUST reject the operation with an error code of "4.00 Bad Request".
-
-Only one topic may be created per request. If there is more than one link
-included in a CREATE request, the Broker MUST reject the operation with an
-error code of "4.00 Bad Request".
-
-A Broker MUST return a response code of "2.01 Created" if the topic is
-created and MUST return the URI path of the created topic via Location-Path
-options. If a new topic can not be created, the Broker MUST return the appropriate 4.xx response code indicating the reason for failure.
-
-A Broker SHOULD remove topics if the Max-Age of the topic is
-exceeded without any publishes to the topic.  A Broker SHOULD retain a
-topic indefinitely if the Max-Age option is elided or is set to zero
-upon topic creation. The lifetime of a topic MUST be refreshed upon
-create operations with a target of an existing topic.
-
-A topic creator SHOULD PUBLISH an initial value to a newly-created Topic in order to enable responses to READ and SUBSCRIBE requests that may be submitted after the topic is discoverable.
-
-The CREATE interface is specified as follows:
-
-Interaction:
-: Client -> Broker
-
-Method:
-: POST
-
-URI Template:
-: {+ps}/{+topic}
-
-URI Template Variables:
-: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
-
-: topic := The desired topic to return links for (optional).
-
-Content-Format:
-: application/link-format
-
-Payload:
-: The desired topic to CREATE
-
-The following response codes are defined for the CREATE operation:
-
-Success:
-: 2.01 "Created". Successful Creation of the topic
-
-Failure:
-: 4.00 "Bad Request". Malformed request.
-
-Failure:
-: 4.01 "Unauthorized". Authorization failure.
-
-{{create-fig}} shows an example of a topic called "topic1" being
-successfully created.
-
-
-~~~~
-Client                                          Broker
-  |                                               |
-  | ---------- POST /ps/ "<topic1>;ct=50" ------->|
-  |                                               |
-  | <---------------- 2.01 Created ---------------|
-  |               Location: /ps/topic1            |
-  |                                               |
-
-~~~~
-{: #create-fig title='Example of CREATE topic' artwork-align="center"}
-
-
-~~~~
-Client                                          Broker
-  |                                               |
-  | ----- POST /ps/ "<parent-topic>;ct=40" ------>|
-  |                                               |
-  | <---------------- 2.01 Created ---------------|
-  |            Location: /ps/parent-topic/        |
-  |                                               |
-  |-- POST /ps/parent-topic/ "<subtopic>;ct=50" ->|
-  |                                               |
-  | <---------------- 2.01 Created ---------------|
-  |       Location: /ps/parent-topic/subtopic     |
-  |                                               |
-  |                                               |
-
-~~~~
-{: #create-sub-fig title='Example of CREATE of topic hierarchy' artwork-align="center"}
-
-## PUBLISH {#sec-publish}
-
-A CoAP pub/sub Broker MAY allow clients to PUBLISH to topics on
-the Broker. A client MAY use the PUT or the POST method to publish
-state updates to the CoAP pub/sub Broker. A client MUST use the content
-format specified upon creation of a given topic to publish updates to
-that topic. The Broker MUST reject publish operations which do not use
-the specified content format.  A CoAP client publishing on a topic MAY
-indicate the maximum lifetime of the value by including the Max-Age
-option in the publish request. The Broker MUST return a response code
-of "2.04 Changed" if the publish is accepted.  A Broker MAY return a
-"4.04 Not Found" if the topic does not exist. A Broker MAY return
-"4.29 Too Many Requests" if simple flow control as described in
-{{sec-flow-control}} is implemented.
-
-A Broker MUST accept PUBLISH operations using the PUT method. PUBLISH
-operations using the PUT method replace any stored representation
-associated with the topic, with the supplied representation. A Broker
-MAY reject, or delay responses to, PUT requests to a topic while
-pending resolution of notifications to subscribers from previous PUT
-requests.
-
-Create on PUBLISH: A Broker MAY accept PUBLISH operations to new topics using
-the PUT method. If a Broker accepts a PUBLISH using PUT to a topic that does
-not exist, the Broker MUST create the topic using the information in the
-PUT operation. The Broker MUST create a topic with the URI-Path of the request,
-including all of the sub-topics necessary, and create a topic link with the
-ct attribute set to the content-format value from the header of the PUT request.
-If topic is created, the Broker MUST return the response "2.01 Created" with
-the URI of the created topic, including all of the created path segments,
-returned via the Location-Path option.
-
-{{create-publish-fig}} shows an example of a topic being created on first
-PUBLISH.
-
-A Broker MAY accept PUBLISH operations using the POST method. If a
-Broker accepts PUBLISH using POST it shall respond with the 2.04 Changed
-status code. If an attempt is made to PUBLISH using POST to a topic that does
-not exist, the Broker SHALL return a response status indicating resource not
-found, such as HTTP 404 or CoAP 4.04.
-
-A Broker MAY perform garbage collection of stored representations
-which have been delivered to all subscribers or which have timed
-out. A Broker MAY retain at least one most recently published
-representation to return in response to SUBSCRIBE and READ requests.
-
-A Broker MUST make a best-effort attempt to notify all clients
-subscribed on a particular topic each time it receives a publish on
-that topic. An example is shown in {{subscribe-fig}}.
-
-If a client publishes to a Broker without the Max-Age option, the Broker MUST
-refresh the topic lifetime with the most recently set Max-Age value, and the
-Broker MUST include the most recently set Max-Age value in the Max-Age option of
-all notifications.
-
-If a client publishes to a Broker with the Max-Age option, the Broker MUST
-include the same value for the Max-Age option in all notifications.
-
-A Broker MUST use CoAP Notification as described in {{!RFC7641}} to notify
-subscribed clients.
-
-The PUBLISH operation is specified as follows:
-
-Interaction:
-: Client -> Broker
-
-Method:
-: PUT, POST
-
-URI Template:
-: {+ps}/{+topic}
-
-URI Template Variables:
-: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
-
-: topic := The desired topic to return links for (optional).
-
-Content-Format:
-: Any valid CoAP content format
-
-Payload:
-: Representation of the topic value (CoAP resource state representation) in
-  the indicated content format
-
-The following response codes are defined for the PUBLISH operation:
-
-Success:
-: 2.01 "Created". Successful publish, topic is created
-
-Success:
-: 2.04 "Changed". Successful publish, topic is updated
-
-Failure:
-: 4.00 "Bad Request". Malformed request.
-
-Failure:
-: 4.01 "Unauthorized". Authorization failure.
+: 2.05 "Content". Successful subscribe with observe response, current value included in the response.
 
 Failure:
 : 4.04 "Not Found". Topic does not exist.
 
-Failure:
-: 4.29 "Too Many Requests". The client should slow down the rate of publish
-  messages for this topic (see {{sec-flow-control}}).
+If the 'max_clients' parameter has been reached, the server must treat that as specified in section 4.1 of {{!RFC7641}}. The response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
 
-{{publish-fig}} shows an example of a new value being successfully
-published to the topic "topic1". See {{subscribe-fig}} for an example
-of a Broker forwarding a message from a publishing client to a
-subscribed client.
-
+Example:
 
 ~~~~
-Client                                          Broker
-  |                                               |
-  | ---------- PUT /ps/topic1 "1033.3"  --------> |
-  |                                               |
-  |                                               |
-  | <--------------- 2.04 Changed---------------- |
-  |                                               |
+=> 0.01 GET
+   Uri-Path: ps
+   Uri-Path: data
+   Uri-Path: 1bd0d6d
+   Observe: 0
+
+<= 2.05 Content
+   Content-Format: 110
+   Observe: 10001
+   Max-Age: 15
+
+   [...SenML data...]
+
+<= 2.05 Content
+   Content-Format: 110
+   Observe: 10002
+   Max-Age: 15
+
+   [...SenML data...]
+
+<= 2.05 Content
+   Content-Format: 110
+   Observe: 10003
+   Max-Age: 15
+
+   [...SenML data...]
+~~~~
+
+### Unsubscribe {#unsubscribe}
+
+A CoAP client can unsubscribe simply by cancelling the observation as described in Section 3.6 of {{!RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification.
+
+In some circumstances, it may be desirable to cancel an observation and release the resources allocated by the broker. In this case, a client MAY explicitly deregister by issuing a GET request that has the Token field set to the token of the observation to be cancelled and includes an Observe Option with the value set to 1 (deregister).
+
+As per {{!RFC7641}} a server that transmits notifications mostly in non-confirmable messages MUST send a notification in a confirmable message instead of a non-confirmable message at least every 24 hours.
+
+This value can be modified at the broker by the administrator of a topic by modifying the parameter "observer_check" on {{topic-resource-representation}}. This would allow to change the rate at which different implementations verify that a subscriber is still interested in observing a topic_data resource.
+
+### Delete topic data resource {#delete-topic-data}
+
+A publisher MAY delete a topic by making a CoAP DELETE request on the 'topic_data' URI.
+
+On success, the server returns a 2.02 (Deleted) response.
+
+When a topic_data resource is deleted, the broker SHOULD also delete the 'topic_data' parameter in the topic resource, unsubscribe all subscribers by removing them from the list of observers and return a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2. The topic is then set back to the half created state as per {{topic-lifecycle}}.
+
+Example:
 
 ~~~~
-{: #publish-fig title='Example of PUBLISH' artwork-align="center"}
+=> 0.04 DELETE
+   Uri-Path: ps
+   Uri-Path: data
+   Uri-Path: 1bd0d6d
 
+<= 2.02 Deleted
+~~~~
 
+### Read latest data {#read-data}
 
+A client can get the latest published topic data by making a GET request to the 'topic_data' URI in the broker. Please note that discovery of the 'topic_data' parameter is a required previous step (see {{topic-get-resource}}).
+
+On success, the server MUST return 2.05 (Content) response with the data.
+
+If the target URI does not match an existing resource or the topic is not in the fully created state (see {{topic-lifecycle}}), the broker SHOULD return a response code 4.04 (Not Found).
+
+If the broker can not return the requested content format it MUST return a response code 4.15 (Unsupported Content Format).
+
+Example:
 
 ~~~~
-Client                                          Broker
-  |                                               |
-  | -------- PUT /ps/exa/mpl/e "1033.3"  -------> |
-  |                                               |
-  |                                               |
-  | <--------------- 2.01 Created---------------- |
-  |             Location: /ps/exa/mpl/e           |
-  |                                               |
+=> 0.01 GET
+   Uri-Path: ps
+   Uri-Path: data
+   Uri-Path: 1bd0d6d
+
+<= 2.05 Content
+   Content-Format: 110
+   Max-Age: 15
+
+   {
+      "n": "temperature",
+      "u": "Cel",
+      "t": 1621452122,
+      "v": 23.5
+   }
+~~~~
+
+
+<!--
+TODO: Do we add wildcards here?
+https://github.com/core-wg/coap-pubsub/issues/42
+
+### Subscribe to a subset of topic_data resources  {#wildcard}
+
+Some implementations may want to subscribe to multiple topic_data resources with one single request. That is possible by using FETCH with
+
+
+-->
+
+# CoAP Pubsub Parameters {#pubsub-parameters}
+
+This document defines parameters used in the messages exchanged between a client and the broker during the topic creation and configuration process (see {{topic-resource-representation}}). The table below summarizes them and specifies the CBOR key to use instead of the full descriptive name.
+
+Note that the media type application/core-pubsub+cbor MUST be used when these parameters are transported in the respective message fields.
 
 ~~~~
-{: #create-publish-fig title='Example of CREATE on PUBLISH' artwork-align="center"}
-
-
-## SUBSCRIBE
-
-A CoAP pub/sub Broker MAY allow Clients to subscribe to topics on the Broker
-using CoAP Observe as described in {{!RFC7641}}. A CoAP pub/sub Client wishing
-to Subscribe to a topic on a Broker MUST use a CoAP GET with the Observe
-option set to 0 (zero). The Broker MAY add the client to a
-list of observers. The Broker MUST return a response code of "2.05 Content"
-along with the most recently published value if the topic contains a valid
-value and the Broker can supply the requested content format. The Broker
-MUST reject Subscribe requests on a topic if the content format of the request
-is not the content format the topic was created with.
-
-If the topic was published with the Max-Age option, the Broker MUST set the Max-Age option in the valid response to the amount of time remaining for the value to be valid since the last publish operation on that topic.
-
-The Broker MUST return a response code "4.04 Not Found" if the topic does not
-exist or has been removed, or if Max-Age of a previously published
-representation has expired.
-
-If a Topic has been created but not yet published to when a SUBSCRIBE to the
-topic is received, the Broker MAY acknowledge and queue the pending SUBSCRIBE
-and defer the response until an initial PUBLISH occurs.
-
-The Broker MUST return a response code "4.15 Unsupported Content Format" if it
-can not return the requested content format. If a Broker is unable to accept a
-new Subscription on a topic, it SHOULD return the appropriate response code
-without the Observe option as per {{!RFC7641}} Section 4.1.
-
-There is no explicit maximum lifetime of a Subscription, thus a Broker may
-remove subscribers at any time. The Broker, upon removing a Subscriber, will
-transmit the appropriate response code without the Observe option, as per
-{{!RFC7641}} Section 4.2, to the removed Subscriber.
-
-The SUBSCRIBE operation is specified as follows:
-
-Interaction:
-: Client -> Broker
-
-Method:
-: GET
-
-Options:
-: Observe:0
-
-URI Template:
-: {+ps}/{+topic}
-
-URI Template Variables:
-: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
-
-: topic := The desired topic to return links for (optional).
-
-The following response codes are defined for the SUBSCRIBE operation:
-
-Success:
-: 2.05 "Content". Successful subscribe, current value included
-
-Failure:
-: 4.00 "Bad Request". Malformed request.
-
-Failure:
-: 4.01 "Unauthorized". Authorization failure.
-
-Failure:
-: 4.04 "Not Found". Topic does not exist.
-
-Failure:
-: 4.15 "Unsupported Content Format". Unsupported content format.
-
-{{subscribe-fig}} shows an example of Client2 subscribing to "topic1"
-and receiving a response from the Broker, with a subsequent
-notification. The subscribe response from the Broker uses the last
-stored value associated with the topic1. The notification from the
-Broker is sent in response to the publish received from Client1.
-
-
++-----------------+-----------+--------------+------------+
+| Name            | CBOR Key  | CBOR Type    | Reference  |
+|-----------------|-----------|--------------|------------|
+| topic_name      | TBD1      | tstr         | [RFC-XXXX] |
+| topic_data      | TBD2      | tstr         | [RFC-XXXX] |
+| resource_type   | TBD3      | tstr         | [RFC-XXXX] |
+| media_type      | TBD4      | tstr (opt)   | [RFC-XXXX] |
+| target_attribute| TBD5      | tstr (opt)   | [RFC-XXXX] |
+| expiration_date | TBD6      | tstr (opt)   | [RFC-XXXX] |
+| max_subscribers | TBD7      | uint (opt)   | [RFC-XXXX] |
++-----------------+-----------+--------------+------------+
 ~~~~
-Client1   Client2                                          Broker
-  |          |                   Subscribe                   |
-  |          | ----- GET /ps/topic1 Observe:0 Token:XX ----> |
-  |          |                                               |
-  |          | <---------- 2.05 Content Observe:10---------- |
-  |          |                                               |
-  |          |                                               |
-  |          |                    Publish                    |
-  | ---------|----------- PUT /ps/topic1 "1033.3"  --------> |
-  |          |                    Notify                     |
-  |          | <---------- 2.05 Content Observe:11 --------- |
-  |          |                                               |
+{: #fig-CoAP-Pubsub-Parameters title="CoAP Pubsub Parameters" artwork-align="center"}
 
-~~~~
-{: #subscribe-fig title='Example of SUBSCRIBE' artwork-align="center"}
+# Security Considerations
 
+The security considerations discussed in this document cover various aspects related to the publish-subscribe architecture and the management of topics, administrators, and the change of topic configuration.
 
-## UNSUBSCRIBE
+## Change of Topic Configuration
 
-If a CoAP pub/sub Broker allows clients to SUBSCRIBE to topics on the Broker,
-it MUST allow Clients to unsubscribe from topics on the Broker using the CoAP
-Cancel Observation operation. A CoAP pub/sub Client wishing to unsubscribe
-to a topic on a Broker MUST either use CoAP GET with Observe using an Observe
-parameter of 1 or send a CoAP Reset message in response to a publish, as
-per {{!RFC7641}}.
+When a topic configuration changes, it may result in disruptions for the subscribers. Some potential issues that may arise include:
 
-The UNSUBSCRIBE operation is specified as follows:
+* Limiting the number of subscribers will cause to cancel ongoing subscriptions until max_subscribers has been reached.
+* Changing the topic_data value will cancel all ongoing subscriptions.
+* Changing of the expiration_date may cause to cancel ongoing subscriptions if the topic expires at an earlier data.
 
-Interaction:
-: Client -> Broker
+To address these potential issues, it is vital to have an administration process in place for topic configurations, including monitoring, validation, and enforcement of security policies and procedures.
 
-Method:
-: GET
+It is also recommended for subscribers to subscribe to the topic configuration resource in order to receive notifications of topic parameter changes.
 
-Options:
-: Observe:1
+## Topic Administrators
 
-URI Template:
-: {+ps}/{+topic}{?q\*}
+In a publish-subscribe architecture, it is essential to ensure that topic administrators are trustworthy and authorized to perform their duties. This includes the ability to create, modify, and delete topics, enforce proper access control policies, and handle potential security issues arising from topic management.
 
-URI Template Variables:
-: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub
-REST API, as obtained from discovery, used to discover topics.
+The draft {{I-D.ietf-ace-pubsub-profile}} defines an application profile of the Authentication and Authorization for Constrained Environments (ACE) framework. The profile is designed to enable secure group communication for the architecture defined in this document "{{&SELF}}" (See {{fig-arch}}).
 
-: topic := The desired topic to return links for (optional).
+The profile relies on protocol-specific transport profiles of ACE for communication security, server authentication, and proof-of-possession for a key that is owned by the Client and bound to an OAuth 2.0 Access Token.
 
-: q := Query Filter (optional). MAY contain a query filter list as per
- {{!RFC6690}} Section 4.1.
+The document outlines the provisioning and enforcement of authorization information for Clients to act as Publishers and/or Subscribers. Additionally, it specifies the provisioning of keying material and security parameters that Clients use to protect their communications end-to-end through the Broker.
 
-The following response codes are defined for the UNSUBSCRIBE operation:
+## Caching and Freshness
 
-Success:
-: 2.05 "Content". Successful unsubscribe, current value included
+A broker could become overloaded if it always had to provide the most recent cached resource representation of a topic_data to a subscriber. On deployments with a large number of clients and with many topic resources this would represent a big burden on the broker.
 
-Success:
-: 2.07 "No Content". Successful unsubscribe, value not included
+For this reason is it recommended to consider changing the default Max-Age Option, which has a value of 60 in CoAP, in order to cater to different deployment scenarios.
 
-Failure:
-: 4.00 "Bad Request". Malformed request.
-
-Failure:
-: 4.01 "Unauthorized". Authorization failure.
-
-Failure:
-: 4.04 "Not Found". Topic does not exist.
-
-{{unsubscribe-fig}} shows an example of a client unsubscribe using the
-Observe=1 cancellation method.
-
-~~~~
-Client                                          Broker
-  |                                               |
-  | ----- GET /ps/topic1 Observe:1 Token:XX ----> |
-  |                                               |
-  | <------------- 2.05 Content ----------------- |
-  |                                               |
-
-~~~~
-{: #unsubscribe-fig title='Example of UNSUBSCRIBE' artwork-align="center"}
-
-## READ
-
-A CoAP pub/sub Broker MAY accept Read requests on a topic using the the CoAP
-GET method if the content format of the request matches the content format the
-topic was created with. The Broker MUST return a response code of "2.05
-Content" along with the most recently published value if the topic contains
-a valid value and the Broker can supply the requested content format.
-
-If the topic was published with the Max-Age option, the Broker MUST set the
-Max-Age option in the valid response to the amount of time remaining for the
-value to be valid since the last publish operation on that topic.
-
-The Broker MUST return a response code "4.04 Not Found" if the topic does not
-exist or has been removed, or if Max-Age of a previously published
-representation has expired.
-
-If a Topic has been created but not yet published to when a READ to the topic is
-received, the Broker MAY acknowledge and queue the pending READ, and defer the
-response until an initial PUBLISH occurs.
-
-The Broker MUST return a response code "4.15 Unsupported Content Format" if the
-Broker can not return the requested content format.
-
-The READ operation is specified as follows:
-
-Interaction:
-: Client -> Broker
-
-Method:
-: GET
-
-URI Template:
-: {+ps}/{+topic}
-
-URI Template Variables:
-: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub
-REST API, as obtained from discovery, used to discover topics.
-
-: topic := The desired topic to return links for (optional).
-
-The following response codes are defined for the READ operation:
-
-Success:
-: 2.05 "Content". Successful READ, current value included
-
-Failure:
-: 4.00 "Bad Request". Malformed request.
-
-Failure:
-: 4.01 "Unauthorized". Authorization failure.
-
-Failure:
-: 4.04 "Not Found". Topic does not exist.
-
-Failure:
-: 4.15 "Unsupported Content Format". Unsupported content-format.
-
-{{read-fig}} shows an example of a successful READ from topic1,
-followed by a Publish on the topic, followed at some time later by a
-read of the updated value from the recent Publish.
-
-
-~~~~
-Client1   Client2                                          Broker
-  |          |                     Read                      |
-  |          | --------------- GET /ps/topic1 -------------> |
-  |          |                                               |
-  |          | <---------- 2.05 Content "1007.1"------------ |
-  |          |                                               |
-  |          |                                               |
-  |          |                    Publish                    |
-  | ---------|----------- PUT /ps/topic1 "1033.3"  --------> |
-  |          |                                               |
-  |          |                                               |
-  |          |                     Read                      |
-  |          | --------------- GET /ps/topic1 -------------> |
-  |          |                                               |
-  |          | <----------- 2.05 Content "1033.3" ---------- |
-  |          |                                               |
-
-~~~~
-{: #read-fig title='Example of READ' artwork-align="center"}
-
-
-## REMOVE
-
-A CoAP pub/sub Broker MAY allow clients to remove topics from the Broker
-using the CoAP Delete
-method on the URI of the topic. The CoAP pub/sub Broker MUST return
-"2.02 Deleted" if the removal is successful. The Broker MUST
-return the appropriate 4.xx response code indicating the reason for
-failure if the topic can not be removed.
-
-When a topic is removed for any reason, the Broker SHOULD remove all of the
-observers from the list of observers and return a final 4.04 "Not Found"
-response as per {{!RFC7641}} Section 3.2. If a topic which has sub-topics is
-removed, then all of its sub-topics MUST be recursively removed.
-
-The REMOVE operation is specified as follows:
-
-Interaction:
-: Client -> Broker
-
-Method:
-: DELETE
-
-URI Template:
-: {+ps}/{+topic}
-
-URI Template Variables:
-: ps := Pub/sub REST API entry point (optional). The entry point of the pub/sub REST API, as obtained from discovery, used to discover topics.
-
-: topic := The desired topic to return links for (optional).
-
-Content-Format:
-: None
-
-Response Payload:
-: None
-
-The following response codes are defined for the REMOVE operation:
-
-Success:
-: 2.02 "Deleted". Successful remove
-
-Failure:
-: 4.00 "Bad Request". Malformed request.
-
-Failure:
-: 4.01 "Unauthorized". Authorization failure.
-
-Failure:
-: 4.04 "Not Found". Topic does not exist.
-
-{{remove-fig}} shows a successful remove of topic1.
-
-
-
-~~~~
-Client                                         Broker
- |                                               |
- | ------------- DELETE /ps/topic1 ------------> |
- |                                               |
- |                                               |
- | <-------------- 2.02 Deleted ---------------- |
- |                                               |
-
-~~~~
-{: #remove-fig title='Example of REMOVE' artwork-align="center"}
-
-
-# CoAP Pub/sub Operation with Resource Directory
-
-A CoAP pub/sub Broker may register the base URI, which is the REST API entry point for a pub/sub service, with a Resource
-Directory. A pub/sub Client may use an RD to discover a pub/sub Broker.
-
-A CoAP pub/sub Client may register links {{!RFC6690}} with a Resource
-Directory to enable discovery of created pub/sub topics. A pub/sub
-Client may use an RD to discover pub/sub Topics. A client which
-registers pub/sub Topics with an RD MUST use the context relation (con)
-{{!RFC9167}} to indicate that the context of
-the registered links is the pub/sub Broker.
-
-A CoAP pub/sub Broker may alternatively register links to its topics to
-a Resource Directory by triggering the RD to retrieve it's links from
-.well-known/core.  In order to use this method, the links must first
-be exposed in the .well-known/core of the pub/sub Broker. See
-{{discover}} in this document.
-
-The pub/sub Broker triggers the RD to retrieve its links by sending a
-POST with an empty payload to the .well-known/core of the Resource
-Directory.  The RD server will then retrieve the links from the
-.well-known/core of the pub/sub Broker and incorporate them into the
-Resource Directory. See {{!RFC9167}} for
-further details.
-
-# Sleep-Wake Operation
-
-CoAP pub/sub provides a way for client nodes to sleep between operations,
-conserving energy during idle periods. This is made possible by shifting
-the server role to the Broker, allowing the Broker to be always-on and respond
-to requests from other clients while a particular client is sleeping.
-
-For example, the Broker will retain the last state update received from a
-sleeping client, in order to supply the most recent state update to other
-clients in response to read and subscribe operations.
-
-Likewise, the Broker will retain the last state update received on the topic
-such that a sleeping client, upon waking, can perform a read operation to
-the Broker to update its own state from the most recent system state update.
-
-# Simple Flow Control {#sec-flow-control}
-
-Since the Broker node has to potentially send a large amount of
-notification messages for each publish message and it may be serving a
-large amount of subscribers and publishers simultaneously, the Broker
-may become overwhelmed if it receives many publish messages to popular
-topics in a short period of time.
-
-If the Broker is unable to serve a certain client that is sending publish
-messages too fast, the Broker SHOULD respond with Response Code 4.29, "Too Many
-Requests" {{!RFC8516}} and set the Max-Age Option to indicate the number of
-seconds after which the client can retry. The Broker MAY stop creating
-notifications from the publish messages from this client and to this topic for
-the indicated time.
-
-If a client receives the 4.29 Response Code from the Broker for a
-publish message to a topic, it MUST NOT send new publish messages to
-the Broker on the same topic before the time indicated in Max-Age has
-passed.
-
-# Security Considerations {#SecurityConsiderations}
-
-CoAP pub/sub re-uses CoAP {{!RFC7252}}, CoRE Resource Directory
-{{!RFC9167}}, and Web Linking {{?RFC5988}} and
-therefore the security considerations of those documents also apply to
-this specification. Additionally, a CoAP pub/sub Broker and the clients
-SHOULD authenticate each other and enforce access control policies. A
-malicious client could subscribe to data it is not authorized to or
-mount a denial of service attack against the Broker by publishing a
-large number of resources.  The authentication can be performed using
-the already standardized DTLS offered mechanisms, such as
-certificates. DTLS also allows communication security to be
-established to ensure integrity and confidentiality protection of the
-data exchanged between these relevant parties. Provisioning the
-necessary credentials, trust anchors and authorization policies is
-non-trivial and subject of ongoing work.
-
-The use of a CoAP pub/sub Broker introduces challenges for the use of
-end-to-end security between for example a client device on a sensor
-network and a client application running in a cloud-based server
-infrastructure since Brokers terminate the exchange. While running
-separate DTLS sessions from the client device to the Broker and from
-Broker to client application protects confidentially on those paths,
-the client device does not know whether the commands coming from the
-Broker are actually coming from the client application. Similarly, a
-client application requesting data does not know whether the data
-originated on the client device. For scenarios where end-to-end
-security is desirable the use of application layer security is
-unavoidable. Application layer security would then provide a guarantee
-to the client device that any request originated at the client
-application. Similarly, integrity protected sensor data from a client
-device will also provide guarantee to the client application that the
-data originated on the client device itself. The protected data can
-also be verified by the intermediate Broker ensuring that it
-stores/caches correct request/response and no malicious
-messages/requests are accepted. The Broker would still be able to
-perform aggregation of data/requests collected.
-
-Depending on the level of trust users and system designers place in
-the CoAP pub/sub Broker, the use of end-to-end object security is
-RECOMMENDED as described in {{?I-D.ietf-ace-pubsub-profile}}.
-An example application that uses the CoAP pub/sub Broker and relies on
-end-to-end object security is described in {{?RFC8387}}.
-When only end-to-end encryption  is necessary and the CoAP Broker is
-trusted, Payload Only Protection (Mode:PAYL) could be used.
-The Publisher would wrap only the  payload before sending it to
-the Broker and set the option Content-Format to application/smpayl.
-Upon receival, the Broker can read the unencrypted CoAP header
-to forward it to the subscribers.
+For example, the broker could choose not to cache anything, therefore it SHOULD explicitly include a Max-Age Option with a value of zero seconds. For more information about caching and freshness in CoAP, please check {{!RFC7252}} and {{!RFC7641}}
 
 # IANA Considerations {#iana}
 
-This document registers one attribute value in the Resource Type (rt=) registry
-established with {{!RFC6690}} and appends to the definition of one CoAP Response Code in the CoRE Parameters Registry.
+<!-- TBD: This section is structured similarly as:
+https://www.ietf.org/archive/id/draft-ietf-ace-oscore-gm-admin-07.html#name-resource-types
+https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.1
+https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.2
+-->
 
-## Resource Type value 'core.ps'
+This document has the following actions for IANA.
 
-* Attribute Value: core.ps
+Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with the RFC number of this specification and delete this paragraph.
 
-* Description: {{sec-rest-api}} of [[This document]]
+## CoAP Pubsub Parameters ## {#iana-coap-pubsub-parameters}
 
-* Reference: [[This document]]
+IANA is asked to register the following entries in the "CoAP Pubsub Parameters" registry.
 
-* Notes: None
+~~~
+Name: topic_name
+CBOR Key: TBD1
+CBOR Type: tstr
+Reference: [RFC-XXXX]
 
-## Resource Type value 'core.ps.discover'
+Name: topic_data
+CBOR Key: TBD2
+CBOR Type: tstr
+Reference: [RFC-XXXX]
 
+Name: resource_type
+CBOR Key: TBD3
+CBOR Type: tstr
+Reference: [RFC-XXXX]
 
-* Attribute Value: core.ps.discover
+Name: media_type
+CBOR Key: TBD4
+CBOR Type: tstr (opt)
+Reference: [RFC-XXXX]
 
-* Description: {{sec-rest-api}} of [[This document]]
+Name: target_attribute
+CBOR Key: TBD5
+CBOR Type: tstr (opt)
+Reference: [RFC-XXXX]
 
-* Reference: [[This document]]
+Name: expiration_date
+CBOR Key: TBD6
+CBOR Type: tstr (opt)
+Reference: [RFC-XXXX]
 
-* Notes: None
+Name: max_subscribers
+CBOR Key: TBD7
+CBOR Type: uint (opt)
+Reference: [RFC-XXXX]
 
-# Acknowledgements {#acks}
+Name: core.ps
+CBOR Key: TBD8
+CBOR Type: tstr
+Reference: [RFC-XXXX]
 
-The authors would like to thank Klaus Hartke, Hannes Tschofenig, Zach Shelby, Mohit Sethi,
-Peter van der Stok, Tim Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen,
-and Olaf Bergmann for their contributions and reviews.
+Name: core.ps.coll
+CBOR Key: TBD9
+CBOR Type: tstr
+Reference: [RFC-XXXX]
 
---- back
+Name: core.ps.conf
+CBOR Key: TBD10
+CBOR Type: tstr
+Reference: [RFC-XXXX]
+
+Name: core.ps.data
+CBOR Key: TBD11
+CBOR Type: tstr
+Reference: [RFC-XXXX]
+~~~
+
+## Resource Types # {#iana-rt}
+
+IANA is asked to enter the following values in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group.
+
+~~~
+Value: core.ps
+Description: Publish-Subscribe Broker
+Reference: [RFC-XXXX]
+
+Value: core.ps.coll
+Description: Topic-collection resource of a Publish-Subscribe Broker
+Reference: [RFC-XXXX]
+
+Value: core.ps.conf
+Description: Topic-configuration resource of a Publish-Subscribe Broker
+Reference: [RFC-XXXX]
+
+Value: core.ps.data
+Description: Topic-data resource of a Publish-Subscribe Broker
+Reference: [RFC-XXXX]
+~~~
+
+# Acknowledgements
+
+The current version of this document contains a substantial contribution by Klaus Hartke's proposal {{I-D.hartke-t2trg-coral-pubsub}}, which defines the topic resource model and structure as well as the topic lifecycle and interactions. It also follows a similar architectural design as that provided by Marco Tiloca's {{I-D.ietf-ace-oscore-gm-admin}}.
+
+The authors would like to also thank Carsten Bormann, Hannes Tschofenig, Zach Shelby, Mohit Sethi, Peter van der Stok, Tim Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen, and Olaf Bergmann for their valuable contributions and reviews.

@@ -22,3 +22,6 @@ package-lock.json
 report.xml
 !requirements.txt
 .DS_Store
+reference/topic-param.md
+.gitignore
+reference/draft-ietf-ace-oscore-gm-admin.md

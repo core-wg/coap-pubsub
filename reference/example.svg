@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="160" width="472" viewBox="0 0 472 160" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+<path d="M 92,40 L 100,56" fill="none" stroke="black"/>
+<path d="M 148,120 L 156,136" fill="none" stroke="black"/>
+<path d="M 136,64 L 156,104" fill="none" stroke="black"/>
+<path d="M 124,24 L 132,40" fill="none" stroke="black"/>
+<path d="M 180,104 L 188,120" fill="none" stroke="black"/>
+<path d="M 212,120 L 220,136" fill="none" stroke="black"/>
+<path d="M 212,88 L 220,104" fill="none" stroke="black"/>
+<path d="M 244,104 L 252,120" fill="none" stroke="black"/>
+<path d="M 308,120 L 316,136" fill="none" stroke="black"/>
+<path d="M 308,88 L 316,104" fill="none" stroke="black"/>
+<path d="M 340,104 L 348,120" fill="none" stroke="black"/>
+<path d="M 92,40 L 100,24" fill="none" stroke="black"/>
+<path d="M 124,56 L 132,40" fill="none" stroke="black"/>
+<path d="M 148,120 L 156,104" fill="none" stroke="black"/>
+<path d="M 180,136 L 188,120" fill="none" stroke="black"/>
+<path d="M 212,120 L 220,104" fill="none" stroke="black"/>
+<path d="M 244,136 L 252,120" fill="none" stroke="black"/>
+<path d="M 308,120 L 316,104" fill="none" stroke="black"/>
+<path d="M 340,136 L 348,120" fill="none" stroke="black"/>
+<path d="M 100,24 L 124,24" fill="none" stroke="black"/>
+<path d="M 100,56 L 124,56" fill="none" stroke="black"/>
+<path d="M 148,88 L 308,88" fill="none" stroke="black"/>
+<path d="M 156,104 L 180,104" fill="none" stroke="black"/>
+<path d="M 220,104 L 244,104" fill="none" stroke="black"/>
+<path d="M 316,104 L 340,104" fill="none" stroke="black"/>
+<path d="M 156,136 L 180,136" fill="none" stroke="black"/>
+<path d="M 220,136 L 244,136" fill="none" stroke="black"/>
+<path d="M 316,136 L 340,136" fill="none" stroke="black"/>
+<g class="text">
+<text x="40" y="36">Topic</text>
+<text x="44" y="52">Collection</text>
+<text x="44" y="68">Resource</text>
+<text x="280" y="116">...</text>
+<text x="432" y="116">Topic</text>
+<text x="432" y="132">Resources</text>
+</g>
+</svg>

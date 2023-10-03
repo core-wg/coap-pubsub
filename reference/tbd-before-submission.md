@@ -1,0 +1,106 @@
+# Final Pass
+
+- **Hackathon implementation**
+    - Discovery
+        - [x] GET /.well-known/core to discover collection
+          - [ ] Use core.ps rt
+        - [x] GET topic to discover topic configuration
+        - [x] GET /ps to retrieve all topics
+          - [ ] Use core.ps.conf rt
+          - [ ] Use FETCH
+    - Configuration
+        - [x] POST topic to create topic
+        - [x] PUT topic to configure topic
+        - [ ] DELETE topic to delete topic
+    - Topic Data
+        - [x] PUT on topic_data to publish
+        - [x] GET + observe on topic_data to Subscribe
+        - [x] GET on topic_data to get last measurement
+        - [ ] Delete to delete topic_data
+- **Using pubsub**
+    - Topic data Resource interactions
+        - Resource used to exchange data in this topic
+    - [x] Pubs sub general process
+    - [x] Topic Lifecycle
+    - [ ] Topic data interaction image 2.7
+    - [x] Fix examples
+    - CB: Senml, IPSO bare data
+    - [x] Publish
+    - [x] Subscribe
+    - [x] Unsubscribe. Maybe a bit thin. Missing example.
+    - [x] Delete. Maybe a bit thin. Missing example
+        - [x] send 404s to all subs (show example, no new content)
+    - [x] Read latest data
+- **Support Sections**
+    - [x] Remove Section: Uri Templates (empty)
+    - [x] Pubsub Parameters (need to check)
+    - [ ] Security Considerations (empty)
+    - [ ] IANA -> TBD for now (need to check)
+
+
+- **Introduction**
+    - [x] Terminology. Since we made the `topic_data_uri` part of the topic configuration, we implicitly made the term `topic` = `topic-configuration` . Should I remove the term topic-configuration and just `topic` or say that they are used as synonyms in the document?
+        - CB: keep word topic for the abstract concept. "Topic resource", "Topic Data Resource".
+        - CB,MT: change title: "A publish-subscribe architecture for the Constrained....", and abstract, and many other places
+    - [x] Architecture and Managing Topics
+- **Pubsub topics**
+    - Configuration properties (topic_resource)
+        - [~] 'topic_name' (human readable field (e.g. "room2")), 'application identifier' (e.g., uuid), 'topic_data_uri', 'rt', 'target attributes' of data resource (including media type, via ct; media types available for patch)
+    - Status properties
+        - [x] Default values. 
+        - CB: Mention that the names used are not cast in stone and are just examples. Discovery is still needed.
+        - MT, CB: maybe merged both conf and status sections. Add a 'expiration date' property, 'max-client'
+- **Discovery and Configuration**
+    - Discovery
+        - [x] broker
+        - [x] topic
+    - Topic Collection interactions
+        - [x] Fix examples
+        - [x] get all
+        - [x] fetch
+            - MT,CB: Mostly "selection" = selecting a subset of the entries in the collection
+                - ... WHERE ...
+            - JJ: "Retrieve links to topic-data collection resources whose property X has a value that matches with the specified one
+            - [x] move to this section 'conf_filter' (part of the search, not of the resource itself)
+        - [x] post/create
+    - Topic Resource interactions
+        - Topic Resource = Topic configuration plus other information on a topic
+        - [x] Fix examples
+        - [x] get
+        - [x] fetch [projection? ]
+            - CB: Mostly "projection" = selecting a subset of the properties 
+                SELECT foo, bar FROM ...
+            JJ: "Retrieve topics that are matching the request property array."
+        - [x] update (put, (i)patch)
+            - [ ] ipatch
+        - CB: need media type for this.
+        - MT: Check oscore gm-admin example.
+        - [x] delete
+- **Using pubsub**
+    - Topic data Resource interactions
+        - Resource used to exchange data in this topic
+    - [x] Pubs sub general process
+    - [x] Topic Lifecycle
+    - [ ] Topic data interaction image 2.7
+    - [x] Fix examples
+    - CB: Senml, IPSO bare data
+    - [x] Publish
+    - [x] Subscribe
+    - [x] Unsubscribe. Maybe a bit thin. Missing example.
+    - [x] Delete. Maybe a bit thin. Missing example
+        - [x] send 404s to all subs (show example, no new content)
+    - [x] Read latest data
+- **Support Sections**
+    - [x] Remove Section: Uri Templates (empty)
+    - [x] Pubsub Parameters (need to check)
+    - [ ] Security Considerations (empty)
+    - [ ] IANA -> TBD for now (need to check)
+
+- **Recap on terminology overhauling**
+    - Figure 2:
+        - s/Topic Collection/Topic Collection Resource
+        - s/Topic Configurations/Topic Resources
+    - Figure 3:
+        - s/Topic Collection/Topic Collection Resource
+        - s/Topic Configuration/Topic Resource
+        - s/Topic Data/Topic Data Resource

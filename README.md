@@ -29,3 +29,8 @@ $ make
 Command line usage requires that you have the necessary software installed.  See
 [the instructions](https://github.com/martinthomson/i-d-template/blob/main/doc/SETUP.md).
 
+Run idnits and fix errors before pushing
+
+```sh
+$ make idnits
+```
