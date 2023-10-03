@@ -616,12 +616,12 @@ Interactions with the topic_data resource are covered in this section. The inter
 One variant shown in {{fig-external-server}} is where the resource is hosted. While the broker can create a topic_data resource when the topic is created, the client can select to host the data in a different CoAP server than that of the topic resource.
 
 ~~~~ aasvg
-   [central-ps.example.com]
-   CoAP server 1
+         [central-ps.example.com]
+               CoAP server 1
   .----------------------------------------.
   |            ___                         |
-  |  Topic    /   \                        |    [2001:db8::2:1]
-  |Collection \___/                        |    CoAP server 2
+  |  Topic    /   \                        |      [2001:db8::2:1]
+  |Collection \___/                        |       CoAP server 2
   | Resource       \                       |   .------------------.
   |                 \___________           |   |                  |
   |                  \          \          |   |                  |
@@ -797,6 +797,18 @@ Example:
       "v": 23.5
    }
 ~~~~
+
+
+<!--
+TODO: Do we add wildcards here?
+https://github.com/core-wg/coap-pubsub/issues/42
+
+### Subscribe to a subset of topic_data resources  {#wildcard}
+
+Some implementations may want to subscribe to multiple topic_data resources with one single request. That is possible by using FETCH with 
+
+
+-->
 
 # CoAP Pubsub Parameters {#pubsub-parameters}
 
