@@ -387,10 +387,7 @@ creator proposes topic name but broker approves
 
 A client can add a new topic to a collection of topics by submitting a representation of the initial topic resource (see Section {{topic-resource-representation}}) in a POST request to the topic collection URI. The topic MUST contain at least a subset of the {{topic-properties}} , namely: topic_name and resource_type.
 
-A CoAP endpoint creating a topic MAY specify a 'topic_data' URI different than that used by the broker. The broker may then simply forward the observation requests to the 'topic_data' URI.
-<!--
-TODO: Expand the topic_data hosted elsewhere section
--->
+A CoAP endpoint creating a topic MAY specify a 'topic_data' URI different than that used by the broker. The broker may then simply forward the observation requests to the 'topic_data' URI as shown in {{fig-external-server}}.
 
 If the 'topic_data' is empty the broker will assign a resource for a publisher to publish to.
 
@@ -723,22 +720,27 @@ Example:
    Content-Format: 110
    Observe: 10001
    Max-Age: 15
-
-   [...SenML data...]
+   
+  {
+    "bn": "urn:dev:os:193-iot/sparrow/jorvas/",
+    "n": "Raitis_lampotila",
+    "u": "Cel",
+    "t": 1696340182,
+    "v": 19.87
+  }
 
 <= 2.05 Content
    Content-Format: 110
    Observe: 10002
    Max-Age: 15
 
-   [...SenML data...]
-
-<= 2.05 Content
-   Content-Format: 110
-   Observe: 10003
-   Max-Age: 15
-
-   [...SenML data...]
+  {
+    "bn": "urn:dev:os:193-iot/sparrow/jorvas/",
+    "n": "Raitis_lampotila",
+    "u": "Cel",
+    "t": 1696340182,
+    "v": 21.87
+  }
 ~~~~
 
 ### Unsubscribe {#unsubscribe}
