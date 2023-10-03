@@ -720,7 +720,7 @@ Example:
    Content-Format: 110
    Observe: 10001
    Max-Age: 15
-   
+
   {
     "bn": "urn:dev:os:193-iot/sparrow/jorvas/",
     "n": "Raitis_lampotila",
