@@ -803,17 +803,15 @@ https://github.com/core-wg/coap-pubsub/issues/42
 
 Some implementations may want to subscribe to multiple topic-data resources with one single request. That is possible by using FETCH with
 
-
 -->
 
+## Rate Limiting {#rate-limit}
 
-### Rate Limiting {#rate-limit}
+The server hosting the topic-data may have to handle a potentially large number of publishers and subscribers at the same time. This means it could become overwhelmed if it receives too many publications in a short period of time.
 
-The server hosting a data resource may have to handle a potentially very large number of publishers and subscribers at the same time. This means the server can easily become overwhelmed if it receives too many publications in a short period of time.
+In this situation, if a publisher is sending publications too fast, the server SHOULD return a 4.29 (Too Many Requests) response {{!RFC8516}}.  As described in {{!RFC8516}}, the Max-Age option {{!RFC7252}} in this response indicates the number of seconds after which the client may retry. The broker MAY also stop publishing messages from that publisher for the indicated time.
 
-In this situation, if a client is sending publications too fast, the server SHOULD return a 4.29 (Too Many Requests) response {{!RFC8516}}.  As described in {{!RFC8516}}, the Max-Age option {{!RFC7252}} in this response indicates the number of seconds after which the client may retry. The Broker MAY stop publishing messages from the client for the indicated time.
-
-When a client receives a 4.29 (Too Many Requests) response, it MUST NOT send any new publication requests to the same topic-data resource before the time indicated by the Max-Age option has passed.
+When a publisher receives a 4.29 (Too Many Requests) response, it MUST NOT send any new publication requests to the same topic-data resource before the time indicated by the Max-Age option has passed.
 
 # CoAP Pubsub Parameters {#pubsub-parameters}
 
