@@ -337,7 +337,6 @@ Example:
    Content-Format: 40 (application/link-format)
    </ps/h9392>;rt="core.ps.conf",
    </ps/2e3570>; ct=application/link-format; rt=core.ps.conf; obs,
-   </ps/data/62e4f8d>; rt=core.ps.data; obs
 ~~~~
 
 ### Getting Topics by Properties {#topic-get-properties}
@@ -368,11 +367,11 @@ update this example.
    Content-Format: TBD (application/pubsub+cbor)
 
    {
-     "resource_type" : "core.ps.data"
+     "resource_type" : "core.ps.conf"
    }
 
 <= 2.05 Content
-   </ps/data/62e4f8d>; rt=core.ps.data; obs
+      </ps/2e3570>; ct=application/link-format; rt=core.ps.conf; obs,
 
 ~~~~
 
@@ -862,6 +861,10 @@ The profile relies on protocol-specific transport profiles of ACE for communicat
 The document outlines the provisioning and enforcement of authorization information for Clients to act as Publishers and/or Subscribers. Additionally, it specifies the provisioning of keying material and security parameters that Clients use to protect their communications end-to-end through the Broker.
 
 ## Caching and Freshness
+
+<!--
+TODO fix 
+-->
 
 A broker could become overloaded if it always had to provide the most recent cached resource representation of a topic_data to a subscriber. On deployments with a large number of clients and with many topic resources this would represent a big burden on the broker.
 
