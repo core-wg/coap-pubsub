@@ -192,11 +192,13 @@ A topic-configuration resource with a topic-data link can also be simply called 
 
 The list can be represented as a Link Format document {{RFC6690}}. The link to each topic-configuration resource specifies the link target attribute 'rt' (Resource Type), with value "core.ps.conf" defined in this document.
 
-## Topic Creation and Configuration
+## Topic-Configuration Representation {#topic-resource-representation}
 
 A CoAP client can create a new topic by submitting an initial configuration for the topic (see {{topic-create}}). It can also read and update the configuration of existing topics and delete them when they are no longer needed (see {{topic-configuration-interactions}}).
 
-The configuration of a topic itself consists of a set of properties that can be set by a client or by the broker.
+The configuration of a topic itself consists of a set of properties that can be set by a client or by the broker. The topic-configuration is represented as a CBOR map containing the configuration properties of the topic as top-level elements.
+
+Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in {{pubsub-parameters}}.
 
 ### Topic Properties {#topic-properties}
 
@@ -222,13 +224,7 @@ TODO: Confirm with Cabo and Marco
 
 * 'observer-check': An optional field used to control the frequency at which the server hosting the topic-data will send a notification in a confirmable message to the observer. This prevents a client that is no longer interested or has disconnected from remaining indefinitely in the list of observers. Note that if the topic-data is not hosted by the broker but by another CoAP server it is up to that server to apply the observer-check value.
 
-### Topic-Configuration Resource Representation {#topic-resource-representation}
-
-A topic-configuration is represented as a CBOR map containing the configuration properties of the topic as top-level elements.
-
-Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in {{pubsub-parameters}}.
-
-#### Default Values
+### Default Values
 
 Below are the defined default values for the topic parameters:
 
