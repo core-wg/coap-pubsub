@@ -224,7 +224,7 @@ TODO: Confirm with Cabo and Marco
 
 * 'observer-check': An optional field used to control the frequency at which the server hosting the topic-data will send a notification in a confirmable message to the observer. This prevents a client that is no longer interested or has disconnected from remaining indefinitely in the list of observers. Note that if the topic-data is not hosted by the broker but by another CoAP server it is up to that server to apply the observer-check value.
 
-### Default Values
+#### Default Values
 
 Below are the defined default values for the topic parameters:
 
@@ -563,7 +563,7 @@ Example:
 <= 2.02 Deleted
 ~~~~
 
-## Publish and Subscribe {#pubsub}
+# Publish and Subscribe {#pubsub}
 
 The overview of the publish/subscribe mechanism over CoAP is as follows: a publisher publishes to a topic by submitting the data in a PUT request to a topic-data resource and subscribers subscribe to a topic by submitting a GET request with the Observe option active to a topic-data resource. When resource state changes, subscribers observing the resource {{!RFC7641}} at that time will receive a notification.
 
@@ -573,7 +573,7 @@ A topic-data resource does not exist until some initial data has been published 
 
 URIs for topic resources are broker-generated (see {{topic-create}}). URIs for topic-data MAY be broker-generated or client-generated. There is no necessary URI pattern dependence between the URI where the data exists and the URI of the topic resource. Topic resource and data resources might even be hosted on different servers.
 
-### Topic Lifecycle {#topic-lifecycle}
+## Topic Lifecycle {#topic-lifecycle}
 
 When a topic is newly created, it is first placed by the server into the HALF CREATED state (see {{fig-life}}). In this state, a client can read and update the configuration of the topic and delete the topic. A publisher can publish to the topic-data resource.  However, a subscriber cannot yet observe the topic-data resource nor read the latest data.
 
@@ -599,7 +599,7 @@ When a client deletes a topic-configuration resource, the topic is placed into t
 
 When a client deletes a topic-data, the topic is placed into the HALF CREATED state, where clients can read, update and delete the topic-configuration and await for a publisher to begin publication.
 
-### Rate Limiting {#rate-limit}
+## Rate Limiting {#rate-limit}
 
 The server hosting a data resource may have to handle a potentially very large number of publishers and subscribers at the same time. This means the server can easily become overwhelmed if it receives too many publications in a short period of time.
 
