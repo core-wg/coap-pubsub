@@ -599,13 +599,6 @@ When a client deletes a topic-configuration resource, the topic is placed into t
 
 When a client deletes a topic-data, the topic is placed into the HALF CREATED state, where clients can read, update and delete the topic-configuration and await for a publisher to begin publication.
 
-## Rate Limiting {#rate-limit}
-
-The server hosting a data resource may have to handle a potentially very large number of publishers and subscribers at the same time. This means the server can easily become overwhelmed if it receives too many publications in a short period of time.
-
-In this situation, if a client is sending publications too fast, the server SHOULD return a 4.29 (Too Many Requests) response {{!RFC8516}}.  As described in {{!RFC8516}}, the Max-Age option {{!RFC7252}} in this response indicates the number of seconds after which the client may retry. The Broker MAY stop publishing messages from the client for the indicated time.
-
-When a client receives a 4.29 (Too Many Requests) response, it MUST NOT send any new publication requests to the same topic-data resource before the time indicated by the Max-Age option has passed.
 
 ## Topic-Data Interactions {#topic-data-interactions}
 
@@ -771,7 +764,7 @@ Example:
 <= 2.02 Deleted
 ~~~~
 
-### Read latest data {#read-data}
+## Read latest data {#read-data}
 
 A client can get the latest published topic-data by making a GET request to the topic-data URI in the broker. Please note that discovery of the topic-data parameter is a required previous step (see {{topic-get-resource}}).
 
@@ -812,6 +805,15 @@ Some implementations may want to subscribe to multiple topic-data resources with
 
 
 -->
+
+
+### Rate Limiting {#rate-limit}
+
+The server hosting a data resource may have to handle a potentially very large number of publishers and subscribers at the same time. This means the server can easily become overwhelmed if it receives too many publications in a short period of time.
+
+In this situation, if a client is sending publications too fast, the server SHOULD return a 4.29 (Too Many Requests) response {{!RFC8516}}.  As described in {{!RFC8516}}, the Max-Age option {{!RFC7252}} in this response indicates the number of seconds after which the client may retry. The Broker MAY stop publishing messages from the client for the indicated time.
+
+When a client receives a 4.29 (Too Many Requests) response, it MUST NOT send any new publication requests to the same topic-data resource before the time indicated by the Max-Age option has passed.
 
 # CoAP Pubsub Parameters {#pubsub-parameters}
 
