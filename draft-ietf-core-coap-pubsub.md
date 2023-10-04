@@ -69,7 +69,7 @@ One important class of constrained devices includes devices that are intended to
 
 For these nodes, the client/server-oriented architecture of REST can be challenging when interactions are not initiated by the devices themselves. A publish/subscribe-oriented architecture where nodes are separated by a broker and data is exchanged via topics might fit these nodes better.
 
-This document applies the idea of publish-subscribe to Constrained RESTful Environments. It introduces a broker that allows to create, discover subscribe and publish on topics. The broker enables store-and-forward data exchange between CoAP endpoints, thereby facilitating the communication of nodes with limited reachability, providing simple many-to-many communication, and easing integration with other publish/subscribe systems.
+This document applies the idea of broker-based publish-subscribe to Constrained RESTful Environments. It defines a broker that allows to create, discover subscribe and publish on topics.
 
 ## Terminology {#terminology}
 
@@ -92,16 +92,16 @@ publishers and subscribers:
 : CoAP clients can act as publishers or as subscribers. Publishers propose topics for creation and send CoAP messages (publications) to the broker on specific topics. Subscribers have an ongoing observation relation (subscription) to a topic. Publishers and subscribers do not need to have any knowledge of each other, but they must know the topic they are publishing and subscribing to.
 
 topic collection:
-: A resource collection is a group of related resources that share a common base URI. In this case the the topic collection contains resources of the type "topic resource". CoAP clients can discover and interact with the resources in a collection by sending CoAP requests to the URI of the collection.
+: A resource collection is a group of related resources that share a common base URI. In this case the the topic collection contains resources of the type "topic-configuration". CoAP clients can discover and interact with the resources in a collection by sending CoAP requests to the URI of the collection.
 
-topic resource:
-: An entry within a topic collection in a broker. Topics are created and configured before any data can be published.  CoAP clients can propose new topics to be created, but it is up to the broker to decide whether and how a topic is created. The broker also decides the URI of each topic resource and of the topic-data resource when hosted at the broker. The creation, configuration, and discovery of topics at a broker are specified in {{topics}}. Interactions about the topic-data are defined in {{topic-data-interactions}}.
+topic-configuration:
+: An entry within a topic collection in a broker. A topic-configuration resource is used for configuration purposes before any data can be published. CoAP clients can propose new topics to be created, but it is up to the broker to decide whether and how a topic is created. The broker also decides the URI of each topic-configuration and the topic-data resource when hosted at the broker. The creation, configuration, and discovery of topics at a broker are specified in {{topics}}. The lifecycle of a topic is specified in {{topic-lifecycle}}. Interactions about the topic-data are defined in {{topic-data-interactions}}. The topic-configuration URI is NOT used to to publish and subscribe to data.
 
 topic-data resource:
-: Topic resources contain a property called "topic-data". The topic-data resource is a CoAP URI used by publishers and subscribers to publish (PUT) and subscribe (GET with Observe) to data (see {{topics}}).
+: Topic-configuration resources contain a property called "topic-data". The topic-data resource is a CoAP URI used by publishers and subscribers to publish (PUT) and subscribe (GET with Observe) to data (see {{topics}}).
 
 broker:
-: A CoAP server that hosts one or more topic collections containing topic resources. The broker is responsible for the store-and-forward of state update representations when the topic-data URI points to a resource hosted on the broker. The broker is also responsible of handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
+: A CoAP server that hosts one or more topic collections containing topic-configurations and sometimes also topic_data resources. The broker is responsible for the store-and-forward of state update representations when the topic-data URI points to a resource hosted on the broker. The broker is also responsible of handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
 
 ## CoAP Publish-Subscribe Architecture
 
@@ -129,9 +129,9 @@ The broker is responsible for the store-and-forward of state update representati
 
 This document describes two sets of interactions, interactions to configure topics and their lifecycle (see {{topic-resource-interactions}}) and interactions about the topic data (see {{topic-data-interactions}}).
 
-Topic resource interactions are discovery, create, read configuration, update configuration, delete configuration and handle the management of the topics.
+Topic-configuration interactions are discovery, create, read configuration, update configuration, delete configuration and handle the management of the topics.
 
-Topic data interactions are publish, subscribe, unsubscribe, read and are oriented on how data is transferred from a publisher to a subscriber.
+Topic-data interactions are publish, subscribe, unsubscribe, read and are oriented on how data is transferred from a publisher to a subscriber.
 
 <!--
 Throughout the document there is a number of TBDs that need updating, mostly content formats or cbor data representations
@@ -148,7 +148,7 @@ Throughout the document there is a number of TBDs that need updating, mostly con
   Resource       \
                   \____________________
                    \___    \___        \___
-                   /   \   /   \  ...  /   \        Topic
+                   /   \   /   \  ...  /   \   Topic-Configuration
                    \___/   \___/       \___/      Resources
 ~~~~
 {: #fig-api title="Resources of a Broker" artwork-align="center"}
@@ -167,8 +167,8 @@ The configuration side of a "publish/subscribe broker" consists of a collection 
                    \___________________________
                     \          \               \
                      \ ......   \ ......        \ ......
-                    : \___  :  : \___  :       : \___  :
-             Topic  : / * \ :  : / * \ :       : / * \ :
+             Topic  : \___  :  : \___  :       : \___  :
+     Configuration  : / * \ :  : / * \ :       : / * \ :
           Resource  : \_|_/ :  : \_|_/ :       : \_|_/ :
                     ....|....  ....|....       ....|....
                     ....|....  ....|....       ....|....
@@ -183,11 +183,13 @@ The configuration side of a "publish/subscribe broker" consists of a collection 
 
 ## Collection Representation
 
-Each topic resource is represented as a link, where the link target is the URI of the topic resource.
+Each topic-configuration resource is represented as a link, where the link target is the URI of the topic-configuration.
 
 Each topic-data is represented as a link, where the link target is the URI of the topic-data resource. A topic-data link is an entry within the topic resource called 'topic_data' (see {{topic-properties}}).
 
-The list can be represented as a Link Format document {{RFC6690}}. The link to each topic resource specifies the link target attribute 'rt' (Resource Type), with value "core.ps.conf" defined in this document.
+A topic-configuration resource with a topic-data link can also be simply called "topic".
+
+The list can be represented as a Link Format document {{RFC6690}}. The link to each topic-configuration resource specifies the link target attribute 'rt' (Resource Type), with value "core.ps.conf" defined in this document.
 
 ## Topic Creation and Configuration
 
@@ -201,7 +203,7 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 * 'topic_name': A required field used as an application identifier. It encodes the topic name as a CBOR text string. Examples of topic names include human-readable strings (e.g., "room2"), UUIDs, or other values.
 
-* 'topic_data': A required field (optional during creation) containing the CoAP URI of the topic data resource for subscribing to a pubsub topic. It encodes the URI as a CBOR text string. This property may contain a fully formed URL including scheme and host or just the resource path depending on where the topic data is hosted.
+* 'topic_data': A required field (optional during creation) containing the CoAP URI of the topic data resource for subscribing to a pubsub topic. It encodes the URI as a CBOR text string. This property may contain a fully formed URL including scheme and host or just the resource path when the topic-data is hosted by the broker.
 
 <!--
 TODO: Confirm with Cabo and Marco
@@ -209,9 +211,9 @@ TODO: Confirm with Cabo and Marco
 
 * 'resource_type': A required field used to indicate the resource type associated with topic resources. It encodes the resource type as a CBOR text string. The value should be "core.ps.conf".
 
-* 'media_type': An optional field used to indicate the media type of the topic data resource. It encodes the media type as a CBOR text string (e.g.,"application/json").
+* 'media_type': An optional field used to indicate the media type of the topic-data resource. It encodes the media type as a CBOR text string (e.g.,"application/json").
 
-* 'target_attribute': An optional field used to indicate the attribute or property of the topic_data resource. It encodes the attribute as a CBOR text string. Example attributes include "temperature".
+* 'target_attribute': An optional field used to indicate the attribute or property of the topic-data resource. It encodes the attribute as a CBOR text string. Example attributes include "temperature".
 
 * 'expiration_date': An optional field used to indicate the expiration date of the topic. It encodes the expiration date as a CBOR text string. The value should be a date string in ISO 8601 format (e.g., "2023-03-31T23:59:59Z"). The pubsub system can use this field to automatically remove topics that are no longer valid.
 
@@ -229,21 +231,21 @@ Unless specified otherwise, these are defined in this document and their CBOR ab
 
 Below are the defined default values for the topic parameters:
 
-* 'topic_name': There is no default value. This field is required and must be specified by the client or broker.
+* 'topic-name': There is no default value. This field is required and must be specified by the client or broker.
 
-* 'topic_data': There is no default value. This field is required and must be specified by the client or broker.
+* 'topic-data': There is no default value. This field is required and must be specified by the client or broker.
 
-* 'resource_type': The default value for a topic resource is "core.ps.conf".
+* 'resource-type': The default value for a topic resource is "core.ps.conf".
 
-* 'media_type': The default value is an empty string, indicating that no media type is specified.
+* 'media-type': The default value is an empty string, indicating that no media type is specified.
 
-* 'target_attribute': The default value is an empty string, indicating that no attribute is specified.
+* 'target-attribute': The default value is an empty string, indicating that no attribute is specified.
 
-* 'expiration_date': The default value is an empty string, indicating that no expiration date is specified. If this field is not present, the topic will not expire automatically.
+* 'expiration-date': The default value is an empty string, indicating that no expiration date is specified. If this field is not present, the topic will not expire automatically.
 
-* 'max_subscribers': The default value is -1, indicating that there is no limit to the number of subscribers allowed. If this field is not present, the pubsub system will not limit the number of subscribers for the topic.
+* 'max-subscribers': The default value is -1, indicating that there is no limit to the number of subscribers allowed. If this field is not present, the pubsub system will not limit the number of subscribers for the topic.
 
-* 'observer_check': The default value is '86400', as defined in {{!RFC7641}}, which corresponds to 24 hours.
+* 'observer-check': The default value is '86400', as defined in {{!RFC7641}}, which corresponds to 24 hours.
 
 ## Discovery
 
@@ -298,9 +300,9 @@ Below is an example discovery via .well-known/core with rt=core.ps.conf that ret
 
 ### Topic Data Discovery
 
-Within a topic, there is the 'topic_data' property containing the URI of the topic data resource that a CoAP client can subscribe and publish to. Resources exposing resources of the topic data type are expected to use the resource type 'core.ps.data'.
+Within a topic, there is the 'topic-data' property containing the URI of the topic data resource that a CoAP client can subscribe and publish to. Resources exposing resources of the topic data type are expected to use the resource type 'core.ps.data'.
 
-Below is an example discovery via .well-known/core that returns list of topic_data resources.
+Below is an example discovery via .well-known/core that returns list of topic-data resources.
 
 ~~~~
 => 0.01 GET
@@ -317,7 +319,7 @@ Below is an example discovery via .well-known/core that returns list of topic_da
 
 These are the interactions that can happen directly with a specific topic collection.
 
-### Retrieving all topic and topic_data {#topic-get-all}
+### Retrieving all topic and topic-data {#topic-get-all}
 
 A client can request a collection of the topics present in the broker by making a GET request to the collection URI.
 
@@ -325,7 +327,7 @@ On success, the server returns a 2.05 (Content) response with a representation o
 
 Depending on the permission set each client MAY receive a different list of topics that they are authorized to read.
 
-If there are existing topic_data resources under the collection resource, those will also be present in the response.
+If there are existing topic-data resources under the collection resource, those will also be present in the response.
 
 Example:
 
@@ -367,7 +369,7 @@ update this example.
    Content-Format: TBD (application/pubsub+cbor)
 
    {
-     "resource_type" : "core.ps.conf"
+     "resource-type" : "core.ps.conf"
    }
 
 <= 2.05 Content
@@ -384,11 +386,11 @@ response (created) is cbor including the link to new topic-config resource
 creator proposes topic name but broker approves
 -->
 
-A client can add a new topic to a collection of topics by submitting a representation of the initial topic resource (see Section {{topic-resource-representation}}) in a POST request to the topic collection URI. The topic MUST contain at least a subset of the {{topic-properties}} , namely: topic_name and resource_type.
+A client can add a new topic to a collection of topics by submitting a representation of the initial topic resource (see Section {{topic-resource-representation}}) in a POST request to the topic collection URI. The topic MUST contain at least a subset of the {{topic-properties}} , namely: topic-name and resource-type.
 
-A CoAP endpoint creating a topic MAY specify a 'topic_data' URI different than that used by the broker. The broker may then simply forward the observation requests to the 'topic_data' URI as shown in {{fig-external-server}}.
+A CoAP endpoint creating a topic MAY specify a 'topic-data' URI different than that used by the broker. The broker may then simply forward the observation requests to the 'topic-data' URI as shown in {{fig-external-server}}.
 
-If the 'topic_data' is empty the broker will assign a resource for a publisher to publish to.
+If the 'topic-data' is empty the broker will assign a resource for a publisher to publish to.
 
 On success, the server returns a 2.01 (Created) response indicating the topic URI of the new topic and the current representation of the topic resource.
 
@@ -402,8 +404,8 @@ The broker MUST respond with a 4.00 (Bad Request) error if any received paramete
    Content-Format: TBD2 (application/core-pubsub+cbor)
    TBD (this should be a CBOR map with the mandatory parameters)
    {
-     "topic_name" : "living_room_sensor"
-     "resource_type" : "core.ps.conf"
+     "topic-name" : "living-room-sensor"
+     "resource-type" : "core.ps.conf"
    }
 
 <= 2.01 Created
@@ -412,9 +414,9 @@ The broker MUST respond with a 4.00 (Bad Request) error if any received paramete
 
    TBD (this should be a CBOR map)
    {
-     "topic_name" : "living_room_sensor",
-     "topic_data" : "ps/data/1bd0d6d"
-     "resource_type" : "core.ps.conf"
+     "topic-name" : "living-room-sensor",
+     "topic-data" : "ps/data/1bd0d6d"
+     "resource-type" : "core.ps.conf"
    }
 ~~~~
 
@@ -448,13 +450,13 @@ For example, below is a request on the topic "ps/h9392":
 <= 2.05 Content
    Content-Format: TBD2 (application/core-pubsub+cbor)
    {
-      "topic_name" : "living_room_sensor",
-      "topic_data" : "ps/data/1bd0d6d",
-      "resource_type": "core.ps.conf",
-      "media_type": "application/senml-cbor",
-      "target_attribute": "temperature",
-      "expiration_date": "2023-04-00T23:59:59Z",
-      "max_subscribers": 100
+      "topic-name" : "living-room-sensor",
+      "topic-data" : "ps/data/1bd0d6d",
+      "resource-type": "core.ps.conf",
+      "media-type": "application/senml-cbor",
+      "target-attribute": "temperature",
+      "expiration-date": "2023-04-00T23:59:59Z",
+      "max-subscribers": 100
    }
 
 ~~~~
@@ -469,7 +471,7 @@ response is cbor
 
 A client can read the configuration of a topic by making a FETCH request to the topic resource URI with a filter for specific parameters. This is done in order to retrieve part of the current topic resource.
 
-The request contains a CBOR map with a configuration filter or 'conf_filter', a CBOR array with CBOR abbreviation. Each element of the array specifies one requested configuration parameter of the current topic resource (see {{topic-resource-representation}}).
+The request contains a CBOR map with a configuration filter or 'conf-filter', a CBOR array with CBOR abbreviation. Each element of the array specifies one requested configuration parameter of the current topic resource (see {{topic-resource-representation}}).
 
 On success, the server returns a 2.05 (Content) response with a representation of the topic resource. The response has as payload the partial representation of the topic resource as specified in {{topic-resource-representation}}.
 
@@ -487,14 +489,14 @@ Example:
    Uri-Path: h9392
    Content-Format: TBD2 (application/core-pubsub+cbor)
    {
-     "conf_filter" : [topic_data, media_type]
+     "conf-filter" : [topic-data, media-type]
    }
 
 <= 2.05 Content
    Content-Format: TBD2 (application/core-pubsub+cbor)
    {
-     "topic_data" : "ps/data/1bd0d6d",
-     "media_type": "application/senml-cbor"
+     "topic-data" : "ps/data/1bd0d6d",
+     "media-type": "application/senml-cbor"
    }
 
 ~~~~
@@ -512,7 +514,7 @@ A client can update the configuration of a topic by submitting the representatio
 
 On success, the server returns a 2.04 (Changed) response and the current full resource representation. The broker may chose not to overwrite parameters that are not explicitly modified in the request.
 
-Note that updating the "topic_data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Similarly, decreasing max_subscribers will also cause that some subscribers get unsubscribed. Unsubscribed endpoints SHOULD receive a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2.
+Note that updating the "topic-data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Similarly, decreasing max-subscribers will also cause that some subscribers get unsubscribed. Unsubscribed endpoints SHOULD receive a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2.
 
 Example:
 
@@ -523,11 +525,11 @@ Example:
    Content-Format: TBD2 (application/core-pubsub+cbor)
 
    {
-      "topic_name" : "living_room_sensor",
-      "topic_data" : "ps/data/1bd0d6d",
-      "target_attribute": "temperature",
-      "expiration_date": "2023-04-28T23:59:59Z",
-      "max_subscribers": 2
+      "topic-name" : "living-room-sensor",
+      "topic-data" : "ps/data/1bd0d6d",
+      "target-attribute": "temperature",
+      "expiration-date": "2023-04-28T23:59:59Z",
+      "max-subscribers": 2
    }
 
 <= 2.04 Changed
@@ -535,13 +537,13 @@ Example:
 
    TBD (this should be a CBOR map)
    {
-      "topic_name" : "living_room_sensor",
-      "topic_data" : "ps/data/1bd0d6d",
-      "resource_type": "core.ps.conf",
-      "media_type": "application/senml-cbor",
-      "target_attribute": "temperature",
-      "expiration_date": "2023-04-28T23:59:59Z",
-      "max_subscribers": 2
+      "topic-name" : "living-room-sensor",
+      "topic-data" : "ps/data/1bd0d6d",
+      "resource-type": "core.ps.conf",
+      "media-type": "application/senml-cbor",
+      "target-attribute": "temperature",
+      "expiration-date": "2023-04-28T23:59:59Z",
+      "max-subscribers": 2
    }
 ~~~~
 
@@ -565,7 +567,7 @@ Example:
 
 ## Publish/Subscribe {#pubsub}
 
-The overview of the publish/subscribe mechanism over CoAP is as follows: a publisher publishes to a topic by submitting the data in a PUT request to a topic_data resource and subscribers subscribe to a topic by submitting a GET request with the Observe option active to a topic_data resource. When resource state changes, subscribers observing the resource {{!RFC7641}} at that time will receive a notification.
+The overview of the publish/subscribe mechanism over CoAP is as follows: a publisher publishes to a topic by submitting the data in a PUT request to a topic-data resource and subscribers subscribe to a topic by submitting a GET request with the Observe option active to a topic-data resource. When resource state changes, subscribers observing the resource {{!RFC7641}} at that time will receive a notification.
 
 As shown in {{topics}}, each topic contains two resources: topic resource and topic data. In that section we explained the creation and configuration of the topic resources. This section will explain the management of topic data resources.
 
@@ -609,9 +611,9 @@ When a client receives a 4.29 (Too Many Requests) response, it MUST NOT send any
 
 ## Topic Data Interactions {#topic-data-interactions}
 
-Interactions with the topic_data resource are covered in this section. The interactions with topic_data are same as that of any other CoAP resource.
+Interactions with the topic-data resource are covered in this section. The interactions with topic-data are same as that of any other CoAP resource.
 
-One variant shown in {{fig-external-server}} is where the resource is hosted. While the broker can create a topic_data resource when the topic is created, the client can select to host the data in a different CoAP server than that of the topic resource.
+One variant shown in {{fig-external-server}} is where the resource is hosted. While the broker can create a topic-data resource when the topic is created, the client can select to host the data in a different CoAP server than that of the topic resource.
 
 ~~~~ aasvg
          [central-ps.example.com]
@@ -641,7 +643,7 @@ One variant shown in {{fig-external-server}} is where the resource is hosted. Wh
 
 A topic must have been created in order to publish data to it (See Section {{topic-create}}) and be in the half-created state in order to the publish operation to work (see {{topic-lifecycle}}).
 
-A client can publish data to a topic by submitting the data in a PUT request to the 'topic_data' URI as indicated in its topic resource property. Please note that the 'topic_data' URI is not the same as the topic URI used for configuring the topic (see {{topic-resource-representation}}).
+A client can publish data to a topic by submitting the data in a PUT request to the 'topic-data' URI as indicated in its topic resource property. Please note that the 'topic-data' URI is not the same as the topic URI used for configuring the topic (see {{topic-resource-representation}}).
 
 On success, the server returns a 2.04 (Updated) response. However, when data is published to the topic for the first time, the server instead MUST return a 2.01 (Created) response and set the topic in the fully-created state (see {{topic-lifecycle}}).
 
@@ -704,7 +706,7 @@ Success:
 Failure:
 : 4.04 "Not Found". Topic does not exist.
 
-If the 'max_clients' parameter has been reached, the server must treat that as specified in section 4.1 of {{!RFC7641}}. The response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
+If the 'max-clients' parameter has been reached, the server must treat that as specified in section 4.1 of {{!RFC7641}}. The response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
 
 Example:
 
@@ -722,7 +724,7 @@ Example:
 
   {
     "bn": "urn:dev:os:193-iot/sparrow/jorvas/",
-    "n": "Raitis_lampotila",
+    "n": "Raitis-lampotila",
     "u": "Cel",
     "t": 1696340182,
     "v": 19.87
@@ -735,7 +737,7 @@ Example:
 
   {
     "bn": "urn:dev:os:193-iot/sparrow/jorvas/",
-    "n": "Raitis_lampotila",
+    "n": "Raitis-lampotila",
     "u": "Cel",
     "t": 1696340182,
     "v": 21.87
@@ -750,15 +752,15 @@ In some circumstances, it may be desirable to cancel an observation and release 
 
 As per {{!RFC7641}} a server that transmits notifications mostly in non-confirmable messages MUST send a notification in a confirmable message instead of a non-confirmable message at least every 24 hours.
 
-This value can be modified at the broker by the administrator of a topic by modifying the parameter "observer_check" on {{topic-resource-representation}}. This would allow to change the rate at which different implementations verify that a subscriber is still interested in observing a topic_data resource.
+This value can be modified at the broker by the administrator of a topic by modifying the parameter "observer-check" on {{topic-resource-representation}}. This would allow to change the rate at which different implementations verify that a subscriber is still interested in observing a topic-data resource.
 
 ### Delete topic data resource {#delete-topic-data}
 
-A publisher MAY delete a topic by making a CoAP DELETE request on the 'topic_data' URI.
+A publisher MAY delete a topic by making a CoAP DELETE request on the 'topic-data' URI.
 
 On success, the server returns a 2.02 (Deleted) response.
 
-When a topic_data resource is deleted, the broker SHOULD also delete the 'topic_data' parameter in the topic resource, unsubscribe all subscribers by removing them from the list of observers and return a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2. The topic is then set back to the half created state as per {{topic-lifecycle}}.
+When a topic-data resource is deleted, the broker SHOULD also delete the 'topic-data' parameter in the topic resource, unsubscribe all subscribers by removing them from the list of observers and return a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2. The topic is then set back to the half created state as per {{topic-lifecycle}}.
 
 Example:
 
@@ -773,7 +775,7 @@ Example:
 
 ### Read latest data {#read-data}
 
-A client can get the latest published topic data by making a GET request to the 'topic_data' URI in the broker. Please note that discovery of the 'topic_data' parameter is a required previous step (see {{topic-get-resource}}).
+A client can get the latest published topic data by making a GET request to the 'topic-data' URI in the broker. Please note that discovery of the 'topic-data' parameter is a required previous step (see {{topic-get-resource}}).
 
 On success, the server MUST return 2.05 (Content) response with the data.
 
@@ -806,9 +808,9 @@ Example:
 TODO: Do we add wildcards here?
 https://github.com/core-wg/coap-pubsub/issues/42
 
-### Subscribe to a subset of topic_data resources  {#wildcard}
+### Subscribe to a subset of topic-data resources  {#wildcard}
 
-Some implementations may want to subscribe to multiple topic_data resources with one single request. That is possible by using FETCH with
+Some implementations may want to subscribe to multiple topic-data resources with one single request. That is possible by using FETCH with
 
 
 -->
@@ -823,13 +825,13 @@ Note that the media type application/core-pubsub+cbor MUST be used when these pa
 +-----------------+-----------+--------------+------------+
 | Name            | CBOR Key  | CBOR Type    | Reference  |
 |-----------------|-----------|--------------|------------|
-| topic_name      | TBD1      | tstr         | [RFC-XXXX] |
-| topic_data      | TBD2      | tstr         | [RFC-XXXX] |
-| resource_type   | TBD3      | tstr         | [RFC-XXXX] |
-| media_type      | TBD4      | tstr (opt)   | [RFC-XXXX] |
-| target_attribute| TBD5      | tstr (opt)   | [RFC-XXXX] |
-| expiration_date | TBD6      | tstr (opt)   | [RFC-XXXX] |
-| max_subscribers | TBD7      | uint (opt)   | [RFC-XXXX] |
+| topic-name      | TBD1      | tstr         | [RFC-XXXX] |
+| topic-data      | TBD2      | tstr         | [RFC-XXXX] |
+| resource-type   | TBD3      | tstr         | [RFC-XXXX] |
+| media-type      | TBD4      | tstr (opt)   | [RFC-XXXX] |
+| target-attribute| TBD5      | tstr (opt)   | [RFC-XXXX] |
+| expiration-date | TBD6      | tstr (opt)   | [RFC-XXXX] |
+| max-subscribers | TBD7      | uint (opt)   | [RFC-XXXX] |
 +-----------------+-----------+--------------+------------+
 ~~~~
 {: #fig-CoAP-Pubsub-Parameters title="CoAP Pubsub Parameters" artwork-align="center"}
@@ -842,9 +844,9 @@ The security considerations discussed in this document cover various aspects rel
 
 When a topic configuration changes, it may result in disruptions for the subscribers. Some potential issues that may arise include:
 
-* Limiting the number of subscribers will cause to cancel ongoing subscriptions until max_subscribers has been reached.
-* Changing the topic_data value will cancel all ongoing subscriptions.
-* Changing of the expiration_date may cause to cancel ongoing subscriptions if the topic expires at an earlier data.
+* Limiting the number of subscribers will cause to cancel ongoing subscriptions until max-subscribers has been reached.
+* Changing the topic-data value will cancel all ongoing subscriptions.
+* Changing of the expiration-date may cause to cancel ongoing subscriptions if the topic expires at an earlier data.
 
 To address these potential issues, it is vital to have an administration process in place for topic configurations, including monitoring, validation, and enforcement of security policies and procedures.
 
@@ -866,7 +868,7 @@ The document outlines the provisioning and enforcement of authorization informat
 TODO fix
 -->
 
-A broker could become overloaded if it always had to provide the most recent cached resource representation of a topic_data to a subscriber. On deployments with a large number of clients and with many topic resources this would represent a big burden on the broker.
+A broker could become overloaded if it always had to provide the most recent cached resource representation of a topic-data to a subscriber. On deployments with a large number of clients and with many topic resources this would represent a big burden on the broker.
 
 For this reason is it recommended to consider changing the default Max-Age Option, which has a value of 60 in CoAP, in order to cater to different deployment scenarios.
 
@@ -889,37 +891,37 @@ Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with the RFC n
 IANA is asked to register the following entries in the "CoAP Pubsub Parameters" registry.
 
 ~~~
-Name: topic_name
+Name: topic-name
 CBOR Key: TBD1
 CBOR Type: tstr
 Reference: [RFC-XXXX]
 
-Name: topic_data
+Name: topic-data
 CBOR Key: TBD2
 CBOR Type: tstr
 Reference: [RFC-XXXX]
 
-Name: resource_type
+Name: resource-type
 CBOR Key: TBD3
 CBOR Type: tstr
 Reference: [RFC-XXXX]
 
-Name: media_type
+Name: media-type
 CBOR Key: TBD4
 CBOR Type: tstr (opt)
 Reference: [RFC-XXXX]
 
-Name: target_attribute
+Name: target-attribute
 CBOR Key: TBD5
 CBOR Type: tstr (opt)
 Reference: [RFC-XXXX]
 
-Name: expiration_date
+Name: expiration-date
 CBOR Key: TBD6
 CBOR Type: tstr (opt)
 Reference: [RFC-XXXX]
 
-Name: max_subscribers
+Name: max-subscribers
 CBOR Key: TBD7
 CBOR Type: uint (opt)
 Reference: [RFC-XXXX]
