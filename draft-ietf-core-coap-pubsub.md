@@ -863,7 +863,7 @@ The document outlines the provisioning and enforcement of authorization informat
 ## Caching and Freshness
 
 <!--
-TODO fix 
+TODO fix
 -->
 
 A broker could become overloaded if it always had to provide the most recent cached resource representation of a topic_data to a subscriber. On deployments with a large number of clients and with many topic resources this would represent a big burden on the broker.
