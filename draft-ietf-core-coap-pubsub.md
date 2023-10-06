@@ -613,7 +613,7 @@ After a publisher publishes to the topic-data for the first time, the topic is p
 
    Isn't the topic supposed to move back to HALF CREATED (see also Section 3.2.4)? In that case, a follow-up PUT request would bring the topic back to FULLY CREATED (as long as the topic resource at the broker has not been deleted in the first place).
 
-JJ: No, the topic-data sends you to half created but deleting the topic-configuration resource is deleting the topic. 
+JJ: No, the topic-data sends you to half created but deleting the topic-configuration resource is deleting the topic.
 
    About "removed from the server", it means simply deleting the topic-data resource, right?
 
@@ -629,7 +629,7 @@ When a client deletes a topic-data, the topic is placed into the HALF CREATED st
 
 
 <!--
-TODO: Should we remove this 
+TODO: Should we remove this
 
 One variant shown in {{fig-external-server}} is where the resource is hosted. While the broker can create a topic-data resource when the topic is created, the client can select to host the data in a different CoAP server than that of the topic resource.
 
@@ -792,7 +792,7 @@ As per {{!RFC7641}} a server that transmits notifications mostly in non-confirma
 This value can be modified at the broker by the administrator of a topic by modifying the parameter "observer-check" on {{topic-resource-representation}}. This would allow to change the rate at which different implementations verify that a subscriber is still interested in observing a topic-data resource.
 
 <!--
-TODO: another item that points to make topic-data a broker thing only. 
+TODO: another item that points to make topic-data a broker thing only.
 
    Yes, and again, what if the topic-data resource is not hosted at the broker but at a different server? Is it just up to a not-specified-here synchronization protocol between the broker and that server?
 -->
