@@ -260,7 +260,7 @@ Example:
 
 ### Topic-Configuration Discovery {#topic-discovery}
 
-Each topic collection is associated with a group of topic resources, each detailing the configuration of its respective topic (refer to Section {{topic-properties}}). Each topic resource is identified by the resource type "core.ps.conf".
+Each topic collection is associated with a group of topic resources, each detailing the configuration of its respective topic (refer to {{topic-properties}}). Each topic resource is identified by the resource type "core.ps.conf".
 
 Below is an example of discovery via /.well-known/core with rt=core.ps.conf that returns a list of topics, as the list of links to the corresponding topic resources.
 
@@ -282,19 +282,30 @@ TODO: add the ct part in IANA and add the example here:
 
 ### Topic-Data Discovery
 
+<!--
+TODO DISCUSS Decide on this section
+
+   Also, as based on Section 1.2.2 of RFC 6690, I'd realistically expect to have located by /.well-known/core certainly the topic collection resources and MAYBE the topic resources (and likely limited only to "perpetual", hence well-known topics).
+
+   Instead, I'd expect to discover the links to the topic resources mostly by GET/FETCH accessing the topic collection resource.
+
+   Practically, you may have to literally *discover* the broker, its collection resource, and a particular topic resource. At that point, you just *learn* the URI of the topic-data resource, from the corresponding parameter within the exact, corresponding topic resource.
+-->
+
 Within a topic, there is the topic-data property containing the URI of the topic-data resource that a CoAP client can subscribe and publish to. Resources exposing resources of the topic-data type are expected to use the resource type 'core.ps.data'.
 
-Below is an example discovery via .well-known/core that returns list of all topic-data resources. This operation can be useful for subscribers to find what can they subscribe to.
+The topic-data contains the URI of the topic-data resource for publishing and subscribing. So retrieving the topic configuration will also provide the URL of the topic-data (see {{topic-get-resource}}).
+
+It is also possible to discover a list of topic-data resources by sending a request to the collection with with rt=core.ps.data resources as shown below.
 
 ~~~~
 => 0.01 GET
-   Uri-Path: .well-known/core
+   Uri-Path: /ps
    Resource-Type: core.ps.data
 
 <= 2.05 Content
    Content-Format: 40 (application/link-format)
-   </ps1/data/62e4f8d>; rt=core.ps.data; obs
-   </ps2/otherdata/86fe8fd>; rt=core.ps.data; obs
+   </ps/data/62e4f8d>; rt=core.ps.data; obs
 ~~~~
 
 ## Topic Collection Interactions {#topic-collection-interactions}
@@ -305,11 +316,9 @@ These are the interactions that can happen directly with a specific topic collec
 
 A client can request a collection of the topics present in the broker by making a GET request to the collection URI.
 
-On success, the server returns a 2.05 (Content) response with a representation of the list of all topic-configuration resources (see Section {{topic-resource-representation}}) in the collection.
+On success, the server returns a 2.05 (Content) response, specifying the list of links to topic resources associated with this topic collection (see  {{topic-resource-representation}}).
 
-Depending on the permission set each client MAY receive a different list of topics that they are authorized to read.
-
-If there are existing topic-data resources under the collection resource, those will also be present in the response.
+Depending on its granted permissions, a client MAY retrieve a different list of links, corresponding to the topics that the client is authorized to access.
 
 Example:
 
@@ -320,7 +329,7 @@ Example:
 <= 2.05 Content
    Content-Format: 40 (application/link-format)
    </ps/h9392>;rt="core.ps.conf",
-   </ps/2e3570>; ct=application/link-format; rt=core.ps.conf; obs,
+   </ps/2e3570>; rt="core.ps.conf"
 ~~~~
 
 ### Getting topic-configurations by Properties {#topic-get-properties}
@@ -332,18 +341,16 @@ response is link format
 -->
 
 A client can filter a collection of topics by submitting the
-representation of a topic filter (see Section {{topic-fetch-resource}}) in a FETCH request to the topic collection URI.
+representation of a topic filter (see  {{topic-fetch-resource}}) in a FETCH request to the topic collection URI.
 
 On success, the server returns a 2.05 (Content) response with a
 representation of a list of topics in the collection (see
-Section {{topic-discovery}}) that match the filter in CoRE link format {{!RFC6690}}.
+ {{topic-discovery}}) that match the filter in CoRE link format {{!RFC6690}}.
+
+Upon success, the server responds with a 2.05 (Content), providing a list of links to topic resources associated with this topic collection that match the request's filter criteria (refer to  {{topic-discovery}}). A positive match happens only when each request parameter is present with the indicated value in the topic resource representation.
 
 Example:
 
-<!--
-TODO: this example and why I was using /ps/tc, tc seems redundant
-update this example.
--->
 
 ~~~~
 => 0.05 FETCH
@@ -352,11 +359,12 @@ update this example.
 
    {
      "resource-type" : "core.ps.conf"
+     "topic-type" : "temperature"
    }
 
 <= 2.05 Content
-      </ps/2e3570>; ct=application/link-format; rt=core.ps.conf; obs,
-
+   Content-Format: 40 (application/link-format)
+   </ps/2e3570>;rt="core.ps.conf"
 ~~~~
 
 ### Creating a Topic {#topic-create}
@@ -368,17 +376,26 @@ response (created) is cbor including the link to new topic-config resource
 creator proposes topic name but broker approves
 -->
 
-A client can add a new topic-configurations to a collection of topics by submitting a representation of the initial topic resource (see Section {{topic-resource-representation}}) in a POST request to the topic collection URI. The topic MUST contain at least a subset of the {{topic-properties}} , namely: topic-name and resource-type.
+A client can add a new topic-configurations to a collection of topics by submitting an initial representation of the initial topic resource (see  {{topic-resource-representation}}) in a POST request to the topic collection URI. The request MUST specify at least a subset of the properties in  {{topic-properties}}, namely: topic-name and resource-type.
 
-A CoAP endpoint creating a topic MAY specify a topic-data URI different than that used by the broker. The broker may then simply forward the observation requests to the topic-data URI as shown in {{fig-external-server}}.
+<!--
+   TODO Next two paragraphs are thorny
+   Also, as above, the topic-data resource may not even hosted at the broker, which only knows the link to that resource. It is up to the actual, responsible host to "assign" a topic-data resource (i.e., associate it with a URI to store within the topic resource at the broker), without even creating the resource yet.
+-->
 
-If the topic-data is empty the broker will assign a resource for a publisher to publish to. Please note that the topic will NOT be fully created until a publisher has published some data to it (See {{topic-lifecycle}}).
+A CoAP endpoint creating a topic MAY specify a topic-data URI when the topic-data resource is not hosted by the broker.
 
-On success, the server returns a 2.01 (Created) response indicating the topic URI of the new topic and the current representation of the topic resource.
+If the topic-data property is empty the broker will assign a URI for a publisher to publish to. Please note that the topic will NOT be fully created until a publisher has published some data to it (See {{topic-lifecycle}}).
 
-If a topic manager is present in the broker, the topic creation  may require manager approval subject to certain conditions. If the conditions are not fulfilled, the manager MUST respond with a 4.03 (Forbidden) error. The response MUST have Content-Format set to "application/core-pubsub+cbor".
+On success, the server returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map with key-value pairs. The response must include the required topic properties (see {{topic-properties}}), namely: "topic-name", "resource-type" and "topic-data". It may also include a number of optional properties too.
 
-The broker MUST respond with a 4.00 (Bad Request) error if any received parameter is specified multiple times, invalid or not recognized.
+If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST respond with a 4.03 (Forbidden) error. The response MUST have Content-Format set to "application/core-pubsub+cbor".
+
+The broker MUST issue a 4.00 (Bad Request) error if a received parameter is invalid, unrecognized, or if the topic-name is already in use or otherwise invalid.
+
+<!--
+   TODO Regardless, what if the topic-name is already in use or not fine for other reasons? Is the broker going to use and return a new one that fits?
+-->
 
 ~~~~
 => 0.02 POST
@@ -402,7 +419,6 @@ The broker MUST respond with a 4.00 (Bad Request) error if any received paramete
    }
 ~~~~
 
-
 ## Topic-Configuration Interactions {#topic-configuration-interactions}
 
 These are the interactions that can happen at the topic resource level.
@@ -417,9 +433,11 @@ response is cbor
 
 A client can read the configuration of a topic by making a GET request to the topic resource URI.
 
-On success, the server returns a 2.05 (Content) response with a representation of the topic resource. The response has as payload the representation of the topic resource as specified in {{topic-resource-representation}}.
+On success, the server returns a 2.05 (Content) response with a partial representation of the topic resource, as specified in {{topic-resource-representation}}. The partial representation includes only the configuration parameters such that they are present and have the same value in both the current topic configuration as well as in the FETCH request.
 
-If a topic manager (TBD) is present in the broker, retrieving topic information may require manager approval subject to certain conditions (TBD). If the conditions are not fulfilled, the manager MUST respond with a 4.03 (Forbidden) error. The response MUST have Content-Format set to "application/core-pubsub+cbor".
+
+
+If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST respond with a 4.03 (Forbidden) error.
 
 The response payload is a CBOR map, whose possible entries are specified in {{topic-resource-representation}} and use the same abbreviations defined in {{pubsub-parameters}}.
 
@@ -437,7 +455,7 @@ For example, below is a request on the topic "ps/h9392":
       "topic-data" : "ps/data/1bd0d6d",
       "resource-type": "core.ps.conf",
       "media-type": "application/senml-cbor",
-      "target-attribute": "temperature",
+      "topic-type": "temperature",
       "expiration-date": "2023-04-00T23:59:59Z",
       "max-subscribers": 100
    }
@@ -493,7 +511,7 @@ request is cbor
 response is cbor
 -->
 
-A client can update the configuration of a topic by submitting the representation of the updated topic  (see Section 3.1.3) in a PUT or POST request to the topic URI. Any existing properties in the configuration are overwritten by this update.
+A client can update the configuration of a topic by submitting the representation of the updated topic in a PUT or POST request to the topic URI. Any existing properties in the configuration are overwritten by this update.
 
 On success, the server returns a 2.04 (Changed) response and the current full resource representation. The broker may chose not to overwrite parameters that are not explicitly modified in the request.
 
@@ -510,7 +528,7 @@ Example:
    {
       "topic-name" : "living-room-sensor",
       "topic-data" : "ps/data/1bd0d6d",
-      "target-attribute": "temperature",
+      "topic-type": "temperature",
       "expiration-date": "2023-04-28T23:59:59Z",
       "max-subscribers": 2
    }
@@ -524,7 +542,7 @@ Example:
       "topic-data" : "ps/data/1bd0d6d",
       "resource-type": "core.ps.conf",
       "media-type": "application/senml-cbor",
-      "target-attribute": "temperature",
+      "topic-type": "temperature",
       "expiration-date": "2023-04-28T23:59:59Z",
       "max-subscribers": 2
    }
@@ -617,7 +635,7 @@ One variant shown in {{fig-external-server}} is where the resource is hosted. Wh
 
 ### Publish {#publish}
 
-A topic-configuration with a topic-data resource must have been created in order to publish data to it (See Section {{topic-create}}) and be in the half-created state in order to the publish operation to work (see {{topic-lifecycle}}).
+A topic-configuration with a topic-data resource must have been created in order to publish data to it (See {{topic-create}}) and be in the half-created state in order to the publish operation to work (see {{topic-lifecycle}}).
 
 A client can publish data to a topic by submitting the data in a PUT request to the topic-data URI as indicated in its topic resource property. Please note that the topic-data URI is not the same as the topic-configuration URI used for configuring the topic (see {{topic-resource-representation}}).
 
@@ -668,11 +686,19 @@ Example of subsequent publication:
 
 ### Subscribe {#subscribe}
 
-A client can subscribe to a topic by sending a CoAP GET request with the Observe set to '0' to subscribe to resource updates. {{!RFC7641}}.
+A client can subscribe to a topic-data by sending a CoAP GET request with the Observe set to '0' to subscribe to resource updates. {{!RFC7641}}.
 
 On success, the broker MUST return 2.05 (Content) notifications with the data.
 
 If the topic is not yet in the fully created state (see {{topic-lifecycle}}) the broker SHOULD return a response code 4.04 (Not Found).
+
+<!--
+TODO: After a publisher publishes to the topic-data for the first time, the topic is placed into the FULLY CREATED state. 
+
+This is a problem, how does the broker know when to put it in fully created state if the pub/sub mechanism is happening directly btw pub and sub?
+-->
+
+The topic-data URI may link to resources that are not hosted directly by the broker as shown in {{fig-external-server}}. Thus subscribers would use the broker for discovery only.
 
 The following response codes are defined for the Subscribe operation:
 
@@ -811,7 +837,7 @@ Note that the media type application/core-pubsub+cbor MUST be used when these pa
 | topic-data      | TBD2      | tstr         | [RFC-XXXX] |
 | resource-type   | TBD3      | tstr         | [RFC-XXXX] |
 | media-type      | TBD4      | tstr (opt)   | [RFC-XXXX] |
-| target-attribute| TBD5      | tstr (opt)   | [RFC-XXXX] |
+| topic-type      | TBD5      | tstr (opt)   | [RFC-XXXX] |
 | expiration-date | TBD6      | tstr (opt)   | [RFC-XXXX] |
 | max-subscribers | TBD7      | uint (opt)   | [RFC-XXXX] |
 | observer-check  | TBD8      | uint (opt)   | [RFC-XXXX] |
@@ -894,7 +920,7 @@ CBOR Key: TBD4
 CBOR Type: tstr (opt)
 Reference: [RFC-XXXX]
 
-Name: target-attribute
+Name: topic-type
 CBOR Key: TBD5
 CBOR Type: tstr (opt)
 Reference: [RFC-XXXX]
