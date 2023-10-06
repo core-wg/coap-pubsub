@@ -167,7 +167,7 @@ A topic-collection resource can have topic resources as its children resources, 
 
 # Pub-Sub Topics {#topics}
 
-The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}). Each topic is associated with: a topic resource hosted by the broker and a topic-data resource that can be hosted by the broker or by a different server. The topic resource is used by a client creating or administering a topic. The topic-data resource is used by the publishers and the subscribers to a topic.
+The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}). Each topic is associated with: a topic resource and a a topic-data resource. The topic resource is used by a client creating or administering a topic. The topic-data resource is used by the publishers and the subscribers to a topic.
 
 ~~~~ aasvg
               ___
@@ -215,7 +215,7 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 * 'topic-name': A required field used as an application identifier. It encodes the topic name as a CBOR text string. Examples of topic names include human-readable strings (e.g., "room2"), UUIDs, or other values.
 
-* 'topic-data': A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI as a CBOR text string. This property may contain a fully formed URL including scheme and host or just the resource path when the topic-data resource for the topic is hosted by the broker.
+* 'topic-data': A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI as a CBOR text string.
 
 * 'resource-type': A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value should be "core.ps.conf".
 
@@ -227,7 +227,7 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 * 'max-subscribers': An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as an unsigned CBOR integer. If this field is not present, there is no limit to the number of simultaneous subscribers allowed. The broker can use this field to limit the number of subscribers for the topic.
 
-* 'observer-check': An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber. Encoded as a CBOR unsigned integer greater than 0, it ensures subscribers who have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. This parameter applies to the server hosting the topic-data resource. If another CoAP server hosts the topic-data resource, that server is responsible for applying the observer-check value. The default value for this field is 86400, as defined in {{!RFC7641}}, which corresponds to 24 hours.
+* 'observer-check': An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber. Encoded as a CBOR unsigned integer greater than 0, it ensures subscribers who have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. If another CoAP server hosts the topic-data resource, that server is responsible for applying the observer-check value. The default value for this field is 86400, as defined in {{!RFC7641}}, which corresponds to 24 hours.
 
 ## Discovery
 
@@ -381,11 +381,13 @@ A client can add a new topic-configurations to a collection of topics by submitt
 <!--
    TODO Next two paragraphs are thorny
    Also, as above, the topic-data resource may not even hosted at the broker, which only knows the link to that resource. It is up to the actual, responsible host to "assign" a topic-data resource (i.e., associate it with a URI to store within the topic resource at the broker), without even creating the resource yet.
--->
+
+   Removed
 
 A CoAP endpoint creating a topic MAY specify a topic-data URI when the topic-data resource is not hosted by the broker.
+-->
 
-If the topic-data property is empty the broker will assign a URI for a publisher to publish to. Please note that the topic will NOT be fully created until a publisher has published some data to it (See {{topic-lifecycle}}).
+Please note that the topic will NOT be fully created until a publisher has published some data to it (See {{topic-lifecycle}}).
 
 On success, the server returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map with key-value pairs. The response must include the required topic properties (see {{topic-properties}}), namely: "topic-name", "resource-type" and "topic-data". It may also include a number of optional properties too.
 
@@ -435,8 +437,6 @@ A client can read the configuration of a topic by making a GET request to the to
 
 On success, the server returns a 2.05 (Content) response with a partial representation of the topic resource, as specified in {{topic-resource-representation}}. The partial representation includes only the configuration parameters such that they are present and have the same value in both the current topic configuration as well as in the FETCH request.
 
-
-
 If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST respond with a 4.03 (Forbidden) error.
 
 The response payload is a CBOR map, whose possible entries are specified in {{topic-resource-representation}} and use the same abbreviations defined in {{pubsub-parameters}}.
@@ -476,7 +476,7 @@ The request contains a CBOR map with a configuration filter or 'conf-filter', a 
 
 On success, the server returns a 2.05 (Content) response with a representation of the topic resource. The response has as payload the partial representation of the topic resource as specified in {{topic-resource-representation}}.
 
-If a topic manager (TBD) is present in the broker, retrieving topic information may require manager approval subject to certain conditions (TBD). If the conditions are not fulfilled, the manager MUST respond with a 4.03 (Forbidden) error.
+If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST respond with a 4.03 (Forbidden) error.
 
 The response payload is a CBOR map, whose possible entries are specified in {{topic-resource-representation}} and use the same abbreviations defined in {{pubsub-parameters}}.
 
@@ -511,7 +511,7 @@ request is cbor
 response is cbor
 -->
 
-A client can update the configuration of a topic by submitting the representation of the updated topic in a PUT or POST request to the topic URI. Any existing properties in the configuration are overwritten by this update.
+A client can update a topic's configuration by submitting the updated topic representation in a PUT request to the topic URI. However, the parameters "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.
 
 On success, the server returns a 2.04 (Changed) response and the current full resource representation. The broker may chose not to overwrite parameters that are not explicitly modified in the request.
 
@@ -554,7 +554,7 @@ A client can delete a topic by making a CoAP DELETE request on the topic resourc
 
 On success, the server returns a 2.02 (Deleted) response.
 
-When a topic resource is deleted, the broker SHOULD also delete the topic-data resource, unsubscribe all subscribers by removing them from the list of observers and returning a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2.
+When a topic-configuration resource is deleted, the broker MUST also delete the topic-data resource, unsubscribe all subscribers by removing them from the list of observers and returning a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2.
 
 Example:
 
@@ -568,17 +568,27 @@ Example:
 
 # Publish and Subscribe {#pubsub}
 
-The overview of the publish/subscribe mechanism over CoAP is as follows: a publisher publishes to a topic by submitting the data in a PUT request to a topic-data resource and subscribers subscribe to a topic by submitting a GET request with the Observe option active to a topic-data resource. When resource state changes, subscribers observing the resource {{!RFC7641}} at that time will receive a notification.
+The overview of the publish/subscribe mechanism over CoAP is as follows: a publisher publishes to a topic by submitting the data in a PUT request to a topic-data resource and subscribers subscribe to a topic by submitting a GET request with Observe option set to 0 (register) to a topic-data resource. When resource state changes, subscribers observing the resource {{!RFC7641}} at that time will receive a notification.
 
-As shown in {{topics}}, each topic contains two resources: topic-configuration resource and topic-data. In that section we explained the creation and configuration of the topic-configuration resources. This section will explain the management of topic-data resources.
+A topic-data resource does not exist until some initial data has been published to it. Before initial data publication, a GET request to the topic-data resource URI results in a 4.04 (Not Found) response. If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created" (see {{topic-lifecycle}}).
 
-A topic-data resource does not exist until some initial data has been published to it.  Before initial data has been published, the topic-data resource yields a 4.04 (Not Found) response. If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created" (see {{topic-lifecycle}}).
+<!--
+* "URIs for topic-data MAY be broker-generated or client-generated."
 
-URIs for topic resources are broker-generated (see {{topic-create}}). URIs for topic-data MAY be broker-generated or client-generated. There is no necessary URI pattern dependence between the URI where the data exists and the URI of the topic resource. Topic resource and data resources might even be hosted on different servers.
+   See a comment above. I think that only the host of the topic-data resource should be in control of generating this URI (to be provided to the broker if that host is not the broker already).
+-->
+
+URIs for topic resources are broker-generated (see {{topic-create}}). There is no necessary URI pattern dependence between the URI where the topic-data exists and the URI of the topic-configuration resource.
 
 ## Topic Lifecycle {#topic-lifecycle}
 
-When a topic is newly created, it is first placed by the server into the HALF CREATED state (see {{fig-life}}). In this state, a client can read and update the configuration of the topic and delete the topic. A publisher can publish to the topic-data resource.  However, a subscriber cannot yet observe the topic-data resource nor read the latest data.
+When a topic is newly created, it is first placed by the broker into the HALF CREATED state (see {{fig-life}}). In this state, a client can read and update the configuration of the topic and delete the topic. A publisher can publish to the topic-data resource.  However, a subscriber cannot yet subscribe to the topic-data resource nor read the latest data.
+
+<!--
+TODO I got a comment that mqtt folks my want to pre-subscribe to topics, so they'd like to be able to place an observation even if the resource is not "fully created"
+
+Also, we might want to restrict the discovery part ONLY for FULLY created topics. If so, let's mention it.
+-->
 
 ~~~~ aasvg
                 HALF                          FULLY
@@ -596,16 +606,30 @@ When a topic is newly created, it is first placed by the server into the HALF CR
 ~~~~
 {: #fig-life title='Lifecycle of a Topic' artwork-align="center"}
 
-After a publisher publishes to the topic-data for the first time, the topic is placed into the FULLY CREATED state. In this state, a client can read, update and delete the topic; a publisher can publish to the topic-data resource; and a subscriber can observe the topic-data resource.
+After a publisher publishes to the topic-data for the first time, the topic is placed into the FULLY CREATED state. In this state, a client can read data by means of a GET request without observe. A publisher can publish to the topic-data resource and a subscriber can observe the topic-data resource.
+
+<!--
+* "When a client deletes a topic-configuration resource, the topic is placed into the DELETED state and shortly after removed from the server."
+
+   Isn't the topic supposed to move back to HALF CREATED (see also Section 3.2.4)? In that case, a follow-up PUT request would bring the topic back to FULLY CREATED (as long as the topic resource at the broker has not been deleted in the first place).
+
+JJ: No, the topic-data sends you to half created but deleting the topic-configuration resource is deleting the topic. 
+
+   About "removed from the server", it means simply deleting the topic-data resource, right?
+
+JJ: for topic-data yes.
+
+-->
 
 When a client deletes a topic-configuration resource, the topic is placed into the DELETED state and shortly after removed from the server. In this state, all subscribers are removed from the list of observers of the topic-data resource and no further interactions with the topic are possible.
 
 When a client deletes a topic-data, the topic is placed into the HALF CREATED state, where clients can read, update and delete the topic-configuration and await for a publisher to begin publication.
 
-
 ## Topic-Data Interactions {#topic-data-interactions}
 
-Interactions with the topic-data resource are covered in this section. The interactions with topic-data are same as that of any other CoAP resource.
+
+<!--
+TODO: Should we remove this 
 
 One variant shown in {{fig-external-server}} is where the resource is hosted. While the broker can create a topic-data resource when the topic is created, the client can select to host the data in a different CoAP server than that of the topic resource.
 
@@ -633,9 +657,18 @@ One variant shown in {{fig-external-server}} is where the resource is hosted. Wh
 ~~~~
 {: #fig-external-server title="topic-data hosted externally" artwork-align="center"}
 
+   See comments above. I'm not sure whether the client should have any say on where the topic-data resource is hosted.
+
+   It'd already be difficult to have some sort of coordination between the broker and the separate server hosting the topic-data resource, let alone involving the client as yet another actor in the process.
+
+JJ: Also note that the broker has no way to know anything about a topic-data hosted elsewhere.
+-->
+
+Interactions with the topic-data resource are covered in this section.
+
 ### Publish {#publish}
 
-A topic-configuration with a topic-data resource must have been created in order to publish data to it (See {{topic-create}}) and be in the half-created state in order to the publish operation to work (see {{topic-lifecycle}}).
+A topic-configuration with a topic-data resource must have been created in order to publish data to it (See {{topic-create}}) and be in the half-created or fully-created state in order to the publish operation to work (see {{topic-lifecycle}}).
 
 A client can publish data to a topic by submitting the data in a PUT request to the topic-data URI as indicated in its topic resource property. Please note that the topic-data URI is not the same as the topic-configuration URI used for configuring the topic (see {{topic-resource-representation}}).
 
@@ -686,19 +719,19 @@ Example of subsequent publication:
 
 ### Subscribe {#subscribe}
 
-A client can subscribe to a topic-data by sending a CoAP GET request with the Observe set to '0' to subscribe to resource updates. {{!RFC7641}}.
+A client can subscribe to a topic-data by sending a CoAP GET request with the Observe set to 0 to subscribe to resource updates. {{!RFC7641}}.
 
-On success, the broker MUST return 2.05 (Content) notifications with the data.
+On success, the server hosting the topic-data resource MUST return 2.05 (Content) notifications with the data and the Observe Option. Otherwise, if no Observe Option is present the client should assume that the subscription was not successful.
 
 If the topic is not yet in the fully created state (see {{topic-lifecycle}}) the broker SHOULD return a response code 4.04 (Not Found).
 
 <!--
 TODO: After a publisher publishes to the topic-data for the first time, the topic is placed into the FULLY CREATED state.
 
-This is a problem, how does the broker know when to put it in fully created state if the pub/sub mechanism is happening directly btw pub and sub?
--->
+This is a problem if the topic-data is hosted elsewhere and not in the broker, how does the broker know when to put it in fully created state if the pub/sub mechanism is happening directly btw pub and sub?
 
-The topic-data URI may link to resources that are not hosted directly by the broker as shown in {{fig-external-server}}. Thus subscribers would use the broker for discovery only.
+Shall I add: The topic-data URI may link to resources that are not hosted directly by the broker as shown in {{fig-external-server}}. Thus subscribers would use the broker for discovery only.
+-->
 
 The following response codes are defined for the Subscribe operation:
 
@@ -706,9 +739,13 @@ Success:
 : 2.05 "Content". Successful subscribe with observe response, current value included in the response.
 
 Failure:
-: 4.04 "Not Found". Topic does not exist.
+: 4.04 "Not Found". The topic-data does not exist.
 
 If the 'max-clients' parameter has been reached, the server must treat that as specified in section 4.1 of {{!RFC7641}}. The response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
+
+<!--
+TODO Right. However, how can this work when the server hosting the topic-data resource is not the broker? The broker knows the maximum number of subscribers, but that separate server does not. Is it just up to a not-specified-here synchronization protocol between the broker and that server?
+-->
 
 Example:
 
@@ -748,13 +785,17 @@ Example:
 
 ### Unsubscribe {#unsubscribe}
 
-A CoAP client can unsubscribe simply by cancelling the observation as described in Section 3.6 of {{!RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification.
+A CoAP client can unsubscribe simply by cancelling the observation as described in Section 3.6 of {{!RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification. Also on Section 3.6 of {{!RFC7641}} the client can simply "forget" the observation and the server will remove it from the list of observers after the next notification.
 
-In some circumstances, it may be desirable to cancel an observation and release the resources allocated by the broker. In this case, a client MAY explicitly deregister by issuing a GET request that has the Token field set to the token of the observation to be cancelled and includes an Observe Option with the value set to 1 (deregister).
-
-As per {{!RFC7641}} a server that transmits notifications mostly in non-confirmable messages MUST send a notification in a confirmable message instead of a non-confirmable message at least every 24 hours.
+As per {{!RFC7641}} a server that transmits notifications mostly in non-confirmable messages, but it MUST send a notification in a confirmable message instead of a non-confirmable message at least every 24 hours.
 
 This value can be modified at the broker by the administrator of a topic by modifying the parameter "observer-check" on {{topic-resource-representation}}. This would allow to change the rate at which different implementations verify that a subscriber is still interested in observing a topic-data resource.
+
+<!--
+TODO: another item that points to make topic-data a broker thing only. 
+
+   Yes, and again, what if the topic-data resource is not hosted at the broker but at a different server? Is it just up to a not-specified-here synchronization protocol between the broker and that server?
+-->
 
 ### Delete topic-data {#delete-topic-data}
 
@@ -781,9 +822,7 @@ A client can get the latest published topic-data by making a GET request to the 
 
 On success, the server MUST return 2.05 (Content) response with the data.
 
-If the target URI does not match an existing resource or the topic is not in the fully created state (see {{topic-lifecycle}}), the broker SHOULD return a response code 4.04 (Not Found).
-
-If the broker can not return the requested content format it MUST return a response code 4.15 (Unsupported Content Format).
+If the target URI does not match an existing resource or the topic is not in the fully created state (see {{topic-lifecycle}}), the broker MUST return a response code 4.04 (Not Found).
 
 Example:
 
@@ -821,6 +860,20 @@ The server hosting the topic-data may have to handle a potentially large number 
 
 In this situation, if a publisher is sending publications too fast, the server SHOULD return a 4.29 (Too Many Requests) response {{!RFC8516}}.  As described in {{!RFC8516}}, the Max-Age option {{!RFC7252}} in this response indicates the number of seconds after which the client may retry. The broker MAY also stop publishing messages from that publisher for the indicated time.
 
+<!--
+TODO DISCUSS
+* "The broker MAY also stop publishing messages from that publisher for the indicated time."
+
+   It's not necessarily the broker, but rather the server hosting the topic-data resource.
+
+   What does "stop publishing" practically mean? Suppose that the client sends a new PUT request right away? What error response does the server send?
+
+   (note that this opens for the server to keep more state about the publishers, which in turn requires pairwise secure association in order to identify them)
+
+   This does not contradict the next, legitimate paragraph on forbidding a client to do so.
+
+-->
+
 When a publisher receives a 4.29 (Too Many Requests) response, it MUST NOT send any new publication requests to the same topic-data resource before the time indicated by the Max-Age option has passed.
 
 # CoAP Pubsub Parameters {#pubsub-parameters}
@@ -847,7 +900,7 @@ Note that the media type application/core-pubsub+cbor MUST be used when these pa
 
 # Security Considerations
 
-The security considerations discussed in this document cover various aspects related to the publish-subscribe architecture and the management of topics, administrators, and the change of topic-configuration.
+The same security considerations from RFC 7252 and RFC 7641 apply, and are complemented by the following ones. The security considerations discussed in this document cover various aspects related to the publish-subscribe architecture and the management of topics, administrators, and the change of topic-configuration.
 
 ## Change of Topic-Configuration
 
@@ -897,71 +950,11 @@ Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with the RFC n
 
 ## CoAP Pubsub Parameters ## {#iana-coap-pubsub-parameters}
 
-IANA is asked to register the following entries in the "CoAP Pubsub Parameters" registry.
+IANA is asked to register the following entries in the subregistry of the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
-~~~
-Name: topic-name
-CBOR Key: TBD1
-CBOR Type: tstr
-Reference: [RFC-XXXX]
+The registry is initially populated with the entries in {fig-CoAP-Pubsub-Parameters} of {{pubsub-parameters}}.
 
-Name: topic-data
-CBOR Key: TBD2
-CBOR Type: tstr
-Reference: [RFC-XXXX]
-
-Name: resource-type
-CBOR Key: TBD3
-CBOR Type: tstr
-Reference: [RFC-XXXX]
-
-Name: media-type
-CBOR Key: TBD4
-CBOR Type: tstr (opt)
-Reference: [RFC-XXXX]
-
-Name: topic-type
-CBOR Key: TBD5
-CBOR Type: tstr (opt)
-Reference: [RFC-XXXX]
-
-Name: expiration-date
-CBOR Key: TBD6
-CBOR Type: tstr (opt)
-Reference: [RFC-XXXX]
-
-Name: max-subscribers
-CBOR Key: TBD7
-CBOR Type: uint (opt)
-Reference: [RFC-XXXX]
-
-Name: observer-check
-CBOR Key: TBD8
-CBOR Type: uint (opt)
-Reference: [RFC-XXXX]
-
-Name: core.ps
-CBOR Key: TBD9
-CBOR Type: tstr
-Reference: [RFC-XXXX]
-
-Name: core.ps.coll
-CBOR Key: TBD10
-CBOR Type: tstr
-Reference: [RFC-XXXX]
-
-Name: core.ps.conf
-CBOR Key: TBD11
-CBOR Type: tstr
-Reference: [RFC-XXXX]
-
-Name: core.ps.data
-CBOR Key: TBD12
-CBOR Type: tstr
-Reference: [RFC-XXXX]
-~~~
-
-## Resource Types # {#iana-rt}
+## Resource Types {#iana-rt}
 
 IANA is asked to enter the following values in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group.
 
@@ -979,7 +972,7 @@ Description: Topic-configuration resource of a Publish-Subscribe Broker
 Reference: [RFC-XXXX]
 
 Value: core.ps.data
-Description: Topic-data resource of a Publish-Subscribe Broker
+Description: Topic-data resource of a broker
 Reference: [RFC-XXXX]
 ~~~
 
