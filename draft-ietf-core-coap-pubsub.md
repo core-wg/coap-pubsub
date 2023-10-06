@@ -926,7 +926,7 @@ Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with the RFC n
 
 IANA is asked to register the following entries in the subregistry of the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
-The registry is initially populated with the entries in {fig-CoAP-Pubsub-Parameters} of {{pubsub-parameters}}.
+The registry is initially populated with the entries in {{fig-CoAP-Pubsub-Parameters}} of {{pubsub-parameters}}.
 
 ## Resource Types {#iana-rt}
 
