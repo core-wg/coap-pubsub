@@ -889,7 +889,7 @@ Note that the media type application/core-pubsub+cbor MUST be used when these pa
 | topic-name      | TBD1      | tstr         | [RFC-XXXX] |
 | topic-data      | TBD2      | tstr         | [RFC-XXXX] |
 | resource-type   | TBD3      | tstr         | [RFC-XXXX] |
-| media-type      | TBD4      | tstr (opt)   | [RFC-XXXX] |
+| media-type      | TBD4      | uint (opt)   | [RFC-XXXX] |
 | topic-type      | TBD5      | tstr (opt)   | [RFC-XXXX] |
 | expiration-date | TBD6      | tstr (opt)   | [RFC-XXXX] |
 | max-subscribers | TBD7      | uint (opt)   | [RFC-XXXX] |
@@ -899,6 +899,8 @@ Note that the media type application/core-pubsub+cbor MUST be used when these pa
 {: #fig-CoAP-Pubsub-Parameters title="CoAP Pubsub Parameters" artwork-align="center"}
 
 # Security Considerations
+
+<!-- TODO REDO EVERYTHING HERE-->
 
 The same security considerations from RFC 7252 and RFC 7641 apply, and are complemented by the following ones. The security considerations discussed in this document cover various aspects related to the publish-subscribe architecture and the management of topics, administrators, and the change of topic-configuration.
 
