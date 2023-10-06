@@ -693,7 +693,7 @@ On success, the broker MUST return 2.05 (Content) notifications with the data.
 If the topic is not yet in the fully created state (see {{topic-lifecycle}}) the broker SHOULD return a response code 4.04 (Not Found).
 
 <!--
-TODO: After a publisher publishes to the topic-data for the first time, the topic is placed into the FULLY CREATED state. 
+TODO: After a publisher publishes to the topic-data for the first time, the topic is placed into the FULLY CREATED state.
 
 This is a problem, how does the broker know when to put it in fully created state if the pub/sub mechanism is happening directly btw pub and sub?
 -->
