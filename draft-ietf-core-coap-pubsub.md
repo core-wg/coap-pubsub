@@ -627,36 +627,8 @@ When a client deletes a topic-data, the topic is placed into the HALF CREATED st
 
 ## Topic-Data Interactions {#topic-data-interactions}
 
-
 <!--
 TODO: Should we remove this
-
-One variant shown in {{fig-external-server}} is where the resource is hosted. While the broker can create a topic-data resource when the topic is created, the client can select to host the data in a different CoAP server than that of the topic resource.
-
-~~~~ aasvg
-         [central-ps.example.com]
-               CoAP server 1
-  .----------------------------------------.
-  |            ___                         |
-  |  Topic    /   \                        |      [2001:db8::2:1]
-  |Collection \___/                        |       CoAP server 2
-  | Resource       \                       |   .------------------.
-  |                 \___________           |   |                  |
-  |                  \          \          |   |                  |
-  |                   \ ......   \ ......  |   |.........         |
-  |                  : \___  :  : \___  :  |   |:  ___  : Topic   |
-  |           Topic  : / * \ :  : / * \----(---(--/   \ : Data    |
-  |        Resource  : \_|_/ :  : \___/ :  |   |: \___/ : Resource|
-  |                  ....|....  .........  |   |:.......:         |
-  |                  ....|....             |   |                  |
-  |           Topic  :  _|_  :             |   '------------------'
-  |            Data  : /   \ :             |
-  |        Resource  : \___/ :             |
-  |                  :.......:             |
-  '----------------------------------------'
-~~~~
-{: #fig-external-server title="topic-data hosted externally" artwork-align="center"}
-
    See comments above. I'm not sure whether the client should have any say on where the topic-data resource is hosted.
 
    It'd already be difficult to have some sort of coordination between the broker and the separate server hosting the topic-data resource, let alone involving the client as yet another actor in the process.
