@@ -1146,8 +1146,8 @@ Table of Contents
    the "Constrained RESTful Environments (CoRE) Parameters" registry
    group.
 
-   The registry is initially populated with the entries in {fig-CoAP-
-   Pubsub-Parameters} of Section 4.
+   The registry is initially populated with the entries in Figure 5 of
+   Section 4.
 
 6.2.  Resource Types
 
