@@ -237,6 +237,19 @@ A client can perform a discovery of: the broker; the topic collection resources 
 
 CoAP clients MAY discover brokers by using CoAP Simple Discovery, via multicast, through a Resource Directory (RD) {{!RFC9176}} or by other means specified in extensions to {{!RFC7252}}. Brokers MAY register with a RD by following the steps on Section 5 of {{!RFC9176}} with the resource type set to "core.ps" as defined in {{iana}} of this document.
 
+The following example shows an endpoint discovering a broker using the "core.ps" resource type over a multicast network. Brokers within the multicast scope will answer the query.
+
+~~~~
+=> 0.01 GET 
+   Uri-Path: coap://[ff0x::fe]/.well-known/core
+   Resource-Type: core.ps
+
+<= 2.05 Content
+   Payload:
+   Content-Format: 40 (application/link-format)
+   <coap://mythinguri.com/broker/v1>; rt=core.ps
+~~~~
+
 ### Topic Collection Discovery
 
 A Broker SHOULD offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point is the topic collection resource collecting the topic configurations for those topics (see Section 1.2.2 of {{?RFC6690}}) and is identified by the resource type "core.ps.coll".
@@ -713,7 +726,7 @@ Success:
 Failure:
 : 4.04 "Not Found". The topic-data does not exist.
 
-If the 'max-clients' parameter has been reached, the server must treat that as specified in section 4.1 of {{!RFC7641}}. The response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
+If the 'max-subscribers' parameter has been reached, the server must treat that as specified in section 4.1 of {{!RFC7641}}. The response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
 
 <!--
 TODO Right. However, how can this work when the server hosting the topic-data resource is not the broker? The broker knows the maximum number of subscribers, but that separate server does not. Is it just up to a not-specified-here synchronization protocol between the broker and that server?
