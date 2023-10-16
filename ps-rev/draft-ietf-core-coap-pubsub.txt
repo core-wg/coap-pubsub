@@ -5,10 +5,10 @@
 Internet Engineering Task Force                               J. Jimenez
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                               M. Koster
-Expires: 8 April 2024                                      Dogtiger Labs
+Expires: 18 April 2024                                     Dogtiger Labs
                                                               A. Keranen
                                                                 Ericsson
-                                                          6 October 2023
+                                                         16 October 2023
 
 
     A publish-subscribe architecture for the Constrained Application
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 April 2024.
+   This Internet-Draft will expire on 18 April 2024.
 
 Copyright Notice
 
@@ -156,7 +156,7 @@ Table of Contents
    This specification requires readers to be familiar with all the terms
    and concepts that are discussed in [RFC8288] and [RFC6690].  Readers
    should also be familiar with the terms and concepts discussed in
-   [RFC7252], [RFC9167] and [RFC7641].  The URI template format
+   [RFC7252], [RFC9176] and [RFC7641].  The URI template format
    [RFC6570] is used to describe the REST API defined in this
    specification.
 
@@ -411,11 +411,24 @@ Table of Contents
 2.3.1.  Broker Discovery
 
    CoAP clients MAY discover brokers by using CoAP Simple Discovery, via
-   multicast, through a Resource Directory (RD) [RFC9167] or by other
+   multicast, through a Resource Directory (RD) [RFC9176] or by other
    means specified in extensions to [RFC7252].  Brokers MAY register
-   with a RD by following the steps on Section 5 of [RFC9167] with the
+   with a RD by following the steps on Section 5 of [RFC9176] with the
    resource type set to "core.ps" as defined in Section 6 of this
    document.
+
+   The following example shows an endpoint discovering a broker using
+   the "core.ps" resource type over a multicast network.  Brokers within
+   the multicast scope will answer the query.
+
+   => 0.01 GET
+      Uri-Path: coap://[ff0x::fe]/.well-known/core
+      Resource-Type: core.ps
+
+   <= 2.05 Content
+      Payload:
+      Content-Format: 40 (application/link-format)
+      <coap://mythinguri.com/broker/v1>; rt=core.ps
 
 2.3.2.  Topic Collection Discovery
 
@@ -902,7 +915,7 @@ Table of Contents
 
    Failure:  4.04 "Not Found".  The topic-data does not exist.
 
-   If the 'max-clients' parameter has been reached, the server must
+   If the 'max-subscribers' parameter has been reached, the server must
    treat that as specified in section 4.1 of [RFC7641].  The response
    MUST NOT include an Observe Option, the absence of which signals to
    the subscriber that the subscription failed.
@@ -1222,10 +1235,10 @@ Normative References
               DOI 10.17487/RFC8516, January 2019,
               <https://www.rfc-editor.org/rfc/rfc8516>.
 
-   [RFC9167]  Sattler, T., Carney, R., and J. Kolker, "Registry
-              Maintenance Notification for the Extensible Provisioning
-              Protocol (EPP)", RFC 9167, DOI 10.17487/RFC9167, December
-              2021, <https://www.rfc-editor.org/rfc/rfc9167>.
+   [RFC9176]  Amsüss, C., Ed., Shelby, Z., Koster, M., Bormann, C., and
+              P. van der Stok, "Constrained RESTful Environments (CoRE)
+              Resource Directory", RFC 9176, DOI 10.17487/RFC9176, April
+              2022, <https://www.rfc-editor.org/rfc/rfc9176>.
 
 Informative References
 
