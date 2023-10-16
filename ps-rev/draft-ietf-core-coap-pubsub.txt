@@ -450,7 +450,7 @@ Table of Contents
 
    Example:
 
-   => GET
+   => 0.01 GET
       Uri-Path: .well-known/core
       Resource-Type: core.ps.coll
 
