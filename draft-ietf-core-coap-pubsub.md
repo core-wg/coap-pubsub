@@ -240,7 +240,7 @@ CoAP clients MAY discover brokers by using CoAP Simple Discovery, via multicast,
 The following example shows an endpoint discovering a broker using the "core.ps" resource type over a multicast network. Brokers within the multicast scope will answer the query.
 
 ~~~~
-=> 0.01 GET 
+=> 0.01 GET
    Uri-Path: coap://[ff0x::fe]/.well-known/core
    Resource-Type: core.ps
 
