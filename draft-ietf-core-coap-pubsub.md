@@ -46,7 +46,7 @@ normative:
   RFC6690:
   RFC7252:
   RFC8516:
-  RFC9167:
+  RFC9176:
   RFC7641:
 informative:
   RFC8288:
@@ -82,7 +82,7 @@ This document applies the idea of broker-based publish-subscribe to Constrained 
 This specification requires readers to be familiar with all the terms and
 concepts that are discussed in {{?RFC8288}} and {{!RFC6690}}. Readers
 should also be familiar with the terms and concepts discussed in
-{{!RFC7252}}, {{!RFC9167}} and {{!RFC7641}}. The URI template
+{{!RFC7252}}, {{!RFC9176}} and {{!RFC7641}}. The URI template
 format {{!RFC6570}} is used to describe the REST API defined in
 this specification.
 
@@ -235,7 +235,7 @@ A client can perform a discovery of: the broker; the topic collection resources 
 
 ### Broker Discovery {#broker-discovery}
 
-CoAP clients MAY discover brokers by using CoAP Simple Discovery, via multicast, through a Resource Directory (RD) {{!RFC9167}} or by other means specified in extensions to {{!RFC7252}}. Brokers MAY register with a RD by following the steps on Section 5 of {{!RFC9167}} with the resource type set to "core.ps" as defined in {{iana}} of this document.
+CoAP clients MAY discover brokers by using CoAP Simple Discovery, via multicast, through a Resource Directory (RD) {{!RFC9176}} or by other means specified in extensions to {{!RFC7252}}. Brokers MAY register with a RD by following the steps on Section 5 of {{!RFC9176}} with the resource type set to "core.ps" as defined in {{iana}} of this document.
 
 ### Topic Collection Discovery
 

@@ -1,38 +1,97 @@
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="160" width="472" viewBox="0 0 472 160" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
-<path d="M 92,40 L 100,56" fill="none" stroke="black"/>
-<path d="M 148,120 L 156,136" fill="none" stroke="black"/>
-<path d="M 136,64 L 156,104" fill="none" stroke="black"/>
-<path d="M 124,24 L 132,40" fill="none" stroke="black"/>
-<path d="M 180,104 L 188,120" fill="none" stroke="black"/>
-<path d="M 212,120 L 220,136" fill="none" stroke="black"/>
-<path d="M 212,88 L 220,104" fill="none" stroke="black"/>
-<path d="M 244,104 L 252,120" fill="none" stroke="black"/>
-<path d="M 308,120 L 316,136" fill="none" stroke="black"/>
-<path d="M 308,88 L 316,104" fill="none" stroke="black"/>
-<path d="M 340,104 L 348,120" fill="none" stroke="black"/>
-<path d="M 92,40 L 100,24" fill="none" stroke="black"/>
-<path d="M 124,56 L 132,40" fill="none" stroke="black"/>
-<path d="M 148,120 L 156,104" fill="none" stroke="black"/>
-<path d="M 180,136 L 188,120" fill="none" stroke="black"/>
-<path d="M 212,120 L 220,104" fill="none" stroke="black"/>
-<path d="M 244,136 L 252,120" fill="none" stroke="black"/>
-<path d="M 308,120 L 316,104" fill="none" stroke="black"/>
-<path d="M 340,136 L 348,120" fill="none" stroke="black"/>
-<path d="M 100,24 L 124,24" fill="none" stroke="black"/>
-<path d="M 100,56 L 124,56" fill="none" stroke="black"/>
-<path d="M 148,88 L 308,88" fill="none" stroke="black"/>
-<path d="M 156,104 L 180,104" fill="none" stroke="black"/>
-<path d="M 220,104 L 244,104" fill="none" stroke="black"/>
-<path d="M 316,104 L 340,104" fill="none" stroke="black"/>
-<path d="M 156,136 L 180,136" fill="none" stroke="black"/>
-<path d="M 220,136 L 244,136" fill="none" stroke="black"/>
-<path d="M 316,136 L 340,136" fill="none" stroke="black"/>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="352" width="528" viewBox="0 0 528 352" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+<path d="M 8,48 L 8,320" fill="none" stroke="black"/>
+<path d="M 192,184 L 192,264" fill="none" stroke="black"/>
+<path d="M 336,48 L 336,184" fill="none" stroke="black"/>
+<path d="M 336,200 L 336,320" fill="none" stroke="black"/>
+<path d="M 368,112 L 368,184" fill="none" stroke="black"/>
+<path d="M 368,200 L 368,256" fill="none" stroke="black"/>
+<path d="M 520,112 L 520,256" fill="none" stroke="black"/>
+<path d="M 8,48 L 336,48" fill="none" stroke="black"/>
+<path d="M 368,112 L 520,112" fill="none" stroke="black"/>
+<path d="M 304,192 L 384,192" fill="none" stroke="black"/>
+<path d="M 368,256 L 520,256" fill="none" stroke="black"/>
+<path d="M 8,320 L 336,320" fill="none" stroke="black"/>
+<path d="M 172,280 L 180,296" fill="none" stroke="black"/>
+<path d="M 100,88 L 108,104" fill="none" stroke="black"/>
+<path d="M 172,200 L 180,216" fill="none" stroke="black"/>
+<path d="M 204,264 L 212,280" fill="none" stroke="black"/>
+<path d="M 144,112 L 180,184" fill="none" stroke="black"/>
+<path d="M 132,72 L 140,88" fill="none" stroke="black"/>
+<path d="M 204,184 L 212,200" fill="none" stroke="black"/>
+<path d="M 260,200 L 268,216" fill="none" stroke="black"/>
+<path d="M 244,136 L 268,184" fill="none" stroke="black"/>
+<path d="M 292,184 L 300,200" fill="none" stroke="black"/>
+<path d="M 388,200 L 396,216" fill="none" stroke="black"/>
+<path d="M 420,184 L 428,200" fill="none" stroke="black"/>
+<path d="M 100,88 L 108,72" fill="none" stroke="black"/>
+<path d="M 132,104 L 140,88" fill="none" stroke="black"/>
+<path d="M 172,200 L 180,184" fill="none" stroke="black"/>
+<path d="M 172,280 L 180,264" fill="none" stroke="black"/>
+<path d="M 204,216 L 212,200" fill="none" stroke="black"/>
+<path d="M 204,296 L 212,280" fill="none" stroke="black"/>
+<path d="M 260,200 L 268,184" fill="none" stroke="black"/>
+<path d="M 292,216 L 300,200" fill="none" stroke="black"/>
+<path d="M 388,200 L 396,184" fill="none" stroke="black"/>
+<path d="M 420,216 L 428,200" fill="none" stroke="black"/>
+<path d="M 108,72 L 132,72" fill="none" stroke="black"/>
+<path d="M 108,104 L 132,104" fill="none" stroke="black"/>
+<path d="M 156,136 L 244,136" fill="none" stroke="black"/>
+<path d="M 180,184 L 204,184" fill="none" stroke="black"/>
+<path d="M 268,184 L 292,184" fill="none" stroke="black"/>
+<path d="M 396,184 L 420,184" fill="none" stroke="black"/>
+<path d="M 268,216 L 292,216" fill="none" stroke="black"/>
+<path d="M 396,216 L 420,216" fill="none" stroke="black"/>
+<path d="M 180,296 L 204,296" fill="none" stroke="black"/>
+<path class="jump" d="M 368,200 C 362,200 362,184 368,184" fill="none" stroke="black"/><path class="jump" d="M 336,200 C 330,200 330,184 336,184" fill="none" stroke="black"/><circle cx="192" cy="192" r="6" class="closeddot" fill="black"/>
+<circle cx="280" cy="192" r="6" class="closeddot" fill="black"/>
 <g class="text">
-<text x="40" y="36">Topic</text>
-<text x="44" y="52">Collection</text>
-<text x="44" y="68">Resource</text>
-<text x="280" y="116">...</text>
-<text x="432" y="116">Topic</text>
-<text x="432" y="132">Resources</text>
+<text x="156" y="20">[central-ps.example.com]</text>
+<text x="160" y="36">CoAP server 1</text>
+<text x="48" y="84">Topic</text>
+<text x="448" y="84">[2001:db8::2:1]</text>
+<text x="52" y="100">Collection</text>
+<text x="448" y="100">CoAP server 2</text>
+<text x="52" y="116">Resource</text>
+<text x="204" y="164">......</text>
+<text x="292" y="164">......</text>
+<text x="408" y="164">.........</text>
+<text x="160" y="180">:</text>
+<text x="224" y="180">:</text>
+<text x="248" y="180">:</text>
+<text x="312" y="180">:</text>
+<text x="376" y="180">:</text>
+<text x="464" y="180">: Topic</text>
+<text x="120" y="196">Topic</text>
+<text x="160" y="196">:</text>
+<text x="224" y="196">:</text>
+<text x="248" y="196">:</text>
+<text x="460" y="196">: Data</text>
+<text x="108" y="212">Resource</text>
+<text x="160" y="212">:</text>
+<text x="184" y="212">_</text>
+<text x="200" y="212">_</text>
+<text x="224" y="212">:</text>
+<text x="248" y="212">:</text>
+<text x="312" y="212">:</text>
+<text x="376" y="212">:</text>
+<text x="476" y="212">: Resource</text>
+<text x="172" y="228">....</text>
+<text x="212" y="228">....</text>
+<text x="280" y="228">.........</text>
+<text x="408" y="228">:.......:</text>
+<text x="172" y="244">....</text>
+<text x="212" y="244">....</text>
+<text x="120" y="260">Topic</text>
+<text x="160" y="260">:</text>
+<text x="184" y="260">_</text>
+<text x="200" y="260">_</text>
+<text x="224" y="260">:</text>
+<text x="124" y="276">Data</text>
+<text x="160" y="276">:</text>
+<text x="224" y="276">:</text>
+<text x="108" y="292">Resource</text>
+<text x="160" y="292">:</text>
+<text x="224" y="292">:</text>
+<text x="192" y="308">:.......:</text>
 </g>
 </svg>
