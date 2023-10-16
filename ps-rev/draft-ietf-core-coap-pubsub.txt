@@ -759,7 +759,7 @@ Table of Contents
    When a topic-configuration resource is deleted, the broker MUST also
    delete the topic-data resource, unsubscribe all subscribers by
    removing them from the list of observers and returning a final 4.04
-   (Not Found) response as per [RFC7641] Section 3.2.
+   (Not Found) response as per section 3.2 of [RFC7641].
 
    Example:
 
@@ -1195,8 +1195,8 @@ Acknowledgements
 
    The authors would like to also thank Carsten Bormann, Hannes
    Tschofenig, Zach Shelby, Mohit Sethi, Peter van der Stok, Tim
-   Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen, and Olaf
-   Bergmann for their valuable contributions and reviews.
+   Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen, Olaf
+   Bergmann and Oscar Novo for their valuable contributions and reviews.
 
 References
 
