@@ -261,7 +261,7 @@ Since the representation of the topic collection resource includes the links to 
 Example:
 
 ~~~~
-=> GET
+=> 0.01 GET
    Uri-Path: .well-known/core
    Resource-Type: core.ps.coll
 
