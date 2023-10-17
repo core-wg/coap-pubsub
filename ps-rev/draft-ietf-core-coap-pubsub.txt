@@ -5,10 +5,10 @@
 Internet Engineering Task Force                               J. Jimenez
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                               M. Koster
-Expires: 18 April 2024                                     Dogtiger Labs
+Expires: 19 April 2024                                     Dogtiger Labs
                                                               A. Keranen
                                                                 Ericsson
-                                                         16 October 2023
+                                                         17 October 2023
 
 
     A publish-subscribe architecture for the Constrained Application
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 April 2024.
+   This Internet-Draft will expire on 19 April 2024.
 
 Copyright Notice
 
@@ -457,7 +457,7 @@ Table of Contents
       <= 2.05 Content
       Content-Format: 40 (application/link-format)
       </ps1>;rt="core.ps.coll";ct=40,
-      </ps2>;rt="core.ps.coll";ct=40
+      </other/path>;rt="core.ps.coll";ct=40
 
 2.3.3.  Topic-Configuration Discovery
 
@@ -477,7 +477,7 @@ Table of Contents
    <= 2.05 Content
       Content-Format: 40 (application/link-format)
       </ps1/h9392>;rt="core.ps.conf",
-      </ps2/other/path/2e3570>;rt=core.ps.conf
+      </other/path/2e3570>;rt=core.ps.conf
 
 2.3.4.  Topic-Data Discovery
 
