@@ -268,7 +268,7 @@ Example:
    <= 2.05 Content
    Content-Format: 40 (application/link-format)
    </ps1>;rt="core.ps.coll";ct=40,
-   </ps2>;rt="core.ps.coll";ct=40
+   </other/path>;rt="core.ps.coll";ct=40
 ~~~~
 
 ### Topic-Configuration Discovery {#topic-discovery}
@@ -290,7 +290,7 @@ TODO: add the ct part in IANA and add the example here:
 <= 2.05 Content
    Content-Format: 40 (application/link-format)
    </ps1/h9392>;rt="core.ps.conf",
-   </ps2/other/path/2e3570>;rt=core.ps.conf
+   </other/path/2e3570>;rt=core.ps.conf
 ~~~~
 
 ### Topic-Data Discovery
