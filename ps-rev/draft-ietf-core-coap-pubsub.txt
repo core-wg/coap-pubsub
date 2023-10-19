@@ -5,10 +5,10 @@
 Internet Engineering Task Force                               J. Jimenez
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                               M. Koster
-Expires: 19 April 2024                                     Dogtiger Labs
+Expires: 21 April 2024                                     Dogtiger Labs
                                                               A. Keranen
                                                                 Ericsson
-                                                         17 October 2023
+                                                         19 October 2023
 
 
     A publish-subscribe architecture for the Constrained Application
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 April 2024.
+   This Internet-Draft will expire on 21 April 2024.
 
 Copyright Notice
 
@@ -105,9 +105,6 @@ Table of Contents
      3.4.  Rate Limiting
    4.  CoAP Pubsub Parameters
    5.  Security Considerations
-     5.1.  Change of Topic-Configuration
-     5.2.  Topic Administrators
-     5.3.  Caching and Freshness
    6.  IANA Considerations
      6.1.  CoAP Pubsub Parameters
      6.2.  Resource Types
@@ -749,6 +746,19 @@ Table of Contents
          "max-subscribers": 2
       }
 
+   Note that when a topic configuration changes, it may result in
+   disruptions for the subscribers.  Some potential issues that may
+   arise include:
+
+   *  Limiting the number of subscribers will cause to cancel ongoing
+      subscriptions until max-subscribers has been reached.
+
+   *  Changing the topic-data value will cancel all ongoing
+      subscriptions.
+
+   *  Changing of the expiration-date may cause to cancel ongoing
+      subscriptions if the topic expires at an earlier data.
+
 2.5.4.  Deleting a topic-configuration
 
    A client can delete a topic by making a CoAP DELETE request on the
@@ -1076,75 +1086,50 @@ Table of Contents
 
 5.  Security Considerations
 
-   The same security considerations from RFC 7252 and RFC 7641 apply,
-   and are complemented by the following ones.  The security
-   considerations discussed in this document cover various aspects
-   related to the publish-subscribe architecture and the management of
-   topics, administrators, and the change of topic-configuration.
+   The security considerations described in CoAP [RFC7252], Web Linking
+   [RFC8288] and CoRE Resource Directory [RFC9176] apply.  The resource
+   used to discover the broker at /.well-known/core MAY be protected,
+   e.g., using DTLS as described in [RFC7252].
 
-5.1.  Change of Topic-Configuration
+   Every operation performed by a client endpoint on a broker SHOULD be
+   mutually authenticated using a pre-shared key, a raw public key, or
+   certificate-based security.  This can be implemented with the
+   existing DTLS, TLS or OSCORE mechanisms.
 
-   When a topic configuration changes, it may result in disruptions for
-   the subscribers.  Some potential issues that may arise include:
+   Access control SHOULD be performed for the topic discovery, topic
+   collection, topi configuration and topic data paths, as different
+   endpoints may be authorized to discover topics, create them, modify
+   them, etc.  Therefore access control SHOULD be as fine-grained as
+   possible.  Otherwise malicious publishers could subscribe to data
+   they are not authorized to access or publish on a topic-data resource
+   continuously to mount a denial of service attack against the broker.
 
-   *  Limiting the number of subscribers will cause to cancel ongoing
-      subscriptions until max-subscribers has been reached.
+   To ensure end-to-end authentication between clients acting as
+   publishers and those acting as subscribers, it is recommended to
+   utilize application layer security, such as that offered by OSCORE
+   [RFC8613].  For example, if we consider a scenario where a broker
+   mediates between a sensor device (publisher) and a cloud-based client
+   application (subscriber).  Although running separate DTLS sessions
+   from the client device to the broker, and from the broker to the
+   client application, ensures path confidentiality, it does not
+   guarantee the source of data.  The client device cannot confirm if
+   the messages from the broker are genuinely from the client
+   application, and similarly, a client application cannot verify if the
+   data originated from the client device.  In situations where end-to-
+   end security is crucial, the use of application layer security
+   becomes indispensable.
 
-   *  Changing the topic-data value will cancel all ongoing
-      subscriptions.
+   When deploying the publish subscribe architecture it is important to
+   ensure authentication, authorization, and key distribution
+   operations, for this reason it is recommended to follow the
+   guidelines described in the ACE profile [I-D.ietf-ace-pubsub-profile]
+   which is designed to enable secure group communication for the
+   architecture defined in this document "[RFC-XXXX]" (See Figure 1).
 
-   *  Changing of the expiration-date may cause to cancel ongoing
-      subscriptions if the topic expires at an earlier data.
-
-   To address these potential issues, it is vital to have an
-   administration process in place for topic configurations, including
-   monitoring, validation, and enforcement of security policies and
-   procedures.
-
-   It is also recommended for subscribers to subscribe to the topic-
-   configuration resource in order to receive notifications of topic
-   parameter changes.
-
-5.2.  Topic Administrators
-
-   In a publish-subscribe architecture, it is essential to ensure that
-   topic administrators are trustworthy and authorized to perform their
-   duties.  This includes the ability to create, modify, and delete
-   topics, enforce proper access control policies, and handle potential
-   security issues arising from topic management.
-
-   The draft [I-D.ietf-ace-pubsub-profile] defines an application
-   profile of the Authentication and Authorization for Constrained
-   Environments (ACE) framework.  The profile is designed to enable
-   secure group communication for the architecture defined in this
-   document "[RFC-XXXX]" (See Figure 1).
-
-   The profile relies on protocol-specific transport profiles of ACE for
-   communication security, server authentication, and proof-of-
-   possession for a key that is owned by the Client and bound to an
-   OAuth 2.0 Access Token.
-
-   The document outlines the provisioning and enforcement of
-   authorization information for Clients to act as Publishers and/or
-   Subscribers.  Additionally, it specifies the provisioning of keying
-   material and security parameters that Clients use to protect their
-   communications end-to-end through the Broker.
-
-5.3.  Caching and Freshness
-
-   A broker could become overloaded if it always had to provide the most
-   recent cached resource representation of a topic-data to a
-   subscriber.  On deployments with a large number of clients and with
-   many topic resources this would represent a big burden on the broker.
-
-   For this reason is it recommended to consider changing the default
-   Max-Age Option, which has a value of 60 in CoAP, in order to cater to
-   different deployment scenarios.
-
-   For example, the broker could choose not to cache anything, therefore
-   it SHOULD explicitly include a Max-Age Option with a value of zero
-   seconds.  For more information about caching and freshness in CoAP,
-   please check [RFC7641] and [RFC7252].
+   While this document does not specify how credentials are to be
+   provisioned the profile on [I-D.ietf-ace-pubsub-profile] and the
+   draft [I-D.ietf-ace-key-groupcomm] can provide guidance in that
+   respect.
 
 6.  IANA Considerations
 
@@ -1235,6 +1220,11 @@ Normative References
               DOI 10.17487/RFC8516, January 2019,
               <https://www.rfc-editor.org/rfc/rfc8516>.
 
+   [RFC8613]  Selander, G., Mattsson, J., Palombini, F., and L. Seitz,
+              "Object Security for Constrained RESTful Environments
+              (OSCORE)", RFC 8613, DOI 10.17487/RFC8613, July 2019,
+              <https://www.rfc-editor.org/rfc/rfc8613>.
+
    [RFC9176]  Amsüss, C., Ed., Shelby, Z., Koster, M., Bormann, C., and
               P. van der Stok, "Constrained RESTful Environments (CoRE)
               Resource Directory", RFC 9176, DOI 10.17487/RFC9176, April
@@ -1249,6 +1239,13 @@ Informative References
               Draft, draft-hartke-t2trg-coral-pubsub-01, 9 May 2020,
               <https://datatracker.ietf.org/doc/html/draft-hartke-t2trg-
               coral-pubsub-01>.
+
+   [I-D.ietf-ace-key-groupcomm]
+              Palombini, F. and M. Tiloca, "Key Provisioning for Group
+              Communication using ACE", Work in Progress, Internet-
+              Draft, draft-ietf-ace-key-groupcomm-17, 6 October 2023,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-
+              groupcomm-17>.
 
    [I-D.ietf-ace-oscore-gm-admin]
               Tiloca, M., Höglund, R., Van der Stok, P., and F.
