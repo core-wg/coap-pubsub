@@ -291,8 +291,8 @@ TODO: add the ct part in IANA and add the example here:
 
 <= 2.05 Content
    Content-Format: 40 (application/link-format)
-   </ps1/h9392>;rt="core.ps.conf",
-   </other/path/2e3570>;rt=core.ps.conf
+   </ps1/h9392>;rt="core.ps.conf";ct=TBD,
+   </other/path/2e3570>;rt=core.ps.conf;ct=TBD
 ~~~~
 
 ### Topic-Data Discovery
@@ -892,7 +892,7 @@ Note that the media type application/core-pubsub+cbor MUST be used when these pa
 ~~~~
 {: #fig-CoAP-Pubsub-Parameters title="CoAP Pubsub Parameters" artwork-align="center"}
 
-# Security Considerations
+# Security Considerations {#seccons}
 
 The security considerations described in CoAP {{RFC7252}}, Web Linking {{RFC8288}} and CoRE Resource Directory {{RFC9176}} apply. The resource used to discover the broker at /.well-known/core MAY be protected, e.g., using DTLS as described in {{RFC7252}}.
 
@@ -908,9 +908,88 @@ While this document does not specify how credentials are to be provisioned the p
 
 # IANA Considerations {#iana}
 
+[^to-be-removed]
+
+[^to-be-removed]: RFC Editor: please replace RFC XXXX with the RFC
+    number of this RFC and remove this note.
+
 This document has the following actions for IANA.
 
 Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with the RFC number of this specification and delete this paragraph.
+
+## Media Type
+
+IANA is requested to add the following Media-Type to the "Media Types"
+registry {{!IANA.media-types}}.
+
+| Name                         | Template                                 | Reference              |
+| pubsub+cborr | application/pubsub+cbor | RFC XXXX, {{media-type}} |
+{: #new-media-type align="left" title="New Media Type application/pubsub+cbor"}
+
+{:compact}
+Type name:
+: application
+
+Subtype name:
+: pubsub+cbor
+
+Required parameters:
+: N/A
+
+Optional parameters:
+: N/A
+
+Encoding considerations:
+: binary (CBOR data item)
+
+Security considerations:
+: {{seccons}} of RFC XXXX
+
+Interoperability considerations:
+: none
+
+Published specification:
+: {{media-type}} of RFC XXXX
+
+Applications that use this media type:
+: Clients and servers in the Internet of Things
+
+Fragment identifier considerations:
+: The syntax and semantics of fragment identifiers is as specified for
+  "application/cbor".  (At publication of RFC XXXX, there is no
+  fragment identification syntax defined for "application/cbor".)
+
+Person & email address to contact for further information:
+: CoRE WG mailing list (core@ietf.org),
+  or IETF Applications and Real-Time Area (art@ietf.org)
+
+Intended usage:
+: COMMON
+
+Restrictions on usage:
+: none
+
+Author/Change controller:
+: IETF
+
+Provisional registration:
+: no
+
+## Content Format
+
+IANA has added the following Content-Formats to the
+{{content-formats ("CoAP Content-Formats")<IANA.core-parameters}}
+sub-registry, within the "Constrained RESTful Environments (CoRE)
+Parameters" Registry {{IANA.core-parameters}}, as follows:
+
+| Content-Type                | Content Coding | ID   | Reference |
+| application/pubsub+cbor     | -              | TBD9 | RFC XXXX  |
+{: align="left" title="New Content-Format"}
+
+TBD9 is to be assigned from the space 256..999.
+
+In the registry the column "Content-Type" is called "Media type" and the
+column "Content Coding" is called "Encoding". [^remove]
 
 ## CoAP Pubsub Parameters ## {#iana-coap-pubsub-parameters}
 
