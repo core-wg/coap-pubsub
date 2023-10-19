@@ -9,16 +9,14 @@
 <meta content="Michael Koster" name="author">
 <meta content="Ari Keranen" name="author">
 <meta content="
-       This document describes a publish-subscribe architecture for CoAP that
-extends the capabilities of CoAP for supporting nodes with long breaks in
-connectivity and/or up-time. The Constrained Application Protocol (CoAP) is used by CoAP clients both to publish and to subscribe via a known topic resource. 
+       This document describes a publish-subscribe architecture for the Constrained Application Protocol (CoAP), extending the capabilities of CoAP communications for supporting endpoints with long breaks in connectivity and/or up-time. CoAP clients publish on and subscribe to a topic via a corresponding topic resource at a CoAP server acting as broker. 
     " name="description">
-<meta content="xml2rfc 3.18.1" name="generator">
+<meta content="xml2rfc 3.18.2" name="generator">
 <meta content="CoRE" name="keyword">
 <meta content="draft-ietf-core-coap-pubsub-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.18.1
-    Python 3.11.5
+  xml2rfc 3.18.2
+    Python 3.11.6
     ConfigArgParse 1.5.3
     google-i18n-address 3.1.0
     intervaltree 3.1.0
@@ -1033,7 +1031,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Jimenez, et al.</td>
-<td class="center">Expires 5 April 2024</td>
+<td class="center">Expires 21 April 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1046,12 +1044,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-core-coap-pubsub-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-10-03" class="published">3 October 2023</time>
+<time datetime="2023-10-19" class="published">19 October 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-04-05">5 April 2024</time></dd>
+<dd class="expires"><time datetime="2024-04-21">21 April 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1072,9 +1070,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">A publish-subscribe architecture for the Constrained Application Protocol (CoAP)</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document describes a publish-subscribe architecture for CoAP that
-extends the capabilities of CoAP for supporting nodes with long breaks in
-connectivity and/or up-time. The Constrained Application Protocol (CoAP) is used by CoAP clients both to publish and to subscribe via a known topic resource.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document describes a publish-subscribe architecture for the Constrained Application Protocol (CoAP), extending the capabilities of CoAP communications for supporting endpoints with long breaks in connectivity and/or up-time. CoAP clients publish on and subscribe to a topic via a corresponding topic resource at a CoAP server acting as broker.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1110,7 +1106,7 @@ connectivity and/or up-time. The Constrained Application Protocol (CoAP) is used
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 5 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 21 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1160,18 +1156,10 @@ connectivity and/or up-time. The Constrained Application Protocol (CoAP) is used
                 <p id="section-toc.1-1.2.2.1.1"><a href="#section-2.1" class="auto internal xref">2.1</a>.  <a href="#name-collection-representation" class="internal xref">Collection Representation</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2">
-                <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="auto internal xref">2.2</a>.  <a href="#name-topic-creation-and-configur" class="internal xref">Topic Creation and Configuration</a></p>
+                <p id="section-toc.1-1.2.2.2.1"><a href="#section-2.2" class="auto internal xref">2.2</a>.  <a href="#name-topic-configuration-represe" class="internal xref">Topic-Configuration Representation</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2.2.1">
                     <p id="section-toc.1-1.2.2.2.2.1.1"><a href="#section-2.2.1" class="auto internal xref">2.2.1</a>.  <a href="#name-topic-properties" class="internal xref">Topic Properties</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2.2.2">
-                    <p id="section-toc.1-1.2.2.2.2.2.1"><a href="#section-2.2.2" class="auto internal xref">2.2.2</a>.  <a href="#name-topic-resource-representati" class="internal xref">Topic Resource Representation</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.2.2.2.2.1">
-                        <p id="section-toc.1-1.2.2.2.2.2.2.1.1"><a href="#section-2.2.2.1" class="auto internal xref">2.2.2.1</a>.  <a href="#name-default-values" class="internal xref">Default Values</a></p>
-</li>
-                    </ul>
 </li>
                 </ul>
 </li>
@@ -1185,10 +1173,10 @@ connectivity and/or up-time. The Constrained Application Protocol (CoAP) is used
                     <p id="section-toc.1-1.2.2.3.2.2.1"><a href="#section-2.3.2" class="auto internal xref">2.3.2</a>.  <a href="#name-topic-collection-discovery" class="internal xref">Topic Collection Discovery</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3.2.3">
-                    <p id="section-toc.1-1.2.2.3.2.3.1"><a href="#section-2.3.3" class="auto internal xref">2.3.3</a>.  <a href="#name-topic-discovery" class="internal xref">Topic Discovery</a></p>
+                    <p id="section-toc.1-1.2.2.3.2.3.1"><a href="#section-2.3.3" class="auto internal xref">2.3.3</a>.  <a href="#name-topic-configuration-discove" class="internal xref">Topic-Configuration Discovery</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.3.2.4">
-                    <p id="section-toc.1-1.2.2.3.2.4.1"><a href="#section-2.3.4" class="auto internal xref">2.3.4</a>.  <a href="#name-topic-data-discovery" class="internal xref">Topic Data Discovery</a></p>
+                    <p id="section-toc.1-1.2.2.3.2.4.1"><a href="#section-2.3.4" class="auto internal xref">2.3.4</a>.  <a href="#name-topic-data-discovery" class="internal xref">Topic-Data Discovery</a></p>
 </li>
                 </ul>
 </li>
@@ -1196,10 +1184,10 @@ connectivity and/or up-time. The Constrained Application Protocol (CoAP) is used
                 <p id="section-toc.1-1.2.2.4.1"><a href="#section-2.4" class="auto internal xref">2.4</a>.  <a href="#name-topic-collection-interactio" class="internal xref">Topic Collection Interactions</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.4.2.1">
-                    <p id="section-toc.1-1.2.2.4.2.1.1"><a href="#section-2.4.1" class="auto internal xref">2.4.1</a>.  <a href="#name-retrieving-all-topic-and-to" class="internal xref">Retrieving all topic and topic_data</a></p>
+                    <p id="section-toc.1-1.2.2.4.2.1.1"><a href="#section-2.4.1" class="auto internal xref">2.4.1</a>.  <a href="#name-retrieving-all-topic-config" class="internal xref">Retrieving all topic-configurations</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.4.2.2">
-                    <p id="section-toc.1-1.2.2.4.2.2.1"><a href="#section-2.4.2" class="auto internal xref">2.4.2</a>.  <a href="#name-getting-topics-by-propertie" class="internal xref">Getting Topics by Properties</a></p>
+                    <p id="section-toc.1-1.2.2.4.2.2.1"><a href="#section-2.4.2" class="auto internal xref">2.4.2</a>.  <a href="#name-getting-topic-configuration" class="internal xref">Getting topic-configurations by Properties</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.4.2.3">
                     <p id="section-toc.1-1.2.2.4.2.3.1"><a href="#section-2.4.3" class="auto internal xref">2.4.3</a>.  <a href="#name-creating-a-topic" class="internal xref">Creating a Topic</a></p>
@@ -1207,99 +1195,97 @@ connectivity and/or up-time. The Constrained Application Protocol (CoAP) is used
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.5">
-                <p id="section-toc.1-1.2.2.5.1"><a href="#section-2.5" class="auto internal xref">2.5</a>.  <a href="#name-topic-resource-interactions" class="internal xref">Topic Resource Interactions</a></p>
+                <p id="section-toc.1-1.2.2.5.1"><a href="#section-2.5" class="auto internal xref">2.5</a>.  <a href="#name-topic-configuration-interac" class="internal xref">Topic-Configuration Interactions</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.5.2.1">
-                    <p id="section-toc.1-1.2.2.5.2.1.1"><a href="#section-2.5.1" class="auto internal xref">2.5.1</a>.  <a href="#name-getting-a-topic-resource" class="internal xref">Getting a topic resource</a></p>
+                    <p id="section-toc.1-1.2.2.5.2.1.1"><a href="#section-2.5.1" class="auto internal xref">2.5.1</a>.  <a href="#name-getting-a-topic-configurati" class="internal xref">Getting a topic-configuration</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.5.2.2">
-                    <p id="section-toc.1-1.2.2.5.2.2.1"><a href="#section-2.5.2" class="auto internal xref">2.5.2</a>.  <a href="#name-getting-part-of-a-topic-res" class="internal xref">Getting part of a topic resource by filter</a></p>
+                    <p id="section-toc.1-1.2.2.5.2.2.1"><a href="#section-2.5.2" class="auto internal xref">2.5.2</a>.  <a href="#name-getting-part-of-a-topic-con" class="internal xref">Getting part of a topic-configuration</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.5.2.3">
-                    <p id="section-toc.1-1.2.2.5.2.3.1"><a href="#section-2.5.3" class="auto internal xref">2.5.3</a>.  <a href="#name-updating-the-topic-resource" class="internal xref">Updating the Topic Resource</a></p>
+                    <p id="section-toc.1-1.2.2.5.2.3.1"><a href="#section-2.5.3" class="auto internal xref">2.5.3</a>.  <a href="#name-updating-the-topic-configur" class="internal xref">Updating the topic-configuration</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.5.2.4">
-                    <p id="section-toc.1-1.2.2.5.2.4.1"><a href="#section-2.5.4" class="auto internal xref">2.5.4</a>.  <a href="#name-deleting-a-topic-resource" class="internal xref">Deleting a Topic Resource</a></p>
-</li>
-                </ul>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.6">
-                <p id="section-toc.1-1.2.2.6.1"><a href="#section-2.6" class="auto internal xref">2.6</a>.  <a href="#name-publish-subscribe" class="internal xref">Publish/Subscribe</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.6.2.1">
-                    <p id="section-toc.1-1.2.2.6.2.1.1"><a href="#section-2.6.1" class="auto internal xref">2.6.1</a>.  <a href="#name-topic-lifecycle" class="internal xref">Topic Lifecycle</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.6.2.2">
-                    <p id="section-toc.1-1.2.2.6.2.2.1"><a href="#section-2.6.2" class="auto internal xref">2.6.2</a>.  <a href="#name-rate-limiting" class="internal xref">Rate Limiting</a></p>
-</li>
-                </ul>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.7">
-                <p id="section-toc.1-1.2.2.7.1"><a href="#section-2.7" class="auto internal xref">2.7</a>.  <a href="#name-topic-data-interactions" class="internal xref">Topic Data Interactions</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.7.2.1">
-                    <p id="section-toc.1-1.2.2.7.2.1.1"><a href="#section-2.7.1" class="auto internal xref">2.7.1</a>.  <a href="#name-publish" class="internal xref">Publish</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.7.2.2">
-                    <p id="section-toc.1-1.2.2.7.2.2.1"><a href="#section-2.7.2" class="auto internal xref">2.7.2</a>.  <a href="#name-subscribe" class="internal xref">Subscribe</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.7.2.3">
-                    <p id="section-toc.1-1.2.2.7.2.3.1"><a href="#section-2.7.3" class="auto internal xref">2.7.3</a>.  <a href="#name-unsubscribe" class="internal xref">Unsubscribe</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.7.2.4">
-                    <p id="section-toc.1-1.2.2.7.2.4.1"><a href="#section-2.7.4" class="auto internal xref">2.7.4</a>.  <a href="#name-delete-topic-data-resource" class="internal xref">Delete topic data resource</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2.2.7.2.5">
-                    <p id="section-toc.1-1.2.2.7.2.5.1"><a href="#section-2.7.5" class="auto internal xref">2.7.5</a>.  <a href="#name-read-latest-data" class="internal xref">Read latest data</a></p>
+                    <p id="section-toc.1-1.2.2.5.2.4.1"><a href="#section-2.5.4" class="auto internal xref">2.5.4</a>.  <a href="#name-deleting-a-topic-configurat" class="internal xref">Deleting a topic-configuration</a></p>
 </li>
                 </ul>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-coap-pubsub-parameters" class="internal xref">CoAP Pubsub Parameters</a></p>
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-publish-and-subscribe" class="internal xref">Publish and Subscribe</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-topic-lifecycle" class="internal xref">Topic Lifecycle</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-topic-data-interactions" class="internal xref">Topic-Data Interactions</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2.2.1">
+                    <p id="section-toc.1-1.3.2.2.2.1.1"><a href="#section-3.2.1" class="auto internal xref">3.2.1</a>.  <a href="#name-publish" class="internal xref">Publish</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2.2.2">
+                    <p id="section-toc.1-1.3.2.2.2.2.1"><a href="#section-3.2.2" class="auto internal xref">3.2.2</a>.  <a href="#name-subscribe" class="internal xref">Subscribe</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2.2.3">
+                    <p id="section-toc.1-1.3.2.2.2.3.1"><a href="#section-3.2.3" class="auto internal xref">3.2.3</a>.  <a href="#name-unsubscribe" class="internal xref">Unsubscribe</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2.2.4">
+                    <p id="section-toc.1-1.3.2.2.2.4.1"><a href="#section-3.2.4" class="auto internal xref">3.2.4</a>.  <a href="#name-delete-topic-data" class="internal xref">Delete topic-data</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-read-latest-data" class="internal xref">Read latest data</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
+                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-rate-limiting" class="internal xref">Rate Limiting</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
-                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-change-of-topic-configurati" class="internal xref">Change of Topic Configuration</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
-                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-topic-administrators" class="internal xref">Topic Administrators</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
-                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-caching-and-freshness" class="internal xref">Caching and Freshness</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-coap-pubsub-parameters" class="internal xref">CoAP Pubsub Parameters</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
-<ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-coap-pubsub-parameters-3" class="internal xref">CoAP Pubsub Parameters</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
-                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-resource-types" class="internal xref">Resource Types</a></p>
-</li>
-            </ul>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-acknowledgements" class="internal xref">Acknowledgements</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-references" class="internal xref">References</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
-                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-media-type" class="internal xref">Media Type</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
-                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-content-format" class="internal xref">Content Format</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
+                <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="auto internal xref">6.3</a>.  <a href="#name-coap-pubsub-parameters-3" class="internal xref">CoAP Pubsub Parameters</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.4">
+                <p id="section-toc.1-1.6.2.4.1"><a href="#section-6.4" class="auto internal xref">6.4</a>.  <a href="#name-resource-types" class="internal xref">Resource Types</a></p>
 </li>
             </ul>
 </li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref"></a><a href="#name-acknowledgements" class="internal xref">Acknowledgements</a></p>
+</li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref"></a><a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref"></a><a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref"></a><a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-contributors" class="internal xref">Contributors</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1313,9 +1299,9 @@ connectivity and/or up-time. The Constrained Application Protocol (CoAP) is used
 <p id="section-1-1">The Constrained Application Protocol (CoAP) <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span> supports
 machine-to-machine communication across networks of constrained
 devices and constrained networks. CoAP uses a request/response model where clients make requests to servers in order to request actions on resources. Depending on the situation the same device may act either as a server, a client, or both.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">One important class of constrained devices includes devices that are intended to run for years from a small battery, or by scavenging energy from their environment. These devices have limited reachability because they spend most of their time in a sleeping state with no network connectivity. Another important class of nodes are devices with limited reachability due to middle-boxes like Network Address Translators (NATs) and firewalls.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">For these nodes, the client/server-oriented architecture of REST can be challenging when interactions are not initiated by the devices themselves. A publish/subscribe-oriented architecture where nodes are separated by a broker and data is exchanged via topics might fit these nodes better.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">This document applies the idea of publish-subscribe to Constrained RESTful Environments. It introduces a broker that allows to create, discover subscribe and publish on topics. The broker enables store-and-forward data exchange between CoAP endpoints, thereby facilitating the communication of nodes with limited reachability, providing simple many-to-many communication, and easing integration with other publish/subscribe systems.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-2">One important class of constrained devices includes devices that are intended to run for years from a small battery, or by scavenging energy from their environment. These devices have limited up-time because they spend most of their time in a sleeping state with no network connectivity. Another important class of nodes are devices with limited reachability due to middle-boxes like Network Address Translators (NATs) and firewalls.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">For these nodes, the client/server-oriented architecture of REST can be challenging when interactions are not initiated by the devices themselves. A publish/subscribe-oriented architecture where nodes exchange data via topics through a broker entity might fit these nodes better.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">This document applies the idea of broker-based publish-subscribe to Constrained RESTful Environments using CoAP. It defines a broker that allows to create, discover subscribe and publish on topics.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <div id="terminology">
 <section id="section-1.1">
         <h3 id="name-terminology">
@@ -1328,39 +1314,39 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
 <p id="section-1.1-2">This specification requires readers to be familiar with all the terms and
 concepts that are discussed in <span>[<a href="#RFC8288" class="cite xref">RFC8288</a>]</span> and <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>. Readers
 should also be familiar with the terms and concepts discussed in
-<span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span> and <span>[<a href="#RFC9167" class="cite xref">RFC9167</a>]</span>. The URI template
+<span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>, <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span> and <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. The URI template
 format <span>[<a href="#RFC6570" class="cite xref">RFC6570</a>]</span> is used to describe the REST API defined in
 this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 <p id="section-1.1-3">This specification makes use of the following terminology:<a href="#section-1.1-3" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlNewline" id="section-1.1-4">
           <dt id="section-1.1-4.1">publish-subscribe (pub/sub):</dt>
           <dd style="margin-left: 1.5em" id="section-1.1-4.2">
-            <p id="section-1.1-4.2.1">A messaging paradigm in which messages are published to a broker, and potential receivers can subscribe to a broker to receive messages. Message producers do not need to know where the message will be eventually sent. The broker matches publications and subscriptions, and delivers publications to subscribed receivers.<a href="#section-1.1-4.2.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-4.2.1">A message communication model where messages associated with specific topics are sent to a broker. Interested parties, i.e. subscribers, receive these topic-based messages from the broker without the original sender knowing the recipients. The broker handles matching and delivering these messages to the appropriate subscribers.<a href="#section-1.1-4.2.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-4.3">publishers and subscribers:</dt>
           <dd style="margin-left: 1.5em" id="section-1.1-4.4">
-            <p id="section-1.1-4.4.1">CoAP clients can act as publishers or as subscribers. Publishers propose topics for creation and send CoAP messages (publications) to the broker on specific topics. Subscribers have an ongoing observation relation (subscription) to a topic. Publishers and subscribers do not need to have any knowledge of each other, but they must know the topic they are publishing and subscribing to.<a href="#section-1.1-4.4.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-4.4.1">CoAP clients can act as publishers or as subscribers. Publishers send CoAP messages (publications) to the broker on specific topics. Subscribers have an ongoing observation relation (subscription) to a topic. Both roles operate without any mutual knowledge, guided by their respective topic interests.<a href="#section-1.1-4.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-4.5">topic collection:</dt>
           <dd style="margin-left: 1.5em" id="section-1.1-4.6">
-            <p id="section-1.1-4.6.1">A resource collection is a group of related resources that share a common base URI. In this case the the topic collection contains resources of the type "topic resource". CoAP clients can discover and interact with the resources in a collection by sending CoAP requests to the URI of the collection.<a href="#section-1.1-4.6.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-4.6.1">A set of topic configurations. A topic collection is hosted as one collection resource at the broker, and its representation is the list of links to the topic resources corresponding to each topic configuration.<a href="#section-1.1-4.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
-<dt id="section-1.1-4.7">topic resource:</dt>
+<dt id="section-1.1-4.7">topic-configuration:</dt>
           <dd style="margin-left: 1.5em" id="section-1.1-4.8">
-            <p id="section-1.1-4.8.1">An entry within a topic collection in a broker. Topics are created and configured before any data can be published.  CoAP clients can propose new topics to be created, but it is up to the broker to decide whether and how a topic is created. The broker also decides the URI of each topic resource and of the topic-data resource when hosted at the broker. The creation, configuration, and discovery of topics at a broker are specified in <a href="#topics" class="auto internal xref">Section 2</a>. Interactions about the topic-data are defined in <a href="#topic-data-interactions" class="auto internal xref">Section 2.7</a>.<a href="#section-1.1-4.8.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-4.8.1">A set of information concerning a topic, including its configuration and other metadata. A topic configurations is hosted as one topic resource at the broker, and its representation is the set of configuration information concerning the topic. All the topic resources associated with the same topic collection share a common base URI, i.e., the URI of the collection resource. Throughout this document the word "topic" and "topic-configuration" can be used interchangeably.<a href="#section-1.1-4.8.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-4.9">topic-data resource:</dt>
           <dd style="margin-left: 1.5em" id="section-1.1-4.10">
-            <p id="section-1.1-4.10.1">Topic resources contain a property called "topic-data". The topic-data resource is a CoAP URI used by publishers and subscribers to publish (PUT) and subscribe (GET with Observe) to data (see <a href="#topics" class="auto internal xref">Section 2</a>).<a href="#section-1.1-4.10.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-4.10.1">A resource where clients can publish data and/or subscribe to data for a specific topic. The representation of the topic resource corresponding to such a topic also specifies the URI to the present topic-data resource.<a href="#section-1.1-4.10.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-4.11">broker:</dt>
           <dd style="margin-left: 1.5em" id="section-1.1-4.12">
-            <p id="section-1.1-4.12.1">A CoAP server that hosts one or more topic collections containing topic resources. The broker is responsible for the store-and-forward of state update representations when the topic-data URI points to a resource hosted on the broker. The broker is also responsible of handling the topic lifecycle as defined in <a href="#topic-lifecycle" class="auto internal xref">Section 2.6.1</a>. The creation, configuration, and discovery of topics at a broker is specified in <a href="#topics" class="auto internal xref">Section 2</a>.<a href="#section-1.1-4.12.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-4.12.1">A CoAP server that hosts one or more topic collections with their topic-configurations, and possibly also topic-data resources. The broker is responsible for the store-and-forward of state update representations, for the topics for which it hosts the corresponding topic-data resources. The broker is also responsible of handling the topic lifecycle as defined in <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>. The creation, configuration, and discovery of topics at a broker is specified in <a href="#topics" class="auto internal xref">Section 2</a>.<a href="#section-1.1-4.12.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -1371,12 +1357,14 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
         <h3 id="name-coap-publish-subscribe-arch">
 <a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-coap-publish-subscribe-arch" class="section-name selfRef">CoAP Publish-Subscribe Architecture</a>
         </h3>
-<p id="section-1.2-1"><a href="#fig-arch" class="auto internal xref">Figure 1</a> shows a simple Publish/Subscribe architecture over CoAP. In it, publishers submit their data over a RESTful interface to a broker-managed resource (topic) and subscribers observe this resource using <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. Resource state information is updated between the CoAP clients and the broker via topics. Topics are created by the broker but the initial configuration can be proposed by a client, normally a publisher.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
-<p id="section-1.2-2">The broker is responsible for the store-and-forward of state update representations between CoAP clients. Subscribers observing a resource will receive notifications, the delivery of which is done on a best-effort basis.<a href="#section-1.2-2" class="pilcrow">¶</a></p>
+<p id="section-1.2-1"><a href="#fig-arch" class="auto internal xref">Figure 1</a> shows a simple Publish/Subscribe architecture over CoAP.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
+<p id="section-1.2-2">Topics are created by the broker, but the initial configuration can be proposed by a client (e.g., a publisher or a dedicated administrator) over the RESTful interface of a corresponding topic resource hosted by the broker.<a href="#section-1.2-2" class="pilcrow">¶</a></p>
+<p id="section-1.2-3">Publishers submit their data over the RESTful interface of a topic-data resource corresponding to the topic, which may be hosted by the broker. Subscribers to a topic are notified of new publications by using Observe <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span> on the corresponding topic-data resource.<a href="#section-1.2-3" class="pilcrow">¶</a></p>
+<p id="section-1.2-4">The broker is responsible for the store-and-forward of state update representations between CoAP clients. Subscribers observing a resource will receive notifications, the delivery of which is done on a best-effort basis.<a href="#section-1.2-4" class="pilcrow">¶</a></p>
 <span id="name-publish-subscribe-architect"></span><div id="fig-arch">
 <figure id="figure-1">
-          <div id="section-1.2-3.1">
-            <div class="alignCenter art-svg artwork" id="section-1.2-3.1.1">
+          <div id="section-1.2-5.1">
+            <div class="alignCenter art-svg artwork" id="section-1.2-5.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="272" width="480" viewBox="0 0 480 272" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
                 <path d="M 8,64 L 8,128" fill="none" stroke="black"></path>
                 <path d="M 8,176 L 8,240" fill="none" stroke="black"></path>
@@ -1435,16 +1423,16 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
                   <text x="56" y="212">publisher</text>
                   <text x="424" y="212">subscribe</text>
                 </g>
-              </svg><a href="#section-1.2-3.1.1" class="pilcrow">¶</a>
+              </svg><a href="#section-1.2-5.1.1" class="pilcrow">¶</a>
 </div>
 </div>
 <figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
 <a href="#name-publish-subscribe-architect" class="selfRef">Publish-subscribe architecture over CoAP</a>
           </figcaption></figure>
 </div>
-<p id="section-1.2-4">This document describes two sets of interactions, interactions to configure topics and their lifecycle (see <a href="#topic-resource-interactions" class="auto internal xref">Section 2.5</a>) and interactions about the topic data (see <a href="#topic-data-interactions" class="auto internal xref">Section 2.7</a>).<a href="#section-1.2-4" class="pilcrow">¶</a></p>
-<p id="section-1.2-5">Topic resource interactions are discovery, create, read configuration, update configuration, delete configuration and handle the management of the topics.<a href="#section-1.2-5" class="pilcrow">¶</a></p>
-<p id="section-1.2-6">Topic data interactions are publish, subscribe, unsubscribe, read and are oriented on how data is transferred from a publisher to a subscriber.<a href="#section-1.2-6" class="pilcrow">¶</a></p>
+<p id="section-1.2-6">This document describes two sets of interactions, interactions to configure topics and their lifecycle (see <a href="#topic-configuration-interactions" class="auto internal xref">Section 2.5</a>) and interactions about the topic-data (see <a href="#topic-data-interactions" class="auto internal xref">Section 3.2</a>).<a href="#section-1.2-6" class="pilcrow">¶</a></p>
+<p id="section-1.2-7">Topic-configuration interactions are discovery, create, read configuration, update configuration, delete configuration and handle the management of the topics.<a href="#section-1.2-7" class="pilcrow">¶</a></p>
+<p id="section-1.2-8">Topic-data interactions are publish, subscribe, unsubscribe, read and delete, these operations are oriented on how data is transferred from a publisher to a subscriber.<a href="#section-1.2-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="managing-topics">
@@ -1452,12 +1440,12 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
         <h3 id="name-managing-topics">
 <a href="#section-1.3" class="section-number selfRef">1.3. </a><a href="#name-managing-topics" class="section-name selfRef">Managing Topics</a>
         </h3>
-<p id="section-1.3-1"><a href="#fig-api" class="auto internal xref">Figure 2</a> shows the resources of a Topic Collection that can be managed at the Broker.<a href="#section-1.3-1" class="pilcrow">¶</a></p>
+<p id="section-1.3-1"><a href="#fig-api" class="auto internal xref">Figure 2</a> shows the resources related to a Topic Collection that can be managed at the Broker.<a href="#section-1.3-1" class="pilcrow">¶</a></p>
 <span id="name-resources-of-a-broker"></span><div id="fig-api">
 <figure id="figure-2">
           <div id="section-1.3-2.1">
             <div class="alignCenter art-svg artwork" id="section-1.3-2.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="176" width="472" viewBox="0 0 472 176" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="176" width="496" viewBox="0 0 496 176" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
                 <path d="M 92,56 L 100,72" fill="none" stroke="black"></path>
                 <path d="M 148,136 L 156,152" fill="none" stroke="black"></path>
                 <path d="M 136,80 L 156,120" fill="none" stroke="black"></path>
@@ -1487,12 +1475,12 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
                 <path d="M 220,152 L 244,152" fill="none" stroke="black"></path>
                 <path d="M 316,152 L 340,152" fill="none" stroke="black"></path>
                 <g class="text">
-                  <text x="40" y="52">Topic</text>
-                  <text x="44" y="68">Collection</text>
-                  <text x="44" y="84">Resource</text>
+                  <text x="40" y="52">topic</text>
+                  <text x="44" y="68">collection</text>
+                  <text x="44" y="84">resource</text>
                   <text x="280" y="132">...</text>
-                  <text x="432" y="132">Topic</text>
-                  <text x="432" y="148">Resources</text>
+                  <text x="392" y="132">topic</text>
+                  <text x="456" y="132">resources</text>
                 </g>
               </svg><a href="#section-1.3-2.1.1" class="pilcrow">¶</a>
 </div>
@@ -1501,7 +1489,8 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 <a href="#name-resources-of-a-broker" class="selfRef">Resources of a Broker</a>
           </figcaption></figure>
 </div>
-<p id="section-1.3-3">The Broker exports a topic-collection resource, with resource type "core.ps.coll" defined in <a href="#iana" class="auto internal xref">Section 5</a> of this document. The interfaces for the topic-collection resource is defined in <a href="#topic-collection-interactions" class="auto internal xref">Section 2.4</a>.<a href="#section-1.3-3" class="pilcrow">¶</a></p>
+<p id="section-1.3-3">The Broker exports one or more topic-collection resources, with resource type "core.ps.coll" defined in <a href="#iana" class="auto internal xref">Section 6</a> of this document. The interfaces for the topic-collection resource is defined in <a href="#topic-collection-interactions" class="auto internal xref">Section 2.4</a>.<a href="#section-1.3-3" class="pilcrow">¶</a></p>
+<p id="section-1.3-4">A topic-collection resource can have topic resources as its children resources, with resource type "core.ps.conf".<a href="#section-1.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1511,7 +1500,7 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
       <h2 id="name-pub-sub-topics">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-pub-sub-topics" class="section-name selfRef">Pub-Sub Topics</a>
       </h2>
-<p id="section-2-1">The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see <a href="#fig-topic" class="auto internal xref">Figure 3</a>). Each topic has a topic and a topic data resources. The topic resource is used by a client creating or administering a topic. The topic data resource is used by the publishers and the subscribers to a topic.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-1">The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see <a href="#fig-topic" class="auto internal xref">Figure 3</a>). Each topic is associated with: a topic resource and a a topic-data resource. The topic resource is used by a client creating or administering a topic. The topic-data resource is used by the publishers and the subscribers to a topic.<a href="#section-2-1" class="pilcrow">¶</a></p>
 <span id="name-topic-and-topic-data-resour"></span><div id="fig-topic">
 <figure id="figure-3">
         <div id="section-2-2.1">
@@ -1569,26 +1558,27 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
               <circle cx="272" cy="160" r="6" class="closeddot" fill="black"></circle>
               <circle cx="400" cy="160" r="6" class="closeddot" fill="black"></circle>
               <g class="text">
-                <text x="40" y="52">Topic</text>
-                <text x="44" y="68">Collection</text>
-                <text x="44" y="84">Resource</text>
+                <text x="40" y="52">topic</text>
+                <text x="44" y="68">collection</text>
+                <text x="44" y="84">resource</text>
                 <text x="196" y="132">......</text>
                 <text x="284" y="132">......</text>
                 <text x="412" y="132">......</text>
+                <text x="112" y="148">topic</text>
                 <text x="152" y="148">:</text>
                 <text x="216" y="148">:</text>
                 <text x="240" y="148">:</text>
                 <text x="304" y="148">:</text>
                 <text x="368" y="148">:</text>
                 <text x="432" y="148">:</text>
-                <text x="112" y="164">Topic</text>
+                <text x="80" y="164">configuration</text>
                 <text x="152" y="164">:</text>
                 <text x="216" y="164">:</text>
                 <text x="240" y="164">:</text>
                 <text x="304" y="164">:</text>
                 <text x="368" y="164">:</text>
                 <text x="432" y="164">:</text>
-                <text x="100" y="180">Resource</text>
+                <text x="100" y="180">resource</text>
                 <text x="152" y="180">:</text>
                 <text x="176" y="180">_</text>
                 <text x="192" y="180">_</text>
@@ -1613,7 +1603,6 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
                 <text x="292" y="212">....</text>
                 <text x="380" y="212">....</text>
                 <text x="420" y="212">....</text>
-                <text x="112" y="228">Topic</text>
                 <text x="152" y="228">:</text>
                 <text x="176" y="228">_</text>
                 <text x="192" y="228">_</text>
@@ -1627,14 +1616,14 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
                 <text x="392" y="228">_</text>
                 <text x="408" y="228">_</text>
                 <text x="432" y="228">:</text>
-                <text x="116" y="244">Data</text>
+                <text x="92" y="244">topic-data</text>
                 <text x="152" y="244">:</text>
                 <text x="216" y="244">:</text>
                 <text x="240" y="244">:</text>
                 <text x="304" y="244">:</text>
                 <text x="368" y="244">:</text>
                 <text x="432" y="244">:</text>
-                <text x="100" y="260">Resource</text>
+                <text x="100" y="260">resource</text>
                 <text x="152" y="260">:</text>
                 <text x="216" y="260">:</text>
                 <text x="240" y="260">:</text>
@@ -1668,95 +1657,52 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
         <h3 id="name-collection-representation">
 <a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-collection-representation" class="section-name selfRef">Collection Representation</a>
         </h3>
-<p id="section-2.1-1">Each topic resource is represented as a link, where the link target is the URI of the topic resource.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
-<p id="section-2.1-2">Each topic-data is represented as a link, where the link target is the URI of the topic-data resource. A topic-data link is an entry within the topic resource called 'topic_data' (see <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>).<a href="#section-2.1-2" class="pilcrow">¶</a></p>
-<p id="section-2.1-3">The list can be represented as a Link Format document <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>. The link to each topic resource specifies the link target attribute 'rt' (Resource Type), with value "core.ps.conf" defined in this document.<a href="#section-2.1-3" class="pilcrow">¶</a></p>
+<p id="section-2.1-1">Each topic configuration is represented as a link, where the link target is the URI of the corresponding topic resource.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.1-2">Publication and subscription to a topic occur at a link, where the link target is the URI of the corresponding topic-data resource. Such a link is specified by the topic-data entry within the topic resource (see <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>).<a href="#section-2.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.1-3">A topic resource with a topic-data link can also be simply called "topic".<a href="#section-2.1-3" class="pilcrow">¶</a></p>
+<p id="section-2.1-4">The list of links to the topic resources can be retrieved from the associated topic collection resource, and represented as a Link Format document <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>where each such link specifies the link target attribute 'rt' (Resource Type), with value "core.ps.conf" defined in this document.<a href="#section-2.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="topic-creation-and-configuration">
+<div id="topic-resource-representation">
 <section id="section-2.2">
-        <h3 id="name-topic-creation-and-configur">
-<a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-topic-creation-and-configur" class="section-name selfRef">Topic Creation and Configuration</a>
+        <h3 id="name-topic-configuration-represe">
+<a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-topic-configuration-represe" class="section-name selfRef">Topic-Configuration Representation</a>
         </h3>
-<p id="section-2.2-1">A CoAP client can create a new topic by submitting an initial configuration for the topic (see <a href="#topic-create" class="auto internal xref">Section 2.4.3</a>). It can also read and update the configuration of existing topics and delete them when they are no longer needed (see <a href="#topic-resource-interactions" class="auto internal xref">Section 2.5</a>).<a href="#section-2.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.2-2">The configuration of a topic itself consists of a set of properties that can be set by a client or by the broker.<a href="#section-2.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.2-1">A CoAP client can create a new topic by submitting an initial configuration for the topic (see <a href="#topic-create" class="auto internal xref">Section 2.4.3</a>). It can also read and update the configuration of existing topics and delete them when they are no longer needed (see <a href="#topic-configuration-interactions" class="auto internal xref">Section 2.5</a>).<a href="#section-2.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.2-2">The configuration of a topic itself consists of a set of properties that can be set by a client or by the broker. The topic-configuration is represented as a CBOR map containing the configuration properties of the topic as top-level elements.<a href="#section-2.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.2-3">Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in <a href="#pubsub-parameters" class="auto internal xref">Section 4</a>.<a href="#section-2.2-3" class="pilcrow">¶</a></p>
 <div id="topic-properties">
 <section id="section-2.2.1">
           <h4 id="name-topic-properties">
 <a href="#section-2.2.1" class="section-number selfRef">2.2.1. </a><a href="#name-topic-properties" class="section-name selfRef">Topic Properties</a>
           </h4>
-<p id="section-2.2.1-1">The CBOR map includes the following configuration parameters, whose CBOR abbreviations are defined in <a href="#pubsub-parameters" class="auto internal xref">Section 3</a> of this document.<a href="#section-2.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.2.1-1">The CBOR map includes the following configuration parameters, whose CBOR abbreviations are defined in <a href="#pubsub-parameters" class="auto internal xref">Section 4</a> of this document.<a href="#section-2.2.1-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-2.2.1-2.1">
-              <p id="section-2.2.1-2.1.1">'topic_name': A required field used as an application identifier. It encodes the topic name as a CBOR text string. Examples of topic names include human-readable strings (e.g., "room2"), UUIDs, or other values.<a href="#section-2.2.1-2.1.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.1-2.1.1">'topic-name': A required field used as an application identifier. It encodes the topic name as a CBOR text string. Examples of topic names include human-readable strings (e.g., "room2"), UUIDs, or other values.<a href="#section-2.2.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.2">
-              <p id="section-2.2.1-2.2.1">'topic_data': A required field (optional during creation) containing the CoAP URI of the topic data resource for subscribing to a pubsub topic. It encodes the URI as a CBOR text string. This property may contain a fully formed URL including scheme and host or just the resource path depending on where the topic data is hosted.<a href="#section-2.2.1-2.2.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.1-2.2.1">'topic-data': A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI as a CBOR text string.<a href="#section-2.2.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.2.1-2.3">
+              <p id="section-2.2.1-2.3.1">'resource-type': A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value should be "core.ps.conf".<a href="#section-2.2.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.2.1-2.4">
+              <p id="section-2.2.1-2.4.1">'media-type': An optional field used to indicate the media type of the topic-data resource for the topic. It encodes the media type as a this information as the integer identifier of the CoAP content format (e.g., value is "50" for "application/json").<a href="#section-2.2.1-2.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.2.1-2.5">
+              <p id="section-2.2.1-2.5.1">'topic-type': An optional field used to indicate the attribute or property of the topic-data resource for the topic. It encodes the attribute as a CBOR text string. Example attributes include "temperature".<a href="#section-2.2.1-2.5.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.2.1-2.6">
+              <p id="section-2.2.1-2.6.1">'expiration-date': An optional field used to indicate the expiration date of the topic. It encodes the expiration date as a CBOR text string. The value should be a date string in ISO 8601 format (e.g., "2023-03-31T23:59:59Z"). The broker can use this field to automatically remove topics that are no longer valid. If this field is not present, the topic will not expire automatically.<a href="#section-2.2.1-2.6.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.2.1-2.7">
+              <p id="section-2.2.1-2.7.1">'max-subscribers': An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as an unsigned CBOR integer. If this field is not present, there is no limit to the number of simultaneous subscribers allowed. The broker can use this field to limit the number of subscribers for the topic.<a href="#section-2.2.1-2.7.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.2.1-2.8">
+              <p id="section-2.2.1-2.8.1">'observer-check': An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber. Encoded as a CBOR unsigned integer greater than 0, it ensures subscribers who have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. If another CoAP server hosts the topic-data resource, that server is responsible for applying the observer-check value. The default value for this field is 86400, as defined in <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, which corresponds to 24 hours.<a href="#section-2.2.1-2.8.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
-<ul class="normal">
-<li class="normal" id="section-2.2.1-3.1">
-              <p id="section-2.2.1-3.1.1">'resource_type': A required field used to indicate the resource type associated with topic resources. It encodes the resource type as a CBOR text string. The value should be "core.ps.conf".<a href="#section-2.2.1-3.1.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-2.2.1-3.2">
-              <p id="section-2.2.1-3.2.1">'media_type': An optional field used to indicate the media type of the topic data resource. It encodes the media type as a CBOR text string (e.g.,"application/json").<a href="#section-2.2.1-3.2.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-2.2.1-3.3">
-              <p id="section-2.2.1-3.3.1">'target_attribute': An optional field used to indicate the attribute or property of the topic_data resource. It encodes the attribute as a CBOR text string. Example attributes include "temperature".<a href="#section-2.2.1-3.3.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-2.2.1-3.4">
-              <p id="section-2.2.1-3.4.1">'expiration_date': An optional field used to indicate the expiration date of the topic. It encodes the expiration date as a CBOR text string. The value should be a date string in ISO 8601 format (e.g., "2023-03-31T23:59:59Z"). The pubsub system can use this field to automatically remove topics that are no longer valid.<a href="#section-2.2.1-3.4.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-2.2.1-3.5">
-              <p id="section-2.2.1-3.5.1">'max_subscribers': An optional field used to indicate the maximum number of subscribers allowed for the topic. It encodes the maximum number as a CBOR integer. If this field is not present, there is no limit to the number of subscribers allowed. The pubsub system can use this field to limit the number of subscribers for a topic.<a href="#section-2.2.1-3.5.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-2.2.1-3.6">
-              <p id="section-2.2.1-3.6.1">'observer_check': An optional field used to control the frequency at which the server hosting the topic_data will send a notification in a confirmable message to the observer. This prevents a client that is no longer interested or has disconnected from remaining indefinitely in the list of observers. Note that if the topic_data is not hosted by the broker but by another CoAP server it is up to that server to apply the observer_check value.<a href="#section-2.2.1-3.6.1" class="pilcrow">¶</a></p>
-</li>
-          </ul>
-</section>
-</div>
-<div id="topic-resource-representation">
-<section id="section-2.2.2">
-          <h4 id="name-topic-resource-representati">
-<a href="#section-2.2.2" class="section-number selfRef">2.2.2. </a><a href="#name-topic-resource-representati" class="section-name selfRef">Topic Resource Representation</a>
-          </h4>
-<p id="section-2.2.2-1">A topic is represented as a CBOR map containing the configuration properties of the topic as top-level elements.<a href="#section-2.2.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.2.2-2">Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in <a href="#pubsub-parameters" class="auto internal xref">Section 3</a>.<a href="#section-2.2.2-2" class="pilcrow">¶</a></p>
-<div id="default-values">
-<section id="section-2.2.2.1">
-            <h5 id="name-default-values">
-<a href="#section-2.2.2.1" class="section-number selfRef">2.2.2.1. </a><a href="#name-default-values" class="section-name selfRef">Default Values</a>
-            </h5>
-<p id="section-2.2.2.1-1">Below are the defined default values for the topic parameters:<a href="#section-2.2.2.1-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-2.2.2.1-2.1">
-                <p id="section-2.2.2.1-2.1.1">'topic_name': There is no default value. This field is required and must be specified by the client or broker.<a href="#section-2.2.2.1-2.1.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-2.2.2.1-2.2">
-                <p id="section-2.2.2.1-2.2.1">'topic_data': There is no default value. This field is required and must be specified by the client or broker.<a href="#section-2.2.2.1-2.2.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-2.2.2.1-2.3">
-                <p id="section-2.2.2.1-2.3.1">'resource_type': The default value for a topic resource is "core.ps.conf".<a href="#section-2.2.2.1-2.3.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-2.2.2.1-2.4">
-                <p id="section-2.2.2.1-2.4.1">'media_type': The default value is an empty string, indicating that no media type is specified.<a href="#section-2.2.2.1-2.4.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-2.2.2.1-2.5">
-                <p id="section-2.2.2.1-2.5.1">'target_attribute': The default value is an empty string, indicating that no attribute is specified.<a href="#section-2.2.2.1-2.5.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-2.2.2.1-2.6">
-                <p id="section-2.2.2.1-2.6.1">'expiration_date': The default value is an empty string, indicating that no expiration date is specified. If this field is not present, the topic will not expire automatically.<a href="#section-2.2.2.1-2.6.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-2.2.2.1-2.7">
-                <p id="section-2.2.2.1-2.7.1">'max_subscribers': The default value is -1, indicating that there is no limit to the number of subscribers allowed. If this field is not present, the pubsub system will not limit the number of subscribers for the topic.<a href="#section-2.2.2.1-2.7.1" class="pilcrow">¶</a></p>
-</li>
-              <li class="normal" id="section-2.2.2.1-2.8">
-                <p id="section-2.2.2.1-2.8.1">'observer_check': The default value is '86400', as defined in <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, which corresponds to 24 hours.<a href="#section-2.2.2.1-2.8.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
-</section>
-</div>
 </section>
 </div>
 </section>
@@ -1766,13 +1712,26 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
         <h3 id="name-discovery">
 <a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-discovery" class="section-name selfRef">Discovery</a>
         </h3>
-<p id="section-2.3-1">Discovery involves that of the broker, topic collections, topic resources and topic data.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.3-1">A client can perform a discovery of: the broker; the topic collection resources and topic resources hosted by the broker; and the topic-data resources associated with those topic resources.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
 <div id="broker-discovery">
 <section id="section-2.3.1">
           <h4 id="name-broker-discovery">
 <a href="#section-2.3.1" class="section-number selfRef">2.3.1. </a><a href="#name-broker-discovery" class="section-name selfRef">Broker Discovery</a>
           </h4>
-<p id="section-2.3.1-1">CoAP clients <span class="bcp14">MAY</span> discover brokers by using CoAP Simple Discovery, via multicast, through a Resource Directory (RD) <span>[<a href="#RFC9167" class="cite xref">RFC9167</a>]</span> or by other means specified in extensions to <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>. Brokers <span class="bcp14">MAY</span> register with a RD by following the steps on Section 5 of <span>[<a href="#RFC9167" class="cite xref">RFC9167</a>]</span> with the resource type set to "core.ps" as defined in <a href="#iana" class="auto internal xref">Section 5</a> of this document.<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.1-1">CoAP clients <span class="bcp14">MAY</span> discover brokers by using CoAP Simple Discovery, via multicast, through a Resource Directory (RD) <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span> or by other means specified in extensions to <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>. Brokers <span class="bcp14">MAY</span> register with a RD by following the steps on Section 5 of <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span> with the resource type set to "core.ps" as defined in <a href="#iana" class="auto internal xref">Section 6</a> of this document.<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.1-2">The following example shows an endpoint discovering a broker using the "core.ps" resource type over a multicast network. Brokers within the multicast scope will answer the query.<a href="#section-2.3.1-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.3.1-3">
+<pre>
+=&gt; 0.01 GET
+   Uri-Path: coap://[ff0x::fe]/.well-known/core
+   Resource-Type: core.ps
+
+&lt;= 2.05 Content
+   Payload:
+   Content-Format: 40 (application/link-format)
+   &lt;coap://mythinguri.com/broker/v1&gt;; rt=core.ps
+</pre><a href="#section-2.3.1-3" class="pilcrow">¶</a>
+</div>
 </section>
 </div>
 <div id="topic-collection-discovery">
@@ -1780,33 +1739,31 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
           <h4 id="name-topic-collection-discovery">
 <a href="#section-2.3.2" class="section-number selfRef">2.3.2. </a><a href="#name-topic-collection-discovery" class="section-name selfRef">Topic Collection Discovery</a>
           </h4>
-<p id="section-2.3.2-1">A Broker <span class="bcp14">SHOULD</span> offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point thus represents a collection of related resources as specified in <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span> and is identified by the resource type "core.ps.coll". The specific resource path is left for implementations, examples in this document may use the "/ps" path.<a href="#section-2.3.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.2-2">The interactions with topic collections are further defined in <a href="#topic-collection-interactions" class="auto internal xref">Section 2.4</a>.<a href="#section-2.3.2-2" class="pilcrow">¶</a></p>
-<p id="section-2.3.2-3">Example:<a href="#section-2.3.2-3" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.3.2-4">
+<p id="section-2.3.2-1">A Broker <span class="bcp14">SHOULD</span> offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point is the topic collection resource collecting the topic configurations for those topics (see Section 1.2.2 of <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>) and is identified by the resource type "core.ps.coll".<a href="#section-2.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-2">The specific resource path is left for implementations, examples in this document use the "/ps" path. The interactions with a topic collection are further defined in <a href="#topic-collection-interactions" class="auto internal xref">Section 2.4</a>.<a href="#section-2.3.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-3">Since the representation of the topic collection resource includes the links to the associated topic resources, it is not required to locate those links under "/.well-known/core", also in order to limit the size of the Link Format document returned as result of the discovery.<a href="#section-2.3.2-3" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-4">Example:<a href="#section-2.3.2-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.3.2-5">
 <pre>
-=&gt; GET
-   Uri-Path: ./well-known/core
+=&gt; 0.01 GET
+   Uri-Path: .well-known/core
+   Resource-Type: core.ps.coll
 
-&lt;= 2.05 Content
+   &lt;= 2.05 Content
    Content-Format: 40 (application/link-format)
    &lt;/ps1&gt;;rt="core.ps.coll";ct=40,
-   &lt;/ps2&gt;;rt="core.ps.coll";ct=40,
-   &lt;/ps1/h9392&gt;;rt="core.ps.conf",
-   &lt;/ps2/other/path/2e3570&gt;; ct=application/link-format; rt=core.ps.conf; obs,
-   &lt;/ps1/data/62e4f8d&gt;; rt=core.ps.data; obs
-   &lt;/ps2/otherdata/86fe8fd&gt;; rt=core.ps.data; obs
-</pre><a href="#section-2.3.2-4" class="pilcrow">¶</a>
+   &lt;/other/path&gt;;rt="core.ps.coll";ct=40
+</pre><a href="#section-2.3.2-5" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
 <div id="topic-discovery">
 <section id="section-2.3.3">
-          <h4 id="name-topic-discovery">
-<a href="#section-2.3.3" class="section-number selfRef">2.3.3. </a><a href="#name-topic-discovery" class="section-name selfRef">Topic Discovery</a>
+          <h4 id="name-topic-configuration-discove">
+<a href="#section-2.3.3" class="section-number selfRef">2.3.3. </a><a href="#name-topic-configuration-discove" class="section-name selfRef">Topic-Configuration Discovery</a>
           </h4>
-<p id="section-2.3.3-1">Each topic collection is a group of topic resources. Topic resources contain a set of properties (see Section <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>), each topic resource is represented as a link to its corresponding resource URI. Each topic resource is identified by the resource type "core.ps.conf".<a href="#section-2.3.3-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.3-2">Below is an example discovery via .well-known/core with rt=core.ps.conf that returns a list of topics.<a href="#section-2.3.3-2" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-1">Each topic collection is associated with a group of topic resources, each detailing the configuration of its respective topic (refer to <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>). Each topic resource is identified by the resource type "core.ps.conf".<a href="#section-2.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-2">Below is an example of discovery via /.well-known/core with rt=core.ps.conf that returns a list of topics, as the list of links to the corresponding topic resources.<a href="#section-2.3.3-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.3.3-3">
 <pre>
 =&gt; 0.01 GET
@@ -1815,8 +1772,8 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 
 &lt;= 2.05 Content
    Content-Format: 40 (application/link-format)
-   &lt;/ps1/h9392&gt;;rt="core.ps.conf",
-   &lt;/ps2/other/path/2e3570&gt;; ct=application/link-format; rt=core.ps.conf; obs,
+   &lt;/ps1/h9392&gt;;rt="core.ps.conf";ct=TBD,
+   &lt;/other/path/2e3570&gt;;rt=core.ps.conf;ct=TBD
 </pre><a href="#section-2.3.3-3" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1824,21 +1781,21 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 <div id="topic-data-discovery">
 <section id="section-2.3.4">
           <h4 id="name-topic-data-discovery">
-<a href="#section-2.3.4" class="section-number selfRef">2.3.4. </a><a href="#name-topic-data-discovery" class="section-name selfRef">Topic Data Discovery</a>
+<a href="#section-2.3.4" class="section-number selfRef">2.3.4. </a><a href="#name-topic-data-discovery" class="section-name selfRef">Topic-Data Discovery</a>
           </h4>
-<p id="section-2.3.4-1">Within a topic, there is the 'topic_data' property containing the URI of the topic data resource that a CoAP client can subscribe and publish to. Resources exposing resources of the topic data type are expected to use the resource type 'core.ps.data'.<a href="#section-2.3.4-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.4-2">Below is an example discovery via .well-known/core that returns list of topic_data resources.<a href="#section-2.3.4-2" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.3.4-3">
+<p id="section-2.3.4-1">Within a topic, there is the topic-data property containing the URI of the topic-data resource that a CoAP client can subscribe and publish to. Resources exposing resources of the topic-data type are expected to use the resource type 'core.ps.data'.<a href="#section-2.3.4-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.4-2">The topic-data contains the URI of the topic-data resource for publishing and subscribing. So retrieving the topic configuration will also provide the URL of the topic-data (see <a href="#topic-get-resource" class="auto internal xref">Section 2.5.1</a>).<a href="#section-2.3.4-2" class="pilcrow">¶</a></p>
+<p id="section-2.3.4-3">It is also possible to discover a list of topic-data resources by sending a request to the collection with with rt=core.ps.data resources as shown below.<a href="#section-2.3.4-3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.3.4-4">
 <pre>
 =&gt; 0.01 GET
-   Uri-Path: .well-known/core
+   Uri-Path: /ps
    Resource-Type: core.ps.data
 
 &lt;= 2.05 Content
    Content-Format: 40 (application/link-format)
-   &lt;/ps1/data/62e4f8d&gt;; rt=core.ps.data; obs
-   &lt;/ps2/otherdata/86fe8fd&gt;; rt=core.ps.data; obs
-</pre><a href="#section-2.3.4-3" class="pilcrow">¶</a>
+   &lt;/ps/data/62e4f8d&gt;; rt=core.ps.data; obs
+</pre><a href="#section-2.3.4-4" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -1852,15 +1809,14 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 <p id="section-2.4-1">These are the interactions that can happen directly with a specific topic collection.<a href="#section-2.4-1" class="pilcrow">¶</a></p>
 <div id="topic-get-all">
 <section id="section-2.4.1">
-          <h4 id="name-retrieving-all-topic-and-to">
-<a href="#section-2.4.1" class="section-number selfRef">2.4.1. </a><a href="#name-retrieving-all-topic-and-to" class="section-name selfRef">Retrieving all topic and topic_data</a>
+          <h4 id="name-retrieving-all-topic-config">
+<a href="#section-2.4.1" class="section-number selfRef">2.4.1. </a><a href="#name-retrieving-all-topic-config" class="section-name selfRef">Retrieving all topic-configurations</a>
           </h4>
 <p id="section-2.4.1-1">A client can request a collection of the topics present in the broker by making a GET request to the collection URI.<a href="#section-2.4.1-1" class="pilcrow">¶</a></p>
-<p id="section-2.4.1-2">On success, the server returns a 2.05 (Content) response with a representation of the list of all topic resources (see Section <a href="#topic-resource-representation" class="auto internal xref">Section 2.2.2</a>) in the collection.<a href="#section-2.4.1-2" class="pilcrow">¶</a></p>
-<p id="section-2.4.1-3">Depending on the permission set each client <span class="bcp14">MAY</span> receive a different list of topics that they are authorized to read.<a href="#section-2.4.1-3" class="pilcrow">¶</a></p>
-<p id="section-2.4.1-4">If there are existing topic_data resources under the collection resource, those will also be present in the response.<a href="#section-2.4.1-4" class="pilcrow">¶</a></p>
-<p id="section-2.4.1-5">Example:<a href="#section-2.4.1-5" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.4.1-6">
+<p id="section-2.4.1-2">On success, the server returns a 2.05 (Content) response, specifying the list of links to topic resources associated with this topic collection (see  <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>).<a href="#section-2.4.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.4.1-3">Depending on its granted permissions, a client <span class="bcp14">MAY</span> retrieve a different list of links, corresponding to the topics that the client is authorized to access.<a href="#section-2.4.1-3" class="pilcrow">¶</a></p>
+<p id="section-2.4.1-4">Example:<a href="#section-2.4.1-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.4.1-5">
 <pre>
 =&gt; 0.01 GET
    Uri-Path: ps
@@ -1868,37 +1824,38 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 &lt;= 2.05 Content
    Content-Format: 40 (application/link-format)
    &lt;/ps/h9392&gt;;rt="core.ps.conf",
-   &lt;/ps/2e3570&gt;; ct=application/link-format; rt=core.ps.conf; obs,
-   &lt;/ps/data/62e4f8d&gt;; rt=core.ps.data; obs
-</pre><a href="#section-2.4.1-6" class="pilcrow">¶</a>
+   &lt;/ps/2e3570&gt;; rt="core.ps.conf"
+</pre><a href="#section-2.4.1-5" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
 <div id="topic-get-properties">
 <section id="section-2.4.2">
-          <h4 id="name-getting-topics-by-propertie">
-<a href="#section-2.4.2" class="section-number selfRef">2.4.2. </a><a href="#name-getting-topics-by-propertie" class="section-name selfRef">Getting Topics by Properties</a>
+          <h4 id="name-getting-topic-configuration">
+<a href="#section-2.4.2" class="section-number selfRef">2.4.2. </a><a href="#name-getting-topic-configuration" class="section-name selfRef">Getting topic-configurations by Properties</a>
           </h4>
 <p id="section-2.4.2-1">A client can filter a collection of topics by submitting the
-representation of a topic filter (see Section <a href="#topic-fetch-resource" class="auto internal xref">Section 2.5.2</a>) in a FETCH request to the topic collection URI.<a href="#section-2.4.2-1" class="pilcrow">¶</a></p>
+representation of a topic filter (see  <a href="#topic-fetch-resource" class="auto internal xref">Section 2.5.2</a>) in a FETCH request to the topic collection URI.<a href="#section-2.4.2-1" class="pilcrow">¶</a></p>
 <p id="section-2.4.2-2">On success, the server returns a 2.05 (Content) response with a
 representation of a list of topics in the collection (see
-Section <a href="#topic-discovery" class="auto internal xref">Section 2.3.3</a>) that match the filter in CoRE link format <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>.<a href="#section-2.4.2-2" class="pilcrow">¶</a></p>
-<p id="section-2.4.2-3">Example:<a href="#section-2.4.2-3" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.4.2-4">
+ <a href="#topic-discovery" class="auto internal xref">Section 2.3.3</a>) that match the filter in CoRE link format <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>.<a href="#section-2.4.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.4.2-3">Upon success, the server responds with a 2.05 (Content), providing a list of links to topic resources associated with this topic collection that match the request's filter criteria (refer to  <a href="#topic-discovery" class="auto internal xref">Section 2.3.3</a>). A positive match happens only when each request parameter is present with the indicated value in the topic resource representation.<a href="#section-2.4.2-3" class="pilcrow">¶</a></p>
+<p id="section-2.4.2-4">Example:<a href="#section-2.4.2-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.4.2-5">
 <pre>
 =&gt; 0.05 FETCH
    Uri-Path: ps
    Content-Format: TBD (application/pubsub+cbor)
 
    {
-     "resource_type" : "core.ps.data"
+     "resource-type" : "core.ps.conf"
+     "topic-type" : "temperature"
    }
 
 &lt;= 2.05 Content
-   &lt;/ps/data/62e4f8d&gt;; rt=core.ps.data; obs
-
-</pre><a href="#section-2.4.2-4" class="pilcrow">¶</a>
+   Content-Format: 40 (application/link-format)
+   &lt;/ps/2e3570&gt;;rt="core.ps.conf"
+</pre><a href="#section-2.4.2-5" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -1907,21 +1864,20 @@ Section <a href="#topic-discovery" class="auto internal xref">Section 2.3.3</a>)
           <h4 id="name-creating-a-topic">
 <a href="#section-2.4.3" class="section-number selfRef">2.4.3. </a><a href="#name-creating-a-topic" class="section-name selfRef">Creating a Topic</a>
           </h4>
-<p id="section-2.4.3-1">A client can add a new topic to a collection of topics by submitting a representation of the initial topic resource (see Section <a href="#topic-resource-representation" class="auto internal xref">Section 2.2.2</a>) in a POST request to the topic collection URI. The topic <span class="bcp14">MUST</span> contain at least a subset of the <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a> , namely: topic_name and resource_type.<a href="#section-2.4.3-1" class="pilcrow">¶</a></p>
-<p id="section-2.4.3-2">A CoAP endpoint creating a topic <span class="bcp14">MAY</span> specify a 'topic_data' URI different than that used by the broker. The broker may then simply forward the observation requests to the 'topic_data' URI.<a href="#section-2.4.3-2" class="pilcrow">¶</a></p>
-<p id="section-2.4.3-3">If the 'topic_data' is empty the broker will assign a resource for a publisher to publish to.<a href="#section-2.4.3-3" class="pilcrow">¶</a></p>
-<p id="section-2.4.3-4">On success, the server returns a 2.01 (Created) response indicating the topic URI of the new topic and the current representation of the topic resource.<a href="#section-2.4.3-4" class="pilcrow">¶</a></p>
-<p id="section-2.4.3-5">If a topic manager is present in the broker, the topic creation  may require manager approval subject to certain conditions. If the conditions are not fulfilled, the manager <span class="bcp14">MUST</span> respond with a 4.03 (Forbidden) error. The response <span class="bcp14">MUST</span> have Content-Format set to "application/core-pubsub+cbor".<a href="#section-2.4.3-5" class="pilcrow">¶</a></p>
-<p id="section-2.4.3-6">The broker <span class="bcp14">MUST</span> respond with a 4.00 (Bad Request) error if any received parameter is specified multiple times, invalid or not recognized.<a href="#section-2.4.3-6" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.4.3-7">
+<p id="section-2.4.3-1">A client can add a new topic-configurations to a collection of topics by submitting an initial representation of the initial topic resource (see  <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>) in a POST request to the topic collection URI. The request <span class="bcp14">MUST</span> specify at least a subset of the properties in  <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>, namely: topic-name and resource-type.<a href="#section-2.4.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.4.3-2">Please note that the topic will NOT be fully created until a publisher has published some data to it (See <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>).<a href="#section-2.4.3-2" class="pilcrow">¶</a></p>
+<p id="section-2.4.3-3">On success, the server returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map with key-value pairs. The response must include the required topic properties (see <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>), namely: "topic-name", "resource-type" and "topic-data". It may also include a number of optional properties too.<a href="#section-2.4.3-3" class="pilcrow">¶</a></p>
+<p id="section-2.4.3-4">If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker <span class="bcp14">MUST</span> respond with a 4.03 (Forbidden) error. The response <span class="bcp14">MUST</span> have Content-Format set to "application/core-pubsub+cbor".<a href="#section-2.4.3-4" class="pilcrow">¶</a></p>
+<p id="section-2.4.3-5">The broker <span class="bcp14">MUST</span> issue a 4.00 (Bad Request) error if a received parameter is invalid, unrecognized, or if the topic-name is already in use or otherwise invalid.<a href="#section-2.4.3-5" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.4.3-6">
 <pre>
 =&gt; 0.02 POST
    Uri-Path: ps
    Content-Format: TBD2 (application/core-pubsub+cbor)
    TBD (this should be a CBOR map with the mandatory parameters)
    {
-     "topic_name" : "living_room_sensor"
-     "resource_type" : "core.ps.conf"
+     "topic-name" : "living-room-sensor"
+     "resource-type" : "core.ps.conf"
    }
 
 &lt;= 2.01 Created
@@ -1930,31 +1886,31 @@ Section <a href="#topic-discovery" class="auto internal xref">Section 2.3.3</a>)
 
    TBD (this should be a CBOR map)
    {
-     "topic_name" : "living_room_sensor",
-     "topic_data" : "ps/data/1bd0d6d"
-     "resource_type" : "core.ps.conf"
+     "topic-name" : "living-room-sensor",
+     "topic-data" : "ps/data/1bd0d6d"
+     "resource-type" : "core.ps.conf"
    }
-</pre><a href="#section-2.4.3-7" class="pilcrow">¶</a>
+</pre><a href="#section-2.4.3-6" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
 </section>
 </div>
-<div id="topic-resource-interactions">
+<div id="topic-configuration-interactions">
 <section id="section-2.5">
-        <h3 id="name-topic-resource-interactions">
-<a href="#section-2.5" class="section-number selfRef">2.5. </a><a href="#name-topic-resource-interactions" class="section-name selfRef">Topic Resource Interactions</a>
+        <h3 id="name-topic-configuration-interac">
+<a href="#section-2.5" class="section-number selfRef">2.5. </a><a href="#name-topic-configuration-interac" class="section-name selfRef">Topic-Configuration Interactions</a>
         </h3>
 <p id="section-2.5-1">These are the interactions that can happen at the topic resource level.<a href="#section-2.5-1" class="pilcrow">¶</a></p>
 <div id="topic-get-resource">
 <section id="section-2.5.1">
-          <h4 id="name-getting-a-topic-resource">
-<a href="#section-2.5.1" class="section-number selfRef">2.5.1. </a><a href="#name-getting-a-topic-resource" class="section-name selfRef">Getting a topic resource</a>
+          <h4 id="name-getting-a-topic-configurati">
+<a href="#section-2.5.1" class="section-number selfRef">2.5.1. </a><a href="#name-getting-a-topic-configurati" class="section-name selfRef">Getting a topic-configuration</a>
           </h4>
 <p id="section-2.5.1-1">A client can read the configuration of a topic by making a GET request to the topic resource URI.<a href="#section-2.5.1-1" class="pilcrow">¶</a></p>
-<p id="section-2.5.1-2">On success, the server returns a 2.05 (Content) response with a representation of the topic resource. The response has as payload the representation of the topic resource as specified in <a href="#topic-resource-representation" class="auto internal xref">Section 2.2.2</a>.<a href="#section-2.5.1-2" class="pilcrow">¶</a></p>
-<p id="section-2.5.1-3">If a topic manager (TBD) is present in the broker, retrieving topic information may require manager approval subject to certain conditions (TBD). If the conditions are not fulfilled, the manager <span class="bcp14">MUST</span> respond with a 4.03 (Forbidden) error. The response <span class="bcp14">MUST</span> have Content-Format set to "application/core-pubsub+cbor".<a href="#section-2.5.1-3" class="pilcrow">¶</a></p>
-<p id="section-2.5.1-4">The response payload is a CBOR map, whose possible entries are specified in <a href="#topic-resource-representation" class="auto internal xref">Section 2.2.2</a> and use the same abbreviations defined in <a href="#pubsub-parameters" class="auto internal xref">Section 3</a>.<a href="#section-2.5.1-4" class="pilcrow">¶</a></p>
+<p id="section-2.5.1-2">On success, the server returns a 2.05 (Content) response with a partial representation of the topic resource, as specified in <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>. The partial representation includes only the configuration parameters such that they are present and have the same value in both the current topic configuration as well as in the FETCH request.<a href="#section-2.5.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.5.1-3">If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker <span class="bcp14">MUST</span> respond with a 4.03 (Forbidden) error.<a href="#section-2.5.1-3" class="pilcrow">¶</a></p>
+<p id="section-2.5.1-4">The response payload is a CBOR map, whose possible entries are specified in <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a> and use the same abbreviations defined in <a href="#pubsub-parameters" class="auto internal xref">Section 4</a>.<a href="#section-2.5.1-4" class="pilcrow">¶</a></p>
 <p id="section-2.5.1-5">For example, below is a request on the topic "ps/h9392":<a href="#section-2.5.1-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.5.1-6">
 <pre>
@@ -1965,13 +1921,13 @@ Section <a href="#topic-discovery" class="auto internal xref">Section 2.3.3</a>)
 &lt;= 2.05 Content
    Content-Format: TBD2 (application/core-pubsub+cbor)
    {
-      "topic_name" : "living_room_sensor",
-      "topic_data" : "ps/data/1bd0d6d",
-      "resource_type": "core.ps.conf",
-      "media_type": "application/senml-cbor",
-      "target_attribute": "temperature",
-      "expiration_date": "2023-04-00T23:59:59Z",
-      "max_subscribers": 100
+      "topic-name" : "living-room-sensor",
+      "topic-data" : "ps/data/1bd0d6d",
+      "resource-type": "core.ps.conf",
+      "media-type": "application/senml-cbor",
+      "topic-type": "temperature",
+      "expiration-date": "2023-04-00T23:59:59Z",
+      "max-subscribers": 100
    }
 
 </pre><a href="#section-2.5.1-6" class="pilcrow">¶</a>
@@ -1980,14 +1936,14 @@ Section <a href="#topic-discovery" class="auto internal xref">Section 2.3.3</a>)
 </div>
 <div id="topic-fetch-resource">
 <section id="section-2.5.2">
-          <h4 id="name-getting-part-of-a-topic-res">
-<a href="#section-2.5.2" class="section-number selfRef">2.5.2. </a><a href="#name-getting-part-of-a-topic-res" class="section-name selfRef">Getting part of a topic resource by filter</a>
+          <h4 id="name-getting-part-of-a-topic-con">
+<a href="#section-2.5.2" class="section-number selfRef">2.5.2. </a><a href="#name-getting-part-of-a-topic-con" class="section-name selfRef">Getting part of a topic-configuration</a>
           </h4>
 <p id="section-2.5.2-1">A client can read the configuration of a topic by making a FETCH request to the topic resource URI with a filter for specific parameters. This is done in order to retrieve part of the current topic resource.<a href="#section-2.5.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.5.2-2">The request contains a CBOR map with a configuration filter or 'conf_filter', a CBOR array with CBOR abbreviation. Each element of the array specifies one requested configuration parameter of the current topic resource (see <a href="#topic-resource-representation" class="auto internal xref">Section 2.2.2</a>).<a href="#section-2.5.2-2" class="pilcrow">¶</a></p>
-<p id="section-2.5.2-3">On success, the server returns a 2.05 (Content) response with a representation of the topic resource. The response has as payload the partial representation of the topic resource as specified in <a href="#topic-resource-representation" class="auto internal xref">Section 2.2.2</a>.<a href="#section-2.5.2-3" class="pilcrow">¶</a></p>
-<p id="section-2.5.2-4">If a topic manager (TBD) is present in the broker, retrieving topic information may require manager approval subject to certain conditions (TBD). If the conditions are not fulfilled, the manager <span class="bcp14">MUST</span> respond with a 4.03 (Forbidden) error.<a href="#section-2.5.2-4" class="pilcrow">¶</a></p>
-<p id="section-2.5.2-5">The response payload is a CBOR map, whose possible entries are specified in <a href="#topic-resource-representation" class="auto internal xref">Section 2.2.2</a> and use the same abbreviations defined in <a href="#pubsub-parameters" class="auto internal xref">Section 3</a>.<a href="#section-2.5.2-5" class="pilcrow">¶</a></p>
+<p id="section-2.5.2-2">The request contains a CBOR map with a configuration filter or 'conf-filter', a CBOR array with CBOR abbreviation. Each element of the array specifies one requested configuration parameter of the current topic resource (see <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>).<a href="#section-2.5.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.5.2-3">On success, the server returns a 2.05 (Content) response with a representation of the topic resource. The response has as payload the partial representation of the topic resource as specified in <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>.<a href="#section-2.5.2-3" class="pilcrow">¶</a></p>
+<p id="section-2.5.2-4">If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker <span class="bcp14">MUST</span> respond with a 4.03 (Forbidden) error.<a href="#section-2.5.2-4" class="pilcrow">¶</a></p>
+<p id="section-2.5.2-5">The response payload is a CBOR map, whose possible entries are specified in <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a> and use the same abbreviations defined in <a href="#pubsub-parameters" class="auto internal xref">Section 4</a>.<a href="#section-2.5.2-5" class="pilcrow">¶</a></p>
 <p id="section-2.5.2-6">Both request and response <span class="bcp14">MUST</span> have Content-Format set to "application/core-pubsub+cbor".<a href="#section-2.5.2-6" class="pilcrow">¶</a></p>
 <p id="section-2.5.2-7">Example:<a href="#section-2.5.2-7" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.5.2-8">
@@ -1997,14 +1953,14 @@ Section <a href="#topic-discovery" class="auto internal xref">Section 2.3.3</a>)
    Uri-Path: h9392
    Content-Format: TBD2 (application/core-pubsub+cbor)
    {
-     "conf_filter" : [topic_data, media_type]
+     "conf-filter" : [topic-data, media-type]
    }
 
 &lt;= 2.05 Content
    Content-Format: TBD2 (application/core-pubsub+cbor)
    {
-     "topic_data" : "ps/data/1bd0d6d",
-     "media_type": "application/senml-cbor"
+     "topic-data" : "ps/data/1bd0d6d",
+     "media-type": "application/senml-cbor"
    }
 
 </pre><a href="#section-2.5.2-8" class="pilcrow">¶</a>
@@ -2013,12 +1969,12 @@ Section <a href="#topic-discovery" class="auto internal xref">Section 2.3.3</a>)
 </div>
 <div id="topic-update-resource">
 <section id="section-2.5.3">
-          <h4 id="name-updating-the-topic-resource">
-<a href="#section-2.5.3" class="section-number selfRef">2.5.3. </a><a href="#name-updating-the-topic-resource" class="section-name selfRef">Updating the Topic Resource</a>
+          <h4 id="name-updating-the-topic-configur">
+<a href="#section-2.5.3" class="section-number selfRef">2.5.3. </a><a href="#name-updating-the-topic-configur" class="section-name selfRef">Updating the topic-configuration</a>
           </h4>
-<p id="section-2.5.3-1">A client can update the configuration of a topic by submitting the representation of the updated topic  (see Section 3.1.3) in a PUT or POST request to the topic URI. Any existing properties in the configuration are overwritten by this update.<a href="#section-2.5.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.5.3-1">A client can update a topic's configuration by submitting the updated topic representation in a PUT request to the topic URI. However, the parameters "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.<a href="#section-2.5.3-1" class="pilcrow">¶</a></p>
 <p id="section-2.5.3-2">On success, the server returns a 2.04 (Changed) response and the current full resource representation. The broker may chose not to overwrite parameters that are not explicitly modified in the request.<a href="#section-2.5.3-2" class="pilcrow">¶</a></p>
-<p id="section-2.5.3-3">Note that updating the "topic_data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Similarly, decreasing max_subscribers will also cause that some subscribers get unsubscribed. Unsubscribed endpoints <span class="bcp14">SHOULD</span> receive a final 4.04 (Not Found) response as per <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span> Section 3.2.<a href="#section-2.5.3-3" class="pilcrow">¶</a></p>
+<p id="section-2.5.3-3">Note that updating the "topic-data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Similarly, decreasing max-subscribers will also cause that some subscribers get unsubscribed. Unsubscribed endpoints <span class="bcp14">SHOULD</span> receive a final 4.04 (Not Found) response as per <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span> Section 3.2.<a href="#section-2.5.3-3" class="pilcrow">¶</a></p>
 <p id="section-2.5.3-4">Example:<a href="#section-2.5.3-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.5.3-5">
 <pre>
@@ -2028,11 +1984,11 @@ Section <a href="#topic-discovery" class="auto internal xref">Section 2.3.3</a>)
    Content-Format: TBD2 (application/core-pubsub+cbor)
 
    {
-      "topic_name" : "living_room_sensor",
-      "topic_data" : "ps/data/1bd0d6d",
-      "target_attribute": "temperature",
-      "expiration_date": "2023-04-28T23:59:59Z",
-      "max_subscribers": 2
+      "topic-name" : "living-room-sensor",
+      "topic-data" : "ps/data/1bd0d6d",
+      "topic-type": "temperature",
+      "expiration-date": "2023-04-28T23:59:59Z",
+      "max-subscribers": 2
    }
 
 &lt;= 2.04 Changed
@@ -2040,26 +1996,38 @@ Section <a href="#topic-discovery" class="auto internal xref">Section 2.3.3</a>)
 
    TBD (this should be a CBOR map)
    {
-      "topic_name" : "living_room_sensor",
-      "topic_data" : "ps/data/1bd0d6d",
-      "resource_type": "core.ps.conf",
-      "media_type": "application/senml-cbor",
-      "target_attribute": "temperature",
-      "expiration_date": "2023-04-28T23:59:59Z",
-      "max_subscribers": 2
+      "topic-name" : "living-room-sensor",
+      "topic-data" : "ps/data/1bd0d6d",
+      "resource-type": "core.ps.conf",
+      "media-type": "application/senml-cbor",
+      "topic-type": "temperature",
+      "expiration-date": "2023-04-28T23:59:59Z",
+      "max-subscribers": 2
    }
 </pre><a href="#section-2.5.3-5" class="pilcrow">¶</a>
 </div>
+<p id="section-2.5.3-6">Note that when a topic configuration changes, it may result in disruptions for the subscribers. Some potential issues that may arise include:<a href="#section-2.5.3-6" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-2.5.3-7.1">
+              <p id="section-2.5.3-7.1.1">Limiting the number of subscribers will cause to cancel ongoing subscriptions until max-subscribers has been reached.<a href="#section-2.5.3-7.1.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.5.3-7.2">
+              <p id="section-2.5.3-7.2.1">Changing the topic-data value will cancel all ongoing subscriptions.<a href="#section-2.5.3-7.2.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.5.3-7.3">
+              <p id="section-2.5.3-7.3.1">Changing of the expiration-date may cause to cancel ongoing subscriptions if the topic expires at an earlier data.<a href="#section-2.5.3-7.3.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
 </section>
 </div>
 <div id="topic-delete">
 <section id="section-2.5.4">
-          <h4 id="name-deleting-a-topic-resource">
-<a href="#section-2.5.4" class="section-number selfRef">2.5.4. </a><a href="#name-deleting-a-topic-resource" class="section-name selfRef">Deleting a Topic Resource</a>
+          <h4 id="name-deleting-a-topic-configurat">
+<a href="#section-2.5.4" class="section-number selfRef">2.5.4. </a><a href="#name-deleting-a-topic-configurat" class="section-name selfRef">Deleting a topic-configuration</a>
           </h4>
 <p id="section-2.5.4-1">A client can delete a topic by making a CoAP DELETE request on the topic resource URI.<a href="#section-2.5.4-1" class="pilcrow">¶</a></p>
 <p id="section-2.5.4-2">On success, the server returns a 2.02 (Deleted) response.<a href="#section-2.5.4-2" class="pilcrow">¶</a></p>
-<p id="section-2.5.4-3">When a topic resource is deleted, the broker <span class="bcp14">SHOULD</span> also delete the topic data resource, unsubscribe all subscribers by removing them from the list of observers and returning a final 4.04 (Not Found) response as per <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span> Section 3.2.<a href="#section-2.5.4-3" class="pilcrow">¶</a></p>
+<p id="section-2.5.4-3">When a topic-configuration resource is deleted, the broker <span class="bcp14">MUST</span> also delete the topic-data resource, unsubscribe all subscribers by removing them from the list of observers and returning a final 4.04 (Not Found) response as per section 3.2 of <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>.<a href="#section-2.5.4-3" class="pilcrow">¶</a></p>
 <p id="section-2.5.4-4">Example:<a href="#section-2.5.4-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.5.4-5">
 <pre>
@@ -2074,247 +2042,118 @@ Section <a href="#topic-discovery" class="auto internal xref">Section 2.3.3</a>)
 </div>
 </section>
 </div>
+</section>
+</div>
 <div id="pubsub">
-<section id="section-2.6">
-        <h3 id="name-publish-subscribe">
-<a href="#section-2.6" class="section-number selfRef">2.6. </a><a href="#name-publish-subscribe" class="section-name selfRef">Publish/Subscribe</a>
-        </h3>
-<p id="section-2.6-1">The overview of the publish/subscribe mechanism over CoAP is as follows: a publisher publishes to a topic by submitting the data in a PUT request to a topic_data resource and subscribers subscribe to a topic by submitting a GET request with the Observe option active to a topic_data resource. When resource state changes, subscribers observing the resource <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span> at that time will receive a notification.<a href="#section-2.6-1" class="pilcrow">¶</a></p>
-<p id="section-2.6-2">As shown in <a href="#topics" class="auto internal xref">Section 2</a>, each topic contains two resources: topic resource and topic data. In that section we explained the creation and configuration of the topic resources. This section will explain the management of topic data resources.<a href="#section-2.6-2" class="pilcrow">¶</a></p>
-<p id="section-2.6-3">A topic data resource does not exist until some initial data has been published to it.  Before initial data has been published, the topic data resource yields a 4.04 (Not Found) response. If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created" (see <a href="#topic-lifecycle" class="auto internal xref">Section 2.6.1</a>).<a href="#section-2.6-3" class="pilcrow">¶</a></p>
-<p id="section-2.6-4">URIs for topic resources are broker-generated (see <a href="#topic-create" class="auto internal xref">Section 2.4.3</a>). URIs for topic-data <span class="bcp14">MAY</span> be broker-generated or client-generated. There is no necessary URI pattern dependence between the URI where the data exists and the URI of the topic resource. Topic resource and data resources might even be hosted on different servers.<a href="#section-2.6-4" class="pilcrow">¶</a></p>
+<section id="section-3">
+      <h2 id="name-publish-and-subscribe">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-publish-and-subscribe" class="section-name selfRef">Publish and Subscribe</a>
+      </h2>
+<p id="section-3-1">The overview of the publish/subscribe mechanism over CoAP is as follows: a publisher publishes to a topic by submitting the data in a PUT request to a topic-data resource and subscribers subscribe to a topic by submitting a GET request with Observe option set to 0 (register) to a topic-data resource. When resource state changes, subscribers observing the resource <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span> at that time will receive a notification.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">A topic-data resource does not exist until some initial data has been published to it. Before initial data publication, a GET request to the topic-data resource URI results in a 4.04 (Not Found) response. If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created" (see <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>).<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-3">URIs for topic resources are broker-generated (see <a href="#topic-create" class="auto internal xref">Section 2.4.3</a>). There is no necessary URI pattern dependence between the URI where the topic-data exists and the URI of the topic-configuration resource.<a href="#section-3-3" class="pilcrow">¶</a></p>
 <div id="topic-lifecycle">
-<section id="section-2.6.1">
-          <h4 id="name-topic-lifecycle">
-<a href="#section-2.6.1" class="section-number selfRef">2.6.1. </a><a href="#name-topic-lifecycle" class="section-name selfRef">Topic Lifecycle</a>
-          </h4>
-<p id="section-2.6.1-1">When a topic is newly created, it is first placed by the server into the HALF CREATED state (see <a href="#fig-life" class="auto internal xref">Figure 4</a>). In this state, a client can read and update the configuration of the topic and delete the topic. A publisher can publish to the topic data resource.  However, a subscriber cannot yet observe the topic data resource nor read the latest data.<a href="#section-2.6.1-1" class="pilcrow">¶</a></p>
+<section id="section-3.1">
+        <h3 id="name-topic-lifecycle">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-topic-lifecycle" class="section-name selfRef">Topic Lifecycle</a>
+        </h3>
+<p id="section-3.1-1">When a topic is newly created, it is first placed by the broker into the HALF CREATED state (see <a href="#fig-life" class="auto internal xref">Figure 4</a>). In this state, a client can read and update the configuration of the topic and delete the topic. A publisher can publish to the topic-data resource.  However, a subscriber cannot yet subscribe to the topic-data resource nor read the latest data.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <span id="name-lifecycle-of-a-topic"></span><div id="fig-life">
 <figure id="figure-4">
-            <div id="section-2.6.1-2.1">
-              <div class="alignCenter art-svg artwork" id="section-2.6.1-2.1.1">
+          <div id="section-3.1-2.1">
+            <div class="alignCenter art-svg artwork" id="section-3.1-2.1.1">
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="224" width="544" viewBox="0 0 544 224" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
-                  <path d="M 128,72 L 128,120" fill="none" stroke="black"></path>
-                  <path d="M 128,144 L 128,176" fill="none" stroke="black"></path>
-                  <path d="M 160,144 L 160,176" fill="none" stroke="black"></path>
-                  <path d="M 168,72 L 168,120" fill="none" stroke="black"></path>
-                  <path d="M 248,152 L 248,184" fill="none" stroke="black"></path>
-                  <path d="M 280,152 L 280,184" fill="none" stroke="black"></path>
-                  <path d="M 368,72 L 368,120" fill="none" stroke="black"></path>
-                  <path d="M 368,144 L 368,176" fill="none" stroke="black"></path>
-                  <path d="M 400,144 L 400,176" fill="none" stroke="black"></path>
-                  <path d="M 408,72 L 408,120" fill="none" stroke="black"></path>
-                  <path d="M 8,80 L 104,80" fill="none" stroke="black"></path>
-                  <path d="M 192,80 L 344,80" fill="none" stroke="black"></path>
-                  <path d="M 432,80 L 520,80" fill="none" stroke="black"></path>
-                  <path d="M 192,112 L 344,112" fill="none" stroke="black"></path>
-                  <path d="M 432,112 L 520,112" fill="none" stroke="black"></path>
-                  <path d="M 200,160 L 224,160" fill="none" stroke="black"></path>
-                  <path d="M 304,160 L 328,160" fill="none" stroke="black"></path>
-                  <path d="M 184,128 L 200,160" fill="none" stroke="black"></path>
-                  <path d="M 328,160 L 344,128" fill="none" stroke="black"></path>
-                  <path d="M 520,80 C 528.83064,80 536,87.16936 536,96" fill="none" stroke="black"></path>
-                  <path d="M 520,112 C 528.83064,112 536,104.83064 536,96" fill="none" stroke="black"></path>
-                  <path d="M 144,192 C 135.16936,192 128,184.83064 128,176" fill="none" stroke="black"></path>
-                  <path d="M 144,192 C 152.83064,192 160,184.83064 160,176" fill="none" stroke="black"></path>
-                  <path d="M 384,192 C 375.16936,192 368,184.83064 368,176" fill="none" stroke="black"></path>
-                  <path d="M 384,192 C 392.83064,192 400,184.83064 400,176" fill="none" stroke="black"></path>
-                  <path d="M 128,72 L 168,72" fill="none" stroke="black"></path>
-                  <path d="M 368,72 L 408,72" fill="none" stroke="black"></path>
-                  <path d="M 128,120 L 168,120" fill="none" stroke="black"></path>
-                  <path d="M 368,120 L 408,120" fill="none" stroke="black"></path>
-                  <path d="M 248,152 L 280,152" fill="none" stroke="black"></path>
-                  <path d="M 248,184 L 280,184" fill="none" stroke="black"></path>
-                  <polygon class="arrowhead" points="440,112 428,106.4 428,117.6" fill="black" transform="rotate(180,432,112)"></polygon>
-                  <polygon class="arrowhead" points="408,144 396,138.4 396,149.6" fill="black" transform="rotate(270,400,144)"></polygon>
-                  <polygon class="arrowhead" points="352,112 340,106.4 340,117.6" fill="black" transform="rotate(0,344,112)"></polygon>
-                  <polygon class="arrowhead" points="312,160 300,154.4 300,165.6" fill="black" transform="rotate(180,304,160)"></polygon>
-                  <polygon class="arrowhead" points="232,160 220,154.4 220,165.6" fill="black" transform="rotate(0,224,160)"></polygon>
-                  <polygon class="arrowhead" points="200,80 188,74.4 188,85.6" fill="black" transform="rotate(180,192,80)"></polygon>
-                  <polygon class="arrowhead" points="168,144 156,138.4 156,149.6" fill="black" transform="rotate(270,160,144)"></polygon>
-                  <polygon class="arrowhead" points="112,80 100,74.4 100,85.6" fill="black" transform="rotate(0,104,80)"></polygon>
-                  <g class="text">
-                    <text x="148" y="36">HALF</text>
-                    <text x="392" y="36">FULLY</text>
-                    <text x="144" y="52">CREATED</text>
-                    <text x="276" y="52">Delete</text>
-                    <text x="392" y="52">CREATED</text>
-                    <text x="256" y="68">Topic</text>
-                    <text x="300" y="68">Data</text>
-                    <text x="472" y="68">Publish</text>
-                    <text x="52" y="100">Create</text>
-                    <text x="264" y="132">Publish</text>
-                    <text x="480" y="132">Subscribe</text>
-                    <text x="96" y="164">Read/</text>
-                    <text x="432" y="164">Read/</text>
-                    <text x="92" y="180">Update</text>
-                    <text x="204" y="180">Delete</text>
-                    <text x="324" y="180">Delete</text>
-                    <text x="436" y="180">Update</text>
-                    <text x="200" y="196">Topic</text>
-                    <text x="320" y="196">Topic</text>
-                    <text x="264" y="212">DELETED</text>
-                  </g>
-                </svg><a href="#section-2.6.1-2.1.1" class="pilcrow">¶</a>
+                <path d="M 128,72 L 128,120" fill="none" stroke="black"></path>
+                <path d="M 128,144 L 128,176" fill="none" stroke="black"></path>
+                <path d="M 160,144 L 160,176" fill="none" stroke="black"></path>
+                <path d="M 168,72 L 168,120" fill="none" stroke="black"></path>
+                <path d="M 248,152 L 248,184" fill="none" stroke="black"></path>
+                <path d="M 280,152 L 280,184" fill="none" stroke="black"></path>
+                <path d="M 368,72 L 368,120" fill="none" stroke="black"></path>
+                <path d="M 368,144 L 368,176" fill="none" stroke="black"></path>
+                <path d="M 400,144 L 400,176" fill="none" stroke="black"></path>
+                <path d="M 408,72 L 408,120" fill="none" stroke="black"></path>
+                <path d="M 8,80 L 104,80" fill="none" stroke="black"></path>
+                <path d="M 192,80 L 344,80" fill="none" stroke="black"></path>
+                <path d="M 432,80 L 520,80" fill="none" stroke="black"></path>
+                <path d="M 192,112 L 344,112" fill="none" stroke="black"></path>
+                <path d="M 432,112 L 520,112" fill="none" stroke="black"></path>
+                <path d="M 200,160 L 224,160" fill="none" stroke="black"></path>
+                <path d="M 304,160 L 328,160" fill="none" stroke="black"></path>
+                <path d="M 184,128 L 200,160" fill="none" stroke="black"></path>
+                <path d="M 328,160 L 344,128" fill="none" stroke="black"></path>
+                <path d="M 520,80 C 528.83064,80 536,87.16936 536,96" fill="none" stroke="black"></path>
+                <path d="M 520,112 C 528.83064,112 536,104.83064 536,96" fill="none" stroke="black"></path>
+                <path d="M 144,192 C 135.16936,192 128,184.83064 128,176" fill="none" stroke="black"></path>
+                <path d="M 144,192 C 152.83064,192 160,184.83064 160,176" fill="none" stroke="black"></path>
+                <path d="M 384,192 C 375.16936,192 368,184.83064 368,176" fill="none" stroke="black"></path>
+                <path d="M 384,192 C 392.83064,192 400,184.83064 400,176" fill="none" stroke="black"></path>
+                <path d="M 128,72 L 168,72" fill="none" stroke="black"></path>
+                <path d="M 368,72 L 408,72" fill="none" stroke="black"></path>
+                <path d="M 128,120 L 168,120" fill="none" stroke="black"></path>
+                <path d="M 368,120 L 408,120" fill="none" stroke="black"></path>
+                <path d="M 248,152 L 280,152" fill="none" stroke="black"></path>
+                <path d="M 248,184 L 280,184" fill="none" stroke="black"></path>
+                <polygon class="arrowhead" points="440,112 428,106.4 428,117.6" fill="black" transform="rotate(180,432,112)"></polygon>
+                <polygon class="arrowhead" points="408,144 396,138.4 396,149.6" fill="black" transform="rotate(270,400,144)"></polygon>
+                <polygon class="arrowhead" points="352,112 340,106.4 340,117.6" fill="black" transform="rotate(0,344,112)"></polygon>
+                <polygon class="arrowhead" points="312,160 300,154.4 300,165.6" fill="black" transform="rotate(180,304,160)"></polygon>
+                <polygon class="arrowhead" points="232,160 220,154.4 220,165.6" fill="black" transform="rotate(0,224,160)"></polygon>
+                <polygon class="arrowhead" points="200,80 188,74.4 188,85.6" fill="black" transform="rotate(180,192,80)"></polygon>
+                <polygon class="arrowhead" points="168,144 156,138.4 156,149.6" fill="black" transform="rotate(270,160,144)"></polygon>
+                <polygon class="arrowhead" points="112,80 100,74.4 100,85.6" fill="black" transform="rotate(0,104,80)"></polygon>
+                <g class="text">
+                  <text x="148" y="36">HALF</text>
+                  <text x="392" y="36">FULLY</text>
+                  <text x="152" y="52">CREATED</text>
+                  <text x="260" y="52">Delete</text>
+                  <text x="392" y="52">CREATED</text>
+                  <text x="268" y="68">topic-data</text>
+                  <text x="472" y="68">Publish</text>
+                  <text x="52" y="100">Create</text>
+                  <text x="264" y="132">Publish</text>
+                  <text x="480" y="132">Subscribe</text>
+                  <text x="96" y="164">Read/</text>
+                  <text x="432" y="164">Read/</text>
+                  <text x="92" y="180">Update</text>
+                  <text x="204" y="180">Delete</text>
+                  <text x="324" y="180">Delete</text>
+                  <text x="436" y="180">Update</text>
+                  <text x="200" y="196">Topic</text>
+                  <text x="320" y="196">Topic</text>
+                  <text x="264" y="212">DELETED</text>
+                </g>
+              </svg><a href="#section-3.1-2.1.1" class="pilcrow">¶</a>
 </div>
 </div>
 <figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
 <a href="#name-lifecycle-of-a-topic" class="selfRef">Lifecycle of a Topic</a>
-            </figcaption></figure>
+          </figcaption></figure>
 </div>
-<p id="section-2.6.1-3">After a publisher publishes to the topic for the first time, the topic is placed into the FULLY CREATED state. In this state, a client can read, update and delete the topic; a publisher can publish to the topic data resource; and a subscriber can observe the topic data resource.<a href="#section-2.6.1-3" class="pilcrow">¶</a></p>
-<p id="section-2.6.1-4">When a client deletes a topic resource, the topic is placed into the DELETED state and shortly after removed from the server. In this state, all subscribers are removed from the list of observers of the topic data resource and no further interactions with the topic are possible.<a href="#section-2.6.1-4" class="pilcrow">¶</a></p>
-<p id="section-2.6.1-5">When a client deletes a topic data, the topic is placed into the HALF CREATED state, where clients can read, update and delete the topic and awaits for a publisher to begin publication.<a href="#section-2.6.1-5" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="rate-limit">
-<section id="section-2.6.2">
-          <h4 id="name-rate-limiting">
-<a href="#section-2.6.2" class="section-number selfRef">2.6.2. </a><a href="#name-rate-limiting" class="section-name selfRef">Rate Limiting</a>
-          </h4>
-<p id="section-2.6.2-1">The server hosting a data resource may have to handle a potentially very large number of publishers and subscribers at the same time. This means the server can easily become overwhelmed if it receives too many publications in a short period of time.<a href="#section-2.6.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.6.2-2">In this situation, if a client is sending publications too fast, the server <span class="bcp14">SHOULD</span> return a 4.29 (Too Many Requests) response <span>[<a href="#RFC8516" class="cite xref">RFC8516</a>]</span>.  As described in <span>[<a href="#RFC8516" class="cite xref">RFC8516</a>]</span>, the Max-Age option <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span> in this response indicates the number of seconds after which the client may retry. The Broker <span class="bcp14">MAY</span> stop publishing messages from the client for the indicated time.<a href="#section-2.6.2-2" class="pilcrow">¶</a></p>
-<p id="section-2.6.2-3">When a client receives a 4.29 (Too Many Requests) response, it <span class="bcp14">MUST NOT</span> send any new publication requests to the same topic data resource before the time indicated by the Max-Age option has passed.<a href="#section-2.6.2-3" class="pilcrow">¶</a></p>
-</section>
-</div>
+<p id="section-3.1-3">After a publisher publishes to the topic-data for the first time, the topic is placed into the FULLY CREATED state. In this state, a client can read data by means of a GET request without observe. A publisher can publish to the topic-data resource and a subscriber can observe the topic-data resource.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-4">When a client deletes a topic-configuration resource, the topic is placed into the DELETED state and shortly after removed from the server. In this state, all subscribers are removed from the list of observers of the topic-data resource and no further interactions with the topic are possible.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.1-5">When a client deletes a topic-data, the topic is placed into the HALF CREATED state, where clients can read, update and delete the topic-configuration and await for a publisher to begin publication.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="topic-data-interactions">
-<section id="section-2.7">
+<section id="section-3.2">
         <h3 id="name-topic-data-interactions">
-<a href="#section-2.7" class="section-number selfRef">2.7. </a><a href="#name-topic-data-interactions" class="section-name selfRef">Topic Data Interactions</a>
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-topic-data-interactions" class="section-name selfRef">Topic-Data Interactions</a>
         </h3>
-<p id="section-2.7-1">Interactions with the topic_data resource are covered in this section. The interactions with topic_data are same as that of any other CoAP resource.<a href="#section-2.7-1" class="pilcrow">¶</a></p>
-<p id="section-2.7-2">One variant shown in <a href="#fig-external-server" class="auto internal xref">Figure 5</a> is where the resource is hosted. While the broker can create a topic_data resource when the topic is created, the client can select to host the data in a different CoAP server than that of the topic resource.<a href="#section-2.7-2" class="pilcrow">¶</a></p>
-<span id="name-topic-data-hosted-externall"></span><div id="fig-external-server">
-<figure id="figure-5">
-          <div id="section-2.7-3.1">
-            <div class="alignCenter art-svg artwork" id="section-2.7-3.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="368" width="528" viewBox="0 0 528 368" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
-                <path d="M 8,64 L 8,336" fill="none" stroke="black"></path>
-                <path d="M 192,200 L 192,280" fill="none" stroke="black"></path>
-                <path d="M 336,64 L 336,200" fill="none" stroke="black"></path>
-                <path d="M 336,216 L 336,336" fill="none" stroke="black"></path>
-                <path d="M 368,128 L 368,200" fill="none" stroke="black"></path>
-                <path d="M 368,216 L 368,272" fill="none" stroke="black"></path>
-                <path d="M 520,128 L 520,272" fill="none" stroke="black"></path>
-                <path d="M 8,64 L 336,64" fill="none" stroke="black"></path>
-                <path d="M 368,128 L 520,128" fill="none" stroke="black"></path>
-                <path d="M 304,208 L 384,208" fill="none" stroke="black"></path>
-                <path d="M 368,272 L 520,272" fill="none" stroke="black"></path>
-                <path d="M 8,336 L 336,336" fill="none" stroke="black"></path>
-                <path d="M 172,296 L 180,312" fill="none" stroke="black"></path>
-                <path d="M 100,104 L 108,120" fill="none" stroke="black"></path>
-                <path d="M 172,216 L 180,232" fill="none" stroke="black"></path>
-                <path d="M 204,280 L 212,296" fill="none" stroke="black"></path>
-                <path d="M 144,128 L 180,200" fill="none" stroke="black"></path>
-                <path d="M 132,88 L 140,104" fill="none" stroke="black"></path>
-                <path d="M 204,200 L 212,216" fill="none" stroke="black"></path>
-                <path d="M 260,216 L 268,232" fill="none" stroke="black"></path>
-                <path d="M 244,152 L 268,200" fill="none" stroke="black"></path>
-                <path d="M 292,200 L 300,216" fill="none" stroke="black"></path>
-                <path d="M 388,216 L 396,232" fill="none" stroke="black"></path>
-                <path d="M 420,200 L 428,216" fill="none" stroke="black"></path>
-                <path d="M 100,104 L 108,88" fill="none" stroke="black"></path>
-                <path d="M 132,120 L 140,104" fill="none" stroke="black"></path>
-                <path d="M 172,216 L 180,200" fill="none" stroke="black"></path>
-                <path d="M 172,296 L 180,280" fill="none" stroke="black"></path>
-                <path d="M 204,232 L 212,216" fill="none" stroke="black"></path>
-                <path d="M 204,312 L 212,296" fill="none" stroke="black"></path>
-                <path d="M 260,216 L 268,200" fill="none" stroke="black"></path>
-                <path d="M 292,232 L 300,216" fill="none" stroke="black"></path>
-                <path d="M 388,216 L 396,200" fill="none" stroke="black"></path>
-                <path d="M 420,232 L 428,216" fill="none" stroke="black"></path>
-                <path d="M 108,88 L 132,88" fill="none" stroke="black"></path>
-                <path d="M 108,120 L 132,120" fill="none" stroke="black"></path>
-                <path d="M 156,152 L 244,152" fill="none" stroke="black"></path>
-                <path d="M 180,200 L 204,200" fill="none" stroke="black"></path>
-                <path d="M 268,200 L 292,200" fill="none" stroke="black"></path>
-                <path d="M 396,200 L 420,200" fill="none" stroke="black"></path>
-                <path d="M 268,232 L 292,232" fill="none" stroke="black"></path>
-                <path d="M 396,232 L 420,232" fill="none" stroke="black"></path>
-                <path d="M 180,312 L 204,312" fill="none" stroke="black"></path>
-                <path class="jump" d="M 368,216 C 362,216 362,200 368,200" fill="none" stroke="black"></path>
-                <path class="jump" d="M 336,216 C 330,216 330,200 336,200" fill="none" stroke="black"></path>
-                <circle cx="192" cy="208" r="6" class="closeddot" fill="black"></circle>
-                <circle cx="280" cy="208" r="6" class="closeddot" fill="black"></circle>
-                <g class="text">
-                  <text x="156" y="36">[central-ps.example.com]</text>
-                  <text x="124" y="52">CoAP</text>
-                  <text x="172" y="52">server</text>
-                  <text x="208" y="52">1</text>
-                  <text x="48" y="100">Topic</text>
-                  <text x="448" y="100">[2001:db8::2:1]</text>
-                  <text x="52" y="116">Collection</text>
-                  <text x="412" y="116">CoAP</text>
-                  <text x="460" y="116">server</text>
-                  <text x="496" y="116">2</text>
-                  <text x="52" y="132">Resource</text>
-                  <text x="204" y="180">......</text>
-                  <text x="292" y="180">......</text>
-                  <text x="408" y="180">.........</text>
-                  <text x="160" y="196">:</text>
-                  <text x="224" y="196">:</text>
-                  <text x="248" y="196">:</text>
-                  <text x="312" y="196">:</text>
-                  <text x="376" y="196">:</text>
-                  <text x="440" y="196">:</text>
-                  <text x="472" y="196">Topic</text>
-                  <text x="120" y="212">Topic</text>
-                  <text x="160" y="212">:</text>
-                  <text x="224" y="212">:</text>
-                  <text x="248" y="212">:</text>
-                  <text x="440" y="212">:</text>
-                  <text x="468" y="212">Data</text>
-                  <text x="108" y="228">Resource</text>
-                  <text x="160" y="228">:</text>
-                  <text x="184" y="228">_</text>
-                  <text x="200" y="228">_</text>
-                  <text x="224" y="228">:</text>
-                  <text x="248" y="228">:</text>
-                  <text x="312" y="228">:</text>
-                  <text x="376" y="228">:</text>
-                  <text x="440" y="228">:</text>
-                  <text x="484" y="228">Resource</text>
-                  <text x="172" y="244">....</text>
-                  <text x="212" y="244">....</text>
-                  <text x="280" y="244">.........</text>
-                  <text x="408" y="244">:.......:</text>
-                  <text x="172" y="260">....</text>
-                  <text x="212" y="260">....</text>
-                  <text x="120" y="276">Topic</text>
-                  <text x="160" y="276">:</text>
-                  <text x="184" y="276">_</text>
-                  <text x="200" y="276">_</text>
-                  <text x="224" y="276">:</text>
-                  <text x="124" y="292">Data</text>
-                  <text x="160" y="292">:</text>
-                  <text x="224" y="292">:</text>
-                  <text x="108" y="308">Resource</text>
-                  <text x="160" y="308">:</text>
-                  <text x="224" y="308">:</text>
-                  <text x="192" y="324">:.......:</text>
-                </g>
-              </svg><a href="#section-2.7-3.1.1" class="pilcrow">¶</a>
-</div>
-</div>
-<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
-<a href="#name-topic-data-hosted-externall" class="selfRef">topic data hosted externally</a>
-          </figcaption></figure>
-</div>
+<p id="section-3.2-1">Interactions with the topic-data resource are covered in this section.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <div id="publish">
-<section id="section-2.7.1">
+<section id="section-3.2.1">
           <h4 id="name-publish">
-<a href="#section-2.7.1" class="section-number selfRef">2.7.1. </a><a href="#name-publish" class="section-name selfRef">Publish</a>
+<a href="#section-3.2.1" class="section-number selfRef">3.2.1. </a><a href="#name-publish" class="section-name selfRef">Publish</a>
           </h4>
-<p id="section-2.7.1-1">A topic must have been created in order to publish data to it (See Section <a href="#topic-create" class="auto internal xref">Section 2.4.3</a>) and be in the half-created state in order to the publish operation to work (see <a href="#topic-lifecycle" class="auto internal xref">Section 2.6.1</a>).<a href="#section-2.7.1-1" class="pilcrow">¶</a></p>
-<p id="section-2.7.1-2">A client can publish data to a topic by submitting the data in a PUT request to the 'topic_data' URI as indicated in its topic resource property. Please note that the 'topic_data' URI is not the same as the topic URI used for configuring the topic (see <a href="#topic-resource-representation" class="auto internal xref">Section 2.2.2</a>).<a href="#section-2.7.1-2" class="pilcrow">¶</a></p>
-<p id="section-2.7.1-3">On success, the server returns a 2.04 (Updated) response. However, when data is published to the topic for the first time, the server instead <span class="bcp14">MUST</span> return a 2.01 (Created) response and set the topic in the fully-created state (see <a href="#topic-lifecycle" class="auto internal xref">Section 2.6.1</a>).<a href="#section-2.7.1-3" class="pilcrow">¶</a></p>
-<p id="section-2.7.1-4">If the request does not have an acceptable content format, the server returns a 4.15 (Unsupported Content Format) response.<a href="#section-2.7.1-4" class="pilcrow">¶</a></p>
-<p id="section-2.7.1-5">If the client is sending publications too fast, the server returns a
-4.29 (Too Many Requests) response <span>[<a href="#RFC8516" class="cite xref">RFC8516</a>]</span>.<a href="#section-2.7.1-5" class="pilcrow">¶</a></p>
-<p id="section-2.7.1-6">Example of first publication:<a href="#section-2.7.1-6" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.7.1-7">
+<p id="section-3.2.1-1">A topic-configuration with a topic-data resource must have been created in order to publish data to it (See <a href="#topic-create" class="auto internal xref">Section 2.4.3</a>) and be in the half-created or fully-created state in order to the publish operation to work (see <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>).<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-2">A client can publish data to a topic by submitting the data in a PUT request to the topic-data URI as indicated in its topic resource property. Please note that the topic-data URI is not the same as the topic-configuration URI used for configuring the topic (see <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>).<a href="#section-3.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-3">On success, the server returns a 2.04 (Updated) response. However, when data is published to the topic for the first time, the server instead <span class="bcp14">MUST</span> return a 2.01 (Created) response and set the topic in the fully-created state (see <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>).<a href="#section-3.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-4">If the request does not have an acceptable content format, the server returns a 4.15 (Unsupported Content Format) response.<a href="#section-3.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-5">If the client is sending publications too fast, the server returns a
+4.29 (Too Many Requests) response <span>[<a href="#RFC8516" class="cite xref">RFC8516</a>]</span>.<a href="#section-3.2.1-5" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-6">Example of first publication:<a href="#section-3.2.1-6" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2.1-7">
 <pre>
 =&gt; 0.03 PUT
    Uri-Path: ps
@@ -2330,10 +2169,10 @@ Section <a href="#topic-discovery" class="auto internal xref">Section 2.3.3</a>)
    }
 
 &lt;= 2.01 Created
-</pre><a href="#section-2.7.1-7" class="pilcrow">¶</a>
+</pre><a href="#section-3.2.1-7" class="pilcrow">¶</a>
 </div>
-<p id="section-2.7.1-8">Example of subsequent publication:<a href="#section-2.7.1-8" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.7.1-9">
+<p id="section-3.2.1-8">Example of subsequent publication:<a href="#section-3.2.1-8" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2.1-9">
 <pre>
 =&gt; 0.03 PUT
    Uri-Path: ps
@@ -2349,34 +2188,34 @@ Section <a href="#topic-discovery" class="auto internal xref">Section 2.3.3</a>)
    }
 
 &lt;= 2.04 Updated
-</pre><a href="#section-2.7.1-9" class="pilcrow">¶</a>
+</pre><a href="#section-3.2.1-9" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
 <div id="subscribe">
-<section id="section-2.7.2">
+<section id="section-3.2.2">
           <h4 id="name-subscribe">
-<a href="#section-2.7.2" class="section-number selfRef">2.7.2. </a><a href="#name-subscribe" class="section-name selfRef">Subscribe</a>
+<a href="#section-3.2.2" class="section-number selfRef">3.2.2. </a><a href="#name-subscribe" class="section-name selfRef">Subscribe</a>
           </h4>
-<p id="section-2.7.2-1">A client can subscribe to a topic by sending a CoAP GET request with the Observe set to '0' to subscribe to resource updates. <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>.<a href="#section-2.7.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.7.2-2">On success, the broker <span class="bcp14">MUST</span> return 2.05 (Content) notifications with the data.<a href="#section-2.7.2-2" class="pilcrow">¶</a></p>
-<p id="section-2.7.2-3">If the topic is not yet in the fully created state (see <a href="#topic-lifecycle" class="auto internal xref">Section 2.6.1</a>) the broker <span class="bcp14">SHOULD</span> return a response code 4.04 (Not Found).<a href="#section-2.7.2-3" class="pilcrow">¶</a></p>
-<p id="section-2.7.2-4">The following response codes are defined for the Subscribe operation:<a href="#section-2.7.2-4" class="pilcrow">¶</a></p>
-<span class="break"></span><dl class="dlParallel" id="section-2.7.2-5">
-            <dt id="section-2.7.2-5.1">Success:</dt>
-            <dd style="margin-left: 1.5em" id="section-2.7.2-5.2">
-              <p id="section-2.7.2-5.2.1">2.05 "Content". Successful subscribe with observe response, current value included in the response.<a href="#section-2.7.2-5.2.1" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-1">A client can subscribe to a topic-data by sending a CoAP GET request with the Observe set to 0 to subscribe to resource updates. <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>.<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-2">On success, the server hosting the topic-data resource <span class="bcp14">MUST</span> return 2.05 (Content) notifications with the data and the Observe Option. Otherwise, if no Observe Option is present the client should assume that the subscription was not successful.<a href="#section-3.2.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-3">If the topic is not yet in the fully created state (see <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>) the broker <span class="bcp14">SHOULD</span> return a response code 4.04 (Not Found).<a href="#section-3.2.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-4">The following response codes are defined for the Subscribe operation:<a href="#section-3.2.2-4" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.2.2-5">
+            <dt id="section-3.2.2-5.1">Success:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.2.2-5.2">
+              <p id="section-3.2.2-5.2.1">2.05 "Content". Successful subscribe with observe response, current value included in the response.<a href="#section-3.2.2-5.2.1" class="pilcrow">¶</a></p>
 </dd>
             <dd class="break"></dd>
-<dt id="section-2.7.2-5.3">Failure:</dt>
-            <dd style="margin-left: 1.5em" id="section-2.7.2-5.4">
-              <p id="section-2.7.2-5.4.1">4.04 "Not Found". Topic does not exist.<a href="#section-2.7.2-5.4.1" class="pilcrow">¶</a></p>
+<dt id="section-3.2.2-5.3">Failure:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.2.2-5.4">
+              <p id="section-3.2.2-5.4.1">4.04 "Not Found". The topic-data does not exist.<a href="#section-3.2.2-5.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 </dl>
-<p id="section-2.7.2-6">If the 'max_clients' parameter has been reached, the server must treat that as specified in section 4.1 of <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. The response <span class="bcp14">MUST NOT</span> include an Observe Option, the absence of which signals to the subscriber that the subscription failed.<a href="#section-2.7.2-6" class="pilcrow">¶</a></p>
-<p id="section-2.7.2-7">Example:<a href="#section-2.7.2-7" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.7.2-8">
+<p id="section-3.2.2-6">If the 'max-subscribers' parameter has been reached, the server must treat that as specified in section 4.1 of <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. The response <span class="bcp14">MUST NOT</span> include an Observe Option, the absence of which signals to the subscriber that the subscription failed.<a href="#section-3.2.2-6" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-7">Example:<a href="#section-3.2.2-7" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2.2-8">
 <pre>
 =&gt; 0.01 GET
    Uri-Path: ps
@@ -2389,46 +2228,50 @@ Section <a href="#topic-discovery" class="auto internal xref">Section 2.3.3</a>)
    Observe: 10001
    Max-Age: 15
 
-   [...SenML data...]
+  {
+    "bn": "urn:dev:os:193-iot/sparrow/jorvas/",
+    "n": "Raitis-lampotila",
+    "u": "Cel",
+    "t": 1696340182,
+    "v": 19.87
+  }
 
 &lt;= 2.05 Content
    Content-Format: 110
    Observe: 10002
    Max-Age: 15
 
-   [...SenML data...]
-
-&lt;= 2.05 Content
-   Content-Format: 110
-   Observe: 10003
-   Max-Age: 15
-
-   [...SenML data...]
-</pre><a href="#section-2.7.2-8" class="pilcrow">¶</a>
+  {
+    "bn": "urn:dev:os:193-iot/sparrow/jorvas/",
+    "n": "Raitis-lampotila",
+    "u": "Cel",
+    "t": 1696340182,
+    "v": 21.87
+  }
+</pre><a href="#section-3.2.2-8" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
 <div id="unsubscribe">
-<section id="section-2.7.3">
+<section id="section-3.2.3">
           <h4 id="name-unsubscribe">
-<a href="#section-2.7.3" class="section-number selfRef">2.7.3. </a><a href="#name-unsubscribe" class="section-name selfRef">Unsubscribe</a>
+<a href="#section-3.2.3" class="section-number selfRef">3.2.3. </a><a href="#name-unsubscribe" class="section-name selfRef">Unsubscribe</a>
           </h4>
-<p id="section-2.7.3-1">A CoAP client can unsubscribe simply by cancelling the observation as described in Section 3.6 of <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. The client <span class="bcp14">MUST</span> either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification.<a href="#section-2.7.3-1" class="pilcrow">¶</a></p>
-<p id="section-2.7.3-2">In some circumstances, it may be desirable to cancel an observation and release the resources allocated by the broker. In this case, a client <span class="bcp14">MAY</span> explicitly deregister by issuing a GET request that has the Token field set to the token of the observation to be cancelled and includes an Observe Option with the value set to 1 (deregister).<a href="#section-2.7.3-2" class="pilcrow">¶</a></p>
-<p id="section-2.7.3-3">As per <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span> a server that transmits notifications mostly in non-confirmable messages <span class="bcp14">MUST</span> send a notification in a confirmable message instead of a non-confirmable message at least every 24 hours.<a href="#section-2.7.3-3" class="pilcrow">¶</a></p>
-<p id="section-2.7.3-4">This value can be modified at the broker by the administrator of a topic by modifying the parameter "observer_check" on <a href="#topic-resource-representation" class="auto internal xref">Section 2.2.2</a>. This would allow to change the rate at which different implementations verify that a subscriber is still interested in observing a topic_data resource.<a href="#section-2.7.3-4" class="pilcrow">¶</a></p>
+<p id="section-3.2.3-1">A CoAP client can unsubscribe simply by cancelling the observation as described in Section 3.6 of <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. The client <span class="bcp14">MUST</span> either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification. Also on Section 3.6 of <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span> the client can simply "forget" the observation and the server will remove it from the list of observers after the next notification.<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.3-2">As per <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span> a server that transmits notifications mostly in non-confirmable messages, but it <span class="bcp14">MUST</span> send a notification in a confirmable message instead of a non-confirmable message at least every 24 hours.<a href="#section-3.2.3-2" class="pilcrow">¶</a></p>
+<p id="section-3.2.3-3">This value can be modified at the broker by the administrator of a topic by modifying the parameter "observer-check" on <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>. This would allow to change the rate at which different implementations verify that a subscriber is still interested in observing a topic-data resource.<a href="#section-3.2.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="delete-topic-data">
-<section id="section-2.7.4">
-          <h4 id="name-delete-topic-data-resource">
-<a href="#section-2.7.4" class="section-number selfRef">2.7.4. </a><a href="#name-delete-topic-data-resource" class="section-name selfRef">Delete topic data resource</a>
+<section id="section-3.2.4">
+          <h4 id="name-delete-topic-data">
+<a href="#section-3.2.4" class="section-number selfRef">3.2.4. </a><a href="#name-delete-topic-data" class="section-name selfRef">Delete topic-data</a>
           </h4>
-<p id="section-2.7.4-1">A publisher <span class="bcp14">MAY</span> delete a topic by making a CoAP DELETE request on the 'topic_data' URI.<a href="#section-2.7.4-1" class="pilcrow">¶</a></p>
-<p id="section-2.7.4-2">On success, the server returns a 2.02 (Deleted) response.<a href="#section-2.7.4-2" class="pilcrow">¶</a></p>
-<p id="section-2.7.4-3">When a topic_data resource is deleted, the broker <span class="bcp14">SHOULD</span> also delete the 'topic_data' parameter in the topic resource, unsubscribe all subscribers by removing them from the list of observers and return a final 4.04 (Not Found) response as per <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span> Section 3.2. The topic is then set back to the half created state as per <a href="#topic-lifecycle" class="auto internal xref">Section 2.6.1</a>.<a href="#section-2.7.4-3" class="pilcrow">¶</a></p>
-<p id="section-2.7.4-4">Example:<a href="#section-2.7.4-4" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.7.4-5">
+<p id="section-3.2.4-1">A publisher <span class="bcp14">MAY</span> delete a topic by making a CoAP DELETE request on the topic-data URI.<a href="#section-3.2.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.4-2">On success, the server returns a 2.02 (Deleted) response.<a href="#section-3.2.4-2" class="pilcrow">¶</a></p>
+<p id="section-3.2.4-3">When a topic-data resource is deleted, the broker <span class="bcp14">SHOULD</span> also delete the topic-data parameter in the topic resource, unsubscribe all subscribers by removing them from the list of observers and return a final 4.04 (Not Found) response as per <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span> Section 3.2. The topic is then set back to the half created state as per <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>.<a href="#section-3.2.4-3" class="pilcrow">¶</a></p>
+<p id="section-3.2.4-4">Example:<a href="#section-3.2.4-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2.4-5">
 <pre>
 =&gt; 0.04 DELETE
    Uri-Path: ps
@@ -2436,21 +2279,22 @@ Section <a href="#topic-discovery" class="auto internal xref">Section 2.3.3</a>)
    Uri-Path: 1bd0d6d
 
 &lt;= 2.02 Deleted
-</pre><a href="#section-2.7.4-5" class="pilcrow">¶</a>
+</pre><a href="#section-3.2.4-5" class="pilcrow">¶</a>
+</div>
+</section>
 </div>
 </section>
 </div>
 <div id="read-data">
-<section id="section-2.7.5">
-          <h4 id="name-read-latest-data">
-<a href="#section-2.7.5" class="section-number selfRef">2.7.5. </a><a href="#name-read-latest-data" class="section-name selfRef">Read latest data</a>
-          </h4>
-<p id="section-2.7.5-1">A client can get the latest published topic data by making a GET request to the 'topic_data' URI in the broker. Please note that discovery of the 'topic_data' parameter is a required previous step (see <a href="#topic-get-resource" class="auto internal xref">Section 2.5.1</a>).<a href="#section-2.7.5-1" class="pilcrow">¶</a></p>
-<p id="section-2.7.5-2">On success, the server <span class="bcp14">MUST</span> return 2.05 (Content) response with the data.<a href="#section-2.7.5-2" class="pilcrow">¶</a></p>
-<p id="section-2.7.5-3">If the target URI does not match an existing resource or the topic is not in the fully created state (see <a href="#topic-lifecycle" class="auto internal xref">Section 2.6.1</a>), the broker <span class="bcp14">SHOULD</span> return a response code 4.04 (Not Found).<a href="#section-2.7.5-3" class="pilcrow">¶</a></p>
-<p id="section-2.7.5-4">If the broker can not return the requested content format it <span class="bcp14">MUST</span> return a response code 4.15 (Unsupported Content Format).<a href="#section-2.7.5-4" class="pilcrow">¶</a></p>
-<p id="section-2.7.5-5">Example:<a href="#section-2.7.5-5" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.7.5-6">
+<section id="section-3.3">
+        <h3 id="name-read-latest-data">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-read-latest-data" class="section-name selfRef">Read latest data</a>
+        </h3>
+<p id="section-3.3-1">A client can get the latest published topic-data by making a GET request to the topic-data URI in the broker. Please note that discovery of the topic-data parameter is a required previous step (see <a href="#topic-get-resource" class="auto internal xref">Section 2.5.1</a>).<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.3-2">On success, the server <span class="bcp14">MUST</span> return 2.05 (Content) response with the data.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
+<p id="section-3.3-3">If the target URI does not match an existing resource or the topic is not in the fully created state (see <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>), the broker <span class="bcp14">MUST</span> return a response code 4.04 (Not Found).<a href="#section-3.3-3" class="pilcrow">¶</a></p>
+<p id="section-3.3-4">Example:<a href="#section-3.3-4" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.3-5">
 <pre>
 =&gt; 0.01 GET
    Uri-Path: ps
@@ -2467,174 +2311,237 @@ Section <a href="#topic-discovery" class="auto internal xref">Section 2.3.3</a>)
       "t": 1621452122,
       "v": 23.5
    }
-</pre><a href="#section-2.7.5-6" class="pilcrow">¶</a>
+</pre><a href="#section-3.3-5" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
+<div id="rate-limit">
+<section id="section-3.4">
+        <h3 id="name-rate-limiting">
+<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-rate-limiting" class="section-name selfRef">Rate Limiting</a>
+        </h3>
+<p id="section-3.4-1">The server hosting the topic-data may have to handle a potentially large number of publishers and subscribers at the same time. This means it could become overwhelmed if it receives too many publications in a short period of time.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.4-2">In this situation, if a publisher is sending publications too fast, the server <span class="bcp14">SHOULD</span> return a 4.29 (Too Many Requests) response <span>[<a href="#RFC8516" class="cite xref">RFC8516</a>]</span>.  As described in <span>[<a href="#RFC8516" class="cite xref">RFC8516</a>]</span>, the Max-Age option <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span> in this response indicates the number of seconds after which the client may retry. The broker <span class="bcp14">MAY</span> also stop publishing messages from that publisher for the indicated time.<a href="#section-3.4-2" class="pilcrow">¶</a></p>
+<p id="section-3.4-3">When a publisher receives a 4.29 (Too Many Requests) response, it <span class="bcp14">MUST NOT</span> send any new publication requests to the same topic-data resource before the time indicated by the Max-Age option has passed.<a href="#section-3.4-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
 </div>
 <div id="pubsub-parameters">
-<section id="section-3">
+<section id="section-4">
       <h2 id="name-coap-pubsub-parameters">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-coap-pubsub-parameters" class="section-name selfRef">CoAP Pubsub Parameters</a>
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-coap-pubsub-parameters" class="section-name selfRef">CoAP Pubsub Parameters</a>
       </h2>
-<p id="section-3-1">This document defines parameters used in the messages exchanged between a client and the broker during the topic creation and configuration process (see <a href="#topic-resource-representation" class="auto internal xref">Section 2.2.2</a>). The table below summarizes them and specifies the CBOR key to use instead of the full descriptive name.<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">Note that the media type application/core-pubsub+cbor <span class="bcp14">MUST</span> be used when these parameters are transported in the respective message fields.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-4-1">This document defines parameters used in the messages exchanged between a client and the broker during the topic creation and configuration process (see <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>). The table below summarizes them and specifies the CBOR key to use instead of the full descriptive name.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-2">Note that the media type application/core-pubsub+cbor <span class="bcp14">MUST</span> be used when these parameters are transported in the respective message fields.<a href="#section-4-2" class="pilcrow">¶</a></p>
 <span id="name-coap-pubsub-parameters-2"></span><div id="fig-CoAP-Pubsub-Parameters">
-<figure id="figure-6">
-        <div class="alignCenter art-text artwork" id="section-3-3.1">
+<figure id="figure-5">
+        <div class="alignCenter art-text artwork" id="section-4-3.1">
 <pre>
 +-----------------+-----------+--------------+------------+
 | Name            | CBOR Key  | CBOR Type    | Reference  |
 |-----------------|-----------|--------------|------------|
-| topic_name      | TBD1      | tstr         | [RFC-XXXX] |
-| topic_data      | TBD2      | tstr         | [RFC-XXXX] |
-| resource_type   | TBD3      | tstr         | [RFC-XXXX] |
-| media_type      | TBD4      | tstr (opt)   | [RFC-XXXX] |
-| target_attribute| TBD5      | tstr (opt)   | [RFC-XXXX] |
-| expiration_date | TBD6      | tstr (opt)   | [RFC-XXXX] |
-| max_subscribers | TBD7      | uint (opt)   | [RFC-XXXX] |
+| topic-name      | TBD1      | tstr         | [RFC-XXXX] |
+| topic-data      | TBD2      | tstr         | [RFC-XXXX] |
+| resource-type   | TBD3      | tstr         | [RFC-XXXX] |
+| media-type      | TBD4      | uint (opt)   | [RFC-XXXX] |
+| topic-type      | TBD5      | tstr (opt)   | [RFC-XXXX] |
+| expiration-date | TBD6      | tstr (opt)   | [RFC-XXXX] |
+| max-subscribers | TBD7      | uint (opt)   | [RFC-XXXX] |
+| observer-check  | TBD8      | uint (opt)   | [RFC-XXXX] |
 +-----------------+-----------+--------------+------------+
 </pre>
 </div>
-<figcaption><a href="#figure-6" class="selfRef">Figure 6</a>:
+<figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
 <a href="#name-coap-pubsub-parameters-2" class="selfRef">CoAP Pubsub Parameters</a>
         </figcaption></figure>
 </div>
 </section>
 </div>
-<div id="security-considerations">
-<section id="section-4">
+<div id="seccons">
+<section id="section-5">
       <h2 id="name-security-considerations">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-4-1">The security considerations discussed in this document cover various aspects related to the publish-subscribe architecture and the management of topics, administrators, and the change of topic configuration.<a href="#section-4-1" class="pilcrow">¶</a></p>
-<div id="change-of-topic-configuration">
-<section id="section-4.1">
-        <h3 id="name-change-of-topic-configurati">
-<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-change-of-topic-configurati" class="section-name selfRef">Change of Topic Configuration</a>
-        </h3>
-<p id="section-4.1-1">When a topic configuration changes, it may result in disruptions for the subscribers. Some potential issues that may arise include:<a href="#section-4.1-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-4.1-2.1">
-            <p id="section-4.1-2.1.1">Limiting the number of subscribers will cause to cancel ongoing subscriptions until max_subscribers has been reached.<a href="#section-4.1-2.1.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-4.1-2.2">
-            <p id="section-4.1-2.2.1">Changing the topic_data value will cancel all ongoing subscriptions.<a href="#section-4.1-2.2.1" class="pilcrow">¶</a></p>
-</li>
-          <li class="normal" id="section-4.1-2.3">
-            <p id="section-4.1-2.3.1">Changing of the expiration_date may cause to cancel ongoing subscriptions if the topic expires at an earlier data.<a href="#section-4.1-2.3.1" class="pilcrow">¶</a></p>
-</li>
-        </ul>
-<p id="section-4.1-3">To address these potential issues, it is vital to have an administration process in place for topic configurations, including monitoring, validation, and enforcement of security policies and procedures.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
-<p id="section-4.1-4">It is also recommended for subscribers to subscribe to the topic configuration resource in order to receive notifications of topic parameter changes.<a href="#section-4.1-4" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="topic-administrators">
-<section id="section-4.2">
-        <h3 id="name-topic-administrators">
-<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-topic-administrators" class="section-name selfRef">Topic Administrators</a>
-        </h3>
-<p id="section-4.2-1">In a publish-subscribe architecture, it is essential to ensure that topic administrators are trustworthy and authorized to perform their duties. This includes the ability to create, modify, and delete topics, enforce proper access control policies, and handle potential security issues arising from topic management.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
-<p id="section-4.2-2">The draft <span>[<a href="#I-D.ietf-ace-pubsub-profile" class="cite xref">I-D.ietf-ace-pubsub-profile</a>]</span> defines an application profile of the Authentication and Authorization for Constrained Environments (ACE) framework. The profile is designed to enable secure group communication for the architecture defined in this document "[RFC-XXXX]" (See <a href="#fig-arch" class="auto internal xref">Figure 1</a>).<a href="#section-4.2-2" class="pilcrow">¶</a></p>
-<p id="section-4.2-3">The profile relies on protocol-specific transport profiles of ACE for communication security, server authentication, and proof-of-possession for a key that is owned by the Client and bound to an OAuth 2.0 Access Token.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
-<p id="section-4.2-4">The document outlines the provisioning and enforcement of authorization information for Clients to act as Publishers and/or Subscribers. Additionally, it specifies the provisioning of keying material and security parameters that Clients use to protect their communications end-to-end through the Broker.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="caching-and-freshness">
-<section id="section-4.3">
-        <h3 id="name-caching-and-freshness">
-<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-caching-and-freshness" class="section-name selfRef">Caching and Freshness</a>
-        </h3>
-<p id="section-4.3-1">A broker could become overloaded if it always had to provide the most recent cached resource representation of a topic_data to a subscriber. On deployments with a large number of clients and with many topic resources this would represent a big burden on the broker.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
-<p id="section-4.3-2">For this reason is it recommended to consider changing the default Max-Age Option, which has a value of 60 in CoAP, in order to cater to different deployment scenarios.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
-<p id="section-4.3-3">For example, the broker could choose not to cache anything, therefore it <span class="bcp14">SHOULD</span> explicitly include a Max-Age Option with a value of zero seconds. For more information about caching and freshness in CoAP, please check <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span> and <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span><a href="#section-4.3-3" class="pilcrow">¶</a></p>
-</section>
-</div>
+<p id="section-5-1">The security considerations described in CoAP <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>, Web Linking <span>[<a href="#RFC8288" class="cite xref">RFC8288</a>]</span> and CoRE Resource Directory <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span> apply. The resource used to discover the broker at /.well-known/core <span class="bcp14">MAY</span> be protected, e.g., using DTLS as described in <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">Every operation performed by a client endpoint on a broker <span class="bcp14">SHOULD</span> be mutually authenticated using a pre-shared key, a raw public key, or certificate-based security. This can be implemented with the existing DTLS, TLS or OSCORE mechanisms.<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-3">Access control <span class="bcp14">SHOULD</span> be performed for the topic discovery, topic collection, topi configuration and topic data paths, as different endpoints may be authorized to discover topics, create them, modify them, etc. Therefore access control <span class="bcp14">SHOULD</span> be as fine-grained as possible. Otherwise malicious publishers could subscribe to data they are not authorized to access or publish on a topic-data resource continuously to mount a denial of service attack against the broker.<a href="#section-5-3" class="pilcrow">¶</a></p>
+<p id="section-5-4">To ensure end-to-end authentication between clients acting as publishers and those acting as subscribers, it is recommended to utilize application layer security, such as that offered by OSCORE <span>[<a href="#RFC8613" class="cite xref">RFC8613</a>]</span>. For example, if we consider a scenario where a broker mediates between a sensor device (publisher) and a cloud-based client application (subscriber). Although running separate DTLS sessions from the client device to the broker, and from the broker to the client application would ensure path confidentiality, it would not guarantee security for the data source. The client device cannot confirm if the messages from the broker are genuinely from the client application, and similarly, a client application cannot verify if the data originated from the client device. In situations where end-to-end security is crucial, the use of application layer security becomes indispensable.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-5">When deploying the publish subscribe architecture it is important to ensure authentication, authorization, and key distribution operations, for this reason it is recommended to follow the guidelines described in the ACE profile <span>[<a href="#I-D.ietf-ace-pubsub-profile" class="cite xref">I-D.ietf-ace-pubsub-profile</a>]</span> which is designed to enable secure group communication for the architecture defined in this document "[RFC-XXXX]" (See <a href="#fig-arch" class="auto internal xref">Figure 1</a>).<a href="#section-5-5" class="pilcrow">¶</a></p>
+<p id="section-5-6">While this document does not specify how credentials are to be provisioned the profile on <span>[<a href="#I-D.ietf-ace-pubsub-profile" class="cite xref">I-D.ietf-ace-pubsub-profile</a>]</span> and the draft <span>[<a href="#I-D.ietf-ace-key-groupcomm" class="cite xref">I-D.ietf-ace-key-groupcomm</a>]</span> can provide guidance in that respect.<a href="#section-5-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana">
-<section id="section-5">
+<section id="section-6">
       <h2 id="name-iana-considerations">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-5-1">This document has the following actions for IANA.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2">Note to RFC Editor: Please replace all occurrences of "[RFC-XXXX]" with the RFC number of this specification and delete this paragraph.<a href="#section-5-2" class="pilcrow">¶</a></p>
-<div id="iana-coap-pubsub-parameters">
-<section id="section-5.1">
-        <h3 id="name-coap-pubsub-parameters-3">
-<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-coap-pubsub-parameters-3" class="section-name selfRef">CoAP Pubsub Parameters</a>
+<p id="section-6-1">This document has the following actions for IANA.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">Note to RFC Editor: Please replace all occurrences of "[RFC-XXXX]" with the RFC number of this specification and delete this paragraph.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<div id="media-type">
+<section id="section-6.1">
+        <h3 id="name-media-type">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-media-type" class="section-name selfRef">Media Type</a>
         </h3>
-<p id="section-5.1-1">IANA is asked to register the following entries in the "CoAP Pubsub Parameters" registry.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-5.1-2">
-<pre>
-Name: topic_name
-CBOR Key: TBD1
-CBOR Type: tstr
-Reference: [RFC-XXXX]
-
-Name: topic_data
-CBOR Key: TBD2
-CBOR Type: tstr
-Reference: [RFC-XXXX]
-
-Name: resource_type
-CBOR Key: TBD3
-CBOR Type: tstr
-Reference: [RFC-XXXX]
-
-Name: media_type
-CBOR Key: TBD4
-CBOR Type: tstr (opt)
-Reference: [RFC-XXXX]
-
-Name: target_attribute
-CBOR Key: TBD5
-CBOR Type: tstr (opt)
-Reference: [RFC-XXXX]
-
-Name: expiration_date
-CBOR Key: TBD6
-CBOR Type: tstr (opt)
-Reference: [RFC-XXXX]
-
-Name: max_subscribers
-CBOR Key: TBD7
-CBOR Type: uint (opt)
-Reference: [RFC-XXXX]
-
-Name: core.ps
-CBOR Key: TBD8
-CBOR Type: tstr
-Reference: [RFC-XXXX]
-
-Name: core.ps.coll
-CBOR Key: TBD9
-CBOR Type: tstr
-Reference: [RFC-XXXX]
-
-Name: core.ps.conf
-CBOR Key: TBD10
-CBOR Type: tstr
-Reference: [RFC-XXXX]
-
-Name: core.ps.data
-CBOR Key: TBD11
-CBOR Type: tstr
-Reference: [RFC-XXXX]
-</pre><a href="#section-5.1-2" class="pilcrow">¶</a>
+<p id="section-6.1-1">IANA is requested to add the following Media-Type to the "Media Types"
+registry <span>[<a href="#IANA.media-types" class="cite xref">IANA.media-types</a>]</span>.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<span id="name-new-media-type-application-"></span><div id="new-media-type">
+<table class="left" id="table-1">
+          <caption>
+<a href="#table-1" class="selfRef">Table 1</a>:
+<a href="#name-new-media-type-application-" class="selfRef">New Media Type application/pubsub+cbor</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Name</th>
+              <th class="text-left" rowspan="1" colspan="1">Template</th>
+              <th class="text-left" rowspan="1" colspan="1">Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">pubsub+cborr</td>
+              <td class="text-left" rowspan="1" colspan="1">application/pubsub+cbor</td>
+              <td class="text-left" rowspan="1" colspan="1">RFC XXXX, <a href="#media-type" class="auto internal xref">Section 6.1</a>
+</td>
+            </tr>
+          </tbody>
+        </table>
 </div>
+<span class="break"></span><dl class="dlCompact dlParallel" id="section-6.1-3">
+          <dt id="section-6.1-3.1">Type name:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-3.2">
+            <p id="section-6.1-3.2.1">application<a href="#section-6.1-3.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-3.3">Subtype name:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-3.4">
+            <p id="section-6.1-3.4.1">pubsub+cbor<a href="#section-6.1-3.4.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-3.5">Required parameters:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-3.6">
+            <p id="section-6.1-3.6.1">N/A<a href="#section-6.1-3.6.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-3.7">Optional parameters:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-3.8">
+            <p id="section-6.1-3.8.1">N/A<a href="#section-6.1-3.8.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-3.9">Encoding considerations:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-3.10">
+            <p id="section-6.1-3.10.1">binary (CBOR data item)<a href="#section-6.1-3.10.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-3.11">Security considerations:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-3.12">
+            <p id="section-6.1-3.12.1"><a href="#seccons" class="auto internal xref">Section 5</a> of RFC XXXX<a href="#section-6.1-3.12.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-3.13">Interoperability considerations:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-3.14">
+            <p id="section-6.1-3.14.1">none<a href="#section-6.1-3.14.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-3.15">Published specification:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-3.16">
+            <p id="section-6.1-3.16.1"><a href="#media-type" class="auto internal xref">Section 6.1</a> of RFC XXXX<a href="#section-6.1-3.16.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-3.17">Applications that use this media type:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-3.18">
+            <p id="section-6.1-3.18.1">Clients and servers in the Internet of Things<a href="#section-6.1-3.18.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-3.19">Fragment identifier considerations:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-3.20">
+            <p id="section-6.1-3.20.1">The syntax and semantics of fragment identifiers is as specified for
+"application/cbor".  (At publication of RFC XXXX, there is no
+fragment identification syntax defined for "application/cbor".)<a href="#section-6.1-3.20.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-3.21">Person &amp; email address to contact for further information:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-3.22">
+            <p id="section-6.1-3.22.1">CoRE WG mailing list (core@ietf.org),
+or IETF Applications and Real-Time Area (art@ietf.org)<a href="#section-6.1-3.22.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-3.23">Intended usage:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-3.24">
+            <p id="section-6.1-3.24.1">COMMON<a href="#section-6.1-3.24.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-3.25">Restrictions on usage:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-3.26">
+            <p id="section-6.1-3.26.1">none<a href="#section-6.1-3.26.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-3.27">Author/Change controller:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-3.28">
+            <p id="section-6.1-3.28.1">IETF<a href="#section-6.1-3.28.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-3.29">Provisional registration:</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-3.30">
+            <p id="section-6.1-3.30.1">no<a href="#section-6.1-3.30.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="content-format">
+<section id="section-6.2">
+        <h3 id="name-content-format">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-content-format" class="section-name selfRef">Content Format</a>
+        </h3>
+<p id="section-6.2-1">IANA has added the following Content-Formats to the
+<a href="http://www.iana.org/assignments/core-parameters#content-formats" class="relref">"CoAP Content-Formats"</a>
+sub-registry, within the "Constrained RESTful Environments (CoRE)
+Parameters" Registry <span>[<a href="#IANA.core-parameters" class="cite xref">IANA.core-parameters</a>]</span>, as follows:<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<span id="name-new-content-format"></span><table class="left" id="table-2">
+          <caption>
+<a href="#table-2" class="selfRef">Table 2</a>:
+<a href="#name-new-content-format" class="selfRef">New Content-Format</a>
+          </caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Content-Type</th>
+              <th class="text-left" rowspan="1" colspan="1">Content Coding</th>
+              <th class="text-left" rowspan="1" colspan="1">ID</th>
+              <th class="text-left" rowspan="1" colspan="1">Reference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">application/pubsub+cbor</td>
+              <td class="text-left" rowspan="1" colspan="1">-</td>
+              <td class="text-left" rowspan="1" colspan="1">TBD9</td>
+              <td class="text-left" rowspan="1" colspan="1">RFC XXXX</td>
+            </tr>
+          </tbody>
+        </table>
+<p id="section-6.2-3">TBD9 is to be assigned from the space 256..999.<a href="#section-6.2-3" class="pilcrow">¶</a></p>
+<p id="section-6.2-4">In the registry the column "Content-Type" is called "Media type" and the
+column "Content Coding" is called "Encoding". <span class="cref" id="remove">This paragraph to be removed by RFC editor.</span><a href="#section-6.2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="iana-coap-pubsub-parameters">
+<section id="section-6.3">
+        <h3 id="name-coap-pubsub-parameters-3">
+<a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-coap-pubsub-parameters-3" class="section-name selfRef">CoAP Pubsub Parameters</a>
+        </h3>
+<p id="section-6.3-1">IANA is asked to register the following entries in the subregistry of the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.3-2">The registry is initially populated with the entries in <a href="#fig-CoAP-Pubsub-Parameters" class="auto internal xref">Figure 5</a> of <a href="#pubsub-parameters" class="auto internal xref">Section 4</a>.<a href="#section-6.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-rt">
-<section id="section-5.2">
+<section id="section-6.4">
         <h3 id="name-resource-types">
-<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-resource-types" class="section-name selfRef">Resource Types</a>
+<a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-resource-types" class="section-name selfRef">Resource Types</a>
         </h3>
-<p id="section-5.2-1">IANA is asked to enter the following values in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-5.2-2">
+<p id="section-6.4-1">IANA is asked to enter the following values in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.4-2">
 <pre>
 Value: core.ps
 Description: Publish-Subscribe Broker
@@ -2649,33 +2556,41 @@ Description: Topic-configuration resource of a Publish-Subscribe Broker
 Reference: [RFC-XXXX]
 
 Value: core.ps.data
-Description: Topic-data resource of a Publish-Subscribe Broker
+Description: Topic-data resource of a broker
 Reference: [RFC-XXXX]
-</pre><a href="#section-5.2-2" class="pilcrow">¶</a>
+</pre><a href="#section-6.4-2" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
 </section>
 </div>
 <div id="acknowledgements">
-<section id="section-6">
+<section id="section-7">
       <h2 id="name-acknowledgements">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
+<a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
       </h2>
-<p id="section-6-1">The current version of this document contains a substantial contribution by Klaus Hartke's proposal <span>[<a href="#I-D.hartke-t2trg-coral-pubsub" class="cite xref">I-D.hartke-t2trg-coral-pubsub</a>]</span>, which defines the topic resource model and structure as well as the topic lifecycle and interactions. It also follows a similar architectural design as that provided by Marco Tiloca's <span>[<a href="#I-D.ietf-ace-oscore-gm-admin" class="cite xref">I-D.ietf-ace-oscore-gm-admin</a>]</span>.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<p id="section-6-2">The authors would like to also thank Carsten Bormann, Hannes Tschofenig, Zach Shelby, Mohit Sethi, Peter van der Stok, Tim Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen, and Olaf Bergmann for their valuable contributions and reviews.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-7-1">The current version of this document contains a substantial contribution by Klaus Hartke's proposal <span>[<a href="#I-D.hartke-t2trg-coral-pubsub" class="cite xref">I-D.hartke-t2trg-coral-pubsub</a>]</span>, which defines the topic resource model and structure as well as the topic lifecycle and interactions. It also follows a similar architectural design as that provided by Marco Tiloca's <span>[<a href="#I-D.ietf-ace-oscore-gm-admin" class="cite xref">I-D.ietf-ace-oscore-gm-admin</a>]</span>.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">The authors would like to also thank Carsten Bormann, Hannes Tschofenig, Zach Shelby, Mohit Sethi, Peter van der Stok, Tim Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen, Olaf Bergmann and Oscar Novo for their valuable contributions and reviews.<a href="#section-7-2" class="pilcrow">¶</a></p>
 </section>
 </div>
-<section id="section-7">
+<section id="section-8">
       <h2 id="name-references">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
-<section id="section-7.1">
+<section id="section-8.1">
         <h3 id="name-normative-references">
-<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
+<dt id="IANA.core-parameters">[IANA.core-parameters]</dt>
+        <dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"Constrained RESTful Environments (CoRE) Parameters"</span>, <span>&lt;<a href="http://www.iana.org/assignments/core-parameters">http://www.iana.org/assignments/core-parameters</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="IANA.media-types">[IANA.media-types]</dt>
+        <dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"Media Types"</span>, <span>&lt;<a href="http://www.iana.org/assignments/media-types">http://www.iana.org/assignments/media-types</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
@@ -2704,22 +2619,30 @@ Reference: [RFC-XXXX]
         <dd>
 <span class="refAuthor">Keranen, A.</span>, <span class="refTitle">""Too Many Requests" Response Code for the Constrained Application Protocol"</span>, <span class="seriesInfo">RFC 8516</span>, <span class="seriesInfo">DOI 10.17487/RFC8516</span>, <time datetime="2019-01" class="refDate">January 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8516">https://www.rfc-editor.org/rfc/rfc8516</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC9167">[RFC9167]</dt>
+<dt id="RFC8613">[RFC8613]</dt>
+        <dd>
+<span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Mattsson, J.</span>, <span class="refAuthor">Palombini, F.</span>, and <span class="refAuthor">L. Seitz</span>, <span class="refTitle">"Object Security for Constrained RESTful Environments (OSCORE)"</span>, <span class="seriesInfo">RFC 8613</span>, <span class="seriesInfo">DOI 10.17487/RFC8613</span>, <time datetime="2019-07" class="refDate">July 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8613">https://www.rfc-editor.org/rfc/rfc8613</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9176">[RFC9176]</dt>
       <dd>
-<span class="refAuthor">Sattler, T.</span>, <span class="refAuthor">Carney, R.</span>, and <span class="refAuthor">J. Kolker</span>, <span class="refTitle">"Registry Maintenance Notification for the Extensible Provisioning Protocol (EPP)"</span>, <span class="seriesInfo">RFC 9167</span>, <span class="seriesInfo">DOI 10.17487/RFC9167</span>, <time datetime="2021-12" class="refDate">December 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9167">https://www.rfc-editor.org/rfc/rfc9167</a>&gt;</span>. </dd>
+<span class="refAuthor">Amsüss, C., Ed.</span>, <span class="refAuthor">Shelby, Z.</span>, <span class="refAuthor">Koster, M.</span>, <span class="refAuthor">Bormann, C.</span>, and <span class="refAuthor">P. van der Stok</span>, <span class="refTitle">"Constrained RESTful Environments (CoRE) Resource Directory"</span>, <span class="seriesInfo">RFC 9176</span>, <span class="seriesInfo">DOI 10.17487/RFC9176</span>, <time datetime="2022-04" class="refDate">April 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9176">https://www.rfc-editor.org/rfc/rfc9176</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
 </div>
 <div id="sec-informative-references">
-<section id="section-7.2">
+<section id="section-8.2">
         <h3 id="name-informative-references">
-<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
 <dt id="I-D.hartke-t2trg-coral-pubsub">[I-D.hartke-t2trg-coral-pubsub]</dt>
         <dd>
 <span class="refAuthor">Hartke, K.</span>, <span class="refTitle">"Publish/Subscribe over the Constrained Application Protocol (CoAP) using the Constrained RESTful Application Language (CoRAL)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-hartke-t2trg-coral-pubsub-01</span>, <time datetime="2020-05-09" class="refDate">9 May 2020</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-hartke-t2trg-coral-pubsub-01">https://datatracker.ietf.org/doc/html/draft-hartke-t2trg-coral-pubsub-01</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-ace-key-groupcomm">[I-D.ietf-ace-key-groupcomm]</dt>
+        <dd>
+<span class="refAuthor">Palombini, F.</span> and <span class="refAuthor">M. Tiloca</span>, <span class="refTitle">"Key Provisioning for Group Communication using ACE"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-key-groupcomm-17</span>, <time datetime="2023-10-06" class="refDate">6 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-17">https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-17</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-ace-oscore-gm-admin">[I-D.ietf-ace-oscore-gm-admin]</dt>
         <dd>
@@ -2737,8 +2660,24 @@ Reference: [RFC-XXXX]
 </section>
 </div>
 </section>
-<div id="authors-addresses">
+<div id="contributors">
 <section id="appendix-A">
+      <h2 id="name-contributors">
+<a href="#name-contributors" class="section-name selfRef">Contributors</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Marco Tiloca</span></div>
+<div dir="auto" class="left"><span class="org">RISE AB</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:marco.tiloca@ri.se" class="email">marco.tiloca@ri.se</a>
+</div>
+</address>
+<p id="appendix-A-1">Marco provided thorough reviews and guidance on the last versions of this document.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-B">
       <h2 id="name-authors-addresses">
 <a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
       </h2>
