@@ -47,12 +47,14 @@ normative:
   RFC7252:
   RFC8516:
   RFC9176:
+  RFC8613:
   RFC7641:
 informative:
   RFC8288:
   I-D.hartke-t2trg-coral-pubsub:
   I-D.ietf-ace-oscore-gm-admin:
   I-D.ietf-ace-pubsub-profile:
+  I-D.ietf-ace-key-groupcomm:
 
 entity:
   SELF: "[RFC-XXXX]"
@@ -561,6 +563,12 @@ Example:
    }
 ~~~~
 
+Note that when a topic configuration changes, it may result in disruptions for the subscribers. Some potential issues that may arise include:
+
+* Limiting the number of subscribers will cause to cancel ongoing subscriptions until max-subscribers has been reached.
+* Changing the topic-data value will cancel all ongoing subscriptions.
+* Changing of the expiration-date may cause to cancel ongoing subscriptions if the topic expires at an earlier data.
+
 ### Deleting a topic-configuration {#topic-delete}
 
 A client can delete a topic by making a CoAP DELETE request on the topic resource URI.
@@ -578,6 +586,7 @@ Example:
 
 <= 2.02 Deleted
 ~~~~
+
 
 # Publish and Subscribe {#pubsub}
 
@@ -885,51 +894,19 @@ Note that the media type application/core-pubsub+cbor MUST be used when these pa
 
 # Security Considerations
 
-<!-- TODO REDO EVERYTHING HERE-->
+The security considerations described in CoAP {{RFC7252}}, Web Linking {{RFC8288}} and CoRE Resource Directory {{RFC9176}} apply. The resource used to discover the broker at /.well-known/core MAY be protected, e.g., using DTLS as described in {{RFC7252}}.
 
-The same security considerations from RFC 7252 and RFC 7641 apply, and are complemented by the following ones. The security considerations discussed in this document cover various aspects related to the publish-subscribe architecture and the management of topics, administrators, and the change of topic-configuration.
+Every operation performed by a client endpoint on a broker SHOULD be mutually authenticated using a pre-shared key, a raw public key, or certificate-based security. This can be implemented with the existing DTLS, TLS or OSCORE mechanisms.
 
-## Change of Topic-Configuration
+Access control SHOULD be performed for the topic discovery, topic collection, topi configuration and topic data paths, as different endpoints may be authorized to discover topics, create them, modify them, etc. Therefore access control SHOULD be as fine-grained as possible. Otherwise malicious publishers could subscribe to data they are not authorized to access or publish on a topic-data resource continuously to mount a denial of service attack against the broker.
 
-When a topic configuration changes, it may result in disruptions for the subscribers. Some potential issues that may arise include:
+To ensure end-to-end authentication between clients acting as publishers and those acting as subscribers, it is recommended to utilize application layer security, such as that offered by OSCORE {{RFC8613}}. For example, if we consider a scenario where a broker mediates between a sensor device (publisher) and a cloud-based client application (subscriber). Although running separate DTLS sessions from the client device to the broker, and from the broker to the client application, ensures path confidentiality, it does not guarantee the source of data. The client device cannot confirm if the messages from the broker are genuinely from the client application, and similarly, a client application cannot verify if the data originated from the client device. In situations where end-to-end security is crucial, the use of application layer security becomes indispensable.
 
-* Limiting the number of subscribers will cause to cancel ongoing subscriptions until max-subscribers has been reached.
-* Changing the topic-data value will cancel all ongoing subscriptions.
-* Changing of the expiration-date may cause to cancel ongoing subscriptions if the topic expires at an earlier data.
+When deploying the publish subscribe architecture it is important to ensure authentication, authorization, and key distribution operations, for this reason it is recommended to follow the guidelines described in the ACE profile {{I-D.ietf-ace-pubsub-profile}} which is designed to enable secure group communication for the architecture defined in this document "{{&SELF}}" (See {{fig-arch}}).
 
-To address these potential issues, it is vital to have an administration process in place for topic configurations, including monitoring, validation, and enforcement of security policies and procedures.
-
-It is also recommended for subscribers to subscribe to the topic-configuration resource in order to receive notifications of topic parameter changes.
-
-## Topic Administrators
-
-In a publish-subscribe architecture, it is essential to ensure that topic administrators are trustworthy and authorized to perform their duties. This includes the ability to create, modify, and delete topics, enforce proper access control policies, and handle potential security issues arising from topic management.
-
-The draft {{I-D.ietf-ace-pubsub-profile}} defines an application profile of the Authentication and Authorization for Constrained Environments (ACE) framework. The profile is designed to enable secure group communication for the architecture defined in this document "{{&SELF}}" (See {{fig-arch}}).
-
-The profile relies on protocol-specific transport profiles of ACE for communication security, server authentication, and proof-of-possession for a key that is owned by the Client and bound to an OAuth 2.0 Access Token.
-
-The document outlines the provisioning and enforcement of authorization information for Clients to act as Publishers and/or Subscribers. Additionally, it specifies the provisioning of keying material and security parameters that Clients use to protect their communications end-to-end through the Broker.
-
-## Caching and Freshness
-
-<!--
-TODO fix
--->
-
-A broker could become overloaded if it always had to provide the most recent cached resource representation of a topic-data to a subscriber. On deployments with a large number of clients and with many topic resources this would represent a big burden on the broker.
-
-For this reason is it recommended to consider changing the default Max-Age Option, which has a value of 60 in CoAP, in order to cater to different deployment scenarios.
-
-For example, the broker could choose not to cache anything, therefore it SHOULD explicitly include a Max-Age Option with a value of zero seconds. For more information about caching and freshness in CoAP, please check {{!RFC7641}} and {{!RFC7252}}.
+While this document does not specify how credentials are to be provisioned the profile on {{I-D.ietf-ace-pubsub-profile}} and the draft {{I-D.ietf-ace-key-groupcomm}} can provide guidance in that respect.
 
 # IANA Considerations {#iana}
-
-<!-- TBD: This section is structured similarly as:
-https://www.ietf.org/archive/id/draft-ietf-ace-oscore-gm-admin-07.html#name-resource-types
-https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.1
-https://www.ietf.org/archive/id/draft-ietf-ace-key-groupcomm-16.html#section-11.2
--->
 
 This document has the following actions for IANA.
 
