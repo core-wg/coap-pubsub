@@ -106,8 +106,10 @@ Table of Contents
    4.  CoAP Pubsub Parameters
    5.  Security Considerations
    6.  IANA Considerations
-     6.1.  CoAP Pubsub Parameters
-     6.2.  Resource Types
+     6.1.  Media Type
+     6.2.  Content Format
+     6.3.  CoAP Pubsub Parameters
+     6.4.  Resource Types
    Acknowledgements
    References
      Normative References
@@ -473,8 +475,8 @@ Table of Contents
 
    <= 2.05 Content
       Content-Format: 40 (application/link-format)
-      </ps1/h9392>;rt="core.ps.conf",
-      </other/path/2e3570>;rt=core.ps.conf
+      </ps1/h9392>;rt="core.ps.conf";ct=TBD,
+      </other/path/2e3570>;rt=core.ps.conf;ct=TBD
 
 2.3.4.  Topic-Data Discovery
 
@@ -1138,7 +1140,63 @@ Table of Contents
    Note to RFC Editor: Please replace all occurrences of "[RFC-XXXX]"
    with the RFC number of this specification and delete this paragraph.
 
-6.1.  CoAP Pubsub Parameters
+6.1.  Media Type
+
+   IANA is requested to add the following Media-Type to the "Media
+   Types" registry [IANA.media-types].
+
+   +==============+=========================+=======================+
+   | Name         | Template                | Reference             |
+   +==============+=========================+=======================+
+   | pubsub+cborr | application/pubsub+cbor | RFC XXXX, Section 6.1 |
+   +--------------+-------------------------+-----------------------+
+
+            Table 1: New Media Type application/pubsub+cbor
+
+   Type name:  application
+   Subtype name:  pubsub+cbor
+   Required parameters:  N/A
+   Optional parameters:  N/A
+   Encoding considerations:  binary (CBOR data item)
+   Security considerations:  Section 5 of RFC XXXX
+   Interoperability considerations:  none
+   Published specification:  Section 6.1 of RFC XXXX
+   Applications that use this media type:  Clients and servers in the
+      Internet of Things
+   Fragment identifier considerations:  The syntax and semantics of
+      fragment identifiers is as specified for "application/cbor".  (At
+      publication of RFC XXXX, there is no fragment identification
+      syntax defined for "application/cbor".)
+   Person & email address to contact for further information:  CoRE WG
+      mailing list (core@ietf.org), or IETF Applications and Real-Time
+      Area (art@ietf.org)
+   Intended usage:  COMMON
+   Restrictions on usage:  none
+   Author/Change controller:  IETF
+   Provisional registration:  no
+
+6.2.  Content Format
+
+   IANA has added the following Content-Formats to the "CoAP
+   Content-Formats" sub-registry, within the "Constrained RESTful
+   Environments (CoRE) Parameters" Registry [IANA.core-parameters], as
+   follows:
+
+   +=========================+================+======+===========+
+   | Content-Type            | Content Coding | ID   | Reference |
+   +=========================+================+======+===========+
+   | application/pubsub+cbor | -              | TBD9 | RFC XXXX  |
+   +-------------------------+----------------+------+-----------+
+
+                     Table 2: New Content-Format
+
+   TBD9 is to be assigned from the space 256..999.
+
+   In the registry the column "Content-Type" is called "Media type" and
+   the column "Content Coding" is called "Encoding".
+   // This paragraph to be removed by RFC editor.
+
+6.3.  CoAP Pubsub Parameters
 
    IANA is asked to register the following entries in the subregistry of
    the "Constrained RESTful Environments (CoRE) Parameters" registry
@@ -1147,7 +1205,7 @@ Table of Contents
    The registry is initially populated with the entries in Figure 5 of
    Section 4.
 
-6.2.  Resource Types
+6.4.  Resource Types
 
    IANA is asked to enter the following values in the "Resource Type
    (rt=) Link Target Attribute Values" registry within the "Constrained
@@ -1186,6 +1244,15 @@ Acknowledgements
 References
 
 Normative References
+
+   [IANA.core-parameters]
+              IANA, "Constrained RESTful Environments (CoRE)
+              Parameters",
+              <http://www.iana.org/assignments/core-parameters>.
+
+   [IANA.media-types]
+              IANA, "Media Types",
+              <http://www.iana.org/assignments/media-types>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
