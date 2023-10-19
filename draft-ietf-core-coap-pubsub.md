@@ -975,7 +975,7 @@ Provisional registration:
 IANA has added the following Content-Formats to the
 {{content-formats ("CoAP Content-Formats")<IANA.core-parameters}}
 sub-registry, within the "Constrained RESTful Environments (CoRE)
-Parameters" Registry {{IANA.core-parameters}}, as follows:
+Parameters" Registry {{!IANA.core-parameters}}, as follows:
 
 | Content-Type                | Content Coding | ID   | Reference |
 | application/pubsub+cbor     | -              | TBD9 | RFC XXXX  |
