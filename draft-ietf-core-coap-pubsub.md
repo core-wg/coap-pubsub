@@ -918,7 +918,7 @@ IANA is requested to add the following Media-Type to the "Media Types"
 registry {{!IANA.media-types}}.
 
 | Name                         | Template                                 | Reference              |
-| pubsub+cborr | application/pubsub+cbor | RFC XXXX, {{media-type}} |
+| pubsub+cbor | application/pubsub+cbor | RFC XXXX, {{media-type}} |
 {: #new-media-type align="left" title="New Media Type application/pubsub+cbor"}
 
 {:compact}
