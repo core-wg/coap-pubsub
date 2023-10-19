@@ -985,6 +985,7 @@ TBD9 is to be assigned from the space 256..999.
 
 In the registry the column "Content-Type" is called "Media type" and the
 column "Content Coding" is called "Encoding". [^remove]
+
 [^remove]: This paragraph to be removed by RFC editor.
 
 ## CoAP Pubsub Parameters ## {#iana-coap-pubsub-parameters}
