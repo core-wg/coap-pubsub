@@ -908,11 +908,6 @@ While this document does not specify how credentials are to be provisioned the p
 
 # IANA Considerations {#iana}
 
-[^to-be-removed]
-
-[^to-be-removed]: RFC Editor: please replace RFC XXXX with the RFC
-    number of this RFC and remove this note.
-
 This document has the following actions for IANA.
 
 Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with the RFC number of this specification and delete this paragraph.
@@ -990,6 +985,7 @@ TBD9 is to be assigned from the space 256..999.
 
 In the registry the column "Content-Type" is called "Media type" and the
 column "Content Coding" is called "Encoding". [^remove]
+[^remove]: This paragraph to be removed by RFC editor.
 
 ## CoAP Pubsub Parameters ## {#iana-coap-pubsub-parameters}
 
