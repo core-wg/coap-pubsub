@@ -1111,9 +1111,9 @@ Table of Contents
    mediates between a sensor device (publisher) and a cloud-based client
    application (subscriber).  Although running separate DTLS sessions
    from the client device to the broker, and from the broker to the
-   client application, ensures path confidentiality, it does not
-   guarantee the source of data.  The client device cannot confirm if
-   the messages from the broker are genuinely from the client
+   client application would ensure path confidentiality, it would not
+   guarantee security for the data source.  The client device cannot
+   confirm if the messages from the broker are genuinely from the client
    application, and similarly, a client application cannot verify if the
    data originated from the client device.  In situations where end-to-
    end security is crucial, the use of application layer security
