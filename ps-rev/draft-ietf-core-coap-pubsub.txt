@@ -5,10 +5,10 @@
 Internet Engineering Task Force                               J. Jimenez
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                               M. Koster
-Expires: 21 April 2024                                     Dogtiger Labs
+Expires: 22 April 2024                                     Dogtiger Labs
                                                               A. Keranen
                                                                 Ericsson
-                                                         19 October 2023
+                                                         20 October 2023
 
 
     A publish-subscribe architecture for the Constrained Application
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 April 2024.
+   This Internet-Draft will expire on 22 April 2024.
 
 Copyright Notice
 
@@ -1088,50 +1088,52 @@ Table of Contents
 
 5.  Security Considerations
 
-   The security considerations described in CoAP [RFC7252], Web Linking
-   [RFC8288] and CoRE Resource Directory [RFC9176] apply.  The resource
-   used to discover the broker at /.well-known/core MAY be protected,
-   e.g., using DTLS as described in [RFC7252].
+   The architecture presented in this document inherits the security
+   considerations from CoAP [RFC7252] and Observe [RFC7641], as well as
+   from Web Linking [RFC8288], Link-Format [RFC6690], and the CoRE
+   Resource Directory [RFC9176].
 
-   Every operation performed by a client endpoint on a broker SHOULD be
-   mutually authenticated using a pre-shared key, a raw public key, or
-   certificate-based security.  This can be implemented with the
-   existing DTLS, TLS or OSCORE mechanisms.
+   Communications between each client and the broker MUST be secured,
+   e.g., by using OSCORE [RFC8613] or DTLS [RFC9147].  Security
+   considerations for the used secure communication protocols apply too.
 
-   Access control SHOULD be performed for the topic discovery, topic
-   collection, topi configuration and topic data paths, as different
-   endpoints may be authorized to discover topics, create them, modify
-   them, etc.  Therefore access control SHOULD be as fine-grained as
-   possible.  Otherwise malicious publishers could subscribe to data
-   they are not authorized to access or publish on a topic-data resource
-   continuously to mount a denial of service attack against the broker.
+   The content published on a topic by a publisher client SHOULD be
+   protected end-to-end between the publisher and all the subscribers to
+   that topic.  In such a case, it MUST be possible to assert source
+   authentication of the published data.  This can be achieved at the
+   application layer, e.g., by using COSE [RFC9052], [RFC9053],
+   [RFC9338].
 
-   To ensure end-to-end authentication between clients acting as
-   publishers and those acting as subscribers, it is recommended to
-   utilize application layer security, such as that offered by OSCORE
-   [RFC8613].  For example, if we consider a scenario where a broker
-   mediates between a sensor device (publisher) and a cloud-based client
-   application (subscriber).  Although running separate DTLS sessions
-   from the client device to the broker, and from the broker to the
-   client application would ensure path confidentiality, it would not
-   guarantee security for the data source.  The client device cannot
-   confirm if the messages from the broker are genuinely from the client
-   application, and similarly, a client application cannot verify if the
-   data originated from the client device.  In situations where end-to-
-   end security is crucial, the use of application layer security
-   becomes indispensable.
+   Access control of clients at the broker MAY be enforced for
+   performing discovery operation, and SHOULD be enforced in a fine-
+   grained fashion for operations related to the the creation, update,
+   and deletion of topic resources, as well as for operations on topic-
+   data resources such as publication on and subscription to topics.
+   This prevents rogue clients to, among other things, repeatedly create
+   topics at the broker or publish (large) contents, which may result in
+   Denial of Service against the broker and the active subscribers.
 
-   When deploying the publish subscribe architecture it is important to
-   ensure authentication, authorization, and key distribution
-   operations, for this reason it is recommended to follow the
-   guidelines described in the ACE profile [I-D.ietf-ace-pubsub-profile]
-   which is designed to enable secure group communication for the
-   architecture defined in this document "[RFC-XXXX]" (See Figure 1).
+   Building on [I-D.ietf-ace-key-groupcomm], its application profile for
+   publish-subscribe communication with CoAP
+   [I-D.ietf-ace-pubsub-profile] provides a security model that can be
+   used in the architecture presented in this document, in order to
+   enable secure communication between the different parties as well as
+   secure, authorized operations of publishers and subscribers that
+   fulfill the requirements above.
 
-   While this document does not specify how credentials are to be
-   provisioned the profile on [I-D.ietf-ace-pubsub-profile] and the
-   draft [I-D.ietf-ace-key-groupcomm] can provide guidance in that
-   respect.
+   In particular, the application profile above relies on the ACE
+   framework for Authentication and Authorization in Constrained
+   Environments (ACE) [RFC9200] and defines a method to: authorize
+   publishers and subscribers to perform operations at the broker, with
+   fine-grained access control; authorize publishers and subscribers to
+   obtain the keying material required to take part to a topic managed
+   by the broker; protect published data end-to-end between its
+   publisher and all the subscribers to the targeted topic, ensuring
+   confidentiality, integrity, and source authentication of the
+   published content end-to-end.  That approach can be extended to
+   enforce authorization and fine-grained access control for
+   administrator clients that are intended to create, update, and delete
+   topic configurations at the broker.
 
 6.  IANA Considerations
 
@@ -1362,6 +1364,31 @@ Informative References
               DOI 10.17487/RFC8288, October 2017,
               <https://www.rfc-editor.org/rfc/rfc8288>.
 
+   [RFC9052]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
+              Structures and Process", STD 96, RFC 9052,
+              DOI 10.17487/RFC9052, August 2022,
+              <https://www.rfc-editor.org/rfc/rfc9052>.
+
+   [RFC9053]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
+              Initial Algorithms", RFC 9053, DOI 10.17487/RFC9053,
+              August 2022, <https://www.rfc-editor.org/rfc/rfc9053>.
+
+   [RFC9147]  Rescorla, E., Tschofenig, H., and N. Modadugu, "The
+              Datagram Transport Layer Security (DTLS) Protocol Version
+              1.3", RFC 9147, DOI 10.17487/RFC9147, April 2022,
+              <https://www.rfc-editor.org/rfc/rfc9147>.
+
+   [RFC9200]  Seitz, L., Selander, G., Wahlstroem, E., Erdtman, S., and
+              H. Tschofenig, "Authentication and Authorization for
+              Constrained Environments Using the OAuth 2.0 Framework
+              (ACE-OAuth)", RFC 9200, DOI 10.17487/RFC9200, August 2022,
+              <https://www.rfc-editor.org/rfc/rfc9200>.
+
+   [RFC9338]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
+              Countersignatures", STD 96, RFC 9338,
+              DOI 10.17487/RFC9338, December 2022,
+              <https://www.rfc-editor.org/rfc/rfc9338>.
+
 Contributors
 
    Marco Tiloca
@@ -1369,8 +1396,10 @@ Contributors
    Email: marco.tiloca@ri.se
 
 
-   Marco provided very thorough reviews and guidance on the last
-   versions of this document.
+   Marco offered comprehensive reviews and insightful guidance on the
+   recent iterations of this document.  His contributions were
+   particularly notable in the Security Considerations section, among
+   others.
 
 Authors' Addresses
 
