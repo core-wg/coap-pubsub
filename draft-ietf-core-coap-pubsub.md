@@ -18,17 +18,17 @@ venue:
   github: core-wg/coap-pubsub
 
 author:
-- 
+-
   ins: J. Jimenez
   name: Jaime Jimenez
   org: Ericsson
   email: jaime@iki.fi
-- 
+-
   ins: M. Koster
   name: Michael Koster
   org: Dogtiger Labs
   email: michaeljohnkoster@gmail.com
-- 
+-
   ins: A. Keranen
   name: Ari Keranen
   org: Ericsson
