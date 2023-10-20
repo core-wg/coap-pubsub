@@ -52,6 +52,11 @@ normative:
 informative:
   RFC8288:
   RFC8126:
+  RFC9052:
+  RFC9147:
+  RFC9053:
+  RFC9200:
+  RFC9338:
   I-D.hartke-t2trg-coral-pubsub:
   I-D.ietf-ace-oscore-gm-admin:
   I-D.ietf-ace-pubsub-profile:
