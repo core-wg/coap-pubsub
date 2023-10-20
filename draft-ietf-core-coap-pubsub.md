@@ -1,36 +1,35 @@
 ---
-stand_alone: true
-ipr: trust200902
+stand_alone: yes
+
+title: "A publish-subscribe architecture for the Constrained Application Protocol (CoAP)"
 docname: draft-ietf-core-coap-pubsub-latest
-title: A publish-subscribe architecture for the Constrained Application Protocol (CoAP)
-area: Applications and Real-Time Area (art)
-wg: Internet Engineering Task Force
-kw: CoRE
-cat: std
-consensus: true
+category: std
+
+ipr: trust200902
+area: Applications
+workgroup: CoRE Working Group
 submissiontype: IETF
-pi:
-  strict: 'yes'
-  toc: 'yes'
-  tocdepth: '4'
-  symrefs: 'yes'
-  sortrefs: 'yes'
-  compact: 'yes'
-  subcompact: 'no'
+
+stand_alone: true
+pi: [toc, sortrefs, symrefs]
+
 venue:
   mail: core@ietf.org
   github: core-wg/coap-pubsub
 
 author:
-- ins: J. Jimenez
+- 
+  ins: J. Jimenez
   name: Jaime Jimenez
   org: Ericsson
   email: jaime@iki.fi
-- ins: M. Koster
+- 
+  ins: M. Koster
   name: Michael Koster
   org: Dogtiger Labs
   email: michaeljohnkoster@gmail.com
-- ins: A. Keranen
+- 
+  ins: A. Keranen
   name: Ari Keranen
   org: Ericsson
   email: ari.keranen@ericsson.com
@@ -49,6 +48,7 @@ normative:
   RFC9176:
   RFC8613:
   RFC7641:
+
 informative:
   RFC8288:
   RFC8126:
@@ -85,7 +85,7 @@ This document applies the idea of broker-based publish-subscribe to Constrained 
 
 ## Terminology {#terminology}
 
-{::boilerplate bcp14-tagged}
+{::boilerplate bcp14}
 
 This specification requires readers to be familiar with all the terms and
 concepts that are discussed in {{?RFC8288}} and {{!RFC6690}}. Readers
