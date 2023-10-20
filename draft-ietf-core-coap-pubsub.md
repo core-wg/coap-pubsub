@@ -39,7 +39,7 @@ contributor:
 - name: Marco Tiloca
   organization: RISE AB
   email: marco.tiloca@ri.se
-  contribution: Marco provided very thorough reviews and guidance on the last versions of this document.
+  contribution: Marco offered comprehensive reviews and insightful guidance on the recent iterations of this document. His contributions were particularly notable in the Security Considerations section, among others.
 
 normative:
   RFC6570:
@@ -895,17 +895,17 @@ Note that the media type application/core-pubsub+cbor MUST be used when these pa
 
 # Security Considerations {#seccons}
 
-The security considerations described in CoAP {{RFC7252}}, Web Linking {{RFC8288}} and CoRE Resource Directory {{RFC9176}} apply. The resource used to discover the broker at /.well-known/core MAY be protected, e.g., using DTLS as described in {{RFC7252}}.
+The architecture presented in this document inherits the security considerations from CoAP {{RFC7252}} and Observe {{RFC7641}}, as well as from Web Linking {{RFC8288}}, Link-Format {{RFC6690}}, and the CoRE Resource Directory {{RFC9176}}.
 
-Every operation performed by a client endpoint on a broker SHOULD be mutually authenticated using a pre-shared key, a raw public key, or certificate-based security. This can be implemented with the existing DTLS, TLS or OSCORE mechanisms.
+Communications between each client and the broker MUST be secured, e.g., by using OSCORE {{RFC8613}} or DTLS {{RFC9147}}. Security considerations for the used secure communication protocols apply too.
 
-Access control SHOULD be performed for the topic discovery, topic collection, topi configuration and topic data paths, as different endpoints may be authorized to discover topics, create them, modify them, etc. Therefore access control SHOULD be as fine-grained as possible. Otherwise malicious publishers could subscribe to data they are not authorized to access or publish on a topic-data resource continuously to mount a denial of service attack against the broker.
+The content published on a topic by a publisher client SHOULD be protected end-to-end between the publisher and all the subscribers to that topic. In such a case, it MUST be possible to assert source authentication of the published data. This can be achieved at the application layer, e.g., by using COSE {{RFC9052}}, {{RFC9053}}, {{RFC9338}}.
 
-To ensure end-to-end authentication between clients acting as publishers and those acting as subscribers, it is recommended to utilize application layer security, such as that offered by OSCORE {{RFC8613}}. For example, if we consider a scenario where a broker mediates between a sensor device (publisher) and a cloud-based client application (subscriber). Although running separate DTLS sessions from the client device to the broker, and from the broker to the client application would ensure path confidentiality, it would not guarantee security for the data source. The client device cannot confirm if the messages from the broker are genuinely from the client application, and similarly, a client application cannot verify if the data originated from the client device. In situations where end-to-end security is crucial, the use of application layer security becomes indispensable.
+Access control of clients at the broker MAY be enforced for performing discovery operation, and SHOULD be enforced in a fine-grained fashion for operations related to the the creation, update, and deletion of topic resources, as well as for operations on topic-data resources such as publication on and subscription to topics. This prevents rogue clients to, among other things, repeatedly create topics at the broker or publish (large) contents, which may result in Denial of Service against the broker and the active subscribers.
 
-When deploying the publish subscribe architecture it is important to ensure authentication, authorization, and key distribution operations, for this reason it is recommended to follow the guidelines described in the ACE profile {{I-D.ietf-ace-pubsub-profile}} which is designed to enable secure group communication for the architecture defined in this document "{{&SELF}}" (See {{fig-arch}}).
+Building on {{draft-ietf-ace-key-groupcomm}}, its application profile for publish-subscribe communication with CoAP {{draft-ietf-ace-pubsub-profile}} provides a security model that can be used in the architecture presented in this document, in order to enable secure communication between the different parties as well as secure, authorized operations of publishers and subscribers that fulfill the requirements above.
 
-While this document does not specify how credentials are to be provisioned the profile on {{I-D.ietf-ace-pubsub-profile}} and the draft {{I-D.ietf-ace-key-groupcomm}} can provide guidance in that respect.
+In particular, the application profile above relies on the ACE framework for Authentication and Authorization in Constrained Environments (ACE) {{RFC9200}} and defines a method to: authorize publishers and subscribers to perform operations at the broker, with fine-grained access control; authorize publishers and subscribers to obtain the keying material required to take part to a topic managed by the broker; protect published data end-to-end between its publisher and all the subscribers to the targeted topic, ensuring confidentiality, integrity, and source authentication of the published content end-to-end. That approach can be extended to enforce authorization and fine-grained access control for administrator clients that are intended to create, update, and delete topic configurations at the broker.
 
 # IANA Considerations {#iana}
 
