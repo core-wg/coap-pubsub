@@ -2,7 +2,7 @@
 
 
 
-Internet Engineering Task Force                               J. Jimenez
+CoRE Working Group                                            J. Jimenez
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                               M. Koster
 Expires: 22 April 2024                                     Dogtiger Labs
