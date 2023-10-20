@@ -39,7 +39,7 @@ contributor:
 - name: Marco Tiloca
   organization: RISE AB
   email: marco.tiloca@ri.se
-  contribution: Marco provided thorough reviews and guidance on the last versions of this document.
+  contribution: Marco offered comprehensive reviews and insightful guidance on the recent iterations of this document. His contributions were particularly notable in the Security Considerations section, among others.
 
 normative:
   RFC6570:
@@ -51,6 +51,12 @@ normative:
   RFC7641:
 informative:
   RFC8288:
+  RFC8126:
+  RFC9052:
+  RFC9147:
+  RFC9053:
+  RFC9200:
+  RFC9338:
   I-D.hartke-t2trg-coral-pubsub:
   I-D.ietf-ace-oscore-gm-admin:
   I-D.ietf-ace-pubsub-profile:
@@ -221,7 +227,7 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 * 'resource-type': A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value should be "core.ps.conf".
 
-* 'media-type': An optional field used to indicate the media type of the topic-data resource for the topic. It encodes the media type as a this information as the integer identifier of the CoAP content format (e.g., value is "50" for "application/json").
+* 'media-type': An optional field used to indicate the media type of the topic-data resource for the topic. It encodes the media type as a this information as the integer identifier of the CoAP content-format (e.g., value is "50" for "application/json").
 
 * 'topic-type': An optional field used to indicate the attribute or property of the topic-data resource for the topic. It encodes the attribute as a CBOR text string. Example attributes include "temperature".
 
@@ -668,7 +674,7 @@ A client can publish data to a topic by submitting the data in a PUT request to 
 
 On success, the server returns a 2.04 (Updated) response. However, when data is published to the topic for the first time, the server instead MUST return a 2.01 (Created) response and set the topic in the fully-created state (see {{topic-lifecycle}}).
 
-If the request does not have an acceptable content format, the server returns a 4.15 (Unsupported Content Format) response.
+If the request does not have an acceptable content-format, the server returns a 4.15 (Unsupported Content-Format) response.
 
 If the client is sending publications too fast, the server returns a
 4.29 (Too Many Requests) response {{!RFC8516}}.
@@ -877,34 +883,34 @@ This document defines parameters used in the messages exchanged between a client
 Note that the media type application/core-pubsub+cbor MUST be used when these parameters are transported in the respective message fields.
 
 ~~~~
-+-----------------+-----------+--------------+------------+
-| Name            | CBOR Key  | CBOR Type    | Reference  |
-|-----------------|-----------|--------------|------------|
-| topic-name      | TBD1      | tstr         | [RFC-XXXX] |
-| topic-data      | TBD2      | tstr         | [RFC-XXXX] |
-| resource-type   | TBD3      | tstr         | [RFC-XXXX] |
-| media-type      | TBD4      | uint (opt)   | [RFC-XXXX] |
-| topic-type      | TBD5      | tstr (opt)   | [RFC-XXXX] |
-| expiration-date | TBD6      | tstr (opt)   | [RFC-XXXX] |
-| max-subscribers | TBD7      | uint (opt)   | [RFC-XXXX] |
-| observer-check  | TBD8      | uint (opt)   | [RFC-XXXX] |
-+-----------------+-----------+--------------+------------+
++-----------------+-----------+-----------+------------+
+| Name            | CBOR Key  | CBOR Type | Reference  |
+|-----------------|-----------|-----------|------------|
+| topic-name      | TBD1      | tstr      | [RFC-XXXX] |
+| topic-data      | TBD2      | tstr      | [RFC-XXXX] |
+| resource-type   | TBD3      | tstr      | [RFC-XXXX] |
+| media-type      | TBD4      | uint      | [RFC-XXXX] |
+| topic-type      | TBD5      | tstr      | [RFC-XXXX] |
+| expiration-date | TBD6      | tstr      | [RFC-XXXX] |
+| max-subscribers | TBD7      | uint      | [RFC-XXXX] |
+| observer-check  | TBD8      | uint      | [RFC-XXXX] |
++-----------------+-----------+-----------+------------+
 ~~~~
 {: #fig-CoAP-Pubsub-Parameters title="CoAP Pubsub Parameters" artwork-align="center"}
 
 # Security Considerations {#seccons}
 
-The security considerations described in CoAP {{RFC7252}}, Web Linking {{RFC8288}} and CoRE Resource Directory {{RFC9176}} apply. The resource used to discover the broker at /.well-known/core MAY be protected, e.g., using DTLS as described in {{RFC7252}}.
+The architecture presented in this document inherits the security considerations from CoAP {{RFC7252}} and Observe {{RFC7641}}, as well as from Web Linking {{RFC8288}}, Link-Format {{RFC6690}}, and the CoRE Resource Directory {{RFC9176}}.
 
-Every operation performed by a client endpoint on a broker SHOULD be mutually authenticated using a pre-shared key, a raw public key, or certificate-based security. This can be implemented with the existing DTLS, TLS or OSCORE mechanisms.
+Communications between each client and the broker MUST be secured, e.g., by using OSCORE {{RFC8613}} or DTLS {{RFC9147}}. Security considerations for the used secure communication protocols apply too.
 
-Access control SHOULD be performed for the topic discovery, topic collection, topi configuration and topic data paths, as different endpoints may be authorized to discover topics, create them, modify them, etc. Therefore access control SHOULD be as fine-grained as possible. Otherwise malicious publishers could subscribe to data they are not authorized to access or publish on a topic-data resource continuously to mount a denial of service attack against the broker.
+The content published on a topic by a publisher client SHOULD be protected end-to-end between the publisher and all the subscribers to that topic. In such a case, it MUST be possible to assert source authentication of the published data. This can be achieved at the application layer, e.g., by using COSE {{RFC9052}}, {{RFC9053}}, {{RFC9338}}.
 
-To ensure end-to-end authentication between clients acting as publishers and those acting as subscribers, it is recommended to utilize application layer security, such as that offered by OSCORE {{RFC8613}}. For example, if we consider a scenario where a broker mediates between a sensor device (publisher) and a cloud-based client application (subscriber). Although running separate DTLS sessions from the client device to the broker, and from the broker to the client application would ensure path confidentiality, it would not guarantee security for the data source. The client device cannot confirm if the messages from the broker are genuinely from the client application, and similarly, a client application cannot verify if the data originated from the client device. In situations where end-to-end security is crucial, the use of application layer security becomes indispensable.
+Access control of clients at the broker MAY be enforced for performing discovery operation, and SHOULD be enforced in a fine-grained fashion for operations related to the the creation, update, and deletion of topic resources, as well as for operations on topic-data resources such as publication on and subscription to topics. This prevents rogue clients to, among other things, repeatedly create topics at the broker or publish (large) contents, which may result in Denial of Service against the broker and the active subscribers.
 
-When deploying the publish subscribe architecture it is important to ensure authentication, authorization, and key distribution operations, for this reason it is recommended to follow the guidelines described in the ACE profile {{I-D.ietf-ace-pubsub-profile}} which is designed to enable secure group communication for the architecture defined in this document "{{&SELF}}" (See {{fig-arch}}).
+Building on {{I-D.ietf-ace-key-groupcomm}}, its application profile for publish-subscribe communication with CoAP {{I-D.ietf-ace-pubsub-profile}} provides a security model that can be used in the architecture presented in this document, in order to enable secure communication between the different parties as well as secure, authorized operations of publishers and subscribers that fulfill the requirements above.
 
-While this document does not specify how credentials are to be provisioned the profile on {{I-D.ietf-ace-pubsub-profile}} and the draft {{I-D.ietf-ace-key-groupcomm}} can provide guidance in that respect.
+In particular, the application profile above relies on the ACE framework for Authentication and Authorization in Constrained Environments (ACE) {{RFC9200}} and defines a method to: authorize publishers and subscribers to perform operations at the broker, with fine-grained access control; authorize publishers and subscribers to obtain the keying material required to take part to a topic managed by the broker; protect published data end-to-end between its publisher and all the subscribers to the targeted topic, ensuring confidentiality, integrity, and source authentication of the published content end-to-end. That approach can be extended to enforce authorization and fine-grained access control for administrator clients that are intended to create, update, and delete topic configurations at the broker.
 
 # IANA Considerations {#iana}
 
@@ -918,7 +924,7 @@ IANA is requested to add the following Media-Type to the "Media Types"
 registry {{!IANA.media-types}}.
 
 | Name                         | Template                                 | Reference              |
-| pubsub+cborr | application/pubsub+cbor | RFC XXXX, {{media-type}} |
+| pubsub+cbor | application/pubsub+cbor | RFC XXXX, {{media-type}} |
 {: #new-media-type align="left" title="New Media Type application/pubsub+cbor"}
 
 {:compact}
@@ -947,12 +953,10 @@ Published specification:
 : {{media-type}} of RFC XXXX
 
 Applications that use this media type:
-: Clients and servers in the Internet of Things
+:  This type is used by clients that create, retrieve, and update topic configurations at servers acting as a pub-sub broker.
 
 Fragment identifier considerations:
-: The syntax and semantics of fragment identifiers is as specified for
-  "application/cbor".  (At publication of RFC XXXX, there is no
-  fragment identification syntax defined for "application/cbor".)
+: N/A
 
 Person & email address to contact for further information:
 : CoRE WG mailing list (core@ietf.org),
@@ -970,27 +974,35 @@ Author/Change controller:
 Provisional registration:
 : no
 
-## Content Format
+## Content-Format
 
 IANA has added the following Content-Formats to the
 {{content-formats ("CoAP Content-Formats")<IANA.core-parameters}}
 sub-registry, within the "Constrained RESTful Environments (CoRE)
 Parameters" Registry {{!IANA.core-parameters}}, as follows:
 
-| Content-Type                | Content Coding | ID   | Reference |
+| Content Type                | Content Coding | ID   | Reference |
 | application/pubsub+cbor     | -              | TBD9 | RFC XXXX  |
 {: align="left" title="New Content-Format"}
 
 TBD9 is to be assigned from the space 256..999.
 
-In the registry the column "Content-Type" is called "Media type" and the
-column "Content Coding" is called "Encoding". [^remove]
-
-[^remove]: This paragraph to be removed by RFC editor.
-
-## CoAP Pubsub Parameters ## {#iana-coap-pubsub-parameters}
+## CoAP Pubsub Parameters {#iana-coap-pubsub-parameters}
 
 IANA is asked to register the following entries in the subregistry of the "Constrained RESTful Environments (CoRE) Parameters" registry group.
+
+This specification establishes the "Pubsub Topic Configuration Parameters" IANA registry within the "Constrained RESTful Environments (CoRE)
+Parameters" registry group.
+
+The columns of this registry are:
+
+* Name: This is a descriptive name that enables easier reference to the item. The name MUST be unique. It is not used in the encoding.
+
+* CBOR Key: This is the value used as CBOR key of the item. These values MUST be unique. The value can be a positive integer, a negative integer, or a text string. Different ranges of values use different registration policies {{RFC8126}}. Integer values from -256 to 255 as well as text strings of length 1 are designated as "Standards Action With Expert Review". Integer values from -65536 to -257 and from 256 to 65535, as well as text strings of length 2 are designated as "Specification Required". Integer values greater than 65535 as well as text strings of length greater than 2 are designated as "Expert Review". Integer values less than -65536 are marked as "Private Use".
+
+* CBOR Type: This contains the CBOR type of the item, or a pointer to the registry that defines its type, when that depends on another item.
+
+* Reference: This contains a pointer to the public specification for the item.
 
 The registry is initially populated with the entries in {{fig-CoAP-Pubsub-Parameters}} of {{pubsub-parameters}}.
 
