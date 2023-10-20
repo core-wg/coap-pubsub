@@ -1031,7 +1031,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Jimenez, et al.</td>
-<td class="center">Expires 21 April 2024</td>
+<td class="center">Expires 22 April 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1044,12 +1044,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-core-coap-pubsub-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-10-19" class="published">19 October 2023</time>
+<time datetime="2023-10-20" class="published">20 October 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-04-21">21 April 2024</time></dd>
+<dd class="expires"><time datetime="2024-04-22">22 April 2024</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1106,7 +1106,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 21 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 22 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1257,7 +1257,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-media-type" class="internal xref">Media Type</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-content-format" class="internal xref">Content Format</a></p>
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-content-format" class="internal xref">Content-Format</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
                 <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="auto internal xref">6.3</a>.  <a href="#name-coap-pubsub-parameters-3" class="internal xref">CoAP Pubsub Parameters</a></p>
@@ -1688,7 +1688,7 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
               <p id="section-2.2.1-2.3.1">'resource-type': A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value should be "core.ps.conf".<a href="#section-2.2.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.4">
-              <p id="section-2.2.1-2.4.1">'media-type': An optional field used to indicate the media type of the topic-data resource for the topic. It encodes the media type as a this information as the integer identifier of the CoAP content format (e.g., value is "50" for "application/json").<a href="#section-2.2.1-2.4.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.1-2.4.1">'media-type': An optional field used to indicate the media type of the topic-data resource for the topic. It encodes the media type as a this information as the integer identifier of the CoAP content-format (e.g., value is "50" for "application/json").<a href="#section-2.2.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.5">
               <p id="section-2.2.1-2.5.1">'topic-type': An optional field used to indicate the attribute or property of the topic-data resource for the topic. It encodes the attribute as a CBOR text string. Example attributes include "temperature".<a href="#section-2.2.1-2.5.1" class="pilcrow">¶</a></p>
@@ -2149,7 +2149,7 @@ representation of a list of topics in the collection (see
 <p id="section-3.2.1-1">A topic-configuration with a topic-data resource must have been created in order to publish data to it (See <a href="#topic-create" class="auto internal xref">Section 2.4.3</a>) and be in the half-created or fully-created state in order to the publish operation to work (see <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>).<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.1-2">A client can publish data to a topic by submitting the data in a PUT request to the topic-data URI as indicated in its topic resource property. Please note that the topic-data URI is not the same as the topic-configuration URI used for configuring the topic (see <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>).<a href="#section-3.2.1-2" class="pilcrow">¶</a></p>
 <p id="section-3.2.1-3">On success, the server returns a 2.04 (Updated) response. However, when data is published to the topic for the first time, the server instead <span class="bcp14">MUST</span> return a 2.01 (Created) response and set the topic in the fully-created state (see <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>).<a href="#section-3.2.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.2.1-4">If the request does not have an acceptable content format, the server returns a 4.15 (Unsupported Content Format) response.<a href="#section-3.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-4">If the request does not have an acceptable content-format, the server returns a 4.15 (Unsupported Content-Format) response.<a href="#section-3.2.1-4" class="pilcrow">¶</a></p>
 <p id="section-3.2.1-5">If the client is sending publications too fast, the server returns a
 4.29 (Too Many Requests) response <span>[<a href="#RFC8516" class="cite xref">RFC8516</a>]</span>.<a href="#section-3.2.1-5" class="pilcrow">¶</a></p>
 <p id="section-3.2.1-6">Example of first publication:<a href="#section-3.2.1-6" class="pilcrow">¶</a></p>
@@ -2338,18 +2338,18 @@ representation of a list of topics in the collection (see
 <figure id="figure-5">
         <div class="alignCenter art-text artwork" id="section-4-3.1">
 <pre>
-+-----------------+-----------+--------------+------------+
-| Name            | CBOR Key  | CBOR Type    | Reference  |
-|-----------------|-----------|--------------|------------|
-| topic-name      | TBD1      | tstr         | [RFC-XXXX] |
-| topic-data      | TBD2      | tstr         | [RFC-XXXX] |
-| resource-type   | TBD3      | tstr         | [RFC-XXXX] |
-| media-type      | TBD4      | uint (opt)   | [RFC-XXXX] |
-| topic-type      | TBD5      | tstr (opt)   | [RFC-XXXX] |
-| expiration-date | TBD6      | tstr (opt)   | [RFC-XXXX] |
-| max-subscribers | TBD7      | uint (opt)   | [RFC-XXXX] |
-| observer-check  | TBD8      | uint (opt)   | [RFC-XXXX] |
-+-----------------+-----------+--------------+------------+
++-----------------+-----------+-----------+------------+
+| Name            | CBOR Key  | CBOR Type | Reference  |
+|-----------------|-----------|-----------|------------|
+| topic-name      | TBD1      | tstr      | [RFC-XXXX] |
+| topic-data      | TBD2      | tstr      | [RFC-XXXX] |
+| resource-type   | TBD3      | tstr      | [RFC-XXXX] |
+| media-type      | TBD4      | uint      | [RFC-XXXX] |
+| topic-type      | TBD5      | tstr      | [RFC-XXXX] |
+| expiration-date | TBD6      | tstr      | [RFC-XXXX] |
+| max-subscribers | TBD7      | uint      | [RFC-XXXX] |
+| observer-check  | TBD8      | uint      | [RFC-XXXX] |
++-----------------+-----------+-----------+------------+
 </pre>
 </div>
 <figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
@@ -2363,12 +2363,12 @@ representation of a list of topics in the collection (see
       <h2 id="name-security-considerations">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-5-1">The security considerations described in CoAP <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>, Web Linking <span>[<a href="#RFC8288" class="cite xref">RFC8288</a>]</span> and CoRE Resource Directory <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span> apply. The resource used to discover the broker at /.well-known/core <span class="bcp14">MAY</span> be protected, e.g., using DTLS as described in <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2">Every operation performed by a client endpoint on a broker <span class="bcp14">SHOULD</span> be mutually authenticated using a pre-shared key, a raw public key, or certificate-based security. This can be implemented with the existing DTLS, TLS or OSCORE mechanisms.<a href="#section-5-2" class="pilcrow">¶</a></p>
-<p id="section-5-3">Access control <span class="bcp14">SHOULD</span> be performed for the topic discovery, topic collection, topi configuration and topic data paths, as different endpoints may be authorized to discover topics, create them, modify them, etc. Therefore access control <span class="bcp14">SHOULD</span> be as fine-grained as possible. Otherwise malicious publishers could subscribe to data they are not authorized to access or publish on a topic-data resource continuously to mount a denial of service attack against the broker.<a href="#section-5-3" class="pilcrow">¶</a></p>
-<p id="section-5-4">To ensure end-to-end authentication between clients acting as publishers and those acting as subscribers, it is recommended to utilize application layer security, such as that offered by OSCORE <span>[<a href="#RFC8613" class="cite xref">RFC8613</a>]</span>. For example, if we consider a scenario where a broker mediates between a sensor device (publisher) and a cloud-based client application (subscriber). Although running separate DTLS sessions from the client device to the broker, and from the broker to the client application would ensure path confidentiality, it would not guarantee security for the data source. The client device cannot confirm if the messages from the broker are genuinely from the client application, and similarly, a client application cannot verify if the data originated from the client device. In situations where end-to-end security is crucial, the use of application layer security becomes indispensable.<a href="#section-5-4" class="pilcrow">¶</a></p>
-<p id="section-5-5">When deploying the publish subscribe architecture it is important to ensure authentication, authorization, and key distribution operations, for this reason it is recommended to follow the guidelines described in the ACE profile <span>[<a href="#I-D.ietf-ace-pubsub-profile" class="cite xref">I-D.ietf-ace-pubsub-profile</a>]</span> which is designed to enable secure group communication for the architecture defined in this document "[RFC-XXXX]" (See <a href="#fig-arch" class="auto internal xref">Figure 1</a>).<a href="#section-5-5" class="pilcrow">¶</a></p>
-<p id="section-5-6">While this document does not specify how credentials are to be provisioned the profile on <span>[<a href="#I-D.ietf-ace-pubsub-profile" class="cite xref">I-D.ietf-ace-pubsub-profile</a>]</span> and the draft <span>[<a href="#I-D.ietf-ace-key-groupcomm" class="cite xref">I-D.ietf-ace-key-groupcomm</a>]</span> can provide guidance in that respect.<a href="#section-5-6" class="pilcrow">¶</a></p>
+<p id="section-5-1">The architecture presented in this document inherits the security considerations from CoAP <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span> and Observe <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, as well as from Web Linking <span>[<a href="#RFC8288" class="cite xref">RFC8288</a>]</span>, Link-Format <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>, and the CoRE Resource Directory <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span>.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">Communications between each client and the broker <span class="bcp14">MUST</span> be secured, e.g., by using OSCORE <span>[<a href="#RFC8613" class="cite xref">RFC8613</a>]</span> or DTLS <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>. Security considerations for the used secure communication protocols apply too.<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-3">The content published on a topic by a publisher client <span class="bcp14">SHOULD</span> be protected end-to-end between the publisher and all the subscribers to that topic. In such a case, it <span class="bcp14">MUST</span> be possible to assert source authentication of the published data. This can be achieved at the application layer, e.g., by using COSE <span>[<a href="#RFC9052" class="cite xref">RFC9052</a>]</span>, <span>[<a href="#RFC9053" class="cite xref">RFC9053</a>]</span>, <span>[<a href="#RFC9338" class="cite xref">RFC9338</a>]</span>.<a href="#section-5-3" class="pilcrow">¶</a></p>
+<p id="section-5-4">Access control of clients at the broker <span class="bcp14">MAY</span> be enforced for performing discovery operation, and <span class="bcp14">SHOULD</span> be enforced in a fine-grained fashion for operations related to the the creation, update, and deletion of topic resources, as well as for operations on topic-data resources such as publication on and subscription to topics. This prevents rogue clients to, among other things, repeatedly create topics at the broker or publish (large) contents, which may result in Denial of Service against the broker and the active subscribers.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-5">Building on <span>[<a href="#I-D.ietf-ace-key-groupcomm" class="cite xref">I-D.ietf-ace-key-groupcomm</a>]</span>, its application profile for publish-subscribe communication with CoAP <span>[<a href="#I-D.ietf-ace-pubsub-profile" class="cite xref">I-D.ietf-ace-pubsub-profile</a>]</span> provides a security model that can be used in the architecture presented in this document, in order to enable secure communication between the different parties as well as secure, authorized operations of publishers and subscribers that fulfill the requirements above.<a href="#section-5-5" class="pilcrow">¶</a></p>
+<p id="section-5-6">In particular, the application profile above relies on the ACE framework for Authentication and Authorization in Constrained Environments (ACE) <span>[<a href="#RFC9200" class="cite xref">RFC9200</a>]</span> and defines a method to: authorize publishers and subscribers to perform operations at the broker, with fine-grained access control; authorize publishers and subscribers to obtain the keying material required to take part to a topic managed by the broker; protect published data end-to-end between its publisher and all the subscribers to the targeted topic, ensuring confidentiality, integrity, and source authentication of the published content end-to-end. That approach can be extended to enforce authorization and fine-grained access control for administrator clients that are intended to create, update, and delete topic configurations at the broker.<a href="#section-5-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana">
@@ -2400,7 +2400,7 @@ registry <span>[<a href="#IANA.media-types" class="cite xref">IANA.media-types</
           </thead>
           <tbody>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">pubsub+cborr</td>
+              <td class="text-left" rowspan="1" colspan="1">pubsub+cbor</td>
               <td class="text-left" rowspan="1" colspan="1">application/pubsub+cbor</td>
               <td class="text-left" rowspan="1" colspan="1">RFC XXXX, <a href="#media-type" class="auto internal xref">Section 6.1</a>
 </td>
@@ -2451,14 +2451,12 @@ registry <span>[<a href="#IANA.media-types" class="cite xref">IANA.media-types</
           <dd class="break"></dd>
 <dt id="section-6.1-3.17">Applications that use this media type:</dt>
           <dd style="margin-left: 1.5em" id="section-6.1-3.18">
-            <p id="section-6.1-3.18.1">Clients and servers in the Internet of Things<a href="#section-6.1-3.18.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-3.18.1">This type is used by clients that create, retrieve, and update topic configurations at servers acting as a pub-sub broker.<a href="#section-6.1-3.18.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-6.1-3.19">Fragment identifier considerations:</dt>
           <dd style="margin-left: 1.5em" id="section-6.1-3.20">
-            <p id="section-6.1-3.20.1">The syntax and semantics of fragment identifiers is as specified for
-"application/cbor".  (At publication of RFC XXXX, there is no
-fragment identification syntax defined for "application/cbor".)<a href="#section-6.1-3.20.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-3.20.1">N/A<a href="#section-6.1-3.20.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-6.1-3.21">Person &amp; email address to contact for further information:</dt>
@@ -2493,7 +2491,7 @@ or IETF Applications and Real-Time Area (art@ietf.org)<a href="#section-6.1-3.22
 <div id="content-format">
 <section id="section-6.2">
         <h3 id="name-content-format">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-content-format" class="section-name selfRef">Content Format</a>
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-content-format" class="section-name selfRef">Content-Format</a>
         </h3>
 <p id="section-6.2-1">IANA has added the following Content-Formats to the
 <a href="http://www.iana.org/assignments/core-parameters#content-formats" class="relref">"CoAP Content-Formats"</a>
@@ -2506,7 +2504,7 @@ Parameters" Registry <span>[<a href="#IANA.core-parameters" class="cite xref">IA
           </caption>
 <thead>
             <tr>
-              <th class="text-left" rowspan="1" colspan="1">Content-Type</th>
+              <th class="text-left" rowspan="1" colspan="1">Content Type</th>
               <th class="text-left" rowspan="1" colspan="1">Content Coding</th>
               <th class="text-left" rowspan="1" colspan="1">ID</th>
               <th class="text-left" rowspan="1" colspan="1">Reference</th>
@@ -2522,8 +2520,6 @@ Parameters" Registry <span>[<a href="#IANA.core-parameters" class="cite xref">IA
           </tbody>
         </table>
 <p id="section-6.2-3">TBD9 is to be assigned from the space 256..999.<a href="#section-6.2-3" class="pilcrow">¶</a></p>
-<p id="section-6.2-4">In the registry the column "Content-Type" is called "Media type" and the
-column "Content Coding" is called "Encoding". <span class="cref" id="remove">This paragraph to be removed by RFC editor.</span><a href="#section-6.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-coap-pubsub-parameters">
@@ -2532,7 +2528,24 @@ column "Content Coding" is called "Encoding". <span class="cref" id="remove">Thi
 <a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-coap-pubsub-parameters-3" class="section-name selfRef">CoAP Pubsub Parameters</a>
         </h3>
 <p id="section-6.3-1">IANA is asked to register the following entries in the subregistry of the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
-<p id="section-6.3-2">The registry is initially populated with the entries in <a href="#fig-CoAP-Pubsub-Parameters" class="auto internal xref">Figure 5</a> of <a href="#pubsub-parameters" class="auto internal xref">Section 4</a>.<a href="#section-6.3-2" class="pilcrow">¶</a></p>
+<p id="section-6.3-2">This specification establishes the "Pubsub Topic Configuration Parameters" IANA registry within the "Constrained RESTful Environments (CoRE)
+Parameters" registry group.<a href="#section-6.3-2" class="pilcrow">¶</a></p>
+<p id="section-6.3-3">The columns of this registry are:<a href="#section-6.3-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.3-4.1">
+            <p id="section-6.3-4.1.1">Name: This is a descriptive name that enables easier reference to the item. The name <span class="bcp14">MUST</span> be unique. It is not used in the encoding.<a href="#section-6.3-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.3-4.2">
+            <p id="section-6.3-4.2.1">CBOR Key: This is the value used as CBOR key of the item. These values <span class="bcp14">MUST</span> be unique. The value can be a positive integer, a negative integer, or a text string. Different ranges of values use different registration policies <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>. Integer values from -256 to 255 as well as text strings of length 1 are designated as "Standards Action With Expert Review". Integer values from -65536 to -257 and from 256 to 65535, as well as text strings of length 2 are designated as "Specification Required". Integer values greater than 65535 as well as text strings of length greater than 2 are designated as "Expert Review". Integer values less than -65536 are marked as "Private Use".<a href="#section-6.3-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.3-4.3">
+            <p id="section-6.3-4.3.1">CBOR Type: This contains the CBOR type of the item, or a pointer to the registry that defines its type, when that depends on another item.<a href="#section-6.3-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.3-4.4">
+            <p id="section-6.3-4.4.1">Reference: This contains a pointer to the public specification for the item.<a href="#section-6.3-4.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-6.3-5">The registry is initially populated with the entries in <a href="#fig-CoAP-Pubsub-Parameters" class="auto internal xref">Figure 5</a> of <a href="#pubsub-parameters" class="auto internal xref">Section 4</a>.<a href="#section-6.3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-rt">
@@ -2652,9 +2665,33 @@ Reference: [RFC-XXXX]
         <dd>
 <span class="refAuthor">Palombini, F.</span>, <span class="refAuthor">Sengul, C.</span>, and <span class="refAuthor">M. Tiloca</span>, <span class="refTitle">"Publish-Subscribe Profile for Authentication and Authorization for Constrained Environments (ACE)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-pubsub-profile-07</span>, <time datetime="2023-09-13" class="refDate">13 September 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-pubsub-profile-07">https://datatracker.ietf.org/doc/html/draft-ietf-ace-pubsub-profile-07</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC8126">[RFC8126]</dt>
+        <dd>
+<span class="refAuthor">Cotton, M.</span>, <span class="refAuthor">Leiba, B.</span>, and <span class="refAuthor">T. Narten</span>, <span class="refTitle">"Guidelines for Writing an IANA Considerations Section in RFCs"</span>, <span class="seriesInfo">BCP 26</span>, <span class="seriesInfo">RFC 8126</span>, <span class="seriesInfo">DOI 10.17487/RFC8126</span>, <time datetime="2017-06" class="refDate">June 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8126">https://www.rfc-editor.org/rfc/rfc8126</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC8288">[RFC8288]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Nottingham, M.</span>, <span class="refTitle">"Web Linking"</span>, <span class="seriesInfo">RFC 8288</span>, <span class="seriesInfo">DOI 10.17487/RFC8288</span>, <time datetime="2017-10" class="refDate">October 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8288">https://www.rfc-editor.org/rfc/rfc8288</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9052">[RFC9052]</dt>
+        <dd>
+<span class="refAuthor">Schaad, J.</span>, <span class="refTitle">"CBOR Object Signing and Encryption (COSE): Structures and Process"</span>, <span class="seriesInfo">STD 96</span>, <span class="seriesInfo">RFC 9052</span>, <span class="seriesInfo">DOI 10.17487/RFC9052</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9052">https://www.rfc-editor.org/rfc/rfc9052</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9053">[RFC9053]</dt>
+        <dd>
+<span class="refAuthor">Schaad, J.</span>, <span class="refTitle">"CBOR Object Signing and Encryption (COSE): Initial Algorithms"</span>, <span class="seriesInfo">RFC 9053</span>, <span class="seriesInfo">DOI 10.17487/RFC9053</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9053">https://www.rfc-editor.org/rfc/rfc9053</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9147">[RFC9147]</dt>
+        <dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refAuthor">Tschofenig, H.</span>, and <span class="refAuthor">N. Modadugu</span>, <span class="refTitle">"The Datagram Transport Layer Security (DTLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 9147</span>, <span class="seriesInfo">DOI 10.17487/RFC9147</span>, <time datetime="2022-04" class="refDate">April 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9147">https://www.rfc-editor.org/rfc/rfc9147</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9200">[RFC9200]</dt>
+        <dd>
+<span class="refAuthor">Seitz, L.</span>, <span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Wahlstroem, E.</span>, <span class="refAuthor">Erdtman, S.</span>, and <span class="refAuthor">H. Tschofenig</span>, <span class="refTitle">"Authentication and Authorization for Constrained Environments Using the OAuth 2.0 Framework (ACE-OAuth)"</span>, <span class="seriesInfo">RFC 9200</span>, <span class="seriesInfo">DOI 10.17487/RFC9200</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9200">https://www.rfc-editor.org/rfc/rfc9200</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9338">[RFC9338]</dt>
+      <dd>
+<span class="refAuthor">Schaad, J.</span>, <span class="refTitle">"CBOR Object Signing and Encryption (COSE): Countersignatures"</span>, <span class="seriesInfo">STD 96</span>, <span class="seriesInfo">RFC 9338</span>, <span class="seriesInfo">DOI 10.17487/RFC9338</span>, <time datetime="2022-12" class="refDate">December 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9338">https://www.rfc-editor.org/rfc/rfc9338</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -2673,7 +2710,7 @@ Reference: [RFC-XXXX]
 <a href="mailto:marco.tiloca@ri.se" class="email">marco.tiloca@ri.se</a>
 </div>
 </address>
-<p id="appendix-A-1">Marco provided thorough reviews and guidance on the last versions of this document.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">Marco offered comprehensive reviews and insightful guidance on the recent iterations of this document. His contributions were particularly notable in the Security Considerations section, among others.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
