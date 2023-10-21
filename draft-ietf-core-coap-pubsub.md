@@ -145,9 +145,9 @@ The broker is responsible for the store-and-forward of state update representati
 
 This document describes two sets of interactions, interactions to configure topics and their lifecycle (see {{topic-configuration-interactions}}) and interactions about the topic-data (see {{topic-data-interactions}}).
 
-Topic-configuration interactions are discovery, create, read configuration, update configuration, delete configuration and handle the management of the topics.
+Topic-configuration interactions are discovery, create, read configuration, update configuration, and delete configuration. These operations handle the management of the topics.
 
-Topic-data interactions are publish, subscribe, unsubscribe, read and delete, these operations are oriented on how data is transferred from a publisher to a subscriber.
+Topic-data interactions are publish, subscribe, unsubscribe, read, and delete. These operations are oriented on how data is transferred from a publisher to a subscriber.
 
 <!--
 Throughout the document there is a number of TBDs that need updating, mostly content formats or cbor data representations
