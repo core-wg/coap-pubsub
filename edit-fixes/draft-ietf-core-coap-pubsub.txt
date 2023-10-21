@@ -277,7 +277,7 @@ Table of Contents
    The interfaces for the topic-collection resource is defined in
    Section 2.4.
 
-   A topic-collection resource can have topic resources as its children
+   A topic-collection resource can have topic resources as its child
    resources, with resource type "core.ps.conf".
 
 2.  Pub-Sub Topics
