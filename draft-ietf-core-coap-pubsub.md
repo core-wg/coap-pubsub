@@ -175,7 +175,7 @@ A topic-collection resource can have topic resources as its child resources, wit
 
 # Pub-Sub Topics {#topics}
 
-The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}). Each topic is associated with a topic resource and a topic-data resource. The topic resource is used by a client creating or administering a topic. The topic-data resource is used by the publishers and the subscribers to a topic.
+The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}). Each topic is associated with a topic configuration resource and a topic-data resource. The topic configuration resource is used by a client creating or administering a topic. The topic-data resource is used by the publishers and the subscribers to a topic.
 
 ~~~~ aasvg
               ___
