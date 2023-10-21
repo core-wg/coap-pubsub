@@ -171,7 +171,7 @@ Throughout the document there is a number of TBDs that need updating, mostly con
 
 The Broker exports one or more topic-collection resources, with resource type "core.ps.coll" defined in {{iana}} of this document. The interfaces for the topic-collection resource is defined in {{topic-collection-interactions}}.
 
-A topic-collection resource can have topic resources as its children resources, with resource type "core.ps.conf".
+A topic-collection resource can have topic resources as its child resources, with resource type "core.ps.conf".
 
 # Pub-Sub Topics {#topics}
 
