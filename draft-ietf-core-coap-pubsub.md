@@ -379,8 +379,8 @@ Example:
    Content-Format: TBD (application/pubsub+cbor)
 
    {
-     "resource-type" : "core.ps.conf"
-     "topic-type" : "temperature"
+     "resource-type": "core.ps.conf",
+     "topic-type": "temperature"
    }
 
 <= 2.05 Content
@@ -426,8 +426,8 @@ The broker MUST issue a 4.00 (Bad Request) error if a received parameter is inva
    Content-Format: TBD2 (application/core-pubsub+cbor)
    TBD (this should be a CBOR map with the mandatory parameters)
    {
-     "topic-name" : "living-room-sensor"
-     "resource-type" : "core.ps.conf"
+     "topic-name": "living-room-sensor",
+     "resource-type": "core.ps.conf"
    }
 
 <= 2.01 Created
@@ -436,9 +436,9 @@ The broker MUST issue a 4.00 (Bad Request) error if a received parameter is inva
 
    TBD (this should be a CBOR map)
    {
-     "topic-name" : "living-room-sensor",
-     "topic-data" : "ps/data/1bd0d6d"
-     "resource-type" : "core.ps.conf"
+     "topic-name": "living-room-sensor",
+     "topic-data": "ps/data/1bd0d6d",
+     "resource-type": "core.ps.conf"
    }
 ~~~~
 
@@ -511,13 +511,13 @@ Example:
    Uri-Path: h9392
    Content-Format: TBD2 (application/core-pubsub+cbor)
    {
-     "conf-filter" : [topic-data, media-type]
+     "conf-filter": ["topic-data", "media-type"]
    }
 
 <= 2.05 Content
    Content-Format: TBD2 (application/core-pubsub+cbor)
    {
-     "topic-data" : "ps/data/1bd0d6d",
+     "topic-data": "ps/data/1bd0d6d",
      "media-type": "application/senml-cbor"
    }
 
@@ -547,8 +547,8 @@ Example:
    Content-Format: TBD2 (application/core-pubsub+cbor)
 
    {
-      "topic-name" : "living-room-sensor",
-      "topic-data" : "ps/data/1bd0d6d",
+      "topic-name": "living-room-sensor",
+      "topic-data": "ps/data/1bd0d6d",
       "topic-type": "temperature",
       "expiration-date": "2023-04-28T23:59:59Z",
       "max-subscribers": 2
@@ -559,8 +559,8 @@ Example:
 
    TBD (this should be a CBOR map)
    {
-      "topic-name" : "living-room-sensor",
-      "topic-data" : "ps/data/1bd0d6d",
+      "topic-name": "living-room-sensor",
+      "topic-data": "ps/data/1bd0d6d",
       "resource-type": "core.ps.conf",
       "media-type": "application/senml-cbor",
       "topic-type": "temperature",
