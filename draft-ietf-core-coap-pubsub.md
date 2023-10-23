@@ -762,8 +762,7 @@ Example:
    Max-Age: 15
 
   {
-    "bn": "urn:dev:os:193-iot/sparrow/jorvas/",
-    "n": "Raitis-lampotila",
+    "n": "urn:dev:os:32473-123456",
     "u": "Cel",
     "t": 1696340182,
     "v": 19.87
@@ -775,10 +774,9 @@ Example:
    Max-Age: 15
 
   {
-    "bn": "urn:dev:os:193-iot/sparrow/jorvas/",
-    "n": "Raitis-lampotila",
+    "n": "urn:dev:os:32473-123456",
     "u": "Cel",
-    "t": 1696340182,
+    "t": 1696340184,
     "v": 21.87
   }
 ~~~~
