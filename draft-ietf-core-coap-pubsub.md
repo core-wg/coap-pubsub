@@ -689,7 +689,7 @@ Example of first publication:
    Content-Format: 110
 
    {
-      "n": "temperature",
+      "n": "coap://dev1.example.com/temperature",
       "u": "Cel",
       "t": 1621452122,
       "v": 23.5
@@ -708,9 +708,9 @@ Example of subsequent publication:
    Content-Format: 110
 
    {
-      "n": "temperature",
+      "n": "coap://dev1.example.com/temperature",
       "u": "Cel",
-      "t": 182734122,
+      "t": 1621452149,
       "v": 22.5
    }
 
@@ -835,7 +835,7 @@ Example:
    Max-Age: 15
 
    {
-      "n": "temperature",
+      "n": "coap://dev1.example.com/temperature",
       "u": "Cel",
       "t": 1621452122,
       "v": 23.5
