@@ -5,10 +5,10 @@
 Internet Engineering Task Force                               J. Jimenez
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                               M. Koster
-Expires: 23 April 2024                                     Dogtiger Labs
+Expires: 25 April 2024                                     Dogtiger Labs
                                                               A. Keranen
                                                                 Ericsson
-                                                         21 October 2023
+                                                         23 October 2023
 
 
     A publish-subscribe architecture for the Constrained Application
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 April 2024.
+   This Internet-Draft will expire on 25 April 2024.
 
 Copyright Notice
 
@@ -553,8 +553,8 @@ Table of Contents
       Content-Format: TBD (application/pubsub+cbor)
 
       {
-        "resource-type" : "core.ps.conf"
-        "topic-type" : "temperature"
+        "resource-type": "core.ps.conf",
+        "topic-type": "temperature"
       }
 
    <= 2.05 Content
@@ -595,8 +595,8 @@ Table of Contents
       Content-Format: TBD2 (application/core-pubsub+cbor)
       TBD (this should be a CBOR map with the mandatory parameters)
       {
-        "topic-name" : "living-room-sensor"
-        "resource-type" : "core.ps.conf"
+        "topic-name": "living-room-sensor",
+        "resource-type": "core.ps.conf"
       }
 
    <= 2.01 Created
@@ -605,9 +605,9 @@ Table of Contents
 
       TBD (this should be a CBOR map)
       {
-        "topic-name" : "living-room-sensor",
-        "topic-data" : "ps/data/1bd0d6d"
-        "resource-type" : "core.ps.conf"
+        "topic-name": "living-room-sensor",
+        "topic-data": "ps/data/1bd0d6d",
+        "resource-type": "core.ps.conf"
       }
 
 2.5.  Topic-Configuration Interactions
@@ -690,13 +690,13 @@ Table of Contents
       Uri-Path: h9392
       Content-Format: TBD2 (application/core-pubsub+cbor)
       {
-        "conf-filter" : [topic-data, media-type]
+        "conf-filter": ["topic-data", "media-type"]
       }
 
    <= 2.05 Content
       Content-Format: TBD2 (application/core-pubsub+cbor)
       {
-        "topic-data" : "ps/data/1bd0d6d",
+        "topic-data": "ps/data/1bd0d6d",
         "media-type": "application/senml-cbor"
       }
 
@@ -727,8 +727,8 @@ Table of Contents
       Content-Format: TBD2 (application/core-pubsub+cbor)
 
       {
-         "topic-name" : "living-room-sensor",
-         "topic-data" : "ps/data/1bd0d6d",
+         "topic-name": "living-room-sensor",
+         "topic-data": "ps/data/1bd0d6d",
          "topic-type": "temperature",
          "expiration-date": "2023-04-28T23:59:59Z",
          "max-subscribers": 2
@@ -739,8 +739,8 @@ Table of Contents
 
       TBD (this should be a CBOR map)
       {
-         "topic-name" : "living-room-sensor",
-         "topic-data" : "ps/data/1bd0d6d",
+         "topic-name": "living-room-sensor",
+         "topic-data": "ps/data/1bd0d6d",
          "resource-type": "core.ps.conf",
          "media-type": "application/senml-cbor",
          "topic-type": "temperature",
