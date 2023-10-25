@@ -765,7 +765,7 @@ Example:
     "bn": "urn:dev:mydevice",
     "n": "Company X",
     "u": "Cel",
-    "t": 1696340182,
+    "t": 1696341182,
     "v": 19.87
   }
 
