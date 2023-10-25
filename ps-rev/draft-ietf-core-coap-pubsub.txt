@@ -5,10 +5,10 @@
 CoRE Working Group                                            J. Jimenez
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                               M. Koster
-Expires: 22 April 2024                                     Dogtiger Labs
+Expires: 27 April 2024                                     Dogtiger Labs
                                                               A. Keranen
                                                                 Ericsson
-                                                         20 October 2023
+                                                         25 October 2023
 
 
     A publish-subscribe architecture for the Constrained Application
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 April 2024.
+   This Internet-Draft will expire on 27 April 2024.
 
 Copyright Notice
 
@@ -946,8 +946,8 @@ Table of Contents
       Max-Age: 15
 
      {
-       "bn": "urn:dev:os:193-iot/sparrow/jorvas/",
-       "n": "Raitis-lampotila",
+       "bn": "urn:dev:mydevice",
+       "n": "Company X",
        "u": "Cel",
        "t": 1696340182,
        "v": 19.87
@@ -959,8 +959,8 @@ Table of Contents
       Max-Age: 15
 
      {
-       "bn": "urn:dev:os:193-iot/sparrow/jorvas/",
-       "n": "Raitis-lampotila",
+       "bn": "urn:dev:os:mydevice",
+       "n": "Company X",
        "u": "Cel",
        "t": 1696340182,
        "v": 21.87
@@ -1343,17 +1343,17 @@ Informative References
               Tiloca, M., Höglund, R., Van der Stok, P., and F.
               Palombini, "Admin Interface for the OSCORE Group Manager",
               Work in Progress, Internet-Draft, draft-ietf-ace-oscore-
-              gm-admin-09, 1 July 2023,
+              gm-admin-10, 23 October 2023,
               <https://datatracker.ietf.org/doc/html/draft-ietf-ace-
-              oscore-gm-admin-09>.
+              oscore-gm-admin-10>.
 
    [I-D.ietf-ace-pubsub-profile]
               Palombini, F., Sengul, C., and M. Tiloca, "Publish-
               Subscribe Profile for Authentication and Authorization for
               Constrained Environments (ACE)", Work in Progress,
-              Internet-Draft, draft-ietf-ace-pubsub-profile-07, 13
-              September 2023, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-ace-pubsub-profile-07>.
+              Internet-Draft, draft-ietf-ace-pubsub-profile-08, 23
+              October 2023, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-ace-pubsub-profile-08>.
 
    [RFC8126]  Cotton, M., Leiba, B., and T. Narten, "Guidelines for
               Writing an IANA Considerations Section in RFCs", BCP 26,
