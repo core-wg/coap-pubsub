@@ -107,7 +107,7 @@ topic collection:
 : A set of topic configurations. A topic collection is hosted as one collection resource at the broker, and its representation is the list of links to the topic resources corresponding to each topic configuration.
 
 topic-configuration:
-: A set of information concerning a topic, including its configuration and other metadata. A topic configurations is hosted as one topic resource at the broker, and its representation is the set of configuration information concerning the topic. All the topic resources associated with the same topic collection share a common base URI, i.e., the URI of the collection resource. Throughout this document the word "topic" and "topic-configuration" can be used interchangeably.
+: A set of information concerning a topic, including its configuration and other metadata. A topic configuration is hosted as one topic resource at the broker, and its representation is the set of configuration information concerning the topic. All the topic resources associated with the same topic collection share a common base URI, i.e., the URI of the collection resource. Throughout this document the word "topic" and "topic-configuration" can be used interchangeably.
 
 topic-data resource:
 : A resource where clients can publish data and/or subscribe to data for a specific topic. The representation of the topic resource corresponding to such a topic also specifies the URI to the present topic-data resource.
@@ -145,9 +145,9 @@ The broker is responsible for the store-and-forward of state update representati
 
 This document describes two sets of interactions, interactions to configure topics and their lifecycle (see {{topic-configuration-interactions}}) and interactions about the topic-data (see {{topic-data-interactions}}).
 
-Topic-configuration interactions are discovery, create, read configuration, update configuration, delete configuration and handle the management of the topics.
+Topic-configuration interactions are discovery, create, read configuration, update configuration, and delete configuration. These operations handle the management of the topics.
 
-Topic-data interactions are publish, subscribe, unsubscribe, read and delete, these operations are oriented on how data is transferred from a publisher to a subscriber.
+Topic-data interactions are publish, subscribe, unsubscribe, read, and delete. These operations are oriented on how data is transferred from a publisher to a subscriber.
 
 <!--
 Throughout the document there is a number of TBDs that need updating, mostly content formats or cbor data representations
@@ -171,11 +171,11 @@ Throughout the document there is a number of TBDs that need updating, mostly con
 
 The Broker exports one or more topic-collection resources, with resource type "core.ps.coll" defined in {{iana}} of this document. The interfaces for the topic-collection resource is defined in {{topic-collection-interactions}}.
 
-A topic-collection resource can have topic resources as its children resources, with resource type "core.ps.conf".
+A topic-collection resource can have topic resources as its child resources, with resource type "core.ps.conf".
 
 # Pub-Sub Topics {#topics}
 
-The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}). Each topic is associated with: a topic resource and a a topic-data resource. The topic resource is used by a client creating or administering a topic. The topic-data resource is used by the publishers and the subscribers to a topic.
+The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}). Each topic is associated with a topic configuration resource and a topic-data resource. The topic configuration resource is used by a client creating or administering a topic. The topic-data resource is used by the publishers and the subscribers to a topic.
 
 ~~~~ aasvg
               ___
@@ -383,8 +383,8 @@ Example:
    Content-Format: TBD (application/pubsub+cbor)
 
    {
-     "resource-type" : "core.ps.conf"
-     "topic-type" : "temperature"
+     "resource-type": "core.ps.conf",
+     "topic-type": "temperature"
    }
 
 <= 2.05 Content
@@ -430,8 +430,8 @@ The broker MUST issue a 4.00 (Bad Request) error if a received parameter is inva
    Content-Format: TBD2 (application/core-pubsub+cbor)
    TBD (this should be a CBOR map with the mandatory parameters)
    {
-     "topic-name" : "living-room-sensor"
-     "resource-type" : "core.ps.conf"
+     "topic-name": "living-room-sensor",
+     "resource-type": "core.ps.conf"
    }
 
 <= 2.01 Created
@@ -440,9 +440,9 @@ The broker MUST issue a 4.00 (Bad Request) error if a received parameter is inva
 
    TBD (this should be a CBOR map)
    {
-     "topic-name" : "living-room-sensor",
-     "topic-data" : "ps/data/1bd0d6d"
-     "resource-type" : "core.ps.conf"
+     "topic-name": "living-room-sensor",
+     "topic-data": "ps/data/1bd0d6d",
+     "resource-type": "core.ps.conf"
    }
 ~~~~
 
@@ -515,13 +515,13 @@ Example:
    Uri-Path: h9392
    Content-Format: TBD2 (application/core-pubsub+cbor)
    {
-     "conf-filter" : [topic-data, media-type]
+     "conf-filter": ["topic-data", "media-type"]
    }
 
 <= 2.05 Content
    Content-Format: TBD2 (application/core-pubsub+cbor)
    {
-     "topic-data" : "ps/data/1bd0d6d",
+     "topic-data": "ps/data/1bd0d6d",
      "media-type": "application/senml-cbor"
    }
 
@@ -555,8 +555,8 @@ Example:
    Content-Format: TBD2 (application/core-pubsub+cbor)
 
    {
-      "topic-name" : "living-room-sensor",
-      "topic-data" : "ps/data/1bd0d6d",
+      "topic-name": "living-room-sensor",
+      "topic-data": "ps/data/1bd0d6d",
       "resource-type": "core.ps.conf",
       "media-type": "application/senml-cbor",
       "topic-type": "temperature",
@@ -568,8 +568,8 @@ Example:
 
    TBD (this should be a CBOR map)
    {
-      "topic-name" : "living-room-sensor",
-      "topic-data" : "ps/data/1bd0d6d",
+      "topic-name": "living-room-sensor",
+      "topic-data": "ps/data/1bd0d6d",
       "resource-type": "core.ps.conf",
       "media-type": "application/senml-cbor",
       "topic-type": "temperature",
@@ -726,7 +726,7 @@ Example of first publication:
    Content-Format: 110
 
    {
-      "n": "temperature",
+      "n": "coap://dev1.example.com/temperature",
       "u": "Cel",
       "t": 1621452122,
       "v": 23.5
@@ -745,9 +745,9 @@ Example of subsequent publication:
    Content-Format: 110
 
    {
-      "n": "temperature",
+      "n": "coap://dev1.example.com/temperature",
       "u": "Cel",
-      "t": 182734122,
+      "t": 1621452149,
       "v": 22.5
    }
 
@@ -799,8 +799,7 @@ Example:
    Max-Age: 15
 
   {
-    "bn": "urn:dev:mydevice",
-    "n": "Company X",
+    "n": "urn:dev:os:32473-123456",
     "u": "Cel",
     "t": 1696341182,
     "v": 19.87
@@ -812,10 +811,10 @@ Example:
    Max-Age: 15
 
   {
-    "bn": "urn:dev:os:mydevice",
-    "n": "Company X",
+
+    "n": "urn:dev:os:32473-123456",
     "u": "Cel",
-    "t": 1696340182,
+    "t": 1696340184,
     "v": 21.87
   }
 ~~~~
@@ -874,7 +873,7 @@ Example:
    Max-Age: 15
 
    {
-      "n": "temperature",
+      "n": "coap://dev1.example.com/temperature",
       "u": "Cel",
       "t": 1621452122,
       "v": 23.5
