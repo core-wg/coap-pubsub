@@ -2,13 +2,13 @@
 
 
 
-Internet Engineering Task Force                               J. Jimenez
+CoRE Working Group                                            J. Jimenez
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                               M. Koster
-Expires: 22 April 2024                                     Dogtiger Labs
+Expires: 8 May 2024                                        Dogtiger Labs
                                                               A. Keranen
                                                                 Ericsson
-                                                         20 October 2023
+                                                         5 November 2023
 
 
     A publish-subscribe architecture for the Constrained Application
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 April 2024.
+   This Internet-Draft will expire on 8 May 2024.
 
 Copyright Notice
 
@@ -93,7 +93,8 @@ Table of Contents
        2.5.1.  Getting a topic-configuration
        2.5.2.  Getting part of a topic-configuration
        2.5.3.  Updating the topic-configuration
-       2.5.4.  Deleting a topic-configuration
+       2.5.4.  Updating the topic-configuration with iPATCH
+       2.5.5.  Deleting a topic-configuration
    3.  Publish and Subscribe
      3.1.  Topic Lifecycle
      3.2.  Topic-Data Interactions
@@ -200,8 +201,8 @@ Table of Contents
 
    broker:
       A CoAP server that hosts one or more topic collections with their
-      topic-configurations, and possibly also topic-data resources.  The
-      broker is responsible for the store-and-forward of state update
+      topic-configurations, and also topic-data resources.  The broker
+      is responsible for the store-and-forward of state update
       representations, for the topics for which it hosts the
       corresponding topic-data resources.  The broker is also
       responsible of handling the topic lifecycle as defined in
@@ -388,7 +389,8 @@ Table of Contents
       encodes the maximum number as an unsigned CBOR integer.  If this
       field is not present, there is no limit to the number of
       simultaneous subscribers allowed.  The broker can use this field
-      to limit the number of subscribers for the topic.
+      to limit the number of subscribers for the topic.  The default
+      value for this field has been set to 100 subscribers.
 
    *  'observer-check': An optional field that controls the maximum
       number of seconds between two consecutive Observe notifications
@@ -708,16 +710,25 @@ Table of Contents
    immutable post-creation, and any request attempting to change them
    will be deemed invalid by the broker.
 
-   On success, the server returns a 2.04 (Changed) response and the
-   current full resource representation.  The broker may chose not to
-   overwrite parameters that are not explicitly modified in the request.
+   On success, the topic configuration is overwritten and server returns
+   a 2.04 (Changed) response and the current full resource
+   representation.  The broker may chose not to overwrite parameters
+   that are not explicitly modified in the request.
 
    Note that updating the "topic-data" path will automatically cancel
    all existing observations on it and thus will unsubscribe all
-   subscribers.  Similarly, decreasing max-subscribers will also cause
-   that some subscribers get unsubscribed.  Unsubscribed endpoints
-   SHOULD receive a final 4.04 (Not Found) response as per [RFC7641]
-   Section 3.2.
+   subscribers.  Updating the "topic-data" may happen also after it
+   being deleted, as described on {delete-topic-data}, this will in turn
+   create a new "topic-data" path for that topic configuration.
+
+   Similarly, decreasing max-subscribers will also cause that some
+   subscribers get unsubscribed.  Unsubscribed endpoints SHOULD receive
+   a final 4.04 (Not Found) response as per [RFC7641] Section 3.2.
+
+   Please note that when using PUT the topic configuration is being
+   overwritten, thus some of the optional parameters (e.g., "max-
+   subscribers", "observer-check") not included in the PUT message will
+   be reset to their default values.
 
    Example:
 
@@ -729,9 +740,10 @@ Table of Contents
       {
          "topic-name" : "living-room-sensor",
          "topic-data" : "ps/data/1bd0d6d",
+         "resource-type": "core.ps.conf",
+         "media-type": "application/senml-cbor",
          "topic-type": "temperature",
          "expiration-date": "2023-04-28T23:59:59Z",
-         "max-subscribers": 2
       }
 
    <= 2.04 Changed
@@ -745,7 +757,8 @@ Table of Contents
          "media-type": "application/senml-cbor",
          "topic-type": "temperature",
          "expiration-date": "2023-04-28T23:59:59Z",
-         "max-subscribers": 2
+         "max-subscribers": 100,
+         "observer-check": 86400
       }
 
    Note that when a topic configuration changes, it may result in
@@ -761,7 +774,62 @@ Table of Contents
    *  Changing of the expiration-date may cause to cancel ongoing
       subscriptions if the topic expires at an earlier data.
 
-2.5.4.  Deleting a topic-configuration
+2.5.4.  Updating the topic-configuration with iPATCH
+
+   A client can partially update a topic's configuration by submitting a
+   partial topic representation in an iPATCH request to the topic URI.
+   The iPATCH request allows for updating only specific fields of the
+   topic configuration while leaving the others unchanged.  As with the
+   PUT method, the parameters "topic-name", "topic-data", and "resource-
+   type" are immutable post-creation, and any request attempting to
+   change them will be deemed invalid by the broker.
+
+   On success, the server returns a 2.04 (Changed) response and the
+   current full resource representation.  The broker only updates
+   parameters that are explicitly mentioned in the request.
+
+   As with the PUT method, updating the "topic-data" path will
+   automatically cancel all existing observations on it and thus will
+   unsubscribe all subscribers.  Decreasing max-subscribers will also
+   cause some subscribers to get unsubscribed.  Unsubscribed endpoints
+   SHOULD receive a final 4.04 (Not Found) response as per [RFC7641]
+   Section 3.2.
+
+   Contrary to PUT iPATCH operations will explicitly update some
+   parameters, leaving others unmodified.
+
+   => 0.07 iPATCH
+      Uri-Path: ps
+      Uri-Path: h9392
+      Content-Format: TBD2 (application/core-pubsub+cbor)
+
+      {
+         "topic-type": "humidity",
+         "max-subscribers": 5
+      }
+
+   <= 2.04 Changed
+      Content-Format: TBD2 (application/core-pubsub+cbor)
+
+      TBD (this should be a CBOR map)
+      {
+         "topic-name" : "living-room-sensor",
+         "topic-data" : "ps/data/1bd0d6d",
+         "resource-type": "core.ps.conf",
+         "media-type": "application/senml-cbor",
+         "topic-type": "humidity",
+         "expiration-date": "2023-05-28T23:59:59Z",
+         "max-subscribers": 5
+      }
+
+   Note that when a topic configuration changes through an iPATCH
+   request, it may result in disruptions for the subscribers.  Some
+   potential issues that may arise include:
+
+   Limiting the number of subscribers will cause to cancel ongoing
+   subscriptions until max-subscribers has been reached.
+
+2.5.5.  Deleting a topic-configuration
 
    A client can delete a topic by making a CoAP DELETE request on the
    topic resource URI.
@@ -946,10 +1014,10 @@ Table of Contents
       Max-Age: 15
 
      {
-       "bn": "urn:dev:os:193-iot/sparrow/jorvas/",
-       "n": "Raitis-lampotila",
+       "bn": "urn:dev:mydevice",
+       "n": "Company X",
        "u": "Cel",
-       "t": 1696340182,
+       "t": 1696341182,
        "v": 19.87
      }
 
@@ -959,8 +1027,8 @@ Table of Contents
       Max-Age: 15
 
      {
-       "bn": "urn:dev:os:193-iot/sparrow/jorvas/",
-       "n": "Raitis-lampotila",
+       "bn": "urn:dev:os:mydevice",
+       "n": "Company X",
        "u": "Cel",
        "t": 1696340182,
        "v": 21.87
@@ -1343,17 +1411,17 @@ Informative References
               Tiloca, M., Höglund, R., Van der Stok, P., and F.
               Palombini, "Admin Interface for the OSCORE Group Manager",
               Work in Progress, Internet-Draft, draft-ietf-ace-oscore-
-              gm-admin-09, 1 July 2023,
+              gm-admin-10, 23 October 2023,
               <https://datatracker.ietf.org/doc/html/draft-ietf-ace-
-              oscore-gm-admin-09>.
+              oscore-gm-admin-10>.
 
    [I-D.ietf-ace-pubsub-profile]
               Palombini, F., Sengul, C., and M. Tiloca, "Publish-
               Subscribe Profile for Authentication and Authorization for
               Constrained Environments (ACE)", Work in Progress,
-              Internet-Draft, draft-ietf-ace-pubsub-profile-07, 13
-              September 2023, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-ace-pubsub-profile-07>.
+              Internet-Draft, draft-ietf-ace-pubsub-profile-08, 23
+              October 2023, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-ace-pubsub-profile-08>.
 
    [RFC8126]  Cotton, M., Leiba, B., and T. Narten, "Guidelines for
               Writing an IANA Considerations Section in RFCs", BCP 26,
