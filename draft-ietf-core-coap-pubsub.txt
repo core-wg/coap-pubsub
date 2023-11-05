@@ -185,11 +185,11 @@ Table of Contents
 
    topic-configuration:
       A set of information concerning a topic, including its
-      configuration and other metadata.  A topic configurations is
-      hosted as one topic resource at the broker, and its representation
-      is the set of configuration information concerning the topic.  All
-      the topic resources associated with the same topic collection
-      share a common base URI, i.e., the URI of the collection resource.
+      configuration and other metadata.  A topic configuration is hosted
+      as one topic resource at the broker, and its representation is the
+      set of configuration information concerning the topic.  All the
+      topic resources associated with the same topic collection share a
+      common base URI, i.e., the URI of the collection resource.
       Throughout this document the word "topic" and "topic-
       configuration" can be used interchangeably.
 
@@ -250,12 +250,12 @@ Table of Contents
    interactions about the topic-data (see Section 3.2).
 
    Topic-configuration interactions are discovery, create, read
-   configuration, update configuration, delete configuration and handle
-   the management of the topics.
+   configuration, update configuration, and delete configuration.  These
+   operations handle the management of the topics.
 
-   Topic-data interactions are publish, subscribe, unsubscribe, read and
-   delete, these operations are oriented on how data is transferred from
-   a publisher to a subscriber.
+   Topic-data interactions are publish, subscribe, unsubscribe, read,
+   and delete.  These operations are oriented on how data is transferred
+   from a publisher to a subscriber.
 
 1.3.  Managing Topics
 
@@ -278,7 +278,7 @@ Table of Contents
    The interfaces for the topic-collection resource is defined in
    Section 2.4.
 
-   A topic-collection resource can have topic resources as its children
+   A topic-collection resource can have topic resources as its child
    resources, with resource type "core.ps.conf".
 
 2.  Pub-Sub Topics
@@ -286,10 +286,10 @@ Table of Contents
    The configuration side of a "publish/subscribe broker" consists of a
    collection of topics.  These topics as well as the collection itself
    are exposed by a CoAP server as resources (see Figure 3).  Each topic
-   is associated with: a topic resource and a a topic-data resource.
-   The topic resource is used by a client creating or administering a
-   topic.  The topic-data resource is used by the publishers and the
-   subscribers to a topic.
+   is associated with a topic configuration resource and a topic-data
+   resource.  The topic configuration resource is used by a client
+   creating or administering a topic.  The topic-data resource is used
+   by the publishers and the subscribers to a topic.
 
                        ___
              topic    /   \
@@ -555,8 +555,8 @@ Table of Contents
       Content-Format: TBD (application/pubsub+cbor)
 
       {
-        "resource-type" : "core.ps.conf"
-        "topic-type" : "temperature"
+        "resource-type": "core.ps.conf",
+        "topic-type": "temperature"
       }
 
    <= 2.05 Content
@@ -597,8 +597,8 @@ Table of Contents
       Content-Format: TBD2 (application/core-pubsub+cbor)
       TBD (this should be a CBOR map with the mandatory parameters)
       {
-        "topic-name" : "living-room-sensor"
-        "resource-type" : "core.ps.conf"
+        "topic-name": "living-room-sensor",
+        "resource-type": "core.ps.conf"
       }
 
    <= 2.01 Created
@@ -607,9 +607,9 @@ Table of Contents
 
       TBD (this should be a CBOR map)
       {
-        "topic-name" : "living-room-sensor",
-        "topic-data" : "ps/data/1bd0d6d"
-        "resource-type" : "core.ps.conf"
+        "topic-name": "living-room-sensor",
+        "topic-data": "ps/data/1bd0d6d",
+        "resource-type": "core.ps.conf"
       }
 
 2.5.  Topic-Configuration Interactions
@@ -692,13 +692,13 @@ Table of Contents
       Uri-Path: h9392
       Content-Format: TBD2 (application/core-pubsub+cbor)
       {
-        "conf-filter" : [topic-data, media-type]
+        "conf-filter": ["topic-data", "media-type"]
       }
 
    <= 2.05 Content
       Content-Format: TBD2 (application/core-pubsub+cbor)
       {
-        "topic-data" : "ps/data/1bd0d6d",
+        "topic-data": "ps/data/1bd0d6d",
         "media-type": "application/senml-cbor"
       }
 
@@ -738,8 +738,8 @@ Table of Contents
       Content-Format: TBD2 (application/core-pubsub+cbor)
 
       {
-         "topic-name" : "living-room-sensor",
-         "topic-data" : "ps/data/1bd0d6d",
+         "topic-name": "living-room-sensor",
+         "topic-data": "ps/data/1bd0d6d",
          "resource-type": "core.ps.conf",
          "media-type": "application/senml-cbor",
          "topic-type": "temperature",
@@ -751,8 +751,8 @@ Table of Contents
 
       TBD (this should be a CBOR map)
       {
-         "topic-name" : "living-room-sensor",
-         "topic-data" : "ps/data/1bd0d6d",
+         "topic-name": "living-room-sensor",
+         "topic-data": "ps/data/1bd0d6d",
          "resource-type": "core.ps.conf",
          "media-type": "application/senml-cbor",
          "topic-type": "temperature",
@@ -949,7 +949,7 @@ Table of Contents
       Content-Format: 110
 
       {
-         "n": "temperature",
+         "n": "coap://dev1.example.com/temperature",
          "u": "Cel",
          "t": 1621452122,
          "v": 23.5
@@ -966,9 +966,9 @@ Table of Contents
       Content-Format: 110
 
       {
-         "n": "temperature",
+         "n": "coap://dev1.example.com/temperature",
          "u": "Cel",
-         "t": 182734122,
+         "t": 1621452149,
          "v": 22.5
       }
 
@@ -1014,8 +1014,7 @@ Table of Contents
       Max-Age: 15
 
      {
-       "bn": "urn:dev:mydevice",
-       "n": "Company X",
+       "n": "urn:dev:os:32473-123456",
        "u": "Cel",
        "t": 1696341182,
        "v": 19.87
@@ -1027,10 +1026,10 @@ Table of Contents
       Max-Age: 15
 
      {
-       "bn": "urn:dev:os:mydevice",
-       "n": "Company X",
+
+       "n": "urn:dev:os:32473-123456",
        "u": "Cel",
-       "t": 1696340182,
+       "t": 1696340184,
        "v": 21.87
      }
 
@@ -1103,7 +1102,7 @@ Table of Contents
       Max-Age: 15
 
       {
-         "n": "temperature",
+         "n": "coap://dev1.example.com/temperature",
          "u": "Cel",
          "t": 1621452122,
          "v": 23.5

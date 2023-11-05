@@ -1339,7 +1339,7 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
           <dd class="break"></dd>
 <dt id="section-1.1-4.7">topic-configuration:</dt>
           <dd style="margin-left: 1.5em" id="section-1.1-4.8">
-            <p id="section-1.1-4.8.1">A set of information concerning a topic, including its configuration and other metadata. A topic configurations is hosted as one topic resource at the broker, and its representation is the set of configuration information concerning the topic. All the topic resources associated with the same topic collection share a common base URI, i.e., the URI of the collection resource. Throughout this document the word "topic" and "topic-configuration" can be used interchangeably.<a href="#section-1.1-4.8.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-4.8.1">A set of information concerning a topic, including its configuration and other metadata. A topic configuration is hosted as one topic resource at the broker, and its representation is the set of configuration information concerning the topic. All the topic resources associated with the same topic collection share a common base URI, i.e., the URI of the collection resource. Throughout this document the word "topic" and "topic-configuration" can be used interchangeably.<a href="#section-1.1-4.8.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-4.9">topic-data resource:</dt>
@@ -1434,8 +1434,8 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
           </figcaption></figure>
 </div>
 <p id="section-1.2-6">This document describes two sets of interactions, interactions to configure topics and their lifecycle (see <a href="#topic-configuration-interactions" class="auto internal xref">Section 2.5</a>) and interactions about the topic-data (see <a href="#topic-data-interactions" class="auto internal xref">Section 3.2</a>).<a href="#section-1.2-6" class="pilcrow">¶</a></p>
-<p id="section-1.2-7">Topic-configuration interactions are discovery, create, read configuration, update configuration, delete configuration and handle the management of the topics.<a href="#section-1.2-7" class="pilcrow">¶</a></p>
-<p id="section-1.2-8">Topic-data interactions are publish, subscribe, unsubscribe, read and delete, these operations are oriented on how data is transferred from a publisher to a subscriber.<a href="#section-1.2-8" class="pilcrow">¶</a></p>
+<p id="section-1.2-7">Topic-configuration interactions are discovery, create, read configuration, update configuration, and delete configuration. These operations handle the management of the topics.<a href="#section-1.2-7" class="pilcrow">¶</a></p>
+<p id="section-1.2-8">Topic-data interactions are publish, subscribe, unsubscribe, read, and delete. These operations are oriented on how data is transferred from a publisher to a subscriber.<a href="#section-1.2-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="managing-topics">
@@ -1493,7 +1493,7 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
           </figcaption></figure>
 </div>
 <p id="section-1.3-3">The Broker exports one or more topic-collection resources, with resource type "core.ps.coll" defined in <a href="#iana" class="auto internal xref">Section 6</a> of this document. The interfaces for the topic-collection resource is defined in <a href="#topic-collection-interactions" class="auto internal xref">Section 2.4</a>.<a href="#section-1.3-3" class="pilcrow">¶</a></p>
-<p id="section-1.3-4">A topic-collection resource can have topic resources as its children resources, with resource type "core.ps.conf".<a href="#section-1.3-4" class="pilcrow">¶</a></p>
+<p id="section-1.3-4">A topic-collection resource can have topic resources as its child resources, with resource type "core.ps.conf".<a href="#section-1.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1503,7 +1503,7 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
       <h2 id="name-pub-sub-topics">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-pub-sub-topics" class="section-name selfRef">Pub-Sub Topics</a>
       </h2>
-<p id="section-2-1">The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see <a href="#fig-topic" class="auto internal xref">Figure 3</a>). Each topic is associated with: a topic resource and a a topic-data resource. The topic resource is used by a client creating or administering a topic. The topic-data resource is used by the publishers and the subscribers to a topic.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-1">The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see <a href="#fig-topic" class="auto internal xref">Figure 3</a>). Each topic is associated with a topic configuration resource and a topic-data resource. The topic configuration resource is used by a client creating or administering a topic. The topic-data resource is used by the publishers and the subscribers to a topic.<a href="#section-2-1" class="pilcrow">¶</a></p>
 <span id="name-topic-and-topic-data-resour"></span><div id="fig-topic">
 <figure id="figure-3">
         <div id="section-2-2.1">
@@ -1853,8 +1853,8 @@ representation of a list of topics in the collection (see
    Content-Format: TBD (application/pubsub+cbor)
 
    {
-     "resource-type" : "core.ps.conf"
-     "topic-type" : "temperature"
+     "resource-type": "core.ps.conf",
+     "topic-type": "temperature"
    }
 
 &lt;= 2.05 Content
@@ -1881,8 +1881,8 @@ representation of a list of topics in the collection (see
    Content-Format: TBD2 (application/core-pubsub+cbor)
    TBD (this should be a CBOR map with the mandatory parameters)
    {
-     "topic-name" : "living-room-sensor"
-     "resource-type" : "core.ps.conf"
+     "topic-name": "living-room-sensor",
+     "resource-type": "core.ps.conf"
    }
 
 &lt;= 2.01 Created
@@ -1891,9 +1891,9 @@ representation of a list of topics in the collection (see
 
    TBD (this should be a CBOR map)
    {
-     "topic-name" : "living-room-sensor",
-     "topic-data" : "ps/data/1bd0d6d"
-     "resource-type" : "core.ps.conf"
+     "topic-name": "living-room-sensor",
+     "topic-data": "ps/data/1bd0d6d",
+     "resource-type": "core.ps.conf"
    }
 </pre><a href="#section-2.4.3-6" class="pilcrow">¶</a>
 </div>
@@ -1958,13 +1958,13 @@ representation of a list of topics in the collection (see
    Uri-Path: h9392
    Content-Format: TBD2 (application/core-pubsub+cbor)
    {
-     "conf-filter" : [topic-data, media-type]
+     "conf-filter": ["topic-data", "media-type"]
    }
 
 &lt;= 2.05 Content
    Content-Format: TBD2 (application/core-pubsub+cbor)
    {
-     "topic-data" : "ps/data/1bd0d6d",
+     "topic-data": "ps/data/1bd0d6d",
      "media-type": "application/senml-cbor"
    }
 
@@ -1991,8 +1991,8 @@ representation of a list of topics in the collection (see
    Content-Format: TBD2 (application/core-pubsub+cbor)
 
    {
-      "topic-name" : "living-room-sensor",
-      "topic-data" : "ps/data/1bd0d6d",
+      "topic-name": "living-room-sensor",
+      "topic-data": "ps/data/1bd0d6d",
       "resource-type": "core.ps.conf",
       "media-type": "application/senml-cbor",
       "topic-type": "temperature",
@@ -2004,8 +2004,8 @@ representation of a list of topics in the collection (see
 
    TBD (this should be a CBOR map)
    {
-      "topic-name" : "living-room-sensor",
-      "topic-data" : "ps/data/1bd0d6d",
+      "topic-name": "living-room-sensor",
+      "topic-data": "ps/data/1bd0d6d",
       "resource-type": "core.ps.conf",
       "media-type": "application/senml-cbor",
       "topic-type": "temperature",
@@ -2211,7 +2211,7 @@ representation of a list of topics in the collection (see
    Content-Format: 110
 
    {
-      "n": "temperature",
+      "n": "coap://dev1.example.com/temperature",
       "u": "Cel",
       "t": 1621452122,
       "v": 23.5
@@ -2230,9 +2230,9 @@ representation of a list of topics in the collection (see
    Content-Format: 110
 
    {
-      "n": "temperature",
+      "n": "coap://dev1.example.com/temperature",
       "u": "Cel",
-      "t": 182734122,
+      "t": 1621452149,
       "v": 22.5
    }
 
@@ -2278,8 +2278,7 @@ representation of a list of topics in the collection (see
    Max-Age: 15
 
   {
-    "bn": "urn:dev:mydevice",
-    "n": "Company X",
+    "n": "urn:dev:os:32473-123456",
     "u": "Cel",
     "t": 1696341182,
     "v": 19.87
@@ -2291,10 +2290,10 @@ representation of a list of topics in the collection (see
    Max-Age: 15
 
   {
-    "bn": "urn:dev:os:mydevice",
-    "n": "Company X",
+
+    "n": "urn:dev:os:32473-123456",
     "u": "Cel",
-    "t": 1696340182,
+    "t": 1696340184,
     "v": 21.87
   }
 </pre><a href="#section-3.2.2-8" class="pilcrow">¶</a>
@@ -2355,7 +2354,7 @@ representation of a list of topics in the collection (see
    Max-Age: 15
 
    {
-      "n": "temperature",
+      "n": "coap://dev1.example.com/temperature",
       "u": "Cel",
       "t": 1621452122,
       "v": 23.5
