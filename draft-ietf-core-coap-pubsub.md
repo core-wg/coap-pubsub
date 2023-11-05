@@ -1,36 +1,35 @@
 ---
-stand_alone: true
-ipr: trust200902
+stand_alone: yes
+
+title: "A publish-subscribe architecture for the Constrained Application Protocol (CoAP)"
 docname: draft-ietf-core-coap-pubsub-latest
-title: A publish-subscribe architecture for the Constrained Application Protocol (CoAP)
-area: Applications and Real-Time Area (art)
-wg: Internet Engineering Task Force
-kw: CoRE
-cat: std
-consensus: true
+category: std
+
+ipr: trust200902
+area: Applications
+workgroup: CoRE Working Group
 submissiontype: IETF
-pi:
-  strict: 'yes'
-  toc: 'yes'
-  tocdepth: '4'
-  symrefs: 'yes'
-  sortrefs: 'yes'
-  compact: 'yes'
-  subcompact: 'no'
+
+stand_alone: true
+pi: [toc, sortrefs, symrefs]
+
 venue:
   mail: core@ietf.org
   github: core-wg/coap-pubsub
 
 author:
-- ins: J. Jimenez
+-
+  ins: J. Jimenez
   name: Jaime Jimenez
   org: Ericsson
   email: jaime@iki.fi
-- ins: M. Koster
+-
+  ins: M. Koster
   name: Michael Koster
   org: Dogtiger Labs
   email: michaeljohnkoster@gmail.com
-- ins: A. Keranen
+-
+  ins: A. Keranen
   name: Ari Keranen
   org: Ericsson
   email: ari.keranen@ericsson.com
@@ -49,6 +48,7 @@ normative:
   RFC9176:
   RFC8613:
   RFC7641:
+
 informative:
   RFC8288:
   RFC8126:
@@ -85,7 +85,7 @@ This document applies the idea of broker-based publish-subscribe to Constrained 
 
 ## Terminology {#terminology}
 
-{::boilerplate bcp14-tagged}
+{::boilerplate bcp14}
 
 This specification requires readers to be familiar with all the terms and
 concepts that are discussed in {{?RFC8288}} and {{!RFC6690}}. Readers
@@ -113,7 +113,7 @@ topic-data resource:
 : A resource where clients can publish data and/or subscribe to data for a specific topic. The representation of the topic resource corresponding to such a topic also specifies the URI to the present topic-data resource.
 
 broker:
-: A CoAP server that hosts one or more topic collections with their topic-configurations, and possibly also topic-data resources. The broker is responsible for the store-and-forward of state update representations, for the topics for which it hosts the corresponding topic-data resources. The broker is also responsible of handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
+: A CoAP server that hosts one or more topic collections with their topic-configurations, and also topic-data resources. The broker is responsible for the store-and-forward of state update representations, for the topics for which it hosts the corresponding topic-data resources. The broker is also responsible of handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
 
 ## CoAP Publish-Subscribe Architecture
 
@@ -227,13 +227,18 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 * 'resource-type': A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value should be "core.ps.conf".
 
+<!--
+David N Christian A:
+history resource with a counter 0 .. 100
+-->
+
 * 'media-type': An optional field used to indicate the media type of the topic-data resource for the topic. It encodes the media type as a this information as the integer identifier of the CoAP content-format (e.g., value is "50" for "application/json").
 
 * 'topic-type': An optional field used to indicate the attribute or property of the topic-data resource for the topic. It encodes the attribute as a CBOR text string. Example attributes include "temperature".
 
 * 'expiration-date': An optional field used to indicate the expiration date of the topic. It encodes the expiration date as a CBOR text string. The value should be a date string in ISO 8601 format (e.g., "2023-03-31T23:59:59Z"). The broker can use this field to automatically remove topics that are no longer valid. If this field is not present, the topic will not expire automatically.
 
-* 'max-subscribers': An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as an unsigned CBOR integer. If this field is not present, there is no limit to the number of simultaneous subscribers allowed. The broker can use this field to limit the number of subscribers for the topic.
+* 'max-subscribers': An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as an unsigned CBOR integer. If this field is not present, there is no limit to the number of simultaneous subscribers allowed. The broker can use this field to limit the number of subscribers for the topic. The default value for this field has been set to 100 subscribers.
 
 * 'observer-check': An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber. Encoded as a CBOR unsigned integer greater than 0, it ensures subscribers who have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. If another CoAP server hosts the topic-data resource, that server is responsible for applying the observer-check value. The default value for this field is 86400, as defined in {{!RFC7641}}, which corresponds to 24 hours.
 
@@ -371,7 +376,6 @@ representation of a list of topics in the collection (see
 Upon success, the server responds with a 2.05 (Content), providing a list of links to topic resources associated with this topic collection that match the request's filter criteria (refer to  {{topic-discovery}}). A positive match happens only when each request parameter is present with the indicated value in the topic resource representation.
 
 Example:
-
 
 ~~~~
 => 0.05 FETCH
@@ -534,9 +538,13 @@ response is cbor
 
 A client can update a topic's configuration by submitting the updated topic representation in a PUT request to the topic URI. However, the parameters "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.
 
-On success, the server returns a 2.04 (Changed) response and the current full resource representation. The broker may chose not to overwrite parameters that are not explicitly modified in the request.
+On success, the topic configuration is overwritten and server returns a 2.04 (Changed) response and the current full resource representation. The broker may chose not to overwrite parameters that are not explicitly modified in the request.
 
-Note that updating the "topic-data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Similarly, decreasing max-subscribers will also cause that some subscribers get unsubscribed. Unsubscribed endpoints SHOULD receive a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2.
+Note that updating the "topic-data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Updating the "topic-data" may happen also after it being deleted, as described on {delete-topic-data}, this will in turn create a new "topic-data" path for that topic configuration.
+
+Similarly, decreasing max-subscribers will also cause that some subscribers get unsubscribed. Unsubscribed endpoints SHOULD receive a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2.
+
+Please note that when using PUT the topic configuration is being overwritten, thus some of the optional parameters (e.g., "max-subscribers", "observer-check") not included in the PUT message will be reset to their default values.
 
 Example:
 
@@ -549,9 +557,10 @@ Example:
    {
       "topic-name" : "living-room-sensor",
       "topic-data" : "ps/data/1bd0d6d",
+      "resource-type": "core.ps.conf",
+      "media-type": "application/senml-cbor",
       "topic-type": "temperature",
       "expiration-date": "2023-04-28T23:59:59Z",
-      "max-subscribers": 2
    }
 
 <= 2.04 Changed
@@ -565,7 +574,8 @@ Example:
       "media-type": "application/senml-cbor",
       "topic-type": "temperature",
       "expiration-date": "2023-04-28T23:59:59Z",
-      "max-subscribers": 2
+      "max-subscribers": 100,
+      "observer-check": 86400
    }
 ~~~~
 
@@ -574,6 +584,46 @@ Note that when a topic configuration changes, it may result in disruptions for t
 * Limiting the number of subscribers will cause to cancel ongoing subscriptions until max-subscribers has been reached.
 * Changing the topic-data value will cancel all ongoing subscriptions.
 * Changing of the expiration-date may cause to cancel ongoing subscriptions if the topic expires at an earlier data.
+
+### Updating the topic-configuration with iPATCH {#topic-update-resource-patch}
+
+A client can partially update a topic's configuration by submitting a partial topic representation in an iPATCH request to the topic URI. The iPATCH request allows for updating only specific fields of the topic configuration while leaving the others unchanged. As with the PUT method, the parameters "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.
+
+On success, the server returns a 2.04 (Changed) response and the current full resource representation. The broker only updates parameters that are explicitly mentioned in the request.
+
+As with the PUT method, updating the "topic-data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Decreasing max-subscribers will also cause some subscribers to get unsubscribed. Unsubscribed endpoints SHOULD receive a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2.
+
+Contrary to PUT iPATCH operations will explicitly update some parameters, leaving others unmodified.
+
+~~~~
+=> 0.07 iPATCH
+   Uri-Path: ps
+   Uri-Path: h9392
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+
+   {
+      "topic-type": "humidity",
+      "max-subscribers": 5
+   }
+
+<= 2.04 Changed
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+
+   TBD (this should be a CBOR map)
+   {
+      "topic-name" : "living-room-sensor",
+      "topic-data" : "ps/data/1bd0d6d",
+      "resource-type": "core.ps.conf",
+      "media-type": "application/senml-cbor",
+      "topic-type": "humidity",
+      "expiration-date": "2023-05-28T23:59:59Z",
+      "max-subscribers": 5
+   }
+~~~~
+
+Note that when a topic configuration changes through an iPATCH request, it may result in disruptions for the subscribers. Some potential issues that may arise include:
+
+Limiting the number of subscribers will cause to cancel ongoing subscriptions until max-subscribers has been reached.
 
 ### Deleting a topic-configuration {#topic-delete}
 
@@ -592,7 +642,6 @@ Example:
 
 <= 2.02 Deleted
 ~~~~
-
 
 # Publish and Subscribe {#pubsub}
 
@@ -636,18 +685,6 @@ Also, we might want to restrict the discovery part ONLY for FULLY created topics
 
 After a publisher publishes to the topic-data for the first time, the topic is placed into the FULLY CREATED state. In this state, a client can read data by means of a GET request without observe. A publisher can publish to the topic-data resource and a subscriber can observe the topic-data resource.
 
-<!--
-* "When a client deletes a topic-configuration resource, the topic is placed into the DELETED state and shortly after removed from the server."
-
-   Isn't the topic supposed to move back to HALF CREATED (see also Section 3.2.4)? In that case, a follow-up PUT request would bring the topic back to FULLY CREATED (as long as the topic resource at the broker has not been deleted in the first place).
-
-JJ: No, the topic-data sends you to half created but deleting the topic-configuration resource is deleting the topic.
-
-   About "removed from the server", it means simply deleting the topic-data resource, right?
-
-JJ: for topic-data yes.
-
--->
 
 When a client deletes a topic-configuration resource, the topic is placed into the DELETED state and shortly after removed from the server. In this state, all subscribers are removed from the list of observers of the topic-data resource and no further interactions with the topic are possible.
 
@@ -762,10 +799,10 @@ Example:
    Max-Age: 15
 
   {
-    "bn": "urn:dev:os:193-iot/sparrow/jorvas/",
-    "n": "Raitis-lampotila",
+    "bn": "urn:dev:mydevice",
+    "n": "Company X",
     "u": "Cel",
-    "t": 1696340182,
+    "t": 1696341182,
     "v": 19.87
   }
 
@@ -775,8 +812,8 @@ Example:
    Max-Age: 15
 
   {
-    "bn": "urn:dev:os:193-iot/sparrow/jorvas/",
-    "n": "Raitis-lampotila",
+    "bn": "urn:dev:os:mydevice",
+    "n": "Company X",
     "u": "Cel",
     "t": 1696340182,
     "v": 21.87
