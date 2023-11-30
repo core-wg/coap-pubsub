@@ -5,10 +5,10 @@
 CoRE Working Group                                            J. Jimenez
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                               M. Koster
-Expires: 8 May 2024                                        Dogtiger Labs
+Expires: 2 June 2024                                       Dogtiger Labs
                                                               A. Keranen
                                                                 Ericsson
-                                                         5 November 2023
+                                                        30 November 2023
 
 
     A publish-subscribe architecture for the Constrained Application
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 May 2024.
+   This Internet-Draft will expire on 2 June 2024.
 
 Copyright Notice
 
@@ -230,18 +230,18 @@ Table of Contents
 
            CoAP                      CoAP                 CoAP
            clients                  server                clients
-         .-----------.          .----------.  observe  .-----------.
-         |           | publish  |          |<----------+           |
-         | publisher +--------->+          +---------->| subscribe |
-         |           |          |          +---------->|           |
-         '-----------'          |          |           '-----------'
+         .-----------.          .----------.  observe  .------------.
+         |           | publish  |          |<----------+            |
+         | publisher +--------->+          +---------->| subscriber |
+         |           |          |          +---------->|            |
+         '-----------'          |          |           '------------'
               ...               |  broker  |                ...
               ...               |          |                ...
-         .-----------.          |          |  observe  .-----------.
-         |           | publish  |          |<----------+           |
-         | publisher +--------->|          +---------->| subscribe |
-         |           |          |          +---------->|           |
-         '-----------'          '----------'           '-----------'
+         .-----------.          |          |  observe  .------------.
+         |           | publish  |          |<----------+            |
+         | publisher +--------->|          +---------->| subscriber |
+         |           |          |          +---------->|            |
+         '-----------'          '----------'           '------------'
 
              Figure 1: Publish-subscribe architecture over CoAP
 
