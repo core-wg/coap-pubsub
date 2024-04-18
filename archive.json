@@ -1,0 +1,1537 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2023-03-14T00:47:02.834612+00:00",
+  "repo": "core-wg/coap-pubsub",
+  "labels": [
+    {
+      "name": "bug",
+      "description": null,
+      "color": "ee0701"
+    },
+    {
+      "name": "duplicate",
+      "description": null,
+      "color": "cccccc"
+    },
+    {
+      "name": "enhancement",
+      "description": null,
+      "color": "84b6eb"
+    },
+    {
+      "name": "help wanted",
+      "description": null,
+      "color": "128A0C"
+    },
+    {
+      "name": "invalid",
+      "description": null,
+      "color": "e6e6e6"
+    },
+    {
+      "name": "question",
+      "description": null,
+      "color": "cc317c"
+    },
+    {
+      "name": "wontfix",
+      "description": null,
+      "color": "ffffff"
+    },
+    {
+      "name": "for-future-docs",
+      "description": "Feature/enhancement not for this draft but potentially for a future focument",
+      "color": "1e2bdb"
+    }
+  ],
+  "issues": [
+    {
+      "number": 1,
+      "id": "MDU6SXNzdWUyMTgwMzU3MTg=",
+      "title": "URI Template",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/1",
+      "state": "CLOSED",
+      "author": "jaimejim",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "The URI template should be confirmed:\r\n\r\n`: /{+ps}{/topic*}?{q*}`\r\n\r\n",
+      "createdAt": "2017-03-29T23:08:24Z",
+      "updatedAt": "2017-07-04T16:58:48Z",
+      "closedAt": "2017-07-04T16:58:48Z",
+      "comments": [
+        {
+          "author": "akeranen",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "PR #6 resolved this",
+          "createdAt": "2017-07-04T16:58:48Z",
+          "updatedAt": "2017-07-04T16:58:48Z"
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "id": "MDU6SXNzdWUyMTgwNTgxMTY=",
+      "title": "Are all operations mandatory?",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/2",
+      "state": "CLOSED",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Should we make create topic, remove topic, and discovery optional? ",
+      "createdAt": "2017-03-30T01:49:01Z",
+      "updatedAt": "2018-07-18T22:28:37Z",
+      "closedAt": "2018-07-18T22:27:55Z",
+      "comments": [
+        {
+          "author": "mjkoster",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "We currently don't require any particular set of operations:\r\n\r\nA CoAP pub/sub Broker implementing this\r\n   specification SHOULD support the DISCOVERY, CREATE, PUBLISH,\r\n   SUBSCRIBE, UNSUBSCRIBE, READ, and REMOVE operations defined in this\r\n   section.",
+          "createdAt": "2018-07-18T22:12:01Z",
+          "updatedAt": "2018-07-18T22:12:01Z"
+        },
+        {
+          "author": "mjkoster",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "We have alternate methods for all operations, such as pre-created topics, read vs. subscribe, pre-published topics.",
+          "createdAt": "2018-07-18T22:28:37Z",
+          "updatedAt": "2018-07-18T22:28:37Z"
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "MDU6SXNzdWUyMTgwNTgzMTA=",
+      "title": "Is there a better name than \"API\" to describe the REST interface to pubsub?",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/3",
+      "state": "CLOSED",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "API may imply that it is a higher level API than REST operations. Is there a better name to replace the \"function set\" concept?\r\n",
+      "createdAt": "2017-03-30T01:50:35Z",
+      "updatedAt": "2018-07-18T21:58:58Z",
+      "closedAt": "2018-07-18T21:58:58Z",
+      "comments": [
+        {
+          "author": "mjkoster",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Using \"REST API\" type terminology",
+          "createdAt": "2018-07-18T21:58:58Z",
+          "updatedAt": "2018-07-18T21:58:58Z"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "MDU6SXNzdWUyMTgwNTg3MjI=",
+      "title": "Response code for stale published value or empty response, \"no content\"",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/4",
+      "state": "OPEN",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Currently we define a \"no content\" response, such as when a GET is done on a value which has expired its lifetime, with 2.04. We should probably define a new response code like 2.06 for this instead of trying to overload the 2.04 when used as a \"changed\" response to POST or PUT.",
+      "createdAt": "2017-03-30T01:53:44Z",
+      "updatedAt": "2018-07-18T21:52:06Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "mjkoster",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "The semantic of this code is not the same as the HTTP 204 \"No Response\". 204 indicates that the data have not changes and the client may continue to use the last transmitted value. We need a response code that indicates data are not transmitted because of staleness and the client should not use the last transmitted value.",
+          "createdAt": "2018-07-18T21:25:21Z",
+          "updatedAt": "2018-07-18T21:25:21Z"
+        },
+        {
+          "author": "mjkoster",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Suggest we create an equivalent response code to HTTP 202 Accepted\r\n\r\n202 Accepted\r\nThe request has been accepted for processing, but the processing has not been completed. The request might or might not be eventually acted upon, and may be disallowed when processing occurs.\r\n\r\nSuggest using 2.07\r\n\r\n",
+          "createdAt": "2018-07-18T21:52:06Z",
+          "updatedAt": "2018-07-18T21:52:06Z"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "id": "MDU6SXNzdWUyMTgwNjEzMjc=",
+      "title": "POST for queueing doesn't solve the QoS issue with missed publications ",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/5",
+      "state": "OPEN",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "for-future-docs"
+      ],
+      "body": "If a client subscribes using Observe, there is no handshake on the observe response to indicate that the notification was received by the subscriber. Creating a list of published representations in the broker using POST only covers the case where the broker can't keep up with sending notifications. The notifications are still \"best effort\".\r\n\r\nTo solve the QoS issue, we should have the subscriber create a queueing resource on the broker, which is specific to that subscriber, for each subscribed topic for which more than \"best effort\" QoS is desired. This resource will store published representations until the subscriber can retrieve or accept them. \r\n\r\nThe subscriber may use GET to return the representation of the queueing resource, receiving a list of links to published representations which may then be fetched using GET. The subscriber would be responsible for removing the representations it has fetched.\r\n\r\nThis enables sleepy subscribers and subscribers behind NAT firewalls to receive notifications without data loss. \r\n\r\nWe may also provide a resource that may be observed which returns and removes representations from the queue, in published order, using GET or Observe. Using GET, the broker would return \"no data\" upon fetches to an empty queue.\r\n\r\nA sleepy subscriber could wake up, subscribe, receive notifications, unsubscribe, and sleep again.\r\n\r\nWe may also provide a means for the subscriber to request a push or \"web callback\" using PUT or POST to update a resource on the subscriber upon notifications.\r\n\r\nWe could keep \"simple pubsub\" as it is, and allow queueing pubsub as an optional feature for enhanced QoS, sleepy subscribers, etc.\r\n",
+      "createdAt": "2017-03-30T02:14:21Z",
+      "updatedAt": "2018-07-18T21:15:02Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 8,
+      "id": "MDU6SXNzdWUyNDM3NDI2MzQ=",
+      "title": "We don't specify enough about options included in notifications",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/8",
+      "state": "CLOSED",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Does the broker pass uri-host? content-format? etc...",
+      "createdAt": "2017-07-18T14:46:53Z",
+      "updatedAt": "2018-07-18T21:18:33Z",
+      "closedAt": "2018-07-18T21:18:33Z",
+      "comments": [
+        {
+          "author": "mjkoster",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "There is no pass-through of header options. Will not specify in this document.",
+          "createdAt": "2018-07-18T21:18:33Z",
+          "updatedAt": "2018-07-18T21:18:33Z"
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "id": "MDU6SXNzdWUyNDM3NDU4Nzc=",
+      "title": "Create on publish needs more definition",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/9",
+      "state": "CLOSED",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Should we allow create on publish?\r\n\r\nCreate on publish might use a query option to set the content format.",
+      "createdAt": "2017-07-18T14:56:04Z",
+      "updatedAt": "2018-07-18T21:15:57Z",
+      "closedAt": "2018-07-18T21:15:57Z",
+      "comments": [
+        {
+          "author": "mjkoster",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Create-on-publish uses the content-format from the header of the PUT/POST used to publish",
+          "createdAt": "2018-07-18T21:15:57Z",
+          "updatedAt": "2018-07-18T21:15:57Z"
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "id": "MDU6SXNzdWUyNDM3NDY4NDg=",
+      "title": "testing opening issues from cli",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/10",
+      "state": "CLOSED",
+      "author": "jaimejim",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "jjjjj jjjj jjjj",
+      "createdAt": "2017-07-18T14:58:55Z",
+      "updatedAt": "2017-07-18T14:59:49Z",
+      "closedAt": "2017-07-18T14:59:49Z",
+      "comments": []
+    },
+    {
+      "number": 11,
+      "id": "MDU6SXNzdWUyNDM3NTAwMzI=",
+      "title": "Subscribing to a hierarchy of topics",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/11",
+      "state": "CLOSED",
+      "author": "jaimejim",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Given the following hierarchy:\n\n\"topic/subtopic1/subtopic2\"\n\nShould a subscriber be allowed to subscribe to topic or subtopic1? What would the broker return if so?",
+      "createdAt": "2017-07-18T15:08:17Z",
+      "updatedAt": "2018-07-18T21:15:35Z",
+      "closedAt": "2018-07-18T21:15:35Z",
+      "comments": [
+        {
+          "author": "mjkoster",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "It depends on the content format requested by the subscriber. If there is only a link-format resource stored (sub topic but no data items) then the client can only get link-format. ",
+          "createdAt": "2017-07-18T21:01:31Z",
+          "updatedAt": "2017-07-18T21:01:31Z"
+        },
+        {
+          "author": "mjkoster",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "The broker would return unsupported content format",
+          "createdAt": "2017-07-18T21:02:07Z",
+          "updatedAt": "2017-07-18T21:02:07Z"
+        },
+        {
+          "author": "mjkoster",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "4.15",
+          "createdAt": "2017-07-18T21:02:52Z",
+          "updatedAt": "2017-07-18T21:02:52Z"
+        },
+        {
+          "author": "akeranen",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "When subscribing to a parent topic, the broker will return a set of links that the client can subscribe to. The broker will send notifications when the link set changes so that a client stays up to date with the tree. This should work with the current draft already.",
+          "createdAt": "2018-07-18T21:15:35Z",
+          "updatedAt": "2018-07-18T21:15:35Z"
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "id": "MDU6SXNzdWUyNzkzNDg0NzA=",
+      "title": "Notification information to publisher",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/12",
+      "state": "OPEN",
+      "author": "lauri-piikivi",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [
+        "for-future-docs"
+      ],
+      "body": "Hi,\r\n\r\nMore of a feature wish. If a client subscribes for notifications, I would like to have an option that allows the broker to forward the notification attributes -- the greater than, less than, minimum period etc --  to the publishing client. The publishing client can use those to adjust it's own publishing. ",
+      "createdAt": "2017-12-05T11:56:32Z",
+      "updatedAt": "2018-07-18T21:12:12Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "akeranen",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "A topic may have multiple subscribers so a broker would have to forward and update combinations of these parameters to the publisher. Also would need to define a mechanism to relay these attributes. This starts to get quite complex so maybe it's better left for the future unless there's a strong need for this.",
+          "createdAt": "2018-07-18T21:12:01Z",
+          "updatedAt": "2018-07-18T21:12:01Z"
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "id": "MDU6SXNzdWUzMDY1NTYwNzI=",
+      "title": "CREATE topic on the core.ps resource should start with slash",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/18",
+      "state": "CLOSED",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "When creating topics under the core.ps resource (\"/ps\" in the document examples) we should require or allow (?) a starts-with-slash path. When creating topics under a parent topic, we should require a relative path (not starts-with-slash). Should we allow PUT to create using an absolute URI?",
+      "createdAt": "2018-03-19T17:20:07Z",
+      "updatedAt": "2018-07-18T21:10:28Z",
+      "closedAt": "2018-07-18T21:10:27Z",
+      "comments": [
+        {
+          "author": "mjkoster",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "dup 21",
+          "createdAt": "2018-07-18T21:10:27Z",
+          "updatedAt": "2018-07-18T21:10:27Z"
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "id": "MDU6SXNzdWUzMDY1NTg2OTg=",
+      "title": "DISCOVER should be enabled on parent topics",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/19",
+      "state": "CLOSED",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Parent topics should have a rt=core.ps.discover target attribute and be described in the draft text as permitting DISCOVER operations.",
+      "createdAt": "2018-03-19T17:27:22Z",
+      "updatedAt": "2018-07-18T21:08:33Z",
+      "closedAt": "2018-07-18T21:08:33Z",
+      "comments": [
+        {
+          "author": "mjkoster",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "After discussion, we think that rt=core.ps.discover should only appear at the root discovery resource and not in each parent topic link",
+          "createdAt": "2018-03-20T11:43:18Z",
+          "updatedAt": "2018-03-20T11:43:18Z"
+        },
+        {
+          "author": "mjkoster",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Done",
+          "createdAt": "2018-07-18T21:08:31Z",
+          "updatedAt": "2018-07-18T21:08:31Z"
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "id": "MDU6SXNzdWUzMDY1OTA2MDc=",
+      "title": "Should we allow topics to be created at locations other than under the pub/sub resource ?",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/21",
+      "state": "CLOSED",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Currently we show topics only being created under the pub/sub resource (core.ps and \"/ps\" in the examples). Should we also allow creation of topics at starts-with-slash URIs, or should Creation, Discovery, and all topics be located under the pub/sub resource?",
+      "createdAt": "2018-03-19T18:57:46Z",
+      "updatedAt": "2018-03-19T19:11:58Z",
+      "closedAt": "2018-03-19T19:11:43Z",
+      "comments": [
+        {
+          "author": "mjkoster",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "duplicate of #18",
+          "createdAt": "2018-03-19T19:11:58Z",
+          "updatedAt": "2018-03-19T19:11:58Z"
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "id": "MDU6SXNzdWUzMDY1OTI4MDc=",
+      "title": "How does a client use Conditional Notification parameters (CoRE Dynlink)?",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/22",
+      "state": "OPEN",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [
+        "for-future-docs"
+      ],
+      "body": "Should we support conditional notification on subscriptions? If so, how should we enable it? Can it only support pmin and pmax since we only forward representations?",
+      "createdAt": "2018-03-19T19:03:44Z",
+      "updatedAt": "2018-07-18T21:04:08Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 24,
+      "id": "MDU6SXNzdWUzMDY2Mzg4NzQ=",
+      "title": "What happens when a client tries to create a topic that already exists?",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/24",
+      "state": "OPEN",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Should we return 4.09 Conflict for the case when the client tries to create a topic that already exists? \r\n\r\n**Indicates that the request could not be processed because of conflict in the request, such as an edit conflict between multiple simultaneous updates.**\r\n\r\nThe draft currently specifies 4.03\r\n\r\n**The request was valid, but the server is refusing action. The user might not have the necessary permissions for a resource, or may need an account of some sort.**\r\n",
+      "createdAt": "2018-03-19T21:16:20Z",
+      "updatedAt": "2018-07-18T22:46:09Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "akeranen",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "LGTM",
+          "createdAt": "2018-07-18T21:05:32Z",
+          "updatedAt": "2018-07-18T21:05:32Z"
+        },
+        {
+          "author": "mjkoster",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Will change to 4.09",
+          "createdAt": "2018-07-18T21:05:40Z",
+          "updatedAt": "2018-07-18T21:05:40Z"
+        },
+        {
+          "author": "akeranen",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "4.03 is same as HTTP 403 per 7252: \r\n> The HTTP 403 Forbidden client error status response code indicates that the server understood the request but refuses to authorize it.\r\n\r\n4.09 is registered by 8132: https://tools.ietf.org/html/rfc8132#section-6\r\nhttps://tools.ietf.org/html/rfc8132#section-3.4\r\n\r\n>    Conflicting state:  If the modification specified by a PATCH or\r\n      iPATCH request causes the resource to enter an inconsistent state\r\n      that the server cannot resolve, the server can return the 4.09\r\n      (Conflict) CoAP response.",
+          "createdAt": "2018-07-18T22:46:08Z",
+          "updatedAt": "2018-07-18T22:46:08Z"
+        }
+      ]
+    },
+    {
+      "number": 29,
+      "id": "MDU6SXNzdWUzNDI1MTUxMDM=",
+      "title": "Add note to intro/abstract about pub/sub paradigm",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/29",
+      "state": "CLOSED",
+      "author": "akeranen",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This mechanism is also useful for cases where the pub/sub paradigm instead of classic req/resp is desired (one-to-many, many-to-one, many-to-many communications, etc.).",
+      "createdAt": "2018-07-18T22:33:06Z",
+      "updatedAt": "2019-01-02T20:06:31Z",
+      "closedAt": "2019-01-02T20:06:31Z",
+      "comments": []
+    },
+    {
+      "number": 31,
+      "id": "MDU6SXNzdWUzOTUzODk2OTI=",
+      "title": "Add implementation status section",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/31",
+      "state": "OPEN",
+      "author": "akeranen",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "https://tools.ietf.org/html/rfc7942\r\n\r\nAt least:\r\n\r\n* https://github.com/Com-AugustCellars/PubSub\r\n* https://github.com/aldwinhermanudin/coap-broker\r\n* https://github.com/gotthardp/rabbitmq-coap-pubsub\r\n* https://github.com/PethrusG/CoAP-PubSub-Broker\r\n* https://github.com/herjulf/coap\r\n* https://github.com/kkdai/coapmq",
+      "createdAt": "2019-01-02T21:40:57Z",
+      "updatedAt": "2019-01-02T21:40:57Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 34,
+      "id": "MDU6SXNzdWU0MjE5OTAxODg=",
+      "title": "Handle topic timeout w/URI-query option and 4.04 and data staleness with max-age",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/34",
+      "state": "OPEN",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "As per the CoRE interim discussion, we would like to support topic lifetime setting using a URI-query option (e.g. \"tlt\") on topic creation. If the topic isn't published to before the lifetime expires, the topic is removed, resulting in a 4.04 response to new SUBSCRIBE or READ requests, and the broker closes outstanding observes with a 4.04. Publishing to the topic resets the lifetime counter.\r\n\r\nMax-age will be used for data staleness. We suggest to provide the same feature to subscribing clients that a cache would use. One issue with Max-age is that it only applies to responses, and we need to convey the data lifetime on publish. We could use a uri-query option (e.g. \"dlt\") or a new header option for publish-max-age. Without this, the default Max-Age of 60 seconds would be required. For READ and SUBSCRIBE responses it will be (60 seconds - seconds since publish). ",
+      "createdAt": "2019-03-17T23:57:29Z",
+      "updatedAt": "2019-03-17T23:57:29Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 40,
+      "id": "MDU6SXNzdWU1MTQ5Mjc5MTI=",
+      "title": "Why do topics need to be created?",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/40",
+      "state": "OPEN",
+      "author": "bdamm",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "The protocol requires that publishers and subscribers create topics before publishing or subscribing to topics. There is an option for a single-shot topic creation with publish, but no option for subscribing to a topic that hasn't been created yet.\r\n\r\nThe result is that if you have a very large tree of potential but not realized topics, subscribers need to actually create a topic before subscribing, regardless of whether the topic will actually be used or not. This converts potential topics into actual topics, which is a major resource burden in the case where there is a large number of potential topics but a small number of actual topics within that potential topic tree.\r\n",
+      "createdAt": "2019-10-30T19:30:25Z",
+      "updatedAt": "2019-10-30T19:30:25Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 41,
+      "id": "MDU6SXNzdWU1MTQ5MzA4MTI=",
+      "title": "Messages are always retained",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/41",
+      "state": "OPEN",
+      "author": "bdamm",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "The pubsub protocol -09 requires the broker to always provide the most recent message to a subscriber. Why? The message might be very out-dated. Also, this requires the broker to retain the most recent message for every topic. If the topic tree is large and the broker is acting as an exchange point for millions of devices then the requirement that all topics have a cached message puts a big burden on the broker.",
+      "createdAt": "2019-10-30T19:35:39Z",
+      "updatedAt": "2019-10-30T19:35:39Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 42,
+      "id": "MDU6SXNzdWU1MTQ5ODAxMTQ=",
+      "title": "No way to wildcard subscriptions or subscribe to subtrees",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/42",
+      "state": "OPEN",
+      "author": "bdamm",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Suppose there is a topic structure such as /${tenant-id}/${device-mac}/${event-id}\r\n\r\nSuppose a subscriber wants to receive all events with a specific ID. There is no way to do that in this protocol.\r\n\r\nSuppose a subscriber wants to receive all events from a specific device-mac. \r\nSuppose a subscriber wants to receive all events from a specific tenant-id.\r\n\r\nHow could this be efficiently realized at all, even with complete freedom to structure the topic tree in any way? With the current protocol I don't see how to do it. Subscribers would need to subscribe to millions of potential topics, even though there may not be millions of actual topics. Even worse, subscribers would need intimate knowledge of all possible topics (all possible IDs and MACs) which may not even be possible.",
+      "createdAt": "2019-10-30T21:01:44Z",
+      "updatedAt": "2022-09-28T15:30:21Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "mattaylor",
+          "authorAssociation": "NONE",
+          "body": "This proposal could be extended to support topic wildcard subscriptions following MQTT conventions (`+` for single path segments and `#` for multiple path segments). \r\nWhen a wildcard is included in the subscription, the broker is responsible for notifying all subscribers when any resources change on any matching topics. \r\nWhen a notify response is then delivered to the subscriber on a wildcard topic, the broker MUST include the `URI-PATH` option in the message which indicates the full topic path of the resource being sent. \r\n\r\nE.G: \r\n```\r\n    Client1   Client2                                          Broker\r\n       |          |                   Subscribe                    |\r\n       |          | --- GET /ps/+ Obs:0 Token:XX ----------------> | \r\n       |          | <--- ACK ------------------------------------- | \r\n       |          |                                                |\r\n       |          |                    Publish                     |\r\n       | ---------|---- PUT /ps/topic1 \"1033.3\"  ----------------> |\r\n       |<---------|---- 2.01 Location:/ps/topic1 ----------------- |\r\n       |          |                    Notify                      |\r\n       |          | <-- 2.05 \"1033.3\" Obs:11 Uri-Path:/ps/topic1 - |\r\n```",
+          "createdAt": "2022-09-23T18:14:25Z",
+          "updatedAt": "2022-09-28T15:30:21Z"
+        }
+      ]
+    },
+    {
+      "number": 44,
+      "id": "I_kwDOBEc_t85ca7ql",
+      "title": "Brokerless case",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/44",
+      "state": "OPEN",
+      "author": "jaimejim",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "This issue is to discuss the need for the brokerless case, originally proposed for the L+G field bus. \r\n\r\nIn the past we have discussed expanding it and moving it to a new draft or an appendix. There has also been discussion around additional input on configuration and topics, combining the PubSub and Resource Directory patterns, and the interface for topic discovery.\r\n\r\nAs we have not enough material for now and we have chosen to keep this draft simple, I propose to remove it for now in https://github.com/core-wg/coap-pubsub/commit/88e17ec5d60c18d5bcf476a462be18e84cdbf4d5.",
+      "createdAt": "2023-01-20T09:42:22Z",
+      "updatedAt": "2023-01-20T09:43:33Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 45,
+      "id": "I_kwDOBEc_t85cbSvV",
+      "title": "CoAP pub/sub client",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/45",
+      "state": "OPEN",
+      "author": "jaimejim",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "After multiple reads of the document I think it would make more sense to simply keep \"CoAP Clients\" as a general term for the endpoints and just have the classic publisher and subscriber roles indicated when needed. There is no need for a new term  \"CoAP pub/sub Client\" as it may introduce confusion to the reader. \r\n\r\nFor now I have removed the term on https://github.com/core-wg/coap-pubsub/commit/a27f6a5d03fab445f0a47b8d7cc55aa59ba69e26",
+      "createdAt": "2023-01-20T10:53:44Z",
+      "updatedAt": "2023-01-20T10:53:44Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
+  "pulls": [
+    {
+      "number": 6,
+      "id": "MDExOlB1bGxSZXF1ZXN0MTI4NzAzOTUw",
+      "title": "updates to address issues",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/6",
+      "state": "MERGED",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "address issues # 1,2,3,4,5\nremoved the list of representations on POST but kept POST to publish,\nmay do subscriber queueing in a separate document",
+      "createdAt": "2017-07-03T23:07:43Z",
+      "updatedAt": "2017-07-03T23:52:39Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "6aa618ca30e6926e2a8c7dbea9933e08c19d7000",
+      "headRepository": null,
+      "headRefName": "master",
+      "headRefOid": "48886f2bfbc52f441d22c3feac47571f59870cbf",
+      "closedAt": "2017-07-03T23:52:39Z",
+      "mergedAt": "2017-07-03T23:52:39Z",
+      "mergedBy": "akeranen",
+      "mergeCommit": {
+        "oid": "5efbc8d476de1fcf5e202f10a10f2f0ac0077b72"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 7,
+      "id": "MDExOlB1bGxSZXF1ZXN0MTI4ODQzNjk1",
+      "title": "Clarify the case for optional CREATE",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/7",
+      "state": "MERGED",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "change MAY to SHOULD and add clarifying text",
+      "createdAt": "2017-07-04T18:04:13Z",
+      "updatedAt": "2018-01-07T00:18:28Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "36081f432df7bbf5af14718709f61d26ab7599fe",
+      "headRepository": null,
+      "headRefName": "master",
+      "headRefOid": "97b732d7a9ed77b53142d87d44a42615d7902787",
+      "closedAt": "2018-01-07T00:18:28Z",
+      "mergedAt": "2018-01-07T00:18:28Z",
+      "mergedBy": "mjkoster",
+      "mergeCommit": {
+        "oid": "0a29954fc436f592551e1484695ceace3bc3395b"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3NjA2MzQ3MzQ=",
+          "commit": {
+            "abbreviatedOid": "97b732d"
+          },
+          "author": "akeranen",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2017-09-05T15:14:49Z",
+          "updatedAt": "2017-09-05T15:15:01Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "How about: \"Fixed brokerless devices and pre-configured brokers in dedicated installations may disallow using CREATE\".",
+              "createdAt": "2017-09-05T15:14:49Z",
+              "updatedAt": "2017-09-05T15:15:02Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "id": "MDExOlB1bGxSZXF1ZXN0MTYwMDYyMTE0",
+      "title": "s|pubsub|pub/sub|g",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/13",
+      "state": "MERGED",
+      "author": "akeranen",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Changed all instances of \"pubsub\" in the text to \"pub/sub\" that seems\nto be the most common way to abbreviate \"publish-subscribe\"",
+      "createdAt": "2017-12-25T16:25:33Z",
+      "updatedAt": "2018-01-07T00:24:09Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "0a29954fc436f592551e1484695ceace3bc3395b",
+      "headRepository": "core-wg/coap-pubsub",
+      "headRefName": "pubsub-term-update",
+      "headRefOid": "7d7d825f63b14d238836de161e0d759d7e326920",
+      "closedAt": "2018-01-07T00:24:09Z",
+      "mergedAt": "2018-01-07T00:24:09Z",
+      "mergedBy": "mjkoster",
+      "mergeCommit": {
+        "oid": "71bf553b58c4bdbae9dcf69597cfcdede19d57e7"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 14,
+      "id": "MDExOlB1bGxSZXF1ZXN0MTY4Njg1ODE1",
+      "title": "Master",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/14",
+      "state": "MERGED",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2018-02-12T20:56:33Z",
+      "updatedAt": "2018-02-12T20:57:04Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "71bf553b58c4bdbae9dcf69597cfcdede19d57e7",
+      "headRepository": null,
+      "headRefName": "master",
+      "headRefOid": "fdc855ef338e9fa2545c71afb7025594513b2065",
+      "closedAt": "2018-02-12T20:57:04Z",
+      "mergedAt": "2018-02-12T20:57:04Z",
+      "mergedBy": "mjkoster",
+      "mergeCommit": {
+        "oid": "0718031131ba46f90ea53a0af76eb7916b882a3a"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 15,
+      "id": "MDExOlB1bGxSZXF1ZXN0MTY4Njg4MjQ4",
+      "title": "Master",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/15",
+      "state": "MERGED",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "pubsub-03",
+      "createdAt": "2018-02-12T21:07:53Z",
+      "updatedAt": "2018-02-12T21:08:11Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "0718031131ba46f90ea53a0af76eb7916b882a3a",
+      "headRepository": null,
+      "headRefName": "master",
+      "headRefOid": "8225dc4aee68a82dbf64f94d23eb68a975b60135",
+      "closedAt": "2018-02-12T21:08:11Z",
+      "mergedAt": "2018-02-12T21:08:11Z",
+      "mergedBy": "mjkoster",
+      "mergeCommit": {
+        "oid": "21cde189cd77e601455353f56b7d9b19d17f2e93"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 16,
+      "id": "MDExOlB1bGxSZXF1ZXN0MTcyODk3Nzcz",
+      "title": "Too Many Reqs response code split",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/16",
+      "state": "MERGED",
+      "author": "akeranen",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2018-03-05T15:24:06Z",
+      "updatedAt": "2018-03-05T22:13:42Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "21cde189cd77e601455353f56b7d9b19d17f2e93",
+      "headRepository": "core-wg/coap-pubsub",
+      "headRefName": "429-resp-code-split",
+      "headRefOid": "382abf2702f3017759ed764ccd923e9a0ac79a5c",
+      "closedAt": "2018-03-05T22:13:42Z",
+      "mergedAt": "2018-03-05T22:13:42Z",
+      "mergedBy": "akeranen",
+      "mergeCommit": {
+        "oid": "f5a1c9126f4b1dc0cf7bc0130ebded0825b881d7"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 17,
+      "id": "MDExOlB1bGxSZXF1ZXN0MTcyOTA0NzQx",
+      "title": "Fixed short description of 2.07 response code",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/17",
+      "state": "MERGED",
+      "author": "akeranen",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The description should be just a few words (https://www.iana.org/assignments/core-parameters/core-parameters.xhtml)",
+      "createdAt": "2018-03-05T15:47:13Z",
+      "updatedAt": "2018-03-05T22:14:10Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "21cde189cd77e601455353f56b7d9b19d17f2e93",
+      "headRepository": "core-wg/coap-pubsub",
+      "headRefName": "207-resp-code-fix",
+      "headRefOid": "b95c762cd4812f72cd463a0ce4db889955e14d3e",
+      "closedAt": "2018-03-05T22:14:10Z",
+      "mergedAt": "2018-03-05T22:14:10Z",
+      "mergedBy": "akeranen",
+      "mergeCommit": {
+        "oid": "7df4ed22c560bb0a687263d01ba6c95896827587"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 20,
+      "id": "MDExOlB1bGxSZXF1ZXN0MTc1OTk0NDE1",
+      "title": "Topic hierarchy editorial fixes",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/20",
+      "state": "MERGED",
+      "author": "akeranen",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2018-03-19T18:56:54Z",
+      "updatedAt": "2018-07-02T22:49:58Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "dfe5aa661bb37c6760ad4a5d3be81e88c0942bb8",
+      "headRepository": "core-wg/coap-pubsub",
+      "headRefName": "topic-hierarchy-fixes",
+      "headRefOid": "b4668582f33837b55f46769b05fac4c3dc7ac7bc",
+      "closedAt": "2018-07-02T22:49:58Z",
+      "mergedAt": "2018-07-02T22:49:58Z",
+      "mergedBy": "mjkoster",
+      "mergeCommit": {
+        "oid": "408c9ad04bf960f8725245c9b9c627277876b34d"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 23,
+      "id": "MDExOlB1bGxSZXF1ZXN0MTc2MDAyNDk3",
+      "title": "Added discussion on sub-topic discovery",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/23",
+      "state": "MERGED",
+      "author": "akeranen",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2018-03-19T19:31:00Z",
+      "updatedAt": "2019-01-02T17:42:25Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "408c9ad04bf960f8725245c9b9c627277876b34d",
+      "headRepository": "core-wg/coap-pubsub",
+      "headRefName": "sub-topic-discovery-discussion",
+      "headRefOid": "9ea2fcef3495ea6b85cb3cbe8aee5da1eb39b5bd",
+      "closedAt": "2018-07-02T22:59:41Z",
+      "mergedAt": "2018-07-02T22:59:41Z",
+      "mergedBy": "mjkoster",
+      "mergeCommit": {
+        "oid": "47e7939ae6f542f156f0ce2b94e7ad8b5b430c68"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 25,
+      "id": "MDExOlB1bGxSZXF1ZXN0MTk4ODA1MDM4",
+      "title": "Master",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/25",
+      "state": "MERGED",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "address email comments and more cleanup of terminology",
+      "createdAt": "2018-07-02T22:26:58Z",
+      "updatedAt": "2018-07-02T22:27:52Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "59afb67932ec8cb982be29d757e59afc69cc0f58",
+      "headRepository": null,
+      "headRefName": "master",
+      "headRefOid": "da5c3d0495118c89134288fc69c1e28cab61cb7f",
+      "closedAt": "2018-07-02T22:27:52Z",
+      "mergedAt": "2018-07-02T22:27:52Z",
+      "mergedBy": "mjkoster",
+      "mergeCommit": {
+        "oid": "dfe5aa661bb37c6760ad4a5d3be81e88c0942bb8"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 26,
+      "id": "MDExOlB1bGxSZXF1ZXN0MTk4ODA4NDY2",
+      "title": "xml file",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/26",
+      "state": "MERGED",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2018-07-02T22:49:35Z",
+      "updatedAt": "2018-07-02T23:00:07Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "dfe5aa661bb37c6760ad4a5d3be81e88c0942bb8",
+      "headRepository": null,
+      "headRefName": "master",
+      "headRefOid": "cd8100ff607c00f2622062bd0b245ceb198a6f23",
+      "closedAt": "2018-07-02T23:00:07Z",
+      "mergedAt": "2018-07-02T23:00:07Z",
+      "mergedBy": "mjkoster",
+      "mergeCommit": {
+        "oid": "11cdbe599b6d51821cd534c11e154f780a0eea95"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 27,
+      "id": "MDExOlB1bGxSZXF1ZXN0MTk4ODE0NDU2",
+      "title": "ready for upload",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/27",
+      "state": "MERGED",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "draft version to upload for IETF 102",
+      "createdAt": "2018-07-02T23:33:46Z",
+      "updatedAt": "2018-07-02T23:36:29Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "11cdbe599b6d51821cd534c11e154f780a0eea95",
+      "headRepository": "mjkoster/pubsub",
+      "headRefName": "master",
+      "headRefOid": "0453d84c4a584cc44db4f201588694acc3abadc2",
+      "closedAt": "2018-07-02T23:36:29Z",
+      "mergedAt": "2018-07-02T23:36:29Z",
+      "mergedBy": "mjkoster",
+      "mergeCommit": {
+        "oid": "aa30422e652705aa797878328bee10868342cd69"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 28,
+      "id": "MDExOlB1bGxSZXF1ZXN0MjAxNDU2NTAz",
+      "title": "add relevant reference",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/28",
+      "state": "MERGED",
+      "author": "ms-s",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2018-07-14T15:32:22Z",
+      "updatedAt": "2019-01-02T20:07:01Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "aa30422e652705aa797878328bee10868342cd69",
+      "headRepository": "ms-s/pubsub",
+      "headRefName": "master",
+      "headRefOid": "22a2cc1dd1c64d7251e4be86c1b363e1f8556d81",
+      "closedAt": "2019-01-02T20:07:01Z",
+      "mergedAt": "2019-01-02T20:07:01Z",
+      "mergedBy": "mjkoster",
+      "mergeCommit": {
+        "oid": "3ac6365d1cae55c8893c2f66e2ba5b80911e35a0"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MTM3MjQ0MTY2",
+          "commit": {
+            "abbreviatedOid": "22a2cc1"
+          },
+          "author": "akeranen",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "LGTM",
+          "createdAt": "2018-07-14T17:34:36Z",
+          "updatedAt": "2018-07-14T17:34:36Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 30,
+      "id": "MDExOlB1bGxSZXF1ZXN0MjQxODE5NTQz",
+      "title": "Added note on pub/sub being good fit for some apps; resolves #29",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/30",
+      "state": "MERGED",
+      "author": "akeranen",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2019-01-02T18:52:31Z",
+      "updatedAt": "2019-01-02T20:06:30Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "aa30422e652705aa797878328bee10868342cd69",
+      "headRepository": "core-wg/coap-pubsub",
+      "headRefName": "pubsubintro",
+      "headRefOid": "185ca86575e0bb4d479bb8e092fe8a5211175070",
+      "closedAt": "2019-01-02T20:06:30Z",
+      "mergedAt": "2019-01-02T20:06:30Z",
+      "mergedBy": "mjkoster",
+      "mergeCommit": {
+        "oid": "448dd4f3795943a85da037ae4636cc268db4d21b"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 32,
+      "id": "MDExOlB1bGxSZXF1ZXN0MjQxOTExNjAz",
+      "title": "cleanup of CREATE section",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/32",
+      "state": "MERGED",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "removed duplicate description of hierarchy, added a constraint to allow\nonly one topic to be created at a time, added text to allow additional\ntarget attributes in links for created topics",
+      "createdAt": "2019-01-03T06:05:29Z",
+      "updatedAt": "2019-01-04T22:27:46Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "3ac6365d1cae55c8893c2f66e2ba5b80911e35a0",
+      "headRepository": "mjkoster/pubsub",
+      "headRefName": "master",
+      "headRefOid": "3015934712655aab69743e1ed1bacdfbe5d4cf49",
+      "closedAt": "2019-01-04T22:27:46Z",
+      "mergedAt": "2019-01-04T22:27:46Z",
+      "mergedBy": "mjkoster",
+      "mergeCommit": {
+        "oid": "fe126ebcf8db0a377a86a2a2dde11ea172e21d71"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MTg5MDI2MjYy",
+          "commit": {
+            "abbreviatedOid": "f18d700"
+          },
+          "author": "akeranen",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "CHANGES_REQUESTED",
+          "body": "",
+          "createdAt": "2019-01-03T14:16:19Z",
+          "updatedAt": "2019-01-03T14:20:35Z",
+          "comments": [
+            {
+              "originalPosition": 29,
+              "body": "Is this sentence (\"link attribute value in payload\") correct?",
+              "createdAt": "2019-01-03T14:16:19Z",
+              "updatedAt": "2019-01-03T14:22:13Z"
+            },
+            {
+              "originalPosition": 35,
+              "body": "s/may/MUST/ ?",
+              "createdAt": "2019-01-03T14:20:03Z",
+              "updatedAt": "2019-01-03T14:22:13Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 33,
+      "id": "MDExOlB1bGxSZXF1ZXN0MjYwMDkwMDUy",
+      "title": "Update per Feb. 7th meeting",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/33",
+      "state": "MERGED",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Removed the 2.07 code for no data and expect publisher to publish\nsomething. Clean up Max-Age so it applies to the topic. address email\ncomments.",
+      "createdAt": "2019-03-11T18:42:45Z",
+      "updatedAt": "2019-03-11T23:41:18Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "fe126ebcf8db0a377a86a2a2dde11ea172e21d71",
+      "headRepository": "mjkoster/pubsub",
+      "headRefName": "master",
+      "headRefOid": "fd11bbb3f3fa7eafdd0fe7ff8160e0b2d0efcfe6",
+      "closedAt": "2019-03-11T23:41:18Z",
+      "mergedAt": "2019-03-11T23:41:18Z",
+      "mergedBy": "mjkoster",
+      "mergeCommit": {
+        "oid": "2aeb1f7a98cb7dcba722f2832bc0476eef2b61b9"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MjEzMDI2NDM1",
+          "commit": {
+            "abbreviatedOid": "29b92e8"
+          },
+          "author": "akeranen",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2019-03-11T18:59:53Z",
+          "updatedAt": "2019-03-11T19:43:26Z",
+          "comments": [
+            {
+              "originalPosition": 69,
+              "body": "s/returns errors on subscription/the broker returns \"4.04\" error response to subscription requests on the topic/",
+              "createdAt": "2019-03-11T18:59:53Z",
+              "updatedAt": "2019-03-11T23:15:53Z"
+            },
+            {
+              "originalPosition": 70,
+              "body": "s/outstanding subscriptions are cancelled/outstanding subscriptions for the topic are cancelled by sending a \"4.04\" response code to subscribers of the topic/",
+              "createdAt": "2019-03-11T19:02:41Z",
+              "updatedAt": "2019-03-11T23:15:53Z"
+            },
+            {
+              "originalPosition": 90,
+              "body": "Supporting just single ct is better.",
+              "createdAt": "2019-03-11T19:39:36Z",
+              "updatedAt": "2019-03-11T23:15:53Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MjEzMTMwMjEy",
+          "commit": {
+            "abbreviatedOid": "c6a74f0"
+          },
+          "author": "mjkoster",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2019-03-11T23:14:06Z",
+          "updatedAt": "2019-03-11T23:14:07Z",
+          "comments": [
+            {
+              "originalPosition": 70,
+              "body": "This part needs WG discussion",
+              "createdAt": "2019-03-11T23:14:07Z",
+              "updatedAt": "2019-03-11T23:15:53Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MjEzMTMwMjk3",
+          "commit": {
+            "abbreviatedOid": "c6a74f0"
+          },
+          "author": "mjkoster",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2019-03-11T23:14:24Z",
+          "updatedAt": "2019-03-11T23:14:24Z",
+          "comments": [
+            {
+              "originalPosition": 90,
+              "body": "This whole feature needs WG discussion",
+              "createdAt": "2019-03-11T23:14:24Z",
+              "updatedAt": "2019-03-11T23:15:53Z"
+            }
+          ]
+        },
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MjEzMTMyNjc0",
+          "commit": {
+            "abbreviatedOid": "fd11bbb"
+          },
+          "author": "mjkoster",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2019-03-11T23:23:38Z",
+          "updatedAt": "2019-03-11T23:23:38Z",
+          "comments": [
+            {
+              "originalPosition": 90,
+              "body": "Updated to require one ct\r\n",
+              "createdAt": "2019-03-11T23:23:38Z",
+              "updatedAt": "2019-03-11T23:23:39Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 35,
+      "id": "MDExOlB1bGxSZXF1ZXN0Mjk1NDI5OTY1",
+      "title": "Proposal for PubSub Broker Improvements",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/35",
+      "state": "MERGED",
+      "author": "ektrah",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "@mjkoster @akeranen PTAL",
+      "createdAt": "2019-07-08T17:30:41Z",
+      "updatedAt": "2019-07-09T08:55:23Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "2aeb1f7a98cb7dcba722f2832bc0476eef2b61b9",
+      "headRepository": null,
+      "headRefName": "redesign",
+      "headRefOid": "69d8a006a9f6eeeb9f01421d1ff5b4448633dc8e",
+      "closedAt": "2019-07-08T20:11:22Z",
+      "mergedAt": "2019-07-08T20:11:22Z",
+      "mergedBy": "mjkoster",
+      "mergeCommit": {
+        "oid": "8a10947836c4ac66429a2982f530a88012a2e31b"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 36,
+      "id": "MDExOlB1bGxSZXF1ZXN0Mjk3MjM3MTc2",
+      "title": "Small proposal improvements",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/36",
+      "state": "MERGED",
+      "author": "ektrah",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "cc @mjkoster @akeranen ",
+      "createdAt": "2019-07-12T22:01:05Z",
+      "updatedAt": "2019-07-21T15:18:45Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "8a10947836c4ac66429a2982f530a88012a2e31b",
+      "headRepository": null,
+      "headRefName": "redesign-fixes",
+      "headRefOid": "79a83a4c9da5c5c24ac231cd246a60ff2a149138",
+      "closedAt": "2019-07-17T22:43:19Z",
+      "mergedAt": "2019-07-17T22:43:19Z",
+      "mergedBy": "mjkoster",
+      "mergeCommit": {
+        "oid": "61e5dff454244ace1ee040246b303e07d40c8ecb"
+      },
+      "comments": [
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "For some reason, I can't login to GitHub today. So I'll use this issue for discussing the proposal, sorry. \n\nA subscriber that is waiting for the first Data should observe the info object? An example might help. \n\nSo the data link had to be there from the outset (with a 404) so the publisher can PUT to it? But then it's not a 404, but a 405. \n\n\n\nSent from mobile, sorry for terse\n\n> On 18. Jul 2019, at 00:43, Michael Koster <notifications@github.com> wrote:\n> \n> Merged #36 into master.\n> \n> \u2014\n> You are receiving this because you are subscribed to this thread.\n> Reply to this email directly, view it on GitHub, or mute the thread.\n",
+          "createdAt": "2019-07-18T07:46:07Z",
+          "updatedAt": "2019-07-18T07:46:07Z"
+        },
+        {
+          "author": "ektrah",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Let\u2019s discuss on the CoRE mailing list.",
+          "createdAt": "2019-07-18T11:04:29Z",
+          "updatedAt": "2019-07-18T11:04:29Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MjYzMTcwNDM0",
+          "commit": {
+            "abbreviatedOid": "79a83a4"
+          },
+          "author": "akeranen",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "LGTM. We may want to add some more text on client hinting what should the topic be while server keeping the authority to generate them.",
+          "createdAt": "2019-07-17T16:23:40Z",
+          "updatedAt": "2019-07-17T16:23:40Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 37,
+      "id": "MDExOlB1bGxSZXF1ZXN0Mjk5NjQ0Nzc4",
+      "title": "Some proposal additions",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/37",
+      "state": "MERGED",
+      "author": "ektrah",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "cc @akeranen @mjkoster",
+      "createdAt": "2019-07-21T15:29:59Z",
+      "updatedAt": "2019-07-22T17:58:11Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "61e5dff454244ace1ee040246b303e07d40c8ecb",
+      "headRepository": null,
+      "headRefName": "redesign-additions",
+      "headRefOid": "5dd3c4d3b5e429f1511bfa520424de7331f35861",
+      "closedAt": "2019-07-22T17:56:24Z",
+      "mergedAt": "2019-07-22T17:56:24Z",
+      "mergedBy": "mjkoster",
+      "mergeCommit": {
+        "oid": "fc4f81520b4d9a94fb30e186803ab28bf645befe"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MjY0OTM5MjMz",
+          "commit": {
+            "abbreviatedOid": "5dd3c4d"
+          },
+          "author": "akeranen",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2019-07-22T17:22:44Z",
+          "updatedAt": "2019-07-22T17:22:44Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 38,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzAzMzI0Mjcx",
+      "title": "More proposal improvements",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/38",
+      "state": "MERGED",
+      "author": "ektrah",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "cc @mjkoster @akeranen @jimsch @chrysn",
+      "createdAt": "2019-08-01T10:39:00Z",
+      "updatedAt": "2020-01-02T23:18:09Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "fc4f81520b4d9a94fb30e186803ab28bf645befe",
+      "headRepository": null,
+      "headRefName": "redesign-updates",
+      "headRefOid": "b8b751f0c4fe7137316292c84f1874c9543da66a",
+      "closedAt": "2019-08-01T16:14:40Z",
+      "mergedAt": "2019-08-01T16:14:39Z",
+      "mergedBy": "mjkoster",
+      "mergeCommit": {
+        "oid": "35cf03a6bf30cbb76641a47e3254e27642798ec8"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MjY5NzE5ODcz",
+          "commit": {
+            "abbreviatedOid": "b8b751f"
+          },
+          "author": "akeranen",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2019-08-01T15:57:17Z",
+          "updatedAt": "2019-08-01T15:57:17Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 39,
+      "id": "MDExOlB1bGxSZXF1ZXN0MzIyOTA4NjAy",
+      "title": "MJK update",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/39",
+      "state": "CLOSED",
+      "author": "mjkoster",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I bumped the version number and put a paragraph into the abstract pointing to the proposal",
+      "createdAt": "2019-09-30T18:13:59Z",
+      "updatedAt": "2023-03-01T17:59:52Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "35cf03a6bf30cbb76641a47e3254e27642798ec8",
+      "headRepository": "mjkoster/pubsub",
+      "headRefName": "mjk-update",
+      "headRefOid": "bd1e236a0549827e1307f3e11acd43f1af91a6f0",
+      "closedAt": "2023-03-01T17:59:51Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MzY4Njk3NjA4",
+          "commit": {
+            "abbreviatedOid": "bd1e236"
+          },
+          "author": "jaimejim",
+          "authorAssociation": "MEMBER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2020-03-04T11:21:49Z",
+          "updatedAt": "2020-03-04T11:21:49Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 43,
+      "id": "PR_kwDOBEc_t843R7_P",
+      "title": "v10 update",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/43",
+      "state": "CLOSED",
+      "author": "jaimejim",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Simple edition for the v10 submission of this document. \r\nReferences have been updated, indentation and few initd corrections made.\r\nI'd also like to rename the file `draft-ietf-core-coap-pubsub.md` instead of `draft-ietf-core-pubsub.md`",
+      "createdAt": "2022-05-04T10:08:23Z",
+      "updatedAt": "2022-05-04T11:19:09Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "master",
+      "baseRefOid": "13c522b7bfd140b6a2f9c2b51ada1caebd5f39fa",
+      "headRepository": "core-wg/coap-pubsub",
+      "headRefName": "jaime-update",
+      "headRefOid": "0a2d3085f2b730a4406cb94ab3f1fc8a38fdae9d",
+      "closedAt": "2022-05-04T11:19:08Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 46,
+      "id": "PR_kwDOBEc_t85KIbFP",
+      "title": "added link to ongoing revision on README",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/46",
+      "state": "CLOSED",
+      "author": "jaimejim",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-02-16T13:46:30Z",
+      "updatedAt": "2023-03-01T17:59:53Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "main",
+      "baseRefOid": "c4647aef3b9266903a998797f3981293c5bbab93",
+      "headRepository": "core-wg/coap-pubsub",
+      "headRefName": "master",
+      "headRefOid": "79dbaf2647c1f4e6b92bdab59cc562b0f0a967fa",
+      "closedAt": "2023-03-01T17:59:52Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 47,
+      "id": "PR_kwDOBEc_t85KfcH-",
+      "title": "Typos",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/47",
+      "state": "CLOSED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-02-22T08:24:14Z",
+      "updatedAt": "2023-02-22T13:24:12Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "main",
+      "baseRefOid": "c4647aef3b9266903a998797f3981293c5bbab93",
+      "headRepository": "core-wg/coap-pubsub",
+      "headRefName": "typos",
+      "headRefOid": "7ef9727818b1ce5ecb964d709b352f19a124029f",
+      "closedAt": "2023-02-22T08:38:42Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "That didn't work very well.  Resubmitting a new PR",
+          "createdAt": "2023-02-22T08:38:42Z",
+          "updatedAt": "2023-02-22T08:38:42Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 48,
+      "id": "PR_kwDOBEc_t85Kfoo-",
+      "title": "Misc typos",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/48",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-02-22T09:06:59Z",
+      "updatedAt": "2023-03-01T17:56:17Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "ps-rev",
+      "baseRefOid": "82784969857abf53ff8ac337d2ecefdd502b7622",
+      "headRepository": "core-wg/coap-pubsub",
+      "headRefName": "typos1",
+      "headRefOid": "08ef83b79b0ea5426c13dac84d2934c3c4da312f",
+      "closedAt": "2023-03-01T17:56:08Z",
+      "mergedAt": "2023-03-01T17:56:08Z",
+      "mergedBy": "jaimejim",
+      "mergeCommit": {
+        "oid": "98770b7d757981760486007ebbe500939e534bb1"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 49,
+      "id": "PR_kwDOBEc_t85L70r5",
+      "title": "Merging v12 on main",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/49",
+      "state": "OPEN",
+      "author": "jaimejim",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "New pubsub draft merge",
+      "createdAt": "2023-03-13T21:12:12Z",
+      "updatedAt": "2023-03-13T21:17:10Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "main",
+      "baseRefOid": "e1b2724949b44830f244acfee0b1d61537ff2a32",
+      "headRepository": "core-wg/coap-pubsub",
+      "headRefName": "ps-rev",
+      "headRefOid": "0b50aa2b88663bdb547d44979202e6c073067d1e",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
