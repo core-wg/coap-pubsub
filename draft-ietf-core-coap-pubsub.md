@@ -128,18 +128,18 @@ The broker is responsible for the store-and-forward of state update representati
 ~~~~ aasvg
      CoAP                      CoAP                 CoAP
      clients                  server                clients
-   .-----------.          .----------.  observe  .-----------.
-   |           | publish  |          |<----------+           |
-   | publisher +--------->+          +---------->| subscribe |
-   |           |          |          +---------->|           |
-   '-----------'          |          |           '-----------'
+   .-----------.          .----------.  observe  .------------.
+   |           | publish  |          |<----------+            |
+   | publisher +--------->+          +---------->| subscriber |
+   |           |          |          +---------->|            |
+   '-----------'          |          |           '------------'
         ...               |  broker  |                ...
         ...               |          |                ...
-   .-----------.          |          |  observe  .-----------.
-   |           | publish  |          |<----------+           |
-   | publisher +--------->|          +---------->| subscribe |
-   |           |          |          +---------->|           |
-   '-----------'          '----------'           '-----------'
+   .-----------.          |          |  observe  .------------.
+   |           | publish  |          |<----------+            |
+   | publisher +--------->|          +---------->| subscriber |
+   |           |          |          +---------->|            |
+   '-----------'          '----------'           '------------'
 ~~~~
 {: #fig-arch title='Publish-subscribe architecture over CoAP' artwork-align="center"}
 
@@ -593,7 +593,7 @@ On success, the server returns a 2.04 (Changed) response and the current full re
 
 As with the PUT method, updating the "topic-data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Decreasing max-subscribers will also cause some subscribers to get unsubscribed. Unsubscribed endpoints SHOULD receive a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2.
 
-Contrary to PUT iPATCH operations will explicitly update some parameters, leaving others unmodified.
+Contrary to PUT, iPATCH operations will explicitly update some parameters, leaving others unmodified.
 
 ~~~~
 => 0.07 iPATCH
@@ -621,9 +621,7 @@ Contrary to PUT iPATCH operations will explicitly update some parameters, leavin
    }
 ~~~~
 
-Note that when a topic configuration changes through an iPATCH request, it may result in disruptions for the subscribers. Some potential issues that may arise include:
-
-Limiting the number of subscribers will cause to cancel ongoing subscriptions until max-subscribers has been reached.
+Note that when a topic configuration changes through an iPATCH request, it may result in disruptions for the subscribers. For example, limiting the number of subscribers will cause to cancel ongoing subscriptions until max-subscribers has been reached.
 
 ### Deleting a topic-configuration {#topic-delete}
 
