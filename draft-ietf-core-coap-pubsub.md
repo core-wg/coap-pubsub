@@ -107,7 +107,7 @@ topic collection:
 : A set of topic configurations. A topic collection is hosted as one collection resource at the broker, and its representation is the list of links to the topic resources corresponding to each topic configuration.
 
 topic-configuration:
-: A set of information concerning a topic, including its configuration and other metadata. A topic configuration is hosted as one topic resource at the broker, and its representation is the set of configuration information concerning the topic. All the topic resources associated with the same topic collection share a common base URI, i.e., the URI of the collection resource. Throughout this document the word "topic" and "topic-configuration" can be used interchangeably.
+: A set of information concerning a topic, including its configuration and other metadata. A topic configuration is hosted as one topic resource at the broker, and its representation is the set of configuration information concerning the topic. All the topic resources associated with the same topic collection share a common base URI, i.e., the URI of the collection resource. Throughout this document the word "topic" and "topic-configuration" are used interchangeably.
 
 topic-data resource:
 : A resource where clients can publish data and/or subscribe to data for a specific topic. The representation of the topic resource corresponding to such a topic also specifies the URI to the present topic-data resource.
@@ -143,7 +143,7 @@ The broker is responsible for the store-and-forward of state update representati
 ~~~~
 {: #fig-arch title='Publish-subscribe architecture over CoAP' artwork-align="center"}
 
-This document describes two sets of interactions, interactions to configure topics and their lifecycle (see {{topic-configuration-interactions}}) and interactions about the topic-data (see {{topic-data-interactions}}).
+This document describes two sets of interactions: interactions to configure topics and their lifecycle (see {{topic-configuration-interactions}}) and interactions about the topic-data (see {{topic-data-interactions}}).
 
 Topic-configuration interactions are discovery, create, read configuration, update configuration, and delete configuration. These operations handle the management of the topics.
 
@@ -169,7 +169,7 @@ Throughout the document there is a number of TBDs that need updating, mostly con
 ~~~~
 {: #fig-api title="Resources of a Broker" artwork-align="center"}
 
-The Broker exports one or more topic-collection resources, with resource type "core.ps.coll" defined in {{iana}} of this document. The interfaces for the topic-collection resource is defined in {{topic-collection-interactions}}.
+The Broker exposes one or more topic-collection resources, with resource type "core.ps.coll" defined in {{iana}} of this document. The interfaces for the topic-collection resource is defined in {{topic-collection-interactions}}.
 
 A topic-collection resource can have topic resources as its child resources, with resource type "core.ps.conf".
 
@@ -207,7 +207,7 @@ Publication and subscription to a topic occur at a link, where the link target i
 
 A topic resource with a topic-data link can also be simply called "topic".
 
-The list of links to the topic resources can be retrieved from the associated topic collection resource, and represented as a Link Format document {{RFC6690}}where each such link specifies the link target attribute 'rt' (Resource Type), with value "core.ps.conf" defined in this document.
+The list of links to the topic resources can be retrieved from the associated topic collection resource, and represented as a Link Format document {{RFC6690}} where each such link specifies the link target attribute 'rt' (Resource Type), with value "core.ps.conf" defined in this document.
 
 ## Topic-Configuration Representation {#topic-resource-representation}
 
@@ -322,7 +322,7 @@ Within a topic, there is the topic-data property containing the URI of the topic
 
 The topic-data contains the URI of the topic-data resource for publishing and subscribing. So retrieving the topic configuration will also provide the URL of the topic-data (see {{topic-get-resource}}).
 
-It is also possible to discover a list of topic-data resources by sending a request to the collection with with rt=core.ps.data resources as shown below.
+It is also possible to discover a list of topic-data resources by sending a GET request to the collection URI with with rt=core.ps.data as shown below.
 
 ~~~~
 => 0.01 GET
@@ -367,13 +367,13 @@ response is link format
 -->
 
 A client can filter a collection of topics by submitting the
-representation of a topic filter (see  {{topic-fetch-resource}}) in a FETCH request to the topic collection URI.
+representation of a topic filter (see {{topic-fetch-resource}}) in a FETCH request to the topic collection URI.
 
 On success, the server returns a 2.05 (Content) response with a
 representation of a list of topics in the collection (see
  {{topic-discovery}}) that match the filter in CoRE link format {{!RFC6690}}.
 
-Upon success, the server responds with a 2.05 (Content), providing a list of links to topic resources associated with this topic collection that match the request's filter criteria (refer to  {{topic-discovery}}). A positive match happens only when each request parameter is present with the indicated value in the topic resource representation.
+Upon success, the server responds with a 2.05 (Content), providing a list of links to topic resources associated with this topic collection that match the request's filter criteria (refer to {{topic-discovery}}). A positive match happens only when each request parameter is present with the indicated value in the topic resource representation.
 
 Example:
 
@@ -401,7 +401,7 @@ response (created) is cbor including the link to new topic-config resource
 creator proposes topic name but broker approves
 -->
 
-A client can add a new topic-configurations to a collection of topics by submitting an initial representation of the initial topic resource (see  {{topic-resource-representation}}) in a POST request to the topic collection URI. The request MUST specify at least a subset of the properties in  {{topic-properties}}, namely: topic-name and resource-type.
+A client can add a new topic-configuration to a collection of topics by submitting an initial representation of the initial topic resource (see  {{topic-resource-representation}}) in a POST request to the topic collection URI. The request MUST specify at least a subset of the properties in  {{topic-properties}}, namely: topic-name and resource-type.
 
 <!--
    TODO Next two paragraphs are thorny
@@ -412,13 +412,14 @@ A client can add a new topic-configurations to a collection of topics by submitt
 A CoAP endpoint creating a topic MAY specify a topic-data URI when the topic-data resource is not hosted by the broker.
 -->
 
-Please note that the topic will NOT be fully created until a publisher has published some data to it (See {{topic-lifecycle}}).
+Note that the topic will NOT be fully created until a publisher has published some data to it (See {{topic-lifecycle}}).
 
-On success, the server returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map with key-value pairs. The response must include the required topic properties (see {{topic-properties}}), namely: "topic-name", "resource-type" and "topic-data". It may also include a number of optional properties too.
+On success, the server returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload MUST be a CBOR map with the required topic properties (see {{topic-properties}}), namely: "topic-name", "resource-type", and "topic-data". It MAY also include any number of optional properties. 
+The response MUST have Content-Format set to "application/core-pubsub+cbor".
 
-If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST respond with a 4.03 (Forbidden) error. The response MUST have Content-Format set to "application/core-pubsub+cbor".
+If the broker can not create the topic as requested by the client, then the broker MUST respond with a 4.03 (Forbidden) error. 
 
-The broker MUST issue a 4.00 (Bad Request) error if a received parameter is invalid, unrecognized, or if the topic-name is already in use or otherwise invalid.
+The broker MUST issue a 4.00 (Bad Request) error if any received parameter is invalid, unrecognized, or if the topic-name is already in use or otherwise invalid.
 
 <!--
    TODO Regardless, what if the topic-name is already in use or not fine for other reasons? Is the broker going to use and return a new one that fits?
