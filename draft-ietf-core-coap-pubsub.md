@@ -244,6 +244,12 @@ history resource with a counter 0 .. 100
 
 * 'topic-history': An optional field used to indicate how many previous resource representations the broker shall store for a topic. Encoded as an unsigned CBOR integer, it defines a counter representing the number of historical resource states the broker should retain. This enables subscribers to retrieve past states of the topic data when necessary, useful in scenarios where historical context is required (e.g., for data analytics or auditing). If this field is not present, no historical data will be stored.
 
+<!-- 
+Add https://github.com/core-wg/coap-pubsub/issues/56
+-->
+
+* 'initialize': An optional boolean field that, when set to `true`, allows the topic-data path to be pre-populated with an empty string or other initial value during the topic creation process. This behavior facilitates one-shot publication and topic creation, enabling CoAP clients to subscribe by default without encountering a `4.04 Not Found` error. If this field is not present, the broker behaves as usual, and the topic-data path is not initialized.
+
 ## Discovery
 
 A client can perform a discovery of: the broker; the topic collection resources and topic resources hosted by the broker; and the topic-data resources associated with those topic resources.
@@ -428,26 +434,14 @@ Example:
 ~~~~
 
 ### Creating a Topic {#topic-create}
-<!--
-POST to /topic-collection
-create new topic
-request is cbor
-response (created) is cbor including the link to new topic-config resource
-creator proposes topic name but broker approves
--->
 
 A client can add a new topic-configurations to a collection of topics by submitting an initial representation of the initial topic resource (see  {{topic-resource-representation}}) in a POST request to the topic collection URI. The request MUST specify at least a subset of the properties in  {{topic-properties}}, namely: topic-name and resource-type.
 
-<!--
-   TODO Next two paragraphs are thorny
-   Also, as above, the topic-data resource may not even hosted at the broker, which only knows the link to that resource. It is up to the actual, responsible host to "assign" a topic-data resource (i.e., associate it with a URI to store within the topic resource at the broker), without even creating the resource yet.
-
-   Removed
-
-A CoAP endpoint creating a topic MAY specify a topic-data URI when the topic-data resource is not hosted by the broker.
--->
-
 Please note that the topic will NOT be fully created until a publisher has published some data to it (See {{topic-lifecycle}}).
+
+To facilitate immediate subscription and allow clients to observe the topic before data has been published, the client can include the "initialize" set to "true". When supported, the broker will create the topic and pre-populate the "topic-data" field with an empty value. This allows subscribers to observe the topic without encountering a 4.04 (Not Found) error, even if no data has been published yet.
+
+When "initialize" is set to "false" or omitted, the topic will only be fully created after data is published to it.
 
 On success, the server returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map with key-value pairs. The response must include the required topic properties (see {{topic-properties}}), namely: "topic-name", "resource-type" and "topic-data". It may also include a number of optional properties too.
 
@@ -455,9 +449,6 @@ If requirements are defined for the client to create the topic as requested and 
 
 The broker MUST issue a 4.00 (Bad Request) error if a received parameter is invalid, unrecognized, or if the topic-name is already in use or otherwise invalid.
 
-<!--
-   TODO Regardless, what if the topic-name is already in use or not fine for other reasons? Is the broker going to use and return a new one that fits?
--->
 
 ~~~~
    Request:
@@ -483,6 +474,8 @@ The broker MUST issue a 4.00 (Bad Request) error if a received parameter is inva
       / resource-type /      2: "core.ps.conf"
    }
 ~~~~
+
+
 
 ## Topic-Configuration Interactions {#topic-configuration-interactions}
 
