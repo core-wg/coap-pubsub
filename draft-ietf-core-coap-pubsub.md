@@ -244,7 +244,7 @@ history resource with a counter 0 .. 100
 
 * 'topic-history': An optional field used to indicate how many previous resource representations the broker shall store for a topic. Encoded as an unsigned CBOR integer, it defines a counter representing the number of historical resource states the broker should retain. This enables subscribers to retrieve past states of the topic data when necessary, useful in scenarios where historical context is required (e.g., for data analytics or auditing). If this field is not present, no historical data will be stored.
 
-<!-- 
+<!--
 Add https://github.com/core-wg/coap-pubsub/issues/56
 -->
 
