@@ -11,22 +11,21 @@
 <meta content="
        This document describes a publish-subscribe architecture for the Constrained Application Protocol (CoAP), extending the capabilities of CoAP communications for supporting endpoints with long breaks in connectivity and/or up-time. CoAP clients publish on and subscribe to a topic via a corresponding topic resource at a CoAP server acting as broker. 
     " name="description">
-<meta content="xml2rfc 3.21.0" name="generator">
+<meta content="xml2rfc 3.23.2" name="generator">
 <meta content="draft-ietf-core-coap-pubsub-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.21.0
-    Python 3.11.9
+  xml2rfc 3.23.2
+    Python 3.12.7
     ConfigArgParse 1.7
-    google-i18n-address 3.1.0
+    google-i18n-address 3.1.1
     intervaltree 3.1.0
-    Jinja2 3.1.2
-    lxml 4.9.3
-    platformdirs 4.2.0
+    Jinja2 3.1.4
+    lxml 4.9.4
+    platformdirs 4.3.6
     pycountry 22.3.5
     PyYAML 6.0.1
-    requests 2.31.0
-    setuptools 68.2.2
-    six 1.16.0
+    requests 2.32.3
+    setuptools 70.3.0
     wcwidth 0.2.13
 -->
 <link href="draft-ietf-core-coap-pubsub.xml" rel="alternate" type="application/rfc+xml">
@@ -1026,11 +1025,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">A publish-subscribe architecture for the</td>
-<td class="right">April 2024</td>
+<td class="right">October 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Jimenez, et al.</td>
-<td class="center">Expires 20 October 2024</td>
+<td class="center">Expires 23 April 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1043,12 +1042,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-core-coap-pubsub-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-04-18" class="published">18 April 2024</time>
+<time datetime="2024-10-20" class="published">20 October 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-10-20">20 October 2024</time></dd>
+<dd class="expires"><time datetime="2025-04-23">23 April 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1105,7 +1104,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 20 October 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 23 April 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1314,12 +1313,7 @@ NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
 "MAY", and "OPTIONAL" in this document are to be interpreted as
 described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
 appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
-<p id="section-1.1-2">This specification requires readers to be familiar with all the terms and
-concepts that are discussed in <span>[<a href="#RFC8288" class="cite xref">RFC8288</a>]</span> and <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>. Readers
-should also be familiar with the terms and concepts discussed in
-<span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>, <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span> and <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. The URI template
-format <span>[<a href="#RFC6570" class="cite xref">RFC6570</a>]</span> is used to describe the REST API defined in
-this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
+<p id="section-1.1-2">This specification requires readers to be familiar with all the terms and concepts that are discussed in <span>[<a href="#RFC8288" class="cite xref">RFC8288</a>]</span> and <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>. Readers should also be familiar with the terms and concepts discussed in <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>, <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span> and <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. The URI template format <span>[<a href="#RFC6570" class="cite xref">RFC6570</a>]</span> is used to describe the REST API defined in this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 <p id="section-1.1-3">This specification makes use of the following terminology:<a href="#section-1.1-3" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlNewline" id="section-1.1-4">
           <dt id="section-1.1-4.1">publish-subscribe (pub/sub):</dt>
@@ -1690,22 +1684,30 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
             <li class="normal" id="section-2.2.1-2.3">
               <p id="section-2.2.1-2.3.1">'resource-type': A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value should be "core.ps.conf".<a href="#section-2.2.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
+            <li class="normal" id="section-2.2.1-2.4">
+              <p id="section-2.2.1-2.4.1">'media-type': An optional field used to indicate the media type of the topic-data resource for the topic. It encodes the media type as a this information as the integer identifier of the CoAP content-format (e.g., value is "50" for "application/json").<a href="#section-2.2.1-2.4.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.2.1-2.5">
+              <p id="section-2.2.1-2.5.1">'topic-type': An optional field used to indicate the attribute or property of the topic-data resource for the topic. It encodes the attribute as a CBOR text string. Example attributes include "temperature".<a href="#section-2.2.1-2.5.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.2.1-2.6">
+              <p id="section-2.2.1-2.6.1">'expiration-date': An optional field used to indicate the expiration date of the topic. It encodes the expiration date as a CBOR text string. The value should be a date string in ISO 8601 format (e.g., "2023-03-31T23:59:59Z"). The broker can use this field to automatically remove topics that are no longer valid. If this field is not present, the topic will not expire automatically.<a href="#section-2.2.1-2.6.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.2.1-2.7">
+              <p id="section-2.2.1-2.7.1">'max-subscribers': An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as an unsigned CBOR integer. If this field is not present, there is no limit to the number of simultaneous subscribers allowed. The broker can use this field to limit the number of subscribers for the topic. The default value for this field has been set to 100 subscribers.<a href="#section-2.2.1-2.7.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-2.2.1-2.8">
+              <p id="section-2.2.1-2.8.1">'observer-check': An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber. Encoded as a CBOR unsigned integer greater than 0, it ensures subscribers who have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. If another CoAP server hosts the topic-data resource, that server is responsible for applying the observer-check value. The default value for this field is 86400, as defined in <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, which corresponds to 24 hours.<a href="#section-2.2.1-2.8.1" class="pilcrow">¶</a></p>
+</li>
           </ul>
 <ul class="normal">
 <li class="normal" id="section-2.2.1-3.1">
-              <p id="section-2.2.1-3.1.1">'media-type': An optional field used to indicate the media type of the topic-data resource for the topic. It encodes the media type as a this information as the integer identifier of the CoAP content-format (e.g., value is "50" for "application/json").<a href="#section-2.2.1-3.1.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.1-3.1.1">'topic-history': An optional field used to indicate how many previous resource representations the broker shall store for a topic. Encoded as an unsigned CBOR integer, it defines a counter representing the number of historical resource states the broker should retain. This enables subscribers to retrieve past states of the topic data when necessary, useful in scenarios where historical context is required (e.g., for data analytics or auditing). If this field is not present, no historical data will be stored.<a href="#section-2.2.1-3.1.1" class="pilcrow">¶</a></p>
 </li>
-            <li class="normal" id="section-2.2.1-3.2">
-              <p id="section-2.2.1-3.2.1">'topic-type': An optional field used to indicate the attribute or property of the topic-data resource for the topic. It encodes the attribute as a CBOR text string. Example attributes include "temperature".<a href="#section-2.2.1-3.2.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-2.2.1-3.3">
-              <p id="section-2.2.1-3.3.1">'expiration-date': An optional field used to indicate the expiration date of the topic. It encodes the expiration date as a CBOR text string. The value should be a date string in ISO 8601 format (e.g., "2023-03-31T23:59:59Z"). The broker can use this field to automatically remove topics that are no longer valid. If this field is not present, the topic will not expire automatically.<a href="#section-2.2.1-3.3.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-2.2.1-3.4">
-              <p id="section-2.2.1-3.4.1">'max-subscribers': An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as an unsigned CBOR integer. If this field is not present, there is no limit to the number of simultaneous subscribers allowed. The broker can use this field to limit the number of subscribers for the topic. The default value for this field has been set to 100 subscribers.<a href="#section-2.2.1-3.4.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-2.2.1-3.5">
-              <p id="section-2.2.1-3.5.1">'observer-check': An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber. Encoded as a CBOR unsigned integer greater than 0, it ensures subscribers who have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. If another CoAP server hosts the topic-data resource, that server is responsible for applying the observer-check value. The default value for this field is 86400, as defined in <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, which corresponds to 24 hours.<a href="#section-2.2.1-3.5.1" class="pilcrow">¶</a></p>
+          </ul>
+<ul class="normal">
+<li class="normal" id="section-2.2.1-4.1">
+              <p id="section-2.2.1-4.1.1">'initialize': An optional boolean field that, when set to <code>true</code>, allows the topic-data path to be pre-populated with an empty string or other initial value during the topic creation process. This behavior facilitates one-shot publication and topic creation, enabling CoAP clients to subscribe by default without encountering a <code>4.04 Not Found</code> error. If this field is not present, the broker behaves as usual, and the topic-data path is not initialized.<a href="#section-2.2.1-4.1.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -1727,14 +1729,20 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 <p id="section-2.3.1-2">The following example shows an endpoint discovering a broker using the "core.ps" resource type over a multicast network. Brokers within the multicast scope will answer the query.<a href="#section-2.3.1-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.3.1-3">
 <pre>
-=&gt; 0.01 GET
-   Uri-Path: coap://[ff0x::fe]/.well-known/core
-   Resource-Type: core.ps
+   Request:
 
-&lt;= 2.05 Content
-   Payload:
+   Header: GET (Code=0.01)
+   Uri-Host: "kdc.example.com"
+   Uri-Path: ".well-known"
+   Uri-Path: "core"
+   Uri-Query: "rt=core.ps"
+
+   Response:
+
+   Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
-   &lt;coap://mythinguri.com/broker/v1&gt;; rt=core.ps
+   Payload:
+   &lt;coap://mythinguri.com/broker/v1&gt;;rt="core.ps"
 </pre><a href="#section-2.3.1-3" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1750,12 +1758,18 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 <p id="section-2.3.2-4">Example:<a href="#section-2.3.2-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.3.2-5">
 <pre>
-=&gt; 0.01 GET
-   Uri-Path: .well-known/core
-   Resource-Type: core.ps.coll
+   Request:
 
-   &lt;= 2.05 Content
+   Header: GET (Code=0.01)
+   Uri-Path: ".well-known"
+   Uri-Path: "core"
+   Uri-Query: "rt=core.ps.coll"
+
+   Response:
+
+   Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
+   Payload:
    &lt;/ps1&gt;;rt="core.ps.coll";ct=40,
    &lt;/other/path&gt;;rt="core.ps.coll";ct=40
 </pre><a href="#section-2.3.2-5" class="pilcrow">¶</a>
@@ -1771,14 +1785,20 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 <p id="section-2.3.3-2">Below is an example of discovery via /.well-known/core with rt=core.ps.conf that returns a list of topics, as the list of links to the corresponding topic resources.<a href="#section-2.3.3-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.3.3-3">
 <pre>
-=&gt; 0.01 GET
-   Uri-Path: .well-known/core
-   Resource-Type: core.ps.conf
+   Request:
 
-&lt;= 2.05 Content
+   Header: GET (Code=0.01)
+   Uri-Path: ".well-known"
+   Uri-Path: "core"
+   Uri-Query: "rt=core.ps.conf"
+
+   Response:
+
+   Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
+   Payload:
    &lt;/ps1/h9392&gt;;rt="core.ps.conf";ct=TBD,
-   &lt;/other/path/2e3570&gt;;rt=core.ps.conf;ct=TBD
+   &lt;/other/path/2e3570&gt;;rt="core.ps.conf";ct=TBD
 </pre><a href="#section-2.3.3-3" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1793,13 +1813,18 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 <p id="section-2.3.4-3">It is also possible to discover a list of topic-data resources by sending a request to the collection with with rt=core.ps.data resources as shown below.<a href="#section-2.3.4-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.3.4-4">
 <pre>
-=&gt; 0.01 GET
-   Uri-Path: /ps
-   Resource-Type: core.ps.data
+   Request:
 
-&lt;= 2.05 Content
+   Header: GET (Code=0.01)
+   Uri-Path: "ps"
+   Uri-Query: "rt=core.ps.data"
+
+   Response:
+
+   Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
-   &lt;/ps/data/62e4f8d&gt;; rt=core.ps.data; obs
+   Payload:
+   &lt;/ps/data/62e4f8d&gt;;rt="core.ps.data";obs
 </pre><a href="#section-2.3.4-4" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1823,13 +1848,18 @@ this specification.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 <p id="section-2.4.1-4">Example:<a href="#section-2.4.1-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.4.1-5">
 <pre>
-=&gt; 0.01 GET
-   Uri-Path: ps
+   Request:
 
-&lt;= 2.05 Content
+   Header: GET (Code=0.01)
+   Uri-Path: "ps"
+
+   Response:
+
+   Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
+   Payload:
    &lt;/ps/h9392&gt;;rt="core.ps.conf",
-   &lt;/ps/2e3570&gt;; rt="core.ps.conf"
+   &lt;/ps/2e3570&gt;;rt="core.ps.conf"
 </pre><a href="#section-2.4.1-5" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1848,17 +1878,22 @@ representation of a list of topics in the collection (see
 <p id="section-2.4.2-4">Example:<a href="#section-2.4.2-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.4.2-5">
 <pre>
-=&gt; 0.05 FETCH
-   Uri-Path: ps
-   Content-Format: TBD (application/pubsub+cbor)
+   Request:
 
+   Header: FETCH (Code=0.05)
+   Uri-Path: "ps"
+   Content-Format: TBD (application/pubsub+cbor)
+   Payload:
    {
-     "resource-type": "core.ps.conf",
-     "topic-type": "temperature"
+      "resource-type": "core.ps.conf",
+      "topic-type": "temperature"
    }
 
-&lt;= 2.05 Content
+   Response:
+
+   Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
+   Payload:
    &lt;/ps/2e3570&gt;;rt="core.ps.conf"
 </pre><a href="#section-2.4.2-5" class="pilcrow">¶</a>
 </div>
@@ -1871,31 +1906,36 @@ representation of a list of topics in the collection (see
           </h4>
 <p id="section-2.4.3-1">A client can add a new topic-configurations to a collection of topics by submitting an initial representation of the initial topic resource (see  <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>) in a POST request to the topic collection URI. The request MUST specify at least a subset of the properties in  <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>, namely: topic-name and resource-type.<a href="#section-2.4.3-1" class="pilcrow">¶</a></p>
 <p id="section-2.4.3-2">Please note that the topic will NOT be fully created until a publisher has published some data to it (See <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>).<a href="#section-2.4.3-2" class="pilcrow">¶</a></p>
-<p id="section-2.4.3-3">On success, the server returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map with key-value pairs. The response must include the required topic properties (see <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>), namely: "topic-name", "resource-type" and "topic-data". It may also include a number of optional properties too.<a href="#section-2.4.3-3" class="pilcrow">¶</a></p>
-<p id="section-2.4.3-4">If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST respond with a 4.03 (Forbidden) error. The response MUST have Content-Format set to "application/core-pubsub+cbor".<a href="#section-2.4.3-4" class="pilcrow">¶</a></p>
-<p id="section-2.4.3-5">The broker MUST issue a 4.00 (Bad Request) error if a received parameter is invalid, unrecognized, or if the topic-name is already in use or otherwise invalid.<a href="#section-2.4.3-5" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.4.3-6">
+<p id="section-2.4.3-3">To facilitate immediate subscription and allow clients to observe the topic before data has been published, the client can include the "initialize" set to "true". When supported, the broker will create the topic and pre-populate the "topic-data" field with an empty value. This allows subscribers to observe the topic without encountering a 4.04 (Not Found) error, even if no data has been published yet.<a href="#section-2.4.3-3" class="pilcrow">¶</a></p>
+<p id="section-2.4.3-4">When "initialize" is set to "false" or omitted, the topic will only be fully created after data is published to it.<a href="#section-2.4.3-4" class="pilcrow">¶</a></p>
+<p id="section-2.4.3-5">On success, the server returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map with key-value pairs. The response must include the required topic properties (see <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>), namely: "topic-name", "resource-type" and "topic-data". It may also include a number of optional properties too.<a href="#section-2.4.3-5" class="pilcrow">¶</a></p>
+<p id="section-2.4.3-6">If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST respond with a 4.03 (Forbidden) error. The response MUST have Content-Format set to "application/core-pubsub+cbor".<a href="#section-2.4.3-6" class="pilcrow">¶</a></p>
+<p id="section-2.4.3-7">The broker MUST issue a 4.00 (Bad Request) error if a received parameter is invalid, unrecognized, or if the topic-name is already in use or otherwise invalid.<a href="#section-2.4.3-7" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.4.3-8">
 <pre>
-=&gt; 0.02 POST
-   Uri-Path: ps
+   Request:
+
+   Header: POST (Code=0.02)
+   Uri-Path: "ps"
    Content-Format: TBD2 (application/core-pubsub+cbor)
-   TBD (this should be a CBOR map with the mandatory parameters)
+   Payload (in CBOR diagnostic notation):
    {
-     "topic-name": "living-room-sensor",
-     "resource-type": "core.ps.conf"
+      / topic-name /         0: "living-room-sensor",
+      / resource-type /      1: "core.ps.conf"
    }
 
-&lt;= 2.01 Created
-   Location-Path: ps/h9392
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Response:
 
-   TBD (this should be a CBOR map)
+   Header: Created (Code=2.01)
+   Location-Path: "ps/h9392"
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Payload (in CBOR diagnostic notation):
    {
-     "topic-name": "living-room-sensor",
-     "topic-data": "ps/data/1bd0d6d",
-     "resource-type": "core.ps.conf"
+      / topic-name /         0: "living-room-sensor",
+      / topic-data /         1: "ps/data/1bd0d6d",
+      / resource-type /      2: "core.ps.conf"
    }
-</pre><a href="#section-2.4.3-6" class="pilcrow">¶</a>
+</pre><a href="#section-2.4.3-8" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -1919,22 +1959,27 @@ representation of a list of topics in the collection (see
 <p id="section-2.5.1-5">For example, below is a request on the topic "ps/h9392":<a href="#section-2.5.1-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.5.1-6">
 <pre>
-=&gt; 0.01 GET
-   Uri-Path: ps
-   Uri-Path: h9392
+   Request:
 
-&lt;= 2.05 Content
+   Header: GET (Code=0.01)
+   Uri-Path: "ps"
+   Uri-Path: "h9392"
+
+   Response:
+
+   Header: Content (Code=2.05)
    Content-Format: TBD2 (application/core-pubsub+cbor)
+   Payload (in CBOR diagnostic notation):
    {
-      "topic-name" : "living-room-sensor",
-      "topic-data" : "ps/data/1bd0d6d",
-      "resource-type": "core.ps.conf",
-      "media-type": "application/senml-cbor",
-      "topic-type": "temperature",
-      "expiration-date": "2023-04-00T23:59:59Z",
-      "max-subscribers": 100
+      / topic-name /         0: "living-room-sensor",
+      / topic-data /         1: "ps/data/1bd0d6d",
+      / resource-type /      2: "core.ps.conf",
+      / media-type /         3: "application/senml-cbor",
+      / topic-type /         4: "temperature",
+      / expiration-date /    5: "2023-04-00T23:59:59Z",
+      / max-subscribers /    6: 100,
+      / topic-history /      7: 10
    }
-
 </pre><a href="#section-2.5.1-6" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1953,21 +1998,26 @@ representation of a list of topics in the collection (see
 <p id="section-2.5.2-7">Example:<a href="#section-2.5.2-7" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.5.2-8">
 <pre>
-=&gt; 0.05 FETCH
-   Uri-Path: ps
-   Uri-Path: h9392
+   Request:
+
+   Header: FETCH (Code=0.05)
+   Uri-Path: "ps"
+   Uri-Path: "h9392"
    Content-Format: TBD2 (application/core-pubsub+cbor)
+   Payload (in CBOR diagnostic notation):
    {
-     "conf-filter": ["topic-data", "media-type"]
+      / conf-filter / 0: ["topic-data", "media-type"]
    }
 
-&lt;= 2.05 Content
-   Content-Format: TBD2 (application/core-pubsub+cbor)
-   {
-     "topic-data": "ps/data/1bd0d6d",
-     "media-type": "application/senml-cbor"
-   }
+   Response:
 
+   Header: Content (Code=2.05)
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Payload (in CBOR diagnostic notation):
+   {
+      / topic-data /   1: "ps/data/1bd0d6d",
+      / media-type /   3: "application/senml-cbor"
+   }
 </pre><a href="#section-2.5.2-8" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1985,33 +2035,36 @@ representation of a list of topics in the collection (see
 <p id="section-2.5.3-6">Example:<a href="#section-2.5.3-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.5.3-7">
 <pre>
-=&gt; 0.03 PUT
-   Uri-Path: ps
-   Uri-Path: h9392
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Request:
 
+   Header: PUT (Code=0.03)
+   Uri-Path: "ps"
+   Uri-Path: "h9392"
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Payload (in CBOR diagnostic notation):
    {
-      "topic-name": "living-room-sensor",
-      "topic-data": "ps/data/1bd0d6d",
-      "resource-type": "core.ps.conf",
-      "media-type": "application/senml-cbor",
-      "topic-type": "temperature",
-      "expiration-date": "2023-04-28T23:59:59Z",
+      / topic-name /        0: "living-room-sensor",
+      / topic-data /        1: "ps/data/1bd0d6d",
+      / resource-type /     2: "core.ps.conf",
+      / media-type /        3: "application/senml-cbor",
+      / topic-type /        4: "temperature",
+      / expiration-date /   5: "2023-04-28T23:59:59Z"
    }
 
-&lt;= 2.04 Changed
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Response:
 
-   TBD (this should be a CBOR map)
+   Header: Changed (Code=2.04)
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Payload (in CBOR diagnostic notation):
    {
-      "topic-name": "living-room-sensor",
-      "topic-data": "ps/data/1bd0d6d",
-      "resource-type": "core.ps.conf",
-      "media-type": "application/senml-cbor",
-      "topic-type": "temperature",
-      "expiration-date": "2023-04-28T23:59:59Z",
-      "max-subscribers": 100,
-      "observer-check": 86400
+      / topic-name /        0: "living-room-sensor",
+      / topic-data /        1: "ps/data/1bd0d6d",
+      / resource-type /     2: "core.ps.conf",
+      / media-type /        3: "application/senml-cbor",
+      / topic-type /        4: "temperature",
+      / expiration-date /   5: "2023-04-28T23:59:59Z",
+      / max-subscribers /   6: 100,
+      / observer-check /    7: 86400
    }
 </pre><a href="#section-2.5.3-7" class="pilcrow">¶</a>
 </div>
@@ -2040,28 +2093,31 @@ representation of a list of topics in the collection (see
 <p id="section-2.5.4-4">Contrary to PUT, iPATCH operations will explicitly update some parameters, leaving others unmodified.<a href="#section-2.5.4-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.5.4-5">
 <pre>
-=&gt; 0.07 iPATCH
-   Uri-Path: ps
-   Uri-Path: h9392
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Request:
 
+   Header: iPATCH (Code=0.07)
+   Uri-Path: "ps"
+   Uri-Path: "h9392"
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Payload (in CBOR diagnostic notation):
    {
-      "topic-type": "humidity",
-      "max-subscribers": 5
+      / topic-type /       4: "humidity",
+      / max-subscribers /  6: 5
    }
 
-&lt;= 2.04 Changed
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Response:
 
-   TBD (this should be a CBOR map)
+   Header: Changed (Code=2.04)
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Payload (in CBOR diagnostic notation):
    {
-      "topic-name" : "living-room-sensor",
-      "topic-data" : "ps/data/1bd0d6d",
-      "resource-type": "core.ps.conf",
-      "media-type": "application/senml-cbor",
-      "topic-type": "humidity",
-      "expiration-date": "2023-05-28T23:59:59Z",
-      "max-subscribers": 5
+      / topic-name /        0: "living-room-sensor",
+      / topic-data /        1: "ps/data/1bd0d6d",
+      / resource-type /     2: "core.ps.conf",
+      / media-type /        3: "application/senml-cbor",
+      / topic-type /        4: "humidity",
+      / expiration-date /   5: "2023-05-28T23:59:59Z",
+      / max-subscribers /   6: 5
    }
 </pre><a href="#section-2.5.4-5" class="pilcrow">¶</a>
 </div>
@@ -2079,11 +2135,15 @@ representation of a list of topics in the collection (see
 <p id="section-2.5.5-4">Example:<a href="#section-2.5.5-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.5.5-5">
 <pre>
-=&gt; 0.04 DELETE
-   Uri-Path: ps
-   Uri-Path: h9392
+   Request:
 
-&lt;= 2.02 Deleted
+   Header: DELETE (Code=0.04)
+   Uri-Path: "ps"
+   Uri-Path: "h9392"
+
+   Response:
+
+   Header: Deleted (Code=2.02)
 </pre><a href="#section-2.5.5-5" class="pilcrow">¶</a>
 </div>
 </section>
@@ -2203,12 +2263,14 @@ representation of a list of topics in the collection (see
 <p id="section-3.2.1-6">Example of first publication:<a href="#section-3.2.1-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.2.1-7">
 <pre>
-=&gt; 0.03 PUT
-   Uri-Path: ps
-   Uri-Path: data
-   Uri-Path: 1bd0d6d
-   Content-Format: 110
+   Request:
 
+   Header: PUT (Code=0.03)
+   Uri-Path: "ps"
+   Uri-Path: "data"
+   Uri-Path: "1bd0d6d"
+   Content-Format: 110
+   Payload:
    {
       "n": "coap://dev1.example.com/temperature",
       "u": "Cel",
@@ -2216,18 +2278,22 @@ representation of a list of topics in the collection (see
       "v": 23.5
    }
 
-&lt;= 2.01 Created
+   Response:
+
+   Header: Created (Code=2.01)
 </pre><a href="#section-3.2.1-7" class="pilcrow">¶</a>
 </div>
 <p id="section-3.2.1-8">Example of subsequent publication:<a href="#section-3.2.1-8" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.2.1-9">
 <pre>
-=&gt; 0.03 PUT
-   Uri-Path: ps
-   Uri-Path: data
-   Uri-Path: 1bd0d6d
-   Content-Format: 110
+   Request:
 
+   Header: PUT (Code=0.03)
+   Uri-Path: "ps"
+   Uri-Path: "data"
+   Uri-Path: "1bd0d6d"
+   Content-Format: 110
+   Payload:
    {
       "n": "coap://dev1.example.com/temperature",
       "u": "Cel",
@@ -2235,7 +2301,9 @@ representation of a list of topics in the collection (see
       "v": 22.5
    }
 
-&lt;= 2.04 Updated
+   Response:
+
+   Header: Updated (Code=2.04)
 </pre><a href="#section-3.2.1-9" class="pilcrow">¶</a>
 </div>
 </section>
@@ -2265,36 +2333,41 @@ representation of a list of topics in the collection (see
 <p id="section-3.2.2-7">Example:<a href="#section-3.2.2-7" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.2.2-8">
 <pre>
-=&gt; 0.01 GET
-   Uri-Path: ps
-   Uri-Path: data
-   Uri-Path: 1bd0d6d
+   Request:
+
+   Header: GET (Code=0.01)
+   Uri-Path: "ps"
+   Uri-Path: "data"
+   Uri-Path: "1bd0d6d"
    Observe: 0
 
-&lt;= 2.05 Content
+   Response:
+
+   Header: Content (Code=2.05)
    Content-Format: 110
    Observe: 10001
    Max-Age: 15
+   Payload:
+   {
+      "n": "urn:dev:os:32473-123456",
+      "u": "Cel",
+      "t": 1696341182,
+      "v": 19.87
+   }
 
-  {
-    "n": "urn:dev:os:32473-123456",
-    "u": "Cel",
-    "t": 1696341182,
-    "v": 19.87
-  }
+   Response:
 
-&lt;= 2.05 Content
+   Header: Content (Code=2.05)
    Content-Format: 110
    Observe: 10002
    Max-Age: 15
-
-  {
-
-    "n": "urn:dev:os:32473-123456",
-    "u": "Cel",
-    "t": 1696340184,
-    "v": 21.87
-  }
+   Payload:
+   {
+      "n": "urn:dev:os:32473-123456",
+      "u": "Cel",
+      "t": 1696340184,
+      "v": 21.87
+   }
 </pre><a href="#section-3.2.2-8" class="pilcrow">¶</a>
 </div>
 </section>
@@ -2320,12 +2393,16 @@ representation of a list of topics in the collection (see
 <p id="section-3.2.4-4">Example:<a href="#section-3.2.4-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.2.4-5">
 <pre>
-=&gt; 0.04 DELETE
-   Uri-Path: ps
-   Uri-Path: data
-   Uri-Path: 1bd0d6d
+   Request:
 
-&lt;= 2.02 Deleted
+   Header: DELETE (Code=0.04)
+   Uri-Path: "ps"
+   Uri-Path: "data"
+   Uri-Path: "1bd0d6d"
+
+   Response:
+
+   Header: Deleted (Code=2.02)
 </pre><a href="#section-3.2.4-5" class="pilcrow">¶</a>
 </div>
 </section>
@@ -2343,15 +2420,19 @@ representation of a list of topics in the collection (see
 <p id="section-3.3-4">Example:<a href="#section-3.3-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3-5">
 <pre>
-=&gt; 0.01 GET
-   Uri-Path: ps
-   Uri-Path: data
-   Uri-Path: 1bd0d6d
+   Request:
 
-&lt;= 2.05 Content
+   Header: GET (Code=0.01)
+   Uri-Path: "ps"
+   Uri-Path: "data"
+   Uri-Path: "1bd0d6d"
+
+   Response:
+
+   Header: Content (Code=2.05)
    Content-Format: 110
    Max-Age: 15
-
+   Payload:
    {
       "n": "coap://dev1.example.com/temperature",
       "u": "Cel",
@@ -2541,7 +2622,7 @@ or IETF Applications and Real-Time Area (art@ietf.org)<a href="#section-6.1-3.22
 <a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-content-format" class="section-name selfRef">Content-Format</a>
         </h3>
 <p id="section-6.2-1">IANA has added the following Content-Formats to the
-<a href="http://www.iana.org/assignments/core-parameters#content-formats" class="relref">"CoAP Content-Formats"</a>
+<a href="https://www.iana.org/assignments/core-parameters#content-formats" class="relref">"CoAP Content-Formats"</a>
 sub-registry, within the "Constrained RESTful Environments (CoRE)
 Parameters" Registry <span>[<a href="#IANA.core-parameters" class="cite xref">IANA.core-parameters</a>]</span>, as follows:<a href="#section-6.2-1" class="pilcrow">¶</a></p>
 <span id="name-new-content-format"></span><table class="left" id="table-2">
@@ -2633,6 +2714,7 @@ Reference: [RFC-XXXX]
 <p id="section-7-2">The authors would like to also thank Carsten Bormann, Hannes Tschofenig, Zach Shelby, Mohit Sethi, Peter van der Stok, Tim Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen, Olaf Bergmann and Oscar Novo for their valuable contributions and reviews.<a href="#section-7-2" class="pilcrow">¶</a></p>
 </section>
 </div>
+<div id="sec-combined-references">
 <section id="section-8">
       <h2 id="name-references">
 <a href="#name-references" class="section-name selfRef">References</a>
@@ -2645,11 +2727,11 @@ Reference: [RFC-XXXX]
 <dl class="references">
 <dt id="IANA.core-parameters">[IANA.core-parameters]</dt>
         <dd>
-<span class="refAuthor">IANA</span>, <span class="refTitle">"Constrained RESTful Environments (CoRE) Parameters"</span>, <span>&lt;<a href="http://www.iana.org/assignments/core-parameters">http://www.iana.org/assignments/core-parameters</a>&gt;</span>. </dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"Constrained RESTful Environments (CoRE) Parameters"</span>, <span>&lt;<a href="https://www.iana.org/assignments/core-parameters">https://www.iana.org/assignments/core-parameters</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="IANA.media-types">[IANA.media-types]</dt>
         <dd>
-<span class="refAuthor">IANA</span>, <span class="refTitle">"Media Types"</span>, <span>&lt;<a href="http://www.iana.org/assignments/media-types">http://www.iana.org/assignments/media-types</a>&gt;</span>. </dd>
+<span class="refAuthor">IANA</span>, <span class="refTitle">"Media Types"</span>, <span>&lt;<a href="https://www.iana.org/assignments/media-types">https://www.iana.org/assignments/media-types</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
@@ -2702,15 +2784,15 @@ Reference: [RFC-XXXX]
 <dd class="break"></dd>
 <dt id="I-D.ietf-ace-key-groupcomm">[I-D.ietf-ace-key-groupcomm]</dt>
         <dd>
-<span class="refAuthor">Palombini, F.</span> and <span class="refAuthor">M. Tiloca</span>, <span class="refTitle">"Key Provisioning for Group Communication using ACE"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-key-groupcomm-18</span>, <time datetime="2024-01-16" class="refDate">16 January 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-18">https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-18</a>&gt;</span>. </dd>
+<span class="refAuthor">Palombini, F.</span> and <span class="refAuthor">M. Tiloca</span>, <span class="refTitle">"Key Provisioning for Group Communication using ACE"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-key-groupcomm-19</span>, <time datetime="2024-04-30" class="refDate">30 April 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-19">https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-19</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-ace-oscore-gm-admin">[I-D.ietf-ace-oscore-gm-admin]</dt>
         <dd>
-<span class="refAuthor">Tiloca, M.</span>, <span class="refAuthor">Höglund, R.</span>, <span class="refAuthor">Van der Stok, P.</span>, and <span class="refAuthor">F. Palombini</span>, <span class="refTitle">"Admin Interface for the OSCORE Group Manager"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-oscore-gm-admin-11</span>, <time datetime="2024-03-04" class="refDate">4 March 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-oscore-gm-admin-11">https://datatracker.ietf.org/doc/html/draft-ietf-ace-oscore-gm-admin-11</a>&gt;</span>. </dd>
+<span class="refAuthor">Tiloca, M.</span>, <span class="refAuthor">Höglund, R.</span>, <span class="refAuthor">Van der Stok, P.</span>, and <span class="refAuthor">F. Palombini</span>, <span class="refTitle">"Admin Interface for the OSCORE Group Manager"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-oscore-gm-admin-12</span>, <time datetime="2024-07-08" class="refDate">8 July 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-oscore-gm-admin-12">https://datatracker.ietf.org/doc/html/draft-ietf-ace-oscore-gm-admin-12</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-ace-pubsub-profile">[I-D.ietf-ace-pubsub-profile]</dt>
         <dd>
-<span class="refAuthor">Palombini, F.</span>, <span class="refAuthor">Sengul, C.</span>, and <span class="refAuthor">M. Tiloca</span>, <span class="refTitle">"Publish-Subscribe Profile for Authentication and Authorization for Constrained Environments (ACE)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-pubsub-profile-09</span>, <time datetime="2024-03-04" class="refDate">4 March 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-pubsub-profile-09">https://datatracker.ietf.org/doc/html/draft-ietf-ace-pubsub-profile-09</a>&gt;</span>. </dd>
+<span class="refAuthor">Palombini, F.</span>, <span class="refAuthor">Sengul, C.</span>, and <span class="refAuthor">M. Tiloca</span>, <span class="refTitle">"Publish-Subscribe Profile for Authentication and Authorization for Constrained Environments (ACE)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-pubsub-profile-10</span>, <time datetime="2024-07-07" class="refDate">7 July 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-pubsub-profile-10">https://datatracker.ietf.org/doc/html/draft-ietf-ace-pubsub-profile-10</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8126">[RFC8126]</dt>
         <dd>
@@ -2744,6 +2826,7 @@ Reference: [RFC-XXXX]
 </section>
 </div>
 </section>
+</div>
 <div id="contributors">
 <section id="appendix-A">
       <h2 id="name-contributors">
