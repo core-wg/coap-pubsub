@@ -2,7 +2,7 @@
 stand_alone: yes
 
 title: "A publish-subscribe architecture for the Constrained Application Protocol (CoAP)"
-docname: draft-ietf-core-coap-pubsub-15
+docname: draft-ietf-core-coap-pubsub-latest
 category: std
 
 ipr: trust200902
