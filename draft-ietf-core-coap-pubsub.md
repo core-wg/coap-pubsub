@@ -2,7 +2,7 @@
 stand_alone: yes
 
 title: "A publish-subscribe architecture for the Constrained Application Protocol (CoAP)"
-docname: draft-ietf-core-coap-pubsub-latest
+docname: draft-ietf-core-coap-pubsub-15
 category: std
 
 ipr: trust200902
@@ -227,11 +227,6 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 * 'resource-type': A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value should be "core.ps.conf".
 
-<!--
-David N Christian A:
-history resource with a counter 0 .. 100
--->
-
 * 'media-type': An optional field used to indicate the media type of the topic-data resource for the topic. It encodes the media type as a this information as the integer identifier of the CoAP content-format (e.g., value is "50" for "application/json").
 
 * 'topic-type': An optional field used to indicate the attribute or property of the topic-data resource for the topic. It encodes the attribute as a CBOR text string. Example attributes include "temperature".
@@ -241,6 +236,13 @@ history resource with a counter 0 .. 100
 * 'max-subscribers': An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as an unsigned CBOR integer. If this field is not present, there is no limit to the number of simultaneous subscribers allowed. The broker can use this field to limit the number of subscribers for the topic. The default value for this field has been set to 100 subscribers.
 
 * 'observer-check': An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber. Encoded as a CBOR unsigned integer greater than 0, it ensures subscribers who have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. If another CoAP server hosts the topic-data resource, that server is responsible for applying the observer-check value. The default value for this field is 86400, as defined in {{!RFC7641}}, which corresponds to 24 hours.
+
+<!--
+David N Christian A:
+history resource with a counter 0 .. 100
+-->
+
+* 'topic-history': An optional field used to indicate how many previous resource representations the broker shall store for a topic. Encoded as an unsigned CBOR integer, it defines a counter representing the number of historical resource states the broker should retain. This enables subscribers to retrieve past states of the topic data when necessary, useful in scenarios where historical context is required (e.g., for data analytics or auditing). If this field is not present, no historical data will be stored.
 
 ## Discovery
 
@@ -253,14 +255,20 @@ CoAP clients MAY discover brokers by using CoAP Simple Discovery, via multicast,
 The following example shows an endpoint discovering a broker using the "core.ps" resource type over a multicast network. Brokers within the multicast scope will answer the query.
 
 ~~~~
-=> 0.01 GET
-   Uri-Path: coap://[ff0x::fe]/.well-known/core
-   Resource-Type: core.ps
+   Request:
 
-<= 2.05 Content
-   Payload:
+   Header: GET (Code=0.01)
+   Uri-Host: "kdc.example.com"
+   Uri-Path: ".well-known"
+   Uri-Path: "core"
+   Uri-Query: "rt=core.ps"
+
+   Response:
+
+   Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
-   <coap://mythinguri.com/broker/v1>; rt=core.ps
+   Payload:
+   <coap://mythinguri.com/broker/v1>;rt="core.ps"
 ~~~~
 
 ### Topic Collection Discovery
@@ -274,12 +282,18 @@ Since the representation of the topic collection resource includes the links to 
 Example:
 
 ~~~~
-=> 0.01 GET
-   Uri-Path: .well-known/core
-   Resource-Type: core.ps.coll
+   Request:
 
-   <= 2.05 Content
+   Header: GET (Code=0.01)
+   Uri-Path: ".well-known"
+   Uri-Path: "core"
+   Uri-Query: "rt=core.ps.coll"
+
+   Response:
+
+   Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
+   Payload:
    </ps1>;rt="core.ps.coll";ct=40,
    </other/path>;rt="core.ps.coll";ct=40
 ~~~~
@@ -296,14 +310,20 @@ TODO: add the ct part in IANA and add the example here:
 -->
 
 ~~~~
-=> 0.01 GET
-   Uri-Path: .well-known/core
-   Resource-Type: core.ps.conf
+   Request:
 
-<= 2.05 Content
+   Header: GET (Code=0.01)
+   Uri-Path: ".well-known"
+   Uri-Path: "core"
+   Uri-Query: "rt=core.ps.conf"
+
+   Response:
+
+   Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
+   Payload:
    </ps1/h9392>;rt="core.ps.conf";ct=TBD,
-   </other/path/2e3570>;rt=core.ps.conf;ct=TBD
+   </other/path/2e3570>;rt="core.ps.conf";ct=TBD
 ~~~~
 
 ### Topic-Data Discovery
@@ -325,13 +345,18 @@ The topic-data contains the URI of the topic-data resource for publishing and su
 It is also possible to discover a list of topic-data resources by sending a request to the collection with with rt=core.ps.data resources as shown below.
 
 ~~~~
-=> 0.01 GET
-   Uri-Path: /ps
-   Resource-Type: core.ps.data
+   Request:
 
-<= 2.05 Content
+   Header: GET (Code=0.01)
+   Uri-Path: "ps"
+   Uri-Query: "rt=core.ps.data"
+
+   Response:
+
+   Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
-   </ps/data/62e4f8d>; rt=core.ps.data; obs
+   Payload:
+   </ps/data/62e4f8d>;rt="core.ps.data";obs
 ~~~~
 
 ## Topic Collection Interactions {#topic-collection-interactions}
@@ -349,13 +374,18 @@ Depending on its granted permissions, a client MAY retrieve a different list of 
 Example:
 
 ~~~~
-=> 0.01 GET
-   Uri-Path: ps
+   Request:
 
-<= 2.05 Content
+   Header: GET (Code=0.01)
+   Uri-Path: "ps"
+
+   Response:
+
+   Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
+   Payload:
    </ps/h9392>;rt="core.ps.conf",
-   </ps/2e3570>; rt="core.ps.conf"
+   </ps/2e3570>;rt="core.ps.conf"
 ~~~~
 
 ### Getting topic-configurations by Properties {#topic-get-properties}
@@ -378,17 +408,22 @@ Upon success, the server responds with a 2.05 (Content), providing a list of lin
 Example:
 
 ~~~~
-=> 0.05 FETCH
-   Uri-Path: ps
-   Content-Format: TBD (application/pubsub+cbor)
+   Request:
 
+   Header: FETCH (Code=0.05)
+   Uri-Path: "ps"
+   Content-Format: TBD (application/pubsub+cbor)
+   Payload:
    {
-     "resource-type": "core.ps.conf",
-     "topic-type": "temperature"
+      "resource-type": "core.ps.conf",
+      "topic-type": "temperature"
    }
 
-<= 2.05 Content
+   Response:
+
+   Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
+   Payload:
    </ps/2e3570>;rt="core.ps.conf"
 ~~~~
 
@@ -425,24 +460,27 @@ The broker MUST issue a 4.00 (Bad Request) error if a received parameter is inva
 -->
 
 ~~~~
-=> 0.02 POST
-   Uri-Path: ps
+   Request:
+
+   Header: POST (Code=0.02)
+   Uri-Path: "ps"
    Content-Format: TBD2 (application/core-pubsub+cbor)
-   TBD (this should be a CBOR map with the mandatory parameters)
+   Payload (in CBOR diagnostic notation):
    {
-     "topic-name": "living-room-sensor",
-     "resource-type": "core.ps.conf"
+      / topic-name /         0: "living-room-sensor",
+      / resource-type /      1: "core.ps.conf"
    }
 
-<= 2.01 Created
-   Location-Path: ps/h9392
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Response:
 
-   TBD (this should be a CBOR map)
+   Header: Created (Code=2.01)
+   Location-Path: "ps/h9392"
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Payload (in CBOR diagnostic notation):
    {
-     "topic-name": "living-room-sensor",
-     "topic-data": "ps/data/1bd0d6d",
-     "resource-type": "core.ps.conf"
+      / topic-name /         0: "living-room-sensor",
+      / topic-data /         1: "ps/data/1bd0d6d",
+      / resource-type /      2: "core.ps.conf"
    }
 ~~~~
 
@@ -469,22 +507,27 @@ The response payload is a CBOR map, whose possible entries are specified in {{to
 For example, below is a request on the topic "ps/h9392":
 
 ~~~~
-=> 0.01 GET
-   Uri-Path: ps
-   Uri-Path: h9392
+   Request:
 
-<= 2.05 Content
+   Header: GET (Code=0.01)
+   Uri-Path: "ps"
+   Uri-Path: "h9392"
+
+   Response:
+
+   Header: Content (Code=2.05)
    Content-Format: TBD2 (application/core-pubsub+cbor)
+   Payload (in CBOR diagnostic notation):
    {
-      "topic-name" : "living-room-sensor",
-      "topic-data" : "ps/data/1bd0d6d",
-      "resource-type": "core.ps.conf",
-      "media-type": "application/senml-cbor",
-      "topic-type": "temperature",
-      "expiration-date": "2023-04-00T23:59:59Z",
-      "max-subscribers": 100
+      / topic-name /         0: "living-room-sensor",
+      / topic-data /         1: "ps/data/1bd0d6d",
+      / resource-type /      2: "core.ps.conf",
+      / media-type /         3: "application/senml-cbor",
+      / topic-type /         4: "temperature",
+      / expiration-date /    5: "2023-04-00T23:59:59Z",
+      / max-subscribers /    6: 100,
+      / topic-history /      7: 10
    }
-
 ~~~~
 
 ### Getting part of a topic-configuration {#topic-fetch-resource}
@@ -510,21 +553,26 @@ Both request and response MUST have Content-Format set to "application/core-pubs
 Example:
 
 ~~~~
-=> 0.05 FETCH
-   Uri-Path: ps
-   Uri-Path: h9392
+   Request:
+
+   Header: FETCH (Code=0.05)
+   Uri-Path: "ps"
+   Uri-Path: "h9392"
    Content-Format: TBD2 (application/core-pubsub+cbor)
+   Payload (in CBOR diagnostic notation):
    {
-     "conf-filter": ["topic-data", "media-type"]
+      / conf-filter / 0: ["topic-data", "media-type"]
    }
 
-<= 2.05 Content
-   Content-Format: TBD2 (application/core-pubsub+cbor)
-   {
-     "topic-data": "ps/data/1bd0d6d",
-     "media-type": "application/senml-cbor"
-   }
+   Response:
 
+   Header: Content (Code=2.05)
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Payload (in CBOR diagnostic notation):
+   {
+      / topic-data /   1: "ps/data/1bd0d6d",
+      / media-type /   3: "application/senml-cbor"
+   }
 ~~~~
 
 ### Updating the topic-configuration {#topic-update-resource}
@@ -549,33 +597,36 @@ Please note that when using PUT the topic configuration is being overwritten, th
 Example:
 
 ~~~~
-=> 0.03 PUT
-   Uri-Path: ps
-   Uri-Path: h9392
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Request:
 
+   Header: PUT (Code=0.03)
+   Uri-Path: "ps"
+   Uri-Path: "h9392"
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Payload (in CBOR diagnostic notation):
    {
-      "topic-name": "living-room-sensor",
-      "topic-data": "ps/data/1bd0d6d",
-      "resource-type": "core.ps.conf",
-      "media-type": "application/senml-cbor",
-      "topic-type": "temperature",
-      "expiration-date": "2023-04-28T23:59:59Z",
+      / topic-name /        0: "living-room-sensor",
+      / topic-data /        1: "ps/data/1bd0d6d",
+      / resource-type /     2: "core.ps.conf",
+      / media-type /        3: "application/senml-cbor",
+      / topic-type /        4: "temperature",
+      / expiration-date /   5: "2023-04-28T23:59:59Z"
    }
 
-<= 2.04 Changed
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Response:
 
-   TBD (this should be a CBOR map)
+   Header: Changed (Code=2.04)
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Payload (in CBOR diagnostic notation):
    {
-      "topic-name": "living-room-sensor",
-      "topic-data": "ps/data/1bd0d6d",
-      "resource-type": "core.ps.conf",
-      "media-type": "application/senml-cbor",
-      "topic-type": "temperature",
-      "expiration-date": "2023-04-28T23:59:59Z",
-      "max-subscribers": 100,
-      "observer-check": 86400
+      / topic-name /        0: "living-room-sensor",
+      / topic-data /        1: "ps/data/1bd0d6d",
+      / resource-type /     2: "core.ps.conf",
+      / media-type /        3: "application/senml-cbor",
+      / topic-type /        4: "temperature",
+      / expiration-date /   5: "2023-04-28T23:59:59Z",
+      / max-subscribers /   6: 100,
+      / observer-check /    7: 86400
    }
 ~~~~
 
@@ -596,28 +647,31 @@ As with the PUT method, updating the "topic-data" path will automatically cancel
 Contrary to PUT, iPATCH operations will explicitly update some parameters, leaving others unmodified.
 
 ~~~~
-=> 0.07 iPATCH
-   Uri-Path: ps
-   Uri-Path: h9392
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Request:
 
+   Header: iPATCH (Code=0.07)
+   Uri-Path: "ps"
+   Uri-Path: "h9392"
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Payload (in CBOR diagnostic notation):
    {
-      "topic-type": "humidity",
-      "max-subscribers": 5
+      / topic-type /       4: "humidity",
+      / max-subscribers /  6: 5
    }
 
-<= 2.04 Changed
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Response:
 
-   TBD (this should be a CBOR map)
+   Header: Changed (Code=2.04)
+   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Payload (in CBOR diagnostic notation):
    {
-      "topic-name" : "living-room-sensor",
-      "topic-data" : "ps/data/1bd0d6d",
-      "resource-type": "core.ps.conf",
-      "media-type": "application/senml-cbor",
-      "topic-type": "humidity",
-      "expiration-date": "2023-05-28T23:59:59Z",
-      "max-subscribers": 5
+      / topic-name /        0: "living-room-sensor",
+      / topic-data /        1: "ps/data/1bd0d6d",
+      / resource-type /     2: "core.ps.conf",
+      / media-type /        3: "application/senml-cbor",
+      / topic-type /        4: "humidity",
+      / expiration-date /   5: "2023-05-28T23:59:59Z",
+      / max-subscribers /   6: 5
    }
 ~~~~
 
@@ -634,11 +688,15 @@ When a topic-configuration resource is deleted, the broker MUST also delete the 
 Example:
 
 ~~~~
-=> 0.04 DELETE
-   Uri-Path: ps
-   Uri-Path: h9392
+   Request:
 
-<= 2.02 Deleted
+   Header: DELETE (Code=0.04)
+   Uri-Path: "ps"
+   Uri-Path: "h9392"
+
+   Response:
+
+   Header: Deleted (Code=2.02)
 ~~~~
 
 # Publish and Subscribe {#pubsub}
@@ -717,12 +775,14 @@ If the client is sending publications too fast, the server returns a
 Example of first publication:
 
 ~~~~
-=> 0.03 PUT
-   Uri-Path: ps
-   Uri-Path: data
-   Uri-Path: 1bd0d6d
-   Content-Format: 110
+   Request:
 
+   Header: PUT (Code=0.03)
+   Uri-Path: "ps"
+   Uri-Path: "data"
+   Uri-Path: "1bd0d6d"
+   Content-Format: 110
+   Payload:
    {
       "n": "coap://dev1.example.com/temperature",
       "u": "Cel",
@@ -730,18 +790,22 @@ Example of first publication:
       "v": 23.5
    }
 
-<= 2.01 Created
+   Response:
+
+   Header: Created (Code=2.01)
 ~~~~
 
 Example of subsequent publication:
 
 ~~~~
-=> 0.03 PUT
-   Uri-Path: ps
-   Uri-Path: data
-   Uri-Path: 1bd0d6d
-   Content-Format: 110
+   Request:
 
+   Header: PUT (Code=0.03)
+   Uri-Path: "ps"
+   Uri-Path: "data"
+   Uri-Path: "1bd0d6d"
+   Content-Format: 110
+   Payload:
    {
       "n": "coap://dev1.example.com/temperature",
       "u": "Cel",
@@ -749,7 +813,9 @@ Example of subsequent publication:
       "v": 22.5
    }
 
-<= 2.04 Updated
+   Response:
+
+   Header: Updated (Code=2.04)
 ~~~~
 
 ### Subscribe {#subscribe}
@@ -785,36 +851,41 @@ TODO Right. However, how can this work when the server hosting the topic-data re
 Example:
 
 ~~~~
-=> 0.01 GET
-   Uri-Path: ps
-   Uri-Path: data
-   Uri-Path: 1bd0d6d
+   Request:
+
+   Header: GET (Code=0.01)
+   Uri-Path: "ps"
+   Uri-Path: "data"
+   Uri-Path: "1bd0d6d"
    Observe: 0
 
-<= 2.05 Content
+   Response:
+
+   Header: Content (Code=2.05)
    Content-Format: 110
    Observe: 10001
    Max-Age: 15
+   Payload:
+   {
+      "n": "urn:dev:os:32473-123456",
+      "u": "Cel",
+      "t": 1696341182,
+      "v": 19.87
+   }
 
-  {
-    "n": "urn:dev:os:32473-123456",
-    "u": "Cel",
-    "t": 1696341182,
-    "v": 19.87
-  }
+   Response:
 
-<= 2.05 Content
+   Header: Content (Code=2.05)
    Content-Format: 110
    Observe: 10002
    Max-Age: 15
-
-  {
-
-    "n": "urn:dev:os:32473-123456",
-    "u": "Cel",
-    "t": 1696340184,
-    "v": 21.87
-  }
+   Payload:
+   {
+      "n": "urn:dev:os:32473-123456",
+      "u": "Cel",
+      "t": 1696340184,
+      "v": 21.87
+   }
 ~~~~
 
 ### Unsubscribe {#unsubscribe}
@@ -842,12 +913,16 @@ When a topic-data resource is deleted, the broker SHOULD also delete the topic-d
 Example:
 
 ~~~~
-=> 0.04 DELETE
-   Uri-Path: ps
-   Uri-Path: data
-   Uri-Path: 1bd0d6d
+   Request:
 
-<= 2.02 Deleted
+   Header: DELETE (Code=0.04)
+   Uri-Path: "ps"
+   Uri-Path: "data"
+   Uri-Path: "1bd0d6d"
+
+   Response:
+
+   Header: Deleted (Code=2.02)
 ~~~~
 
 ## Read latest data {#read-data}
@@ -861,15 +936,19 @@ If the target URI does not match an existing resource or the topic is not in the
 Example:
 
 ~~~~
-=> 0.01 GET
-   Uri-Path: ps
-   Uri-Path: data
-   Uri-Path: 1bd0d6d
+   Request:
 
-<= 2.05 Content
+   Header: GET (Code=0.01)
+   Uri-Path: "ps"
+   Uri-Path: "data"
+   Uri-Path: "1bd0d6d"
+
+   Response:
+
+   Header: Content (Code=2.05)
    Content-Format: 110
    Max-Age: 15
-
+   Payload:
    {
       "n": "coap://dev1.example.com/temperature",
       "u": "Cel",
