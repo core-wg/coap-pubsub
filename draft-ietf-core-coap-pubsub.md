@@ -1135,3 +1135,26 @@ Reference: [RFC-XXXX]
 The current version of this document contains a substantial contribution by Klaus Hartke's proposal {{I-D.hartke-t2trg-coral-pubsub}}, which defines the topic resource model and structure as well as the topic lifecycle and interactions. It also follows a similar architectural design as that provided by Marco Tiloca's {{I-D.ietf-ace-oscore-gm-admin}}.
 
 The authors would like to also thank Carsten Bormann, Hannes Tschofenig, Zach Shelby, Mohit Sethi, Peter van der Stok, Tim Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen, Olaf Bergmann and Oscar Novo for their valuable contributions and reviews.
+
+# Appendix: Document Updates
+
+RFC EDITOR: PLEASE REMOVE THIS SECTION.
+
+A.1.  Version -13 to -14
+
+* Section restructuring for better readability.
+* Updated topic configuration interactions.
+* Introduced iPATCH section.
+* Various clarifications of default values for parameters.
+* New examples for several interactions.
+* Updated topic discovery section.
+* Other editorial changes
+
+A.2.  Version -14 to -15
+
+* Added two new optional topic configuration parameters; ‘initialize,’ and ‘topic-history’.
+* Modified all examples to conform to RFC9594.
+* Added the explicit cancelation of ongoing subscriptions when topic configuration parameters are changed.
+* Added editorial changes based on feedback.
+* Clarifications on Topic Configuration creation.
+* Other editorial changes
