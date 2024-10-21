@@ -1122,13 +1122,6 @@ Description: Topic-data resource of a broker
 Reference: [RFC-XXXX]
 ~~~
 
-# Acknowledgements
-{: numbered='no'}
-
-The current version of this document contains a substantial contribution by Klaus Hartke's proposal {{I-D.hartke-t2trg-coral-pubsub}}, which defines the topic resource model and structure as well as the topic lifecycle and interactions. It also follows a similar architectural design as that provided by Marco Tiloca's {{I-D.ietf-ace-oscore-gm-admin}}.
-
-The authors would like to also thank Carsten Bormann, Hannes Tschofenig, Zach Shelby, Mohit Sethi, Peter van der Stok, Tim Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen, Olaf Bergmann and Oscar Novo for their valuable contributions and reviews.
-
 # Document Updates # {#sec-document-updates}
 {:removeinrfc}
 
@@ -1151,3 +1144,11 @@ The authors would like to also thank Carsten Bormann, Hannes Tschofenig, Zach Sh
 * Added editorial changes based on feedback.
 * Clarifications on Topic Configuration creation.
 * Other editorial changes
+
+
+# Acknowledgements
+{: numbered='no'}
+
+The current version of this document contains a substantial contribution by Klaus Hartke's proposal {{I-D.hartke-t2trg-coral-pubsub}}, which defines the topic resource model and structure as well as the topic lifecycle and interactions. It also follows a similar architectural design as that provided by Marco Tiloca's {{I-D.ietf-ace-oscore-gm-admin}}.
+
+The authors would like to also thank Marco Tiloca, Carsten Bormann, Hannes Tschofenig, Zach Shelby, Mohit Sethi, Peter van der Stok, Tim Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen, Olaf Bergmann and Oscar Novo for their valuable contributions and reviews.
