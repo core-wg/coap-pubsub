@@ -5,10 +5,10 @@
 CoRE Working Group                                            J. Jimenez
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                               M. Koster
-Expires: 23 April 2025                                     Dogtiger Labs
+Expires: 24 April 2025                                     Dogtiger Labs
                                                               A. Keranen
                                                                 Ericsson
-                                                         20 October 2024
+                                                         21 October 2024
 
 
     A publish-subscribe architecture for the Constrained Application
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Jimenez, et al.           Expires 23 April 2025                 [Page 1]
+Jimenez, et al.           Expires 24 April 2025                 [Page 1]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -63,7 +63,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 April 2025.
+   This Internet-Draft will expire on 24 April 2025.
 
 Copyright Notice
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Jimenez, et al.           Expires 23 April 2025                 [Page 2]
+Jimenez, et al.           Expires 24 April 2025                 [Page 2]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -126,14 +126,17 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  30
      6.1.  Media Type  . . . . . . . . . . . . . . . . . . . . . . .  30
      6.2.  Content-Format  . . . . . . . . . . . . . . . . . . . . .  31
-     6.3.  CoAP Pubsub Parameters  . . . . . . . . . . . . . . . . .  31
+     6.3.  CoAP Pubsub Parameters  . . . . . . . . . . . . . . . . .  32
      6.4.  Resource Types  . . . . . . . . . . . . . . . . . . . . .  32
-   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  33
-   References  . . . . . . . . . . . . . . . . . . . . . . . . . . .  33
-     Normative References  . . . . . . . . . . . . . . . . . . . . .  33
-     Informative References  . . . . . . . . . . . . . . . . . . . .  34
-   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  35
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  36
+   7.  Document Updates  . . . . . . . . . . . . . . . . . . . . . .  33
+     7.1.  Version -13 to -14  . . . . . . . . . . . . . . . . . . .  33
+     7.2.  Version -14 to -15  . . . . . . . . . . . . . . . . . . .  33
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  34
+   References  . . . . . . . . . . . . . . . . . . . . . . . . . . .  34
+     Normative References  . . . . . . . . . . . . . . . . . . . . .  34
+     Informative References  . . . . . . . . . . . . . . . . . . . .  35
+   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  37
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  37
 
 1.  Introduction
 
@@ -158,17 +161,18 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
    exchange data via topics through a broker entity might fit these
    nodes better.
 
-   This document applies the idea of broker-based publish-subscribe to
-   Constrained RESTful Environments using CoAP.  It defines a broker
-   that allows to create, discover subscribe and publish on topics.
 
 
 
 
-Jimenez, et al.           Expires 23 April 2025                 [Page 3]
+Jimenez, et al.           Expires 24 April 2025                 [Page 3]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
+
+   This document applies the idea of broker-based publish-subscribe to
+   Constrained RESTful Environments using CoAP.  It defines a broker
+   that allows to create, discover subscribe and publish on topics.
 
 1.1.  Terminology
 
@@ -214,17 +218,17 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
       as one topic resource at the broker, and its representation is the
       set of configuration information concerning the topic.  All the
       topic resources associated with the same topic collection share a
-      common base URI, i.e., the URI of the collection resource.
-      Throughout this document the word "topic" and "topic-
-      configuration" can be used interchangeably.
 
 
 
-
-Jimenez, et al.           Expires 23 April 2025                 [Page 4]
+Jimenez, et al.           Expires 24 April 2025                 [Page 4]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
+
+      common base URI, i.e., the URI of the collection resource.
+      Throughout this document the word "topic" and "topic-
+      configuration" can be used interchangeably.
 
    topic-data resource:
       A resource where clients can publish data and/or subscribe to data
@@ -273,11 +277,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-
-
-
-
-Jimenez, et al.           Expires 23 April 2025                 [Page 5]
+Jimenez, et al.           Expires 24 April 2025                 [Page 5]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -333,7 +333,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                 [Page 6]
+Jimenez, et al.           Expires 24 April 2025                 [Page 6]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -389,7 +389,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                 [Page 7]
+Jimenez, et al.           Expires 24 April 2025                 [Page 7]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -438,14 +438,14 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
       resource type as a CBOR text string.  The value should be
       "core.ps.conf".
 
-   *  'media-type': An optional field used to indicate the media type of
-      the topic-data resource for the topic.  It encodes the media type
-      as a this information as the integer identifier of the CoAP
-      content-format (e.g., value is "50" for "application/json").
+   *  'topic-media-type': An optional field used to indicate the media
+      type of the topic-data resource for the topic.  It encodes the
+      media type as a this information as the integer identifier of the
+      CoAP content-format (e.g., value is "50" for "application/json").
 
 
 
-Jimenez, et al.           Expires 23 April 2025                 [Page 8]
+Jimenez, et al.           Expires 24 April 2025                 [Page 8]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -501,7 +501,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                 [Page 9]
+Jimenez, et al.           Expires 24 April 2025                 [Page 9]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -557,7 +557,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                [Page 10]
+Jimenez, et al.           Expires 24 April 2025                [Page 10]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -613,7 +613,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                [Page 11]
+Jimenez, et al.           Expires 24 April 2025                [Page 11]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -669,7 +669,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                [Page 12]
+Jimenez, et al.           Expires 24 April 2025                [Page 12]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -725,7 +725,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                [Page 13]
+Jimenez, et al.           Expires 24 April 2025                [Page 13]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -781,7 +781,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                [Page 14]
+Jimenez, et al.           Expires 24 April 2025                [Page 14]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -837,7 +837,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                [Page 15]
+Jimenez, et al.           Expires 24 April 2025                [Page 15]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -875,7 +875,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
          / topic-name /         0: "living-room-sensor",
          / topic-data /         1: "ps/data/1bd0d6d",
          / resource-type /      2: "core.ps.conf",
-         / media-type /         3: "application/senml-cbor",
+         / topic-media-type /   3: "application/senml-cbor",
          / topic-type /         4: "temperature",
          / expiration-date /    5: "2023-04-00T23:59:59Z",
          / max-subscribers /    6: 100,
@@ -893,7 +893,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                [Page 16]
+Jimenez, et al.           Expires 24 April 2025                [Page 16]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -939,8 +939,8 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
       Content-Format: TBD2 (application/core-pubsub+cbor)
       Payload (in CBOR diagnostic notation):
       {
-         / topic-data /   1: "ps/data/1bd0d6d",
-         / media-type /   3: "application/senml-cbor"
+         / topic-data /        1: "ps/data/1bd0d6d",
+         / topic-media-type /  3: "application/senml-cbor",
       }
 
 
@@ -949,7 +949,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                [Page 17]
+Jimenez, et al.           Expires 24 April 2025                [Page 17]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -970,7 +970,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
    Note that updating the "topic-data" path will automatically cancel
    all existing observations on it and thus will unsubscribe all
    subscribers.  Updating the "topic-data" may happen also after it
-   being deleted, as described on {delete-topic-data}, this will in turn
+   being deleted, as described on Section 3.2.4, this will in turn
    create a new "topic-data" path for that topic configuration.
 
    Similarly, decreasing max-subscribers will also cause that some
@@ -1005,7 +1005,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                [Page 18]
+Jimenez, et al.           Expires 24 April 2025                [Page 18]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -1021,7 +1021,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
          / topic-name /        0: "living-room-sensor",
          / topic-data /        1: "ps/data/1bd0d6d",
          / resource-type /     2: "core.ps.conf",
-         / media-type /        3: "application/senml-cbor",
+         / topic-media-type /  3: "application/senml-cbor",
          / topic-type /        4: "temperature",
          / expiration-date /   5: "2023-04-28T23:59:59Z"
       }
@@ -1035,7 +1035,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
          / topic-name /        0: "living-room-sensor",
          / topic-data /        1: "ps/data/1bd0d6d",
          / resource-type /     2: "core.ps.conf",
-         / media-type /        3: "application/senml-cbor",
+         / topic-media-type /  3: "application/senml-cbor",
          / topic-type /        4: "temperature",
          / expiration-date /   5: "2023-04-28T23:59:59Z",
          / max-subscribers /   6: 100,
@@ -1061,7 +1061,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                [Page 19]
+Jimenez, et al.           Expires 24 April 2025                [Page 19]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -1117,7 +1117,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                [Page 20]
+Jimenez, et al.           Expires 24 April 2025                [Page 20]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -1143,7 +1143,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
          / topic-name /        0: "living-room-sensor",
          / topic-data /        1: "ps/data/1bd0d6d",
          / resource-type /     2: "core.ps.conf",
-         / media-type /        3: "application/senml-cbor",
+         / topic-media-type /  3: "application/senml-cbor",
          / topic-type /        4: "humidity",
          / expiration-date /   5: "2023-05-28T23:59:59Z",
          / max-subscribers /   6: 5
@@ -1173,7 +1173,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                [Page 21]
+Jimenez, et al.           Expires 24 April 2025                [Page 21]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -1229,7 +1229,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                [Page 22]
+Jimenez, et al.           Expires 24 April 2025                [Page 22]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -1285,7 +1285,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                [Page 23]
+Jimenez, et al.           Expires 24 April 2025                [Page 23]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -1341,7 +1341,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                [Page 24]
+Jimenez, et al.           Expires 24 April 2025                [Page 24]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -1397,7 +1397,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                [Page 25]
+Jimenez, et al.           Expires 24 April 2025                [Page 25]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -1453,7 +1453,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                [Page 26]
+Jimenez, et al.           Expires 24 April 2025                [Page 26]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -1509,7 +1509,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                [Page 27]
+Jimenez, et al.           Expires 24 April 2025                [Page 27]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -1565,7 +1565,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
-Jimenez, et al.           Expires 23 April 2025                [Page 28]
+Jimenez, et al.           Expires 24 April 2025                [Page 28]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
@@ -1582,18 +1582,20 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
    when these parameters are transported in the respective message
    fields.
 
-         +-----------------+-----------+-----------+------------+
-         | Name            | CBOR Key  | CBOR Type | Reference  |
-         |-----------------|-----------|-----------|------------|
-         | topic-name      | TBD1      | tstr      | [RFC-XXXX] |
-         | topic-data      | TBD2      | tstr      | [RFC-XXXX] |
-         | resource-type   | TBD3      | tstr      | [RFC-XXXX] |
-         | media-type      | TBD4      | uint      | [RFC-XXXX] |
-         | topic-type      | TBD5      | tstr      | [RFC-XXXX] |
-         | expiration-date | TBD6      | tstr      | [RFC-XXXX] |
-         | max-subscribers | TBD7      | uint      | [RFC-XXXX] |
-         | observer-check  | TBD8      | uint      | [RFC-XXXX] |
-         +-----------------+-----------+-----------+------------+
+         +------------------+-----------+-----------+------------+
+         | Name             | CBOR Key  | CBOR Type | Reference  |
+         |------------------|-----------|-----------|------------|
+         | topic-name       | TBD1      | tstr      | [RFC-XXXX] |
+         | topic-data       | TBD2      | tstr      | [RFC-XXXX] |
+         | resource-type    | TBD3      | tstr      | [RFC-XXXX] |
+         | topic-media-type | TBD4      | uint      | [RFC-XXXX] |
+         | topic-type       | TBD5      | tstr      | [RFC-XXXX] |
+         | expiration-date  | TBD6      | tstr      | [RFC-XXXX] |
+         | max-subscribers  | TBD7      | uint      | [RFC-XXXX] |
+         | observer-check   | TBD8      | uint      | [RFC-XXXX] |
+         | topic-history    | TBD9      | uint      | [RFC-XXXX] |
+         | initialize       | TBD10     | bool      | [RFC-XXXX] |
+         +------------------+-----------+-----------+------------+
 
                       Figure 5: CoAP Pubsub Parameters
 
@@ -1615,17 +1617,18 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
    application layer, e.g., by using COSE [RFC9052], [RFC9053],
    [RFC9338].
 
-   Access control of clients at the broker MAY be enforced for
-   performing discovery operation, and SHOULD be enforced in a fine-
-   grained fashion for operations related to the the creation, update,
 
 
 
-Jimenez, et al.           Expires 23 April 2025                [Page 29]
+
+Jimenez, et al.           Expires 24 April 2025                [Page 29]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
+   Access control of clients at the broker MAY be enforced for
+   performing discovery operation, and SHOULD be enforced in a fine-
+   grained fashion for operations related to the the creation, update,
    and deletion of topic resources, as well as for operations on topic-
    data resources such as publication on and subscription to topics.
    This prevents rogue clients to, among other things, repeatedly create
@@ -1666,6 +1669,19 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
    IANA is requested to add the following Media-Type to the "Media
    Types" registry [IANA.media-types].
 
+
+
+
+
+
+
+
+
+Jimenez, et al.           Expires 24 April 2025                [Page 30]
+
+Internet-Draft  A publish-subscribe architecture for the    October 2024
+
+
    +=============+=========================+=======================+
    | Name        | Template                | Reference             |
    +=============+=========================+=======================+
@@ -1673,14 +1689,6 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
    +-------------+-------------------------+-----------------------+
 
             Table 1: New Media Type application/pubsub+cbor
-
-
-
-
-Jimenez, et al.           Expires 23 April 2025                [Page 30]
-
-Internet-Draft  A publish-subscribe architecture for the    October 2024
-
 
    Type name:  application
    Subtype name:  pubsub+cbor
@@ -1719,6 +1727,17 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
    TBD9 is to be assigned from the space 256..999.
 
+
+
+
+
+
+
+Jimenez, et al.           Expires 24 April 2025                [Page 31]
+
+Internet-Draft  A publish-subscribe architecture for the    October 2024
+
+
 6.3.  CoAP Pubsub Parameters
 
    IANA is asked to register the following entries in the subregistry of
@@ -1730,13 +1749,6 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
    Environments (CoRE) Parameters" registry group.
 
    The columns of this registry are:
-
-
-
-Jimenez, et al.           Expires 23 April 2025                [Page 31]
-
-Internet-Draft  A publish-subscribe architecture for the    October 2024
-
 
    *  Name: This is a descriptive name that enables easier reference to
       the item.  The name MUST be unique.  It is not used in the
@@ -1770,6 +1782,18 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
    (rt=) Link Target Attribute Values" registry within the "Constrained
    Restful Environments (CoRE) Parameters" registry group.
 
+
+
+
+
+
+
+
+Jimenez, et al.           Expires 24 April 2025                [Page 32]
+
+Internet-Draft  A publish-subscribe architecture for the    October 2024
+
+
  Value: core.ps
  Description: Publish-Subscribe Broker
  Reference: [RFC-XXXX]
@@ -1786,13 +1810,51 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
  Description: Topic-data resource of a broker
  Reference: [RFC-XXXX]
 
+7.  Document Updates
+
+   This section is to be removed before publishing as an RFC.
+
+7.1.  Version -13 to -14
+
+   *  Section restructuring for better readability.
+
+   *  Updated topic configuration interactions.
+
+   *  Introduced iPATCH section.
+
+   *  Various clarifications of default values for parameters.
+
+   *  New examples for several interactions.
+
+   *  Updated topic discovery section.
+
+   *  Other editorial changes
+
+7.2.  Version -14 to -15
+
+   *  Code bug fix https://github.com/jaimejim/aiocoap-pubsub-
+      broker/commit/f32ce4866a81319238d6e905de439c9410cce175
+
+   *  Added two new optional topic configuration parameters;
+      ‘initialize,’ and ‘topic-history’.
+
+   *  Modified all examples to conform to RFC9594.
+
+   *  Added the explicit cancelation of ongoing subscriptions when topic
+      configuration parameters are changed.
 
 
 
-Jimenez, et al.           Expires 23 April 2025                [Page 32]
+Jimenez, et al.           Expires 24 April 2025                [Page 33]
 
 Internet-Draft  A publish-subscribe architecture for the    October 2024
 
+
+   *  Added editorial changes based on feedback.
+
+   *  Clarifications on Topic Configuration creation.
+
+   *  Other editorial changes
 
 Acknowledgements
 
@@ -1803,8 +1865,8 @@ Acknowledgements
    It also follows a similar architectural design as that provided by
    Marco Tiloca's [I-D.ietf-ace-oscore-gm-admin].
 
-   The authors would like to also thank Carsten Bormann, Hannes
-   Tschofenig, Zach Shelby, Mohit Sethi, Peter van der Stok, Tim
+   The authors would like to also thank Marco Tiloca, Carsten Bormann,
+   Hannes Tschofenig, Zach Shelby, Mohit Sethi, Peter van der Stok, Tim
    Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen, Olaf
    Bergmann and Oscar Novo for their valuable contributions and reviews.
 
@@ -1835,20 +1897,19 @@ Normative References
               Format", RFC 6690, DOI 10.17487/RFC6690, August 2012,
               <https://www.rfc-editor.org/rfc/rfc6690>.
 
+
+
+
+
+Jimenez, et al.           Expires 24 April 2025                [Page 34]
+
+Internet-Draft  A publish-subscribe architecture for the    October 2024
+
+
    [RFC7252]  Shelby, Z., Hartke, K., and C. Bormann, "The Constrained
               Application Protocol (CoAP)", RFC 7252,
               DOI 10.17487/RFC7252, June 2014,
               <https://www.rfc-editor.org/rfc/rfc7252>.
-
-
-
-
-
-
-Jimenez, et al.           Expires 23 April 2025                [Page 33]
-
-Internet-Draft  A publish-subscribe architecture for the    October 2024
-
 
    [RFC7641]  Hartke, K., "Observing Resources in the Constrained
               Application Protocol (CoAP)", RFC 7641,
@@ -1891,6 +1952,16 @@ Informative References
               <https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-
               groupcomm-19>.
 
+
+
+
+
+
+Jimenez, et al.           Expires 24 April 2025                [Page 35]
+
+Internet-Draft  A publish-subscribe architecture for the    October 2024
+
+
    [I-D.ietf-ace-oscore-gm-admin]
               Tiloca, M., Höglund, R., Van der Stok, P., and F.
               Palombini, "Admin Interface for the OSCORE Group Manager",
@@ -1898,13 +1969,6 @@ Informative References
               gm-admin-12, 8 July 2024,
               <https://datatracker.ietf.org/doc/html/draft-ietf-ace-
               oscore-gm-admin-12>.
-
-
-
-Jimenez, et al.           Expires 23 April 2025                [Page 34]
-
-Internet-Draft  A publish-subscribe architecture for the    October 2024
-
 
    [I-D.ietf-ace-pubsub-profile]
               Palombini, F., Sengul, C., and M. Tiloca, "Publish-
@@ -1943,6 +2007,17 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
               (ACE-OAuth)", RFC 9200, DOI 10.17487/RFC9200, August 2022,
               <https://www.rfc-editor.org/rfc/rfc9200>.
 
+
+
+
+
+
+
+Jimenez, et al.           Expires 24 April 2025                [Page 36]
+
+Internet-Draft  A publish-subscribe architecture for the    October 2024
+
+
    [RFC9338]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
               Countersignatures", STD 96, RFC 9338,
               DOI 10.17487/RFC9338, December 2022,
@@ -1953,13 +2028,6 @@ Contributors
    Marco Tiloca
    RISE AB
    Email: marco.tiloca@ri.se
-
-
-
-
-Jimenez, et al.           Expires 23 April 2025                [Page 35]
-
-Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
    Marco offered comprehensive reviews and insightful guidance on the
@@ -2001,16 +2069,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-Jimenez, et al.           Expires 23 April 2025                [Page 36]
+Jimenez, et al.           Expires 24 April 2025                [Page 37]
