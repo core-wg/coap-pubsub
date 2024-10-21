@@ -1145,6 +1145,7 @@ A.1.  Version -13 to -14
 
 A.2.  Version -14 to -15
 
+* Code bug fix https://github.com/jaimejim/aiocoap-pubsub-broker/commit/f32ce4866a81319238d6e905de439c9410cce175
 * Added two new optional topic configuration parameters; ‘initialize,’ and ‘topic-history’.
 * Modified all examples to conform to RFC9594.
 * Added the explicit cancelation of ongoing subscriptions when topic configuration parameters are changed.
