@@ -1,36 +1,27 @@
 ---
-stand_alone: yes
+v: 3
 
 title: "A publish-subscribe architecture for the Constrained Application Protocol (CoAP)"
+abbrev: CoAP pubsub
 docname: draft-ietf-core-coap-pubsub-latest
-category: std
 
-ipr: trust200902
+category: std
+stream: IETF
 area: Applications
 workgroup: CoRE Working Group
-submissiontype: IETF
-
-stand_alone: true
-pi: [toc, sortrefs, symrefs]
 
 venue:
   mail: core@ietf.org
   github: core-wg/coap-pubsub
 
 author:
--
-  ins: J. Jimenez
-  name: Jaime Jimenez
+- name: Jaime Jimenez
   org: Ericsson
   email: jaime@iki.fi
--
-  ins: M. Koster
-  name: Michael Koster
+- name: Michael Koster
   org: Dogtiger Labs
   email: michaeljohnkoster@gmail.com
--
-  ins: A. Keranen
-  name: Ari Keranen
+- name: Ari Keranen
   org: Ericsson
   email: ari.keranen@ericsson.com
 
@@ -73,7 +64,7 @@ This document describes a publish-subscribe architecture for the Constrained App
 
 # Introduction {#introduction}
 
-The Constrained Application Protocol (CoAP) {{!RFC7252}} supports
+The Constrained Application Protocol (CoAP) {{RFC7252}} supports
 machine-to-machine communication across networks of constrained
 devices and constrained networks. CoAP uses a request/response model where clients make requests to servers in order to request actions on resources. Depending on the situation the same device may act either as a server, a client, or both.
 
@@ -87,7 +78,7 @@ This document applies the idea of broker-based publish-subscribe to Constrained 
 
 {::boilerplate bcp14}
 
-This specification requires readers to be familiar with all the terms and concepts that are discussed in {{?RFC8288}} and {{!RFC6690}}. Readers should also be familiar with the terms and concepts discussed in {{!RFC7252}}, {{!RFC9176}} and {{!RFC7641}}. The URI template format {{!RFC6570}} is used to describe the REST API defined in this specification.
+This specification requires readers to be familiar with all the terms and concepts that are discussed in {{RFC8288}} and {{RFC6690}}. Readers should also be familiar with the terms and concepts discussed in {{RFC7252}}, {{RFC9176}} and {{RFC7641}}. The URI template format {{RFC6570}} is used to describe the REST API defined in this specification.
 
 This specification makes use of the following terminology:
 
@@ -108,7 +99,7 @@ topic-data resource:
 : A resource where clients can publish data and/or subscribe to data for a specific topic. The representation of the topic resource corresponding to such a topic also specifies the URI to the present topic-data resource.
 
 broker:
-: A CoAP server that hosts one or more topic collections with their topic-configurations, and also topic-data resources. The broker is responsible for the store-and-forward of state update representations, for the topics for which it hosts the corresponding topic-data resources. The broker is also responsible of handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
+: A CoAP server that hosts one or more topic collections with their topic-configurations, and also topic-data resources. The broker is responsible for the store-and-forward of state update representations, for the topics for which it hosts the corresponding topic-data resources. The broker is also responsible for handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
 
 ## CoAP Publish-Subscribe Architecture
 
@@ -116,7 +107,7 @@ broker:
 
 Topics are created by the broker, but the initial configuration can be proposed by a client (e.g., a publisher or a dedicated administrator) over the RESTful interface of a corresponding topic resource hosted by the broker.
 
-Publishers submit their data over the RESTful interface of a topic-data resource corresponding to the topic, which may be hosted by the broker. Subscribers to a topic are notified of new publications by using Observe {{?RFC7641}} on the corresponding topic-data resource.
+Publishers submit their data over the RESTful interface of a topic-data resource corresponding to the topic, which may be hosted by the broker. Subscribers to a topic are notified of new publications by using Observe {{RFC7641}} on the corresponding topic-data resource.
 
 The broker is responsible for the store-and-forward of state update representations between CoAP clients. Subscribers observing a resource will receive notifications, the delivery of which is done on a best-effort basis.
 
@@ -222,7 +213,7 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 * 'resource-type': A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value should be "core.ps.conf".
 
-* 'topic-media-type': An optional field used to indicate the media type of the topic-data resource for the topic. It encodes the media type as a this information as the integer identifier of the CoAP content-format (e.g., value is "50" for "application/json").
+* 'topic-media-type': An optional field used to indicate the media type of the topic-data resource for the topic. It represents the media type as the integer identifier of the CoAP content-format (e.g., value is "50" for "application/json").
 
 * 'topic-type': An optional field used to indicate the attribute or property of the topic-data resource for the topic. It encodes the attribute as a CBOR text string. Example attributes include "temperature".
 
@@ -230,7 +221,7 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 * 'max-subscribers': An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as an unsigned CBOR integer. If this field is not present, there is no limit to the number of simultaneous subscribers allowed. The broker can use this field to limit the number of subscribers for the topic. The default value for this field has been set to 100 subscribers.
 
-* 'observer-check': An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber. Encoded as a CBOR unsigned integer greater than 0, it ensures subscribers who have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. If another CoAP server hosts the topic-data resource, that server is responsible for applying the observer-check value. The default value for this field is 86400, as defined in {{!RFC7641}}, which corresponds to 24 hours.
+* 'observer-check': An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber. Encoded as a CBOR unsigned integer greater than 0, it ensures subscribers who have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. If another CoAP server hosts the topic-data resource, that server is responsible for applying the observer-check value. The default value for this field is 86400, as defined in {{RFC7641}}, which corresponds to 24 hours.
 
 * 'topic-history': An optional field used to indicate how many previous resource representations the broker shall store for a topic. Encoded as an unsigned CBOR integer, it defines a counter representing the number of historical resource states the broker should retain. This enables subscribers to retrieve past states of the topic data when necessary, useful in scenarios where historical context is required (e.g., for data analytics or auditing). If this field is not present, no historical data will be stored.
 
@@ -242,7 +233,7 @@ A client can perform a discovery of: the broker; the topic collection resources 
 
 ### Broker Discovery {#broker-discovery}
 
-CoAP clients MAY discover brokers by using CoAP Simple Discovery, via multicast, through a Resource Directory (RD) {{!RFC9176}} or by other means specified in extensions to {{!RFC7252}}. Brokers MAY register with a RD by following the steps on Section 5 of {{!RFC9176}} with the resource type set to "core.ps" as defined in {{iana}} of this document.
+CoAP clients MAY discover brokers by using CoAP Simple Discovery, via multicast, through a Resource Directory (RD) {{RFC9176}} or by other means specified in extensions to {{RFC7252}}. Brokers MAY register with a RD by following the steps on {{Section 5 of RFC9176}} with the resource type set to "core.ps" as defined in {{iana}} of this document.
 
 The following example shows an endpoint discovering a broker using the "core.ps" resource type over a multicast network. Brokers within the multicast scope will answer the query.
 
@@ -265,7 +256,7 @@ The following example shows an endpoint discovering a broker using the "core.ps"
 
 ### Topic Collection Discovery
 
-A Broker SHOULD offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point is the topic collection resource collecting the topic configurations for those topics (see Section 1.2.2 of {{?RFC6690}}) and is identified by the resource type "core.ps.coll".
+A Broker SHOULD offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point is the topic collection resource collecting the topic configurations for those topics (see {{Section 1.2.2 of RFC6690}}) and is identified by the resource type "core.ps.coll".
 
 The specific resource path is left for implementations, examples in this document use the "/ps" path. The interactions with a topic collection are further defined in {{topic-collection-interactions}}.
 
@@ -323,7 +314,7 @@ TODO: add the ct part in IANA and add the example here:
 <!--
 TODO DISCUSS Decide on this section
 
-   Also, as based on Section 1.2.2 of RFC 6690, I'd realistically expect to have located by /.well-known/core certainly the topic collection resources and MAYBE the topic resources (and likely limited only to "perpetual", hence well-known topics).
+   Also, as based on {{ection 1.2.2 of RFC6690}}, I'd realistically expect to have located by /.well-known/core certainly the topic collection resources and MAYBE the topic resources (and likely limited only to "perpetual", hence well-known topics).
 
    Instead, I'd expect to discover the links to the topic resources mostly by GET/FETCH accessing the topic collection resource.
 
@@ -334,7 +325,7 @@ Within a topic, there is the topic-data property containing the URI of the topic
 
 The topic-data contains the URI of the topic-data resource for publishing and subscribing. So retrieving the topic configuration will also provide the URL of the topic-data (see {{topic-get-resource}}).
 
-It is also possible to discover a list of topic-data resources by sending a request to the collection with with rt=core.ps.data resources as shown below.
+It is also possible to discover a list of topic-data resources by sending a request to the collection with rt=core.ps.data resources as shown below.
 
 ~~~~
    Request:
@@ -359,7 +350,7 @@ These are the interactions that can happen directly with a specific topic collec
 
 A client can request a collection of the topics present in the broker by making a GET request to the collection URI.
 
-On success, the server returns a 2.05 (Content) response, specifying the list of links to topic resources associated with this topic collection (see  {{topic-resource-representation}}).
+On success, the server returns a 2.05 (Content) response, specifying the list of links to topic resources associated with this topic collection (see {{topic-resource-representation}}).
 
 Depending on its granted permissions, a client MAY retrieve a different list of links, corresponding to the topics that the client is authorized to access.
 
@@ -389,13 +380,13 @@ response is link format
 -->
 
 A client can filter a collection of topics by submitting the
-representation of a topic filter (see  {{topic-fetch-resource}}) in a FETCH request to the topic collection URI.
+representation of a topic filter (see {{topic-fetch-resource}}) in a FETCH request to the topic collection URI.
 
 On success, the server returns a 2.05 (Content) response with a
 representation of a list of topics in the collection (see
- {{topic-discovery}}) that match the filter in CoRE link format {{!RFC6690}}.
+ {{topic-discovery}}) that match the filter in CoRE link format {{RFC6690}}.
 
-Upon success, the server responds with a 2.05 (Content), providing a list of links to topic resources associated with this topic collection that match the request's filter criteria (refer to  {{topic-discovery}}). A positive match happens only when each request parameter is present with the indicated value in the topic resource representation.
+Upon success, the server responds with a 2.05 (Content), providing a list of links to topic resources associated with this topic collection that match the request's filter criteria (refer to {{topic-discovery}}). A positive match happens only when each request parameter is present with the indicated value in the topic resource representation.
 
 Example:
 
@@ -421,7 +412,7 @@ Example:
 
 ### Creating a Topic {#topic-create}
 
-A client can add a new topic-configurations to a collection of topics by submitting an initial representation of the initial topic resource (see  {{topic-resource-representation}}) in a POST request to the topic collection URI. The request MUST specify at least a subset of the properties in  {{topic-properties}}, namely: topic-name and resource-type.
+A client can add a new topic-configurations to a collection of topics by submitting an initial representation of the initial topic resource (see {{topic-resource-representation}}) in a POST request to the topic collection URI. The request MUST specify at least a subset of the properties in {{topic-properties}}, namely: topic-name and resource-type.
 
 Please note that the topic will NOT be fully created until a publisher has published some data to it (See {{topic-lifecycle}}).
 
@@ -477,7 +468,7 @@ response is cbor
 
 A client can read the configuration of a topic by making a GET request to the topic resource URI.
 
-On success, the server returns a 2.05 (Content) response with a partial representation of the topic resource, as specified in {{topic-resource-representation}}. The partial representation includes only the configuration parameters such that they are present and have the same value in both the current topic configuration as well as in the FETCH request.
+On success, the server returns a 2.05 (Content) response with a partial representation of the topic resource, as specified in {{topic-resource-representation}}. The partial representation includes only the configuration parameters such that they are present and have the same value in both the current topic configuration and in the FETCH request.
 
 If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST respond with a 4.03 (Forbidden) error.
 
@@ -565,11 +556,11 @@ response is cbor
 
 A client can update a topic's configuration by submitting the updated topic representation in a PUT request to the topic URI. However, the parameters "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.
 
-On success, the topic configuration is overwritten and server returns a 2.04 (Changed) response and the current full resource representation. The broker may chose not to overwrite parameters that are not explicitly modified in the request.
+On success, the topic configuration is overwritten and server returns a 2.04 (Changed) response and the current full resource representation. The broker may choose not to overwrite parameters that are not explicitly modified in the request.
 
 Note that updating the "topic-data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Updating the "topic-data" may happen also after it being deleted, as described on {{delete-topic-data}}, this will in turn create a new "topic-data" path for that topic configuration.
 
-Similarly, decreasing max-subscribers will also cause that some subscribers get unsubscribed. Unsubscribed endpoints SHOULD receive a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2.
+Similarly, decreasing max-subscribers will also cause that some subscribers get unsubscribed. Unsubscribed endpoints SHOULD receive a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}.
 
 Please note that when using PUT the topic configuration is being overwritten, thus some of the optional parameters (e.g., "max-subscribers", "observer-check") not included in the PUT message will be reset to their default values.
 
@@ -611,9 +602,9 @@ Example:
 
 Note that when a topic configuration changes, it may result in disruptions for the subscribers. Some potential issues that may arise include:
 
-* Limiting the number of subscribers will cause to cancel ongoing subscriptions until max-subscribers has been reached.
+* Limiting the number of subscribers will cause cancellation of ongoing subscriptions until max-subscribers has been reached.
 * Changing the topic-data value will cancel all ongoing subscriptions.
-* Changing of the expiration-date may cause to cancel ongoing subscriptions if the topic expires at an earlier data.
+* Changing of the expiration-date may cause cancellation of ongoing subscriptions if the topic expires at an earlier data.
 
 ### Updating the topic-configuration with iPATCH {#topic-update-resource-patch}
 
@@ -621,7 +612,7 @@ A client can partially update a topic's configuration by submitting a partial to
 
 On success, the server returns a 2.04 (Changed) response and the current full resource representation. The broker only updates parameters that are explicitly mentioned in the request.
 
-As with the PUT method, updating the "topic-data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Decreasing max-subscribers will also cause some subscribers to get unsubscribed. Unsubscribed endpoints SHOULD receive a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2.
+As with the PUT method, updating the "topic-data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Decreasing max-subscribers will also cause some subscribers to get unsubscribed. Unsubscribed endpoints SHOULD receive a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}.
 
 Contrary to PUT, iPATCH operations will explicitly update some parameters, leaving others unmodified.
 
@@ -654,7 +645,7 @@ Contrary to PUT, iPATCH operations will explicitly update some parameters, leavi
    }
 ~~~~
 
-Note that when a topic configuration changes through an iPATCH request, it may result in disruptions for the subscribers. For example, limiting the number of subscribers will cause to cancel ongoing subscriptions until max-subscribers has been reached.
+Note that when a topic configuration changes through an iPATCH request, it may result in disruptions for the subscribers. For example, limiting the number of subscribers will cause cancellation of ongoing subscriptions until max-subscribers has been reached.
 
 ### Deleting a topic-configuration {#topic-delete}
 
@@ -662,7 +653,7 @@ A client can delete a topic by making a CoAP DELETE request on the topic resourc
 
 On success, the server returns a 2.02 (Deleted) response.
 
-When a topic-configuration resource is deleted, the broker MUST also delete the topic-data resource, unsubscribe all subscribers by removing them from the list of observers and returning a final 4.04 (Not Found) response as per section 3.2 of {{!RFC7641}}.
+When a topic-configuration resource is deleted, the broker MUST also delete the topic-data resource, unsubscribe all subscribers by removing them from the list of observers and returning a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}.
 
 Example:
 
@@ -680,7 +671,7 @@ Example:
 
 # Publish and Subscribe {#pubsub}
 
-The overview of the publish/subscribe mechanism over CoAP is as follows: a publisher publishes to a topic by submitting the data in a PUT request to a topic-data resource and subscribers subscribe to a topic by submitting a GET request with Observe option set to 0 (register) to a topic-data resource. When resource state changes, subscribers observing the resource {{!RFC7641}} at that time will receive a notification.
+The overview of the publish/subscribe mechanism over CoAP is as follows: a publisher publishes to a topic by submitting the data in a PUT request to a topic-data resource and subscribers subscribe to a topic by submitting a GET request with Observe option set to 0 (register) to a topic-data resource. When resource state changes, subscribers observing the resource {{RFC7641}} at that time will receive a notification.
 
 A topic-data resource does not exist until some initial data has been published to it. Before initial data publication, a GET request to the topic-data resource URI results in a 4.04 (Not Found) response. If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created" (see {{topic-lifecycle}}).
 
@@ -749,7 +740,7 @@ On success, the server returns a 2.04 (Updated) response. However, when data is 
 If the request does not have an acceptable content-format, the server returns a 4.15 (Unsupported Content-Format) response.
 
 If the client is sending publications too fast, the server returns a
-4.29 (Too Many Requests) response {{!RFC8516}}.
+4.29 (Too Many Requests) response {{RFC8516}}.
 
 Example of first publication:
 
@@ -799,7 +790,7 @@ Example of subsequent publication:
 
 ### Subscribe {#subscribe}
 
-A client can subscribe to a topic-data by sending a CoAP GET request with the Observe set to 0 to subscribe to resource updates. {{!RFC7641}}.
+A client can subscribe to a topic-data by sending a CoAP GET request with the Observe set to 0 to subscribe to resource updates {{RFC7641}}.
 
 On success, the server hosting the topic-data resource MUST return 2.05 (Content) notifications with the data and the Observe Option. Otherwise, if no Observe Option is present the client should assume that the subscription was not successful.
 
@@ -810,7 +801,8 @@ TODO: After a publisher publishes to the topic-data for the first time, the topi
 
 This is a problem if the topic-data is hosted elsewhere and not in the broker, how does the broker know when to put it in fully created state if the pub/sub mechanism is happening directly btw pub and sub?
 
-Shall I add: The topic-data URI may link to resources that are not hosted directly by the broker as shown in {{fig-external-server}}. Thus subscribers would use the broker for discovery only.
+Shall I add: The topic-data URI may link to resources that are not hosted directly by the broker as shown in {{fig-external-server}}.
+Thus, subscribers would use the broker for discovery only.
 -->
 
 The following response codes are defined for the Subscribe operation:
@@ -821,7 +813,7 @@ Success:
 Failure:
 : 4.04 "Not Found". The topic-data does not exist.
 
-If the 'max-subscribers' parameter has been reached, the server must treat that as specified in section 4.1 of {{!RFC7641}}. The response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
+If the 'max-subscribers' parameter has been reached, the server must treat that as specified in {{Section 4.1 Of RFC7641}}. The response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
 
 <!--
 TODO Right. However, how can this work when the server hosting the topic-data resource is not the broker? The broker knows the maximum number of subscribers, but that separate server does not. Is it just up to a not-specified-here synchronization protocol between the broker and that server?
@@ -869,11 +861,11 @@ Example:
 
 ### Unsubscribe {#unsubscribe}
 
-A CoAP client can unsubscribe simply by cancelling the observation as described in Section 3.6 of {{!RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification. Also on Section 3.6 of {{!RFC7641}} the client can simply "forget" the observation and the server will remove it from the list of observers after the next notification.
+A CoAP client can unsubscribe simply by cancelling the observation as described in {{Section 3.6 of RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification. Also on {{Section 3.6 of RFC7641}} the client can simply "forget" the observation and the server will remove it from the list of observers after the next notification.
 
-As per {{!RFC7641}} a server that transmits notifications mostly in non-confirmable messages, but it MUST send a notification in a confirmable message instead of a non-confirmable message at least every 24 hours.
+As per {{RFC7641}} a server that transmits notifications mostly in non-confirmable messages, but it MUST send a notification in a confirmable message instead of a non-confirmable message at least every 24 hours.
 
-This value can be modified at the broker by the administrator of a topic by modifying the parameter "observer-check" on {{topic-resource-representation}}. This would allow to change the rate at which different implementations verify that a subscriber is still interested in observing a topic-data resource.
+This value can be modified at the broker by the administrator of a topic by modifying the parameter "observer-check" on {{topic-resource-representation}}. This would allow changing the rate at which different implementations verify that a subscriber is still interested in observing a topic-data resource.
 
 <!--
 TODO: another item that points to make topic-data a broker thing only.
@@ -887,7 +879,7 @@ A publisher MAY delete a topic by making a CoAP DELETE request on the topic-data
 
 On success, the server returns a 2.02 (Deleted) response.
 
-When a topic-data resource is deleted, the broker SHOULD also delete the topic-data parameter in the topic resource, unsubscribe all subscribers by removing them from the list of observers and return a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2. The topic is then set back to the half created state as per {{topic-lifecycle}}.
+When a topic-data resource is deleted, the broker SHOULD also delete the topic-data parameter in the topic resource, unsubscribe all subscribers by removing them from the list of observers and return a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The topic is then set back to the half created state as per {{topic-lifecycle}}.
 
 Example:
 
@@ -904,7 +896,7 @@ Example:
    Header: Deleted (Code=2.02)
 ~~~~
 
-## Read latest data {#read-data}
+## Read the latest data {#read-data}
 
 A client can get the latest published topic-data by making a GET request to the topic-data URI in the broker. Please note that discovery of the topic-data parameter is a required previous step (see {{topic-get-resource}}).
 
@@ -950,7 +942,7 @@ Some implementations may want to subscribe to multiple topic-data resources with
 
 The server hosting the topic-data may have to handle a potentially large number of publishers and subscribers at the same time. This means it could become overwhelmed if it receives too many publications in a short period of time.
 
-In this situation, if a publisher is sending publications too fast, the server SHOULD return a 4.29 (Too Many Requests) response {{!RFC8516}}.  As described in {{!RFC8516}}, the Max-Age option {{!RFC7252}} in this response indicates the number of seconds after which the client may retry. The broker MAY also stop publishing messages from that publisher for the indicated time.
+In this situation, if a publisher is sending publications too fast, the server SHOULD return a 4.29 (Too Many Requests) response {{RFC8516}}.  As described in {{RFC8516}}, the Max-Age option {{RFC7252}} in this response indicates the number of seconds after which the client may retry. The broker MAY also stop publishing messages from that publisher for the indicated time.
 
 <!--
 TODO DISCUSS
@@ -1000,7 +992,7 @@ Communications between each client and the broker MUST be secured, e.g., by usin
 
 The content published on a topic by a publisher client SHOULD be protected end-to-end between the publisher and all the subscribers to that topic. In such a case, it MUST be possible to assert source authentication of the published data. This can be achieved at the application layer, e.g., by using COSE {{RFC9052}}, {{RFC9053}}, {{RFC9338}}.
 
-Access control of clients at the broker MAY be enforced for performing discovery operation, and SHOULD be enforced in a fine-grained fashion for operations related to the the creation, update, and deletion of topic resources, as well as for operations on topic-data resources such as publication on and subscription to topics. This prevents rogue clients to, among other things, repeatedly create topics at the broker or publish (large) contents, which may result in Denial of Service against the broker and the active subscribers.
+Access control of clients at the broker MAY be enforced for performing discovery operation, and SHOULD be enforced in a fine-grained fashion for operations related to the creation, update, and deletion of topic resources, as well as for operations on topic-data resources such as publication on and subscription to topics. This prevents rogue clients to, among other things, repeatedly create topics at the broker or publish (large) contents, which may result in Denial of Service against the broker and the active subscribers.
 
 Building on {{I-D.ietf-ace-key-groupcomm}}, its application profile for publish-subscribe communication with CoAP {{I-D.ietf-ace-pubsub-profile}} provides a security model that can be used in the architecture presented in this document, in order to enable secure communication between the different parties as well as secure, authorized operations of publishers and subscribers that fulfill the requirements above.
 
@@ -1122,6 +1114,8 @@ Description: Topic-data resource of a broker
 Reference: [RFC-XXXX]
 ~~~
 
+--- back
+
 # Document Updates # {#sec-document-updates}
 {:removeinrfc}
 
@@ -1151,4 +1145,6 @@ Reference: [RFC-XXXX]
 
 The current version of this document contains a substantial contribution by Klaus Hartke's proposal {{I-D.hartke-t2trg-coral-pubsub}}, which defines the topic resource model and structure as well as the topic lifecycle and interactions. It also follows a similar architectural design as that provided by Marco Tiloca's {{I-D.ietf-ace-oscore-gm-admin}}.
 
+
 The authors would like to also thank {{{Marco Tiloca}}}, {{{Carsten Bormann}}}, {{{Hannes Tschofenig}}}, {{{Zach Shelby}}}, {{{Mohit Sethi}}}, Peter van der Stok, Tim Kellogg, Anders Eriksson, {{{Goran Selander}}}, Mikko Majanen, {{{Olaf Bergmann}}}, {{{David Navarro}}} and Oscar Novo for their valuable contributions and reviews.
+
