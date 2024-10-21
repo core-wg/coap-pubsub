@@ -813,7 +813,7 @@ Success:
 Failure:
 : 4.04 "Not Found". The topic-data does not exist.
 
-If the 'max-subscribers' parameter has been reached, the server must treat that as specified in {{Section 4.1 Of RFC7641}}. The response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
+If the 'max-subscribers' parameter has been reached, the server must treat that as specified in {{Section 4.1 of RFC7641}}. The response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
 
 <!--
 TODO Right. However, how can this work when the server hosting the topic-data resource is not the broker? The broker knows the maximum number of subscribers, but that separate server does not. Is it just up to a not-specified-here synchronization protocol between the broker and that server?
@@ -1144,7 +1144,6 @@ Reference: [RFC-XXXX]
 {: numbered='no'}
 
 The current version of this document contains a substantial contribution by Klaus Hartke's proposal {{I-D.hartke-t2trg-coral-pubsub}}, which defines the topic resource model and structure as well as the topic lifecycle and interactions. It also follows a similar architectural design as that provided by Marco Tiloca's {{I-D.ietf-ace-oscore-gm-admin}}.
-
 
 The authors would like to also thank {{{Marco Tiloca}}}, {{{Carsten Bormann}}}, {{{Hannes Tschofenig}}}, {{{Zach Shelby}}}, {{{Mohit Sethi}}}, Peter van der Stok, Tim Kellogg, Anders Eriksson, {{{Goran Selander}}}, Mikko Majanen, {{{Olaf Bergmann}}}, {{{David Navarro}}} and Oscar Novo for their valuable contributions and reviews.
 
