@@ -1438,7 +1438,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
 <a href="#name-publish-subscribe-architect" class="selfRef">Publish-subscribe architecture over CoAP</a>
           </figcaption></figure>
 </div>
-<p id="section-1.2-6">This document describes two sets of interactions, interactions to configure topics and their lifecycle (see <a href="#topic-configuration-interactions" class="auto internal xref">Section 2.5</a>) and interactions about the topic-data (see <a href="#topic-data-interactions" class="auto internal xref">Section 3.2</a>).<a href="#section-1.2-6" class="pilcrow">¶</a></p>
+<p id="section-1.2-6">This document describes two sets of interactions; interactions to configure topics and their lifecycle (see <a href="#topic-configuration-interactions" class="auto internal xref">Section 2.5</a>) and interactions about the topic-data (see <a href="#topic-data-interactions" class="auto internal xref">Section 3.2</a>).<a href="#section-1.2-6" class="pilcrow">¶</a></p>
 <p id="section-1.2-7">Topic-configuration interactions are discovery, create, read configuration, update configuration, and delete configuration. These operations handle the management of the topics.<a href="#section-1.2-7" class="pilcrow">¶</a></p>
 <p id="section-1.2-8">Topic-data interactions are publish, subscribe, unsubscribe, read, and delete. These operations are oriented on how data is transferred from a publisher to a subscriber.<a href="#section-1.2-8" class="pilcrow">¶</a></p>
 </section>
@@ -1889,7 +1889,7 @@ representation of a list of topics in the collection (see
 
    Header: FETCH (Code=0.05)
    Uri-Path: "ps"
-   Content-Format: TBD (application/pubsub+cbor)
+   Content-Format: TBD (application/core-pubsub+cbor)
    Payload:
    {
       "resource-type": "core.ps.conf",
@@ -2526,7 +2526,7 @@ registry <span>[<a href="#IANA.media-types" class="cite xref">IANA.media-types</
 <table class="left" id="table-1">
           <caption>
 <a href="#table-1" class="selfRef">Table 1</a>:
-<a href="#name-new-media-type-application-" class="selfRef">New Media Type application/pubsub+cbor</a>
+<a href="#name-new-media-type-application-" class="selfRef">New Media Type application/core-pubsub+cbor</a>
           </caption>
 <thead>
             <tr>
@@ -2537,8 +2537,8 @@ registry <span>[<a href="#IANA.media-types" class="cite xref">IANA.media-types</
           </thead>
           <tbody>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">pubsub+cbor</td>
-              <td class="text-left" rowspan="1" colspan="1">application/pubsub+cbor</td>
+              <td class="text-left" rowspan="1" colspan="1">core-pubsub+cbor</td>
+              <td class="text-left" rowspan="1" colspan="1">application/core-pubsub+cbor</td>
               <td class="text-left" rowspan="1" colspan="1">RFC XXXX, <a href="#media-type" class="auto internal xref">Section 6.1</a>
 </td>
             </tr>
@@ -2553,7 +2553,7 @@ registry <span>[<a href="#IANA.media-types" class="cite xref">IANA.media-types</
           <dd class="break"></dd>
 <dt id="section-6.1-3.3">Subtype name:</dt>
           <dd style="margin-left: 1.5em" id="section-6.1-3.4">
-            <p id="section-6.1-3.4.1">pubsub+cbor<a href="#section-6.1-3.4.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-3.4.1">core-pubsub+cbor<a href="#section-6.1-3.4.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-6.1-3.5">Required parameters:</dt>
@@ -2649,7 +2649,7 @@ Parameters" Registry <span>[<a href="#IANA.core-parameters" class="cite xref">IA
           </thead>
           <tbody>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">application/pubsub+cbor</td>
+              <td class="text-left" rowspan="1" colspan="1">application/core-pubsub+cbor</td>
               <td class="text-left" rowspan="1" colspan="1">-</td>
               <td class="text-left" rowspan="1" colspan="1">TBD9</td>
               <td class="text-left" rowspan="1" colspan="1">RFC XXXX</td>
@@ -2901,7 +2901,7 @@ Reference: [RFC-XXXX]
 <a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
       </h2>
 <p id="appendix-B-1">The current version of this document contains a substantial contribution by Klaus Hartke's proposal <span>[<a href="#I-D.hartke-t2trg-coral-pubsub" class="cite xref">I-D.hartke-t2trg-coral-pubsub</a>]</span>, which defines the topic resource model and structure as well as the topic lifecycle and interactions. It also follows a similar architectural design as that provided by Marco Tiloca's <span>[<a href="#I-D.ietf-ace-oscore-gm-admin" class="cite xref">I-D.ietf-ace-oscore-gm-admin</a>]</span>.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
-<p id="appendix-B-2">The authors would like to also thank <span class="contact-name">Marco Tiloca</span>, <span class="contact-name">Carsten Bormann</span>, <span class="contact-name">Hannes Tschofenig</span>, <span class="contact-name">Zach Shelby</span>, <span class="contact-name">Mohit Sethi</span>, Peter van der Stok, Tim Kellogg, Anders Eriksson, <span class="contact-name">Goran Selander</span>, Mikko Majanen, <span class="contact-name">Olaf Bergmann</span>, <span class="contact-name">David Navarro</span> and Oscar Novo for their valuable contributions and reviews.<a href="#appendix-B-2" class="pilcrow">¶</a></p>
+<p id="appendix-B-2">The authors would like to also thank <span class="contact-name">Marco Tiloca</span>, <span class="contact-name">Carsten Bormann</span>, <span class="contact-name">Hannes Tschofenig</span>, <span class="contact-name">Zach Shelby</span>, <span class="contact-name">Mohit Sethi</span>, Peter van der Stok, Tim Kellogg, Anders Eriksson, <span class="contact-name">Goran Selander</span>, Mikko Majanen, <span class="contact-name">Olaf Bergmann</span>, <span class="contact-name">David Navarro</span>, Oscar Novo and Lorenzo Corneo for their valuable contributions and reviews.<a href="#appendix-B-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="contributors">

@@ -299,7 +299,7 @@ Internet-Draft                 CoAP pubsub                  October 2024
 
              Figure 1: Publish-subscribe architecture over CoAP
 
-   This document describes two sets of interactions, interactions to
+   This document describes two sets of interactions; interactions to
    configure topics and their lifecycle (see Section 2.5) and
    interactions about the topic-data (see Section 3.2).
 
@@ -734,7 +734,7 @@ Internet-Draft                 CoAP pubsub                  October 2024
 
       Header: FETCH (Code=0.05)
       Uri-Path: "ps"
-      Content-Format: TBD (application/pubsub+cbor)
+      Content-Format: TBD (application/core-pubsub+cbor)
       Payload:
       {
          "resource-type": "core.ps.conf",
@@ -1682,16 +1682,17 @@ Jimenez, et al.           Expires 24 April 2025                [Page 30]
 Internet-Draft                 CoAP pubsub                  October 2024
 
 
-   +=============+=========================+=======================+
-   | Name        | Template                | Reference             |
-   +=============+=========================+=======================+
-   | pubsub+cbor | application/pubsub+cbor | RFC XXXX, Section 6.1 |
-   +-------------+-------------------------+-----------------------+
+   +==================+==============================+=============+
+   | Name             | Template                     | Reference   |
+   +==================+==============================+=============+
+   | core-pubsub+cbor | application/core-pubsub+cbor | RFC XXXX,   |
+   |                  |                              | Section 6.1 |
+   +------------------+------------------------------+-------------+
 
-            Table 1: New Media Type application/pubsub+cbor
+          Table 1: New Media Type application/core-pubsub+cbor
 
    Type name:  application
-   Subtype name:  pubsub+cbor
+   Subtype name:  core-pubsub+cbor
    Required parameters:  N/A
    Optional parameters:  N/A
    Encoding considerations:  binary (CBOR data item)
@@ -1717,16 +1718,15 @@ Internet-Draft                 CoAP pubsub                  October 2024
    Environments (CoRE) Parameters" Registry [IANA.core-parameters], as
    follows:
 
-   +=========================+================+======+===========+
-   | Content Type            | Content Coding | ID   | Reference |
-   +=========================+================+======+===========+
-   | application/pubsub+cbor | -              | TBD9 | RFC XXXX  |
-   +-------------------------+----------------+------+-----------+
+   +==============================+================+======+===========+
+   | Content Type                 | Content Coding | ID   | Reference |
+   +==============================+================+======+===========+
+   | application/core-pubsub+cbor | -              | TBD9 | RFC XXXX  |
+   +------------------------------+----------------+------+-----------+
 
-                     Table 2: New Content-Format
+                       Table 2: New Content-Format
 
    TBD9 is to be assigned from the space 256..999.
-
 
 
 
@@ -2021,8 +2021,8 @@ Internet-Draft                 CoAP pubsub                  October 2024
    The authors would like to also thank Marco Tiloca, Carsten Bormann,
    Hannes Tschofenig, Zach Shelby, Mohit Sethi, Peter van der Stok, Tim
    Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen, Olaf
-   Bergmann, David Navarro and Oscar Novo for their valuable
-   contributions and reviews.
+   Bergmann, David Navarro, Oscar Novo and Lorenzo Corneo for their
+   valuable contributions and reviews.
 
 Contributors
 
