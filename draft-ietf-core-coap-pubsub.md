@@ -222,7 +222,7 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 * 'resource-type': A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value should be "core.ps.conf".
 
-* 'media-type': An optional field used to indicate the media type of the topic-data resource for the topic. It encodes the media type as a this information as the integer identifier of the CoAP content-format (e.g., value is "50" for "application/json").
+* 'topic-media-type': An optional field used to indicate the media type of the topic-data resource for the topic. It encodes the media type as a this information as the integer identifier of the CoAP content-format (e.g., value is "50" for "application/json").
 
 * 'topic-type': An optional field used to indicate the attribute or property of the topic-data resource for the topic. It encodes the attribute as a CBOR text string. Example attributes include "temperature".
 
@@ -232,16 +232,7 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 * 'observer-check': An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber. Encoded as a CBOR unsigned integer greater than 0, it ensures subscribers who have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. If another CoAP server hosts the topic-data resource, that server is responsible for applying the observer-check value. The default value for this field is 86400, as defined in {{!RFC7641}}, which corresponds to 24 hours.
 
-<!--
-David N Christian A:
-history resource with a counter 0 .. 100
--->
-
 * 'topic-history': An optional field used to indicate how many previous resource representations the broker shall store for a topic. Encoded as an unsigned CBOR integer, it defines a counter representing the number of historical resource states the broker should retain. This enables subscribers to retrieve past states of the topic data when necessary, useful in scenarios where historical context is required (e.g., for data analytics or auditing). If this field is not present, no historical data will be stored.
-
-<!--
-Add https://github.com/core-wg/coap-pubsub/issues/56
--->
 
 * 'initialize': An optional boolean field that, when set to `true`, allows the topic-data path to be pre-populated with an empty string or other initial value during the topic creation process. This behavior facilitates one-shot publication and topic creation, enabling CoAP clients to subscribe by default without encountering a `4.04 Not Found` error. If this field is not present, the broker behaves as usual, and the topic-data path is not initialized.
 
@@ -510,7 +501,7 @@ For example, below is a request on the topic "ps/h9392":
       / topic-name /         0: "living-room-sensor",
       / topic-data /         1: "ps/data/1bd0d6d",
       / resource-type /      2: "core.ps.conf",
-      / media-type /         3: "application/senml-cbor",
+      / topic-media-type /   3: "application/senml-cbor",
       / topic-type /         4: "temperature",
       / expiration-date /    5: "2023-04-00T23:59:59Z",
       / max-subscribers /    6: 100,
@@ -558,8 +549,8 @@ Example:
    Content-Format: TBD2 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
-      / topic-data /   1: "ps/data/1bd0d6d",
-      / media-type /   3: "application/senml-cbor"
+      / topic-data /        1: "ps/data/1bd0d6d",
+      / topic-media-type /  3: "application/senml-cbor",
    }
 ~~~~
 
@@ -576,7 +567,7 @@ A client can update a topic's configuration by submitting the updated topic repr
 
 On success, the topic configuration is overwritten and server returns a 2.04 (Changed) response and the current full resource representation. The broker may chose not to overwrite parameters that are not explicitly modified in the request.
 
-Note that updating the "topic-data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Updating the "topic-data" may happen also after it being deleted, as described on {delete-topic-data}, this will in turn create a new "topic-data" path for that topic configuration.
+Note that updating the "topic-data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Updating the "topic-data" may happen also after it being deleted, as described on {{delete-topic-data}}, this will in turn create a new "topic-data" path for that topic configuration.
 
 Similarly, decreasing max-subscribers will also cause that some subscribers get unsubscribed. Unsubscribed endpoints SHOULD receive a final 4.04 (Not Found) response as per {{!RFC7641}} Section 3.2.
 
@@ -596,7 +587,7 @@ Example:
       / topic-name /        0: "living-room-sensor",
       / topic-data /        1: "ps/data/1bd0d6d",
       / resource-type /     2: "core.ps.conf",
-      / media-type /        3: "application/senml-cbor",
+      / topic-media-type /  3: "application/senml-cbor",
       / topic-type /        4: "temperature",
       / expiration-date /   5: "2023-04-28T23:59:59Z"
    }
@@ -610,7 +601,7 @@ Example:
       / topic-name /        0: "living-room-sensor",
       / topic-data /        1: "ps/data/1bd0d6d",
       / resource-type /     2: "core.ps.conf",
-      / media-type /        3: "application/senml-cbor",
+      / topic-media-type /  3: "application/senml-cbor",
       / topic-type /        4: "temperature",
       / expiration-date /   5: "2023-04-28T23:59:59Z",
       / max-subscribers /   6: 100,
@@ -656,7 +647,7 @@ Contrary to PUT, iPATCH operations will explicitly update some parameters, leavi
       / topic-name /        0: "living-room-sensor",
       / topic-data /        1: "ps/data/1bd0d6d",
       / resource-type /     2: "core.ps.conf",
-      / media-type /        3: "application/senml-cbor",
+      / topic-media-type /  3: "application/senml-cbor",
       / topic-type /        4: "humidity",
       / expiration-date /   5: "2023-05-28T23:59:59Z",
       / max-subscribers /   6: 5
@@ -984,18 +975,20 @@ This document defines parameters used in the messages exchanged between a client
 Note that the media type application/core-pubsub+cbor MUST be used when these parameters are transported in the respective message fields.
 
 ~~~~
-+-----------------+-----------+-----------+------------+
-| Name            | CBOR Key  | CBOR Type | Reference  |
-|-----------------|-----------|-----------|------------|
-| topic-name      | TBD1      | tstr      | [RFC-XXXX] |
-| topic-data      | TBD2      | tstr      | [RFC-XXXX] |
-| resource-type   | TBD3      | tstr      | [RFC-XXXX] |
-| media-type      | TBD4      | uint      | [RFC-XXXX] |
-| topic-type      | TBD5      | tstr      | [RFC-XXXX] |
-| expiration-date | TBD6      | tstr      | [RFC-XXXX] |
-| max-subscribers | TBD7      | uint      | [RFC-XXXX] |
-| observer-check  | TBD8      | uint      | [RFC-XXXX] |
-+-----------------+-----------+-----------+------------+
++------------------+-----------+-----------+------------+
+| Name             | CBOR Key  | CBOR Type | Reference  |
+|------------------|-----------|-----------|------------|
+| topic-name       | TBD1      | tstr      | [RFC-XXXX] |
+| topic-data       | TBD2      | tstr      | [RFC-XXXX] |
+| resource-type    | TBD3      | tstr      | [RFC-XXXX] |
+| topic-media-type | TBD4      | uint      | [RFC-XXXX] |
+| topic-type       | TBD5      | tstr      | [RFC-XXXX] |
+| expiration-date  | TBD6      | tstr      | [RFC-XXXX] |
+| max-subscribers  | TBD7      | uint      | [RFC-XXXX] |
+| observer-check   | TBD8      | uint      | [RFC-XXXX] |
+| topic-history    | TBD9      | uint      | [RFC-XXXX] |
+| initialize       | TBD10     | bool      | [RFC-XXXX] |
++------------------+-----------+-----------+------------+
 ~~~~
 {: #fig-CoAP-Pubsub-Parameters title="CoAP Pubsub Parameters" artwork-align="center"}
 
