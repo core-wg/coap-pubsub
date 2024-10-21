@@ -55,7 +55,7 @@ Status of This Memo
 
 Jimenez, et al.           Expires 24 April 2025                 [Page 1]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
    Internet-Drafts are draft documents valid for a maximum of six months
@@ -111,7 +111,7 @@ Table of Contents
 
 Jimenez, et al.           Expires 24 April 2025                 [Page 2]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
      3.2.  Topic-Data Interactions . . . . . . . . . . . . . . . . .  23
@@ -119,7 +119,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
        3.2.2.  Subscribe . . . . . . . . . . . . . . . . . . . . . .  25
        3.2.3.  Unsubscribe . . . . . . . . . . . . . . . . . . . . .  26
        3.2.4.  Delete topic-data . . . . . . . . . . . . . . . . . .  27
-     3.3.  Read latest data  . . . . . . . . . . . . . . . . . . . .  27
+     3.3.  Read the latest data  . . . . . . . . . . . . . . . . . .  27
      3.4.  Rate Limiting . . . . . . . . . . . . . . . . . . . . . .  28
    4.  CoAP Pubsub Parameters  . . . . . . . . . . . . . . . . . . .  29
    5.  Security Considerations . . . . . . . . . . . . . . . . . . .  29
@@ -128,13 +128,13 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
      6.2.  Content-Format  . . . . . . . . . . . . . . . . . . . . .  31
      6.3.  CoAP Pubsub Parameters  . . . . . . . . . . . . . . . . .  32
      6.4.  Resource Types  . . . . . . . . . . . . . . . . . . . . .  32
-   7.  Document Updates  . . . . . . . . . . . . . . . . . . . . . .  33
-     7.1.  Version -13 to -14  . . . . . . . . . . . . . . . . . . .  33
-     7.2.  Version -14 to -15  . . . . . . . . . . . . . . . . . . .  33
-   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  34
-   References  . . . . . . . . . . . . . . . . . . . . . . . . . . .  34
-     Normative References  . . . . . . . . . . . . . . . . . . . . .  34
-     Informative References  . . . . . . . . . . . . . . . . . . . .  35
+   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  33
+     7.1.  Normative References  . . . . . . . . . . . . . . . . . .  33
+     7.2.  Informative References  . . . . . . . . . . . . . . . . .  34
+   Appendix A.  Document Updates . . . . . . . . . . . . . . . . . .  35
+     A.1.  Version -13 to -14  . . . . . . . . . . . . . . . . . . .  36
+     A.2.  Version -14 to -15  . . . . . . . . . . . . . . . . . . .  36
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  36
    Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  37
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  37
 
@@ -167,7 +167,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                 [Page 3]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
    This document applies the idea of broker-based publish-subscribe to
@@ -223,7 +223,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                 [Page 4]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
       common base URI, i.e., the URI of the collection resource.
@@ -242,7 +242,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
       is responsible for the store-and-forward of state update
       representations, for the topics for which it hosts the
       corresponding topic-data resources.  The broker is also
-      responsible of handling the topic lifecycle as defined in
+      responsible for handling the topic lifecycle as defined in
       Section 3.1.  The creation, configuration, and discovery of topics
       at a broker is specified in Section 2.
 
@@ -279,7 +279,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                 [Page 5]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
            CoAP                      CoAP                 CoAP
@@ -335,7 +335,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                 [Page 6]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
    The Broker exports one or more topic-collection resources, with
@@ -391,7 +391,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                 [Page 7]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
    A topic resource with a topic-data link can also be simply called
@@ -439,15 +439,15 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
       "core.ps.conf".
 
    *  'topic-media-type': An optional field used to indicate the media
-      type of the topic-data resource for the topic.  It encodes the
-      media type as a this information as the integer identifier of the
-      CoAP content-format (e.g., value is "50" for "application/json").
+      type of the topic-data resource for the topic.  It represents the
+      media type as the integer identifier of the CoAP content-format
+      (e.g., value is "50" for "application/json").
 
 
 
 Jimenez, et al.           Expires 24 April 2025                 [Page 8]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
    *  'topic-type': An optional field used to indicate the attribute or
@@ -503,7 +503,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                 [Page 9]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
    *  'initialize': An optional boolean field that, when set to true,
@@ -559,7 +559,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 10]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
 2.3.2.  Topic Collection Discovery
@@ -615,7 +615,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 11]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
       Request:
@@ -645,8 +645,8 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
    will also provide the URL of the topic-data (see Section 2.5.1).
 
    It is also possible to discover a list of topic-data resources by
-   sending a request to the collection with with rt=core.ps.data
-   resources as shown below.
+   sending a request to the collection with rt=core.ps.data resources as
+   shown below.
 
       Request:
 
@@ -671,7 +671,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 12]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
 2.4.1.  Retrieving all topic-configurations
@@ -727,7 +727,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 13]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
       Request:
@@ -783,7 +783,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 14]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
    If requirements are defined for the client to create the topic as
@@ -839,14 +839,14 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 15]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
    On success, the server returns a 2.05 (Content) response with a
    partial representation of the topic resource, as specified in
    Section 2.2.  The partial representation includes only the
    configuration parameters such that they are present and have the same
-   value in both the current topic configuration as well as in the FETCH
+   value in both the current topic configuration and in the FETCH
    request.
 
    If requirements are defined for the client to create the topic as
@@ -895,7 +895,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 16]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
    The request contains a CBOR map with a configuration filter or 'conf-
@@ -951,7 +951,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 17]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
 2.5.3.  Updating the topic-configuration
@@ -964,7 +964,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
    On success, the topic configuration is overwritten and server returns
    a 2.04 (Changed) response and the current full resource
-   representation.  The broker may chose not to overwrite parameters
+   representation.  The broker may choose not to overwrite parameters
    that are not explicitly modified in the request.
 
    Note that updating the "topic-data" path will automatically cancel
@@ -975,7 +975,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
    Similarly, decreasing max-subscribers will also cause that some
    subscribers get unsubscribed.  Unsubscribed endpoints SHOULD receive
-   a final 4.04 (Not Found) response as per [RFC7641] Section 3.2.
+   a final 4.04 (Not Found) response as per Section 3.2 of [RFC7641].
 
    Please note that when using PUT the topic configuration is being
    overwritten, thus some of the optional parameters (e.g., "max-
@@ -1007,7 +1007,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 18]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
       Request:
@@ -1046,13 +1046,13 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
    disruptions for the subscribers.  Some potential issues that may
    arise include:
 
-   *  Limiting the number of subscribers will cause to cancel ongoing
-      subscriptions until max-subscribers has been reached.
+   *  Limiting the number of subscribers will cause cancellation of
+      ongoing subscriptions until max-subscribers has been reached.
 
    *  Changing the topic-data value will cancel all ongoing
       subscriptions.
 
-   *  Changing of the expiration-date may cause to cancel ongoing
+   *  Changing of the expiration-date may cause cancellation of ongoing
       subscriptions if the topic expires at an earlier data.
 
 
@@ -1063,7 +1063,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 19]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
 2.5.4.  Updating the topic-configuration with iPATCH
@@ -1084,8 +1084,8 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
    automatically cancel all existing observations on it and thus will
    unsubscribe all subscribers.  Decreasing max-subscribers will also
    cause some subscribers to get unsubscribed.  Unsubscribed endpoints
-   SHOULD receive a final 4.04 (Not Found) response as per [RFC7641]
-   Section 3.2.
+   SHOULD receive a final 4.04 (Not Found) response as per Section 3.2
+   of [RFC7641].
 
    Contrary to PUT, iPATCH operations will explicitly update some
    parameters, leaving others unmodified.
@@ -1119,7 +1119,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 20]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
       Request:
@@ -1151,8 +1151,8 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
    Note that when a topic configuration changes through an iPATCH
    request, it may result in disruptions for the subscribers.  For
-   example, limiting the number of subscribers will cause to cancel
-   ongoing subscriptions until max-subscribers has been reached.
+   example, limiting the number of subscribers will cause cancellation
+   of ongoing subscriptions until max-subscribers has been reached.
 
 2.5.5.  Deleting a topic-configuration
 
@@ -1164,7 +1164,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
    When a topic-configuration resource is deleted, the broker MUST also
    delete the topic-data resource, unsubscribe all subscribers by
    removing them from the list of observers and returning a final 4.04
-   (Not Found) response as per section 3.2 of [RFC7641].
+   (Not Found) response as per Section 3.2 of [RFC7641].
 
    Example:
 
@@ -1175,7 +1175,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 21]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
       Request:
@@ -1231,7 +1231,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 22]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
                     HALF                          FULLY
@@ -1287,7 +1287,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 23]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
    On success, the server returns a 2.04 (Updated) response.  However,
@@ -1343,7 +1343,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 24]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
       Request:
@@ -1368,8 +1368,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 3.2.2.  Subscribe
 
    A client can subscribe to a topic-data by sending a CoAP GET request
-   with the Observe set to 0 to subscribe to resource updates.
-   [RFC7641].
+   with the Observe set to 0 to subscribe to resource updates [RFC7641].
 
    On success, the server hosting the topic-data resource MUST return
    2.05 (Content) notifications with the data and the Observe Option.
@@ -1387,7 +1386,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
    Failure:  4.04 "Not Found".  The topic-data does not exist.
 
    If the 'max-subscribers' parameter has been reached, the server must
-   treat that as specified in section 4.1 of [RFC7641].  The response
+   treat that as specified in Section 4.1 of [RFC7641].  The response
    MUST NOT include an Observe Option, the absence of which signals to
    the subscriber that the subscription failed.
 
@@ -1397,9 +1396,10 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 
 
+
 Jimenez, et al.           Expires 24 April 2025                [Page 25]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
       Request:
@@ -1455,7 +1455,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 26]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
    As per [RFC7641] a server that transmits notifications mostly in non-
@@ -1465,9 +1465,9 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
    This value can be modified at the broker by the administrator of a
    topic by modifying the parameter "observer-check" on Section 2.2.
-   This would allow to change the rate at which different
-   implementations verify that a subscriber is still interested in
-   observing a topic-data resource.
+   This would allow changing the rate at which different implementations
+   verify that a subscriber is still interested in observing a topic-
+   data resource.
 
 3.2.4.  Delete topic-data
 
@@ -1479,7 +1479,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
    When a topic-data resource is deleted, the broker SHOULD also delete
    the topic-data parameter in the topic resource, unsubscribe all
    subscribers by removing them from the list of observers and return a
-   final 4.04 (Not Found) response as per [RFC7641] Section 3.2.  The
+   final 4.04 (Not Found) response as per Section 3.2 of [RFC7641].  The
    topic is then set back to the half created state as per Section 3.1.
 
    Example:
@@ -1495,7 +1495,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
       Header: Deleted (Code=2.02)
 
-3.3.  Read latest data
+3.3.  Read the latest data
 
    A client can get the latest published topic-data by making a GET
    request to the topic-data URI in the broker.  Please note that
@@ -1511,7 +1511,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 27]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
    If the target URI does not match an existing resource or the topic is
@@ -1567,7 +1567,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 28]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
 4.  CoAP Pubsub Parameters
@@ -1623,15 +1623,15 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 29]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
    Access control of clients at the broker MAY be enforced for
    performing discovery operation, and SHOULD be enforced in a fine-
-   grained fashion for operations related to the the creation, update,
-   and deletion of topic resources, as well as for operations on topic-
-   data resources such as publication on and subscription to topics.
-   This prevents rogue clients to, among other things, repeatedly create
+   grained fashion for operations related to the creation, update, and
+   deletion of topic resources, as well as for operations on topic-data
+   resources such as publication on and subscription to topics.  This
+   prevents rogue clients to, among other things, repeatedly create
    topics at the broker or publish (large) contents, which may result in
    Denial of Service against the broker and the active subscribers.
 
@@ -1679,7 +1679,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 30]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
    +=============+=========================+=======================+
@@ -1735,7 +1735,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 31]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
 6.3.  CoAP Pubsub Parameters
@@ -1791,7 +1791,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 32]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
  Value: core.ps
@@ -1810,70 +1810,9 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
  Description: Topic-data resource of a broker
  Reference: [RFC-XXXX]
 
-7.  Document Updates
+7.  References
 
-   This section is to be removed before publishing as an RFC.
-
-7.1.  Version -13 to -14
-
-   *  Section restructuring for better readability.
-
-   *  Updated topic configuration interactions.
-
-   *  Introduced iPATCH section.
-
-   *  Various clarifications of default values for parameters.
-
-   *  New examples for several interactions.
-
-   *  Updated topic discovery section.
-
-   *  Other editorial changes
-
-7.2.  Version -14 to -15
-
-   *  Code bug fix https://github.com/jaimejim/aiocoap-pubsub-
-      broker/commit/f32ce4866a81319238d6e905de439c9410cce175
-
-   *  Added two new optional topic configuration parameters;
-      ‘initialize,’ and ‘topic-history’.
-
-   *  Modified all examples to conform to RFC9594.
-
-   *  Added the explicit cancelation of ongoing subscriptions when topic
-      configuration parameters are changed.
-
-
-
-Jimenez, et al.           Expires 24 April 2025                [Page 33]
-
-Internet-Draft  A publish-subscribe architecture for the    October 2024
-
-
-   *  Added editorial changes based on feedback.
-
-   *  Clarifications on Topic Configuration creation.
-
-   *  Other editorial changes
-
-Acknowledgements
-
-   The current version of this document contains a substantial
-   contribution by Klaus Hartke's proposal
-   [I-D.hartke-t2trg-coral-pubsub], which defines the topic resource
-   model and structure as well as the topic lifecycle and interactions.
-   It also follows a similar architectural design as that provided by
-   Marco Tiloca's [I-D.ietf-ace-oscore-gm-admin].
-
-   The authors would like to also thank Marco Tiloca, Carsten Bormann,
-   Hannes Tschofenig, Zach Shelby, Mohit Sethi, Peter van der Stok, Tim
-   Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen, Olaf
-   Bergmann, David Navarro and Oscar Novo for their valuable
-   contributions and reviews.
-
-References
-
-Normative References
+7.1.  Normative References
 
    [IANA.core-parameters]
               IANA, "Constrained RESTful Environments (CoRE)
@@ -1898,18 +1837,18 @@ Normative References
               Format", RFC 6690, DOI 10.17487/RFC6690, August 2012,
               <https://www.rfc-editor.org/rfc/rfc6690>.
 
-
-
-
-Jimenez, et al.           Expires 24 April 2025                [Page 34]
-
-Internet-Draft  A publish-subscribe architecture for the    October 2024
-
-
    [RFC7252]  Shelby, Z., Hartke, K., and C. Bormann, "The Constrained
               Application Protocol (CoAP)", RFC 7252,
               DOI 10.17487/RFC7252, June 2014,
               <https://www.rfc-editor.org/rfc/rfc7252>.
+
+
+
+
+Jimenez, et al.           Expires 24 April 2025                [Page 33]
+
+Internet-Draft                 CoAP pubsub                  October 2024
+
 
    [RFC7641]  Hartke, K., "Observing Resources in the Constrained
               Application Protocol (CoAP)", RFC 7641,
@@ -1935,7 +1874,7 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
               Resource Directory", RFC 9176, DOI 10.17487/RFC9176, April
               2022, <https://www.rfc-editor.org/rfc/rfc9176>.
 
-Informative References
+7.2.  Informative References
 
    [I-D.hartke-t2trg-coral-pubsub]
               Hartke, K., "Publish/Subscribe over the Constrained
@@ -1952,16 +1891,6 @@ Informative References
               <https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-
               groupcomm-19>.
 
-
-
-
-
-
-Jimenez, et al.           Expires 24 April 2025                [Page 35]
-
-Internet-Draft  A publish-subscribe architecture for the    October 2024
-
-
    [I-D.ietf-ace-oscore-gm-admin]
               Tiloca, M., Höglund, R., Van der Stok, P., and F.
               Palombini, "Admin Interface for the OSCORE Group Manager",
@@ -1969,6 +1898,13 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
               gm-admin-12, 8 July 2024,
               <https://datatracker.ietf.org/doc/html/draft-ietf-ace-
               oscore-gm-admin-12>.
+
+
+
+Jimenez, et al.           Expires 24 April 2025                [Page 34]
+
+Internet-Draft                 CoAP pubsub                  October 2024
+
 
    [I-D.ietf-ace-pubsub-profile]
               Palombini, F., Sengul, C., and M. Tiloca, "Publish-
@@ -2007,6 +1943,70 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
               (ACE-OAuth)", RFC 9200, DOI 10.17487/RFC9200, August 2022,
               <https://www.rfc-editor.org/rfc/rfc9200>.
 
+   [RFC9338]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
+              Countersignatures", STD 96, RFC 9338,
+              DOI 10.17487/RFC9338, December 2022,
+              <https://www.rfc-editor.org/rfc/rfc9338>.
+
+Appendix A.  Document Updates
+
+   This section is to be removed before publishing as an RFC.
+
+
+
+
+
+
+Jimenez, et al.           Expires 24 April 2025                [Page 35]
+
+Internet-Draft                 CoAP pubsub                  October 2024
+
+
+A.1.  Version -13 to -14
+
+   *  Section restructuring for better readability.
+
+   *  Updated topic configuration interactions.
+
+   *  Introduced iPATCH section.
+
+   *  Various clarifications of default values for parameters.
+
+   *  New examples for several interactions.
+
+   *  Updated topic discovery section.
+
+   *  Other editorial changes
+
+A.2.  Version -14 to -15
+
+   *  Code bug fix https://github.com/jaimejim/aiocoap-pubsub-
+      broker/commit/f32ce4866a81319238d6e905de439c9410cce175
+
+   *  Added two new optional topic configuration parameters;
+      ‘initialize,’ and ‘topic-history’.
+
+   *  Modified all examples to conform to RFC9594.
+
+   *  Added the explicit cancelation of ongoing subscriptions when topic
+      configuration parameters are changed.
+
+   *  Added editorial changes based on feedback.
+
+   *  Clarifications on Topic Configuration creation.
+
+   *  Other editorial changes
+
+Acknowledgements
+
+   The current version of this document contains a substantial
+   contribution by Klaus Hartke's proposal
+   [I-D.hartke-t2trg-coral-pubsub], which defines the topic resource
+   model and structure as well as the topic lifecycle and interactions.
+   It also follows a similar architectural design as that provided by
+   Marco Tiloca's [I-D.ietf-ace-oscore-gm-admin].
+
+
 
 
 
@@ -2015,13 +2015,14 @@ Internet-Draft  A publish-subscribe architecture for the    October 2024
 
 Jimenez, et al.           Expires 24 April 2025                [Page 36]
 
-Internet-Draft  A publish-subscribe architecture for the    October 2024
+Internet-Draft                 CoAP pubsub                  October 2024
 
 
-   [RFC9338]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
-              Countersignatures", STD 96, RFC 9338,
-              DOI 10.17487/RFC9338, December 2022,
-              <https://www.rfc-editor.org/rfc/rfc9338>.
+   The authors would like to also thank Marco Tiloca, Carsten Bormann,
+   Hannes Tschofenig, Zach Shelby, Mohit Sethi, Peter van der Stok, Tim
+   Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen, Olaf
+   Bergmann, David Navarro and Oscar Novo for their valuable
+   contributions and reviews.
 
 Contributors
 
@@ -2050,7 +2051,6 @@ Authors' Addresses
    Ari Keranen
    Ericsson
    Email: ari.keranen@ericsson.com
-
 
 
 
