@@ -1114,13 +1114,12 @@ Description: Topic-data resource of a broker
 Reference: [RFC-XXXX]
 ~~~
 
---- back
 
-# Appendix: Document Updates
+=======
+# Document Updates # {#sec-document-updates}
+{:removeinrfc}
 
-RFC EDITOR: PLEASE REMOVE THIS SECTION.
-
-A.1.  Version -13 to -14
+## Version -13 to -14
 
 * Section restructuring for better readability.
 * Updated topic configuration interactions.
@@ -1130,7 +1129,7 @@ A.1.  Version -13 to -14
 * Updated topic discovery section.
 * Other editorial changes
 
-A.2.  Version -14 to -15
+## Version -14 to -15
 
 * Code bug fix https://github.com/jaimejim/aiocoap-pubsub-broker/commit/f32ce4866a81319238d6e905de439c9410cce175
 * Added two new optional topic configuration parameters; ‘initialize,’ and ‘topic-history’.
@@ -1146,4 +1145,6 @@ A.2.  Version -14 to -15
 
 The current version of this document contains a substantial contribution by Klaus Hartke's proposal {{I-D.hartke-t2trg-coral-pubsub}}, which defines the topic resource model and structure as well as the topic lifecycle and interactions. It also follows a similar architectural design as that provided by Marco Tiloca's {{I-D.ietf-ace-oscore-gm-admin}}.
 
-The authors would like to also thank Carsten Bormann, Hannes Tschofenig, Zach Shelby, Mohit Sethi, Peter van der Stok, Tim Kellogg, Anders Eriksson, Goran Selander, Mikko Majanen, Olaf Bergmann and Oscar Novo for their valuable contributions and reviews.
+
+The authors would like to also thank {{{Marco Tiloca}}}, {{{Carsten Bormann}}}, {{{Hannes Tschofenig}}}, {{{Zach Shelby}}}, {{{Mohit Sethi}}}, Peter van der Stok, Tim Kellogg, Anders Eriksson, {{{Goran Selander}}}, Mikko Majanen, {{{Olaf Bergmann}}}, {{{David Navarro}}} and Oscar Novo for their valuable contributions and reviews.
+
