@@ -129,7 +129,7 @@ The broker is responsible for the store-and-forward of state update representati
 ~~~~
 {: #fig-arch title='Publish-subscribe architecture over CoAP' artwork-align="center"}
 
-This document describes two sets of interactions, interactions to configure topics and their lifecycle (see {{topic-configuration-interactions}}) and interactions about the topic-data (see {{topic-data-interactions}}).
+This document describes two sets of interactions; interactions to configure topics and their lifecycle (see {{topic-configuration-interactions}}) and interactions about the topic-data (see {{topic-data-interactions}}).
 
 Topic-configuration interactions are discovery, create, read configuration, update configuration, and delete configuration. These operations handle the management of the topics.
 
@@ -289,7 +289,7 @@ Below is an example of discovery via /.well-known/core with rt=core.ps.conf that
 
 <!--
 TODO: add the ct part in IANA and add the example here:
-- If you want to indicate ct= in one of this links, then it should be ct=X, where is the the Content-Format identifier for application/pubsub+cbor
+- If you want to indicate ct= in one of this links, then it should be ct=X, where is the the Content-Format identifier for application/core-pubsub+cbor
 -->
 
 ~~~~
@@ -395,7 +395,7 @@ Example:
 
    Header: FETCH (Code=0.05)
    Uri-Path: "ps"
-   Content-Format: TBD (application/pubsub+cbor)
+   Content-Format: TBD (application/core-pubsub+cbor)
    Payload:
    {
       "resource-type": "core.ps.conf",
@@ -1010,15 +1010,15 @@ IANA is requested to add the following Media-Type to the "Media Types"
 registry {{!IANA.media-types}}.
 
 | Name                         | Template                                 | Reference              |
-| pubsub+cbor | application/pubsub+cbor | RFC XXXX, {{media-type}} |
-{: #new-media-type align="left" title="New Media Type application/pubsub+cbor"}
+| core-pubsub+cbor | application/core-pubsub+cbor | RFC XXXX, {{media-type}} |
+{: #new-media-type align="left" title="New Media Type application/core-pubsub+cbor"}
 
 {:compact}
 Type name:
 : application
 
 Subtype name:
-: pubsub+cbor
+: core-pubsub+cbor
 
 Required parameters:
 : N/A
@@ -1068,7 +1068,7 @@ sub-registry, within the "Constrained RESTful Environments (CoRE)
 Parameters" Registry {{!IANA.core-parameters}}, as follows:
 
 | Content Type                | Content Coding | ID   | Reference |
-| application/pubsub+cbor     | -              | TBD9 | RFC XXXX  |
+| application/core-pubsub+cbor     | -              | TBD9 | RFC XXXX  |
 {: align="left" title="New Content-Format"}
 
 TBD9 is to be assigned from the space 256..999.
@@ -1145,5 +1145,4 @@ Reference: [RFC-XXXX]
 
 The current version of this document contains a substantial contribution by Klaus Hartke's proposal {{I-D.hartke-t2trg-coral-pubsub}}, which defines the topic resource model and structure as well as the topic lifecycle and interactions. It also follows a similar architectural design as that provided by Marco Tiloca's {{I-D.ietf-ace-oscore-gm-admin}}.
 
-The authors would like to also thank {{{Marco Tiloca}}}, {{{Carsten Bormann}}}, {{{Hannes Tschofenig}}}, {{{Zach Shelby}}}, {{{Mohit Sethi}}}, Peter van der Stok, Tim Kellogg, Anders Eriksson, {{{Goran Selander}}}, Mikko Majanen, {{{Olaf Bergmann}}}, {{{David Navarro}}} and Oscar Novo for their valuable contributions and reviews.
-
+The authors would like to also thank {{{Marco Tiloca}}}, {{{Carsten Bormann}}}, {{{Hannes Tschofenig}}}, {{{Zach Shelby}}}, {{{Mohit Sethi}}}, Peter van der Stok, Tim Kellogg, Anders Eriksson, {{{Goran Selander}}}, Mikko Majanen, {{{Olaf Bergmann}}}, {{{David Navarro}}}, Oscar Novo and Lorenzo Corneo for their valuable contributions and reviews.
