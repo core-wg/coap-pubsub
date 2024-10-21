@@ -1114,8 +1114,8 @@ Description: Topic-data resource of a broker
 Reference: [RFC-XXXX]
 ~~~
 
+--- back
 
-=======
 # Document Updates # {#sec-document-updates}
 {:removeinrfc}
 
