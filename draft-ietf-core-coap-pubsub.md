@@ -233,7 +233,7 @@ A client can perform a discovery of: the broker; the topic collection resources 
 
 ### Broker Discovery {#broker-discovery}
 
-CoAP clients MAY discover brokers by using CoAP Simple Discovery, via multicast, through a Resource Directory (RD) {{RFC9176}} or by other means specified in extensions to {{RFC7252}}. Brokers MAY register with a RD by following the steps on Section 5 of {{RFC9176}} with the resource type set to "core.ps" as defined in {{iana}} of this document.
+CoAP clients MAY discover brokers by using CoAP Simple Discovery, via multicast, through a Resource Directory (RD) {{RFC9176}} or by other means specified in extensions to {{RFC7252}}. Brokers MAY register with a RD by following the steps on {{Section 5 of RFC9176}} with the resource type set to "core.ps" as defined in {{iana}} of this document.
 
 The following example shows an endpoint discovering a broker using the "core.ps" resource type over a multicast network. Brokers within the multicast scope will answer the query.
 
@@ -256,7 +256,7 @@ The following example shows an endpoint discovering a broker using the "core.ps"
 
 ### Topic Collection Discovery
 
-A Broker SHOULD offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point is the topic collection resource collecting the topic configurations for those topics (see Section 1.2.2 of {{RFC6690}}) and is identified by the resource type "core.ps.coll".
+A Broker SHOULD offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point is the topic collection resource collecting the topic configurations for those topics (see {{Section 1.2.2 of RFC6690}}) and is identified by the resource type "core.ps.coll".
 
 The specific resource path is left for implementations, examples in this document use the "/ps" path. The interactions with a topic collection are further defined in {{topic-collection-interactions}}.
 
@@ -314,7 +314,7 @@ TODO: add the ct part in IANA and add the example here:
 <!--
 TODO DISCUSS Decide on this section
 
-   Also, as based on Section 1.2.2 of RFC 6690, I'd realistically expect to have located by /.well-known/core certainly the topic collection resources and MAYBE the topic resources (and likely limited only to "perpetual", hence well-known topics).
+   Also, as based on {{ection 1.2.2 of RFC6690}}, I'd realistically expect to have located by /.well-known/core certainly the topic collection resources and MAYBE the topic resources (and likely limited only to "perpetual", hence well-known topics).
 
    Instead, I'd expect to discover the links to the topic resources mostly by GET/FETCH accessing the topic collection resource.
 
@@ -560,7 +560,7 @@ On success, the topic configuration is overwritten and server returns a 2.04 (Ch
 
 Note that updating the "topic-data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Updating the "topic-data" may happen also after it being deleted, as described on {{delete-topic-data}}, this will in turn create a new "topic-data" path for that topic configuration.
 
-Similarly, decreasing max-subscribers will also cause that some subscribers get unsubscribed. Unsubscribed endpoints SHOULD receive a final 4.04 (Not Found) response as per {{RFC7641}} Section 3.2.
+Similarly, decreasing max-subscribers will also cause that some subscribers get unsubscribed. Unsubscribed endpoints SHOULD receive a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}.
 
 Please note that when using PUT the topic configuration is being overwritten, thus some of the optional parameters (e.g., "max-subscribers", "observer-check") not included in the PUT message will be reset to their default values.
 
@@ -813,7 +813,7 @@ Success:
 Failure:
 : 4.04 "Not Found". The topic-data does not exist.
 
-If the 'max-subscribers' parameter has been reached, the server must treat that as specified in section 4.1 of {{RFC7641}}. The response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
+If the 'max-subscribers' parameter has been reached, the server must treat that as specified in {{Section 4.1 Of RFC7641}}. The response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
 
 <!--
 TODO Right. However, how can this work when the server hosting the topic-data resource is not the broker? The broker knows the maximum number of subscribers, but that separate server does not. Is it just up to a not-specified-here synchronization protocol between the broker and that server?
@@ -861,7 +861,7 @@ Example:
 
 ### Unsubscribe {#unsubscribe}
 
-A CoAP client can unsubscribe simply by cancelling the observation as described in Section 3.6 of {{RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification. Also on Section 3.6 of {{RFC7641}} the client can simply "forget" the observation and the server will remove it from the list of observers after the next notification.
+A CoAP client can unsubscribe simply by cancelling the observation as described in {{Section 3.6 of RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification. Also on {{Section 3.6 of RFC7641}} the client can simply "forget" the observation and the server will remove it from the list of observers after the next notification.
 
 As per {{RFC7641}} a server that transmits notifications mostly in non-confirmable messages, but it MUST send a notification in a confirmable message instead of a non-confirmable message at least every 24 hours.
 
@@ -879,7 +879,7 @@ A publisher MAY delete a topic by making a CoAP DELETE request on the topic-data
 
 On success, the server returns a 2.02 (Deleted) response.
 
-When a topic-data resource is deleted, the broker SHOULD also delete the topic-data parameter in the topic resource, unsubscribe all subscribers by removing them from the list of observers and return a final 4.04 (Not Found) response as per {{RFC7641}} Section 3.2. The topic is then set back to the half created state as per {{topic-lifecycle}}.
+When a topic-data resource is deleted, the broker SHOULD also delete the topic-data parameter in the topic resource, unsubscribe all subscribers by removing them from the list of observers and return a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The topic is then set back to the half created state as per {{topic-lifecycle}}.
 
 Example:
 
