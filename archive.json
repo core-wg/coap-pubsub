@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2023-03-14T00:47:02.834612+00:00",
+  "timestamp": "2024-10-22T01:24:39.523633+00:00",
   "repo": "core-wg/coap-pubsub",
   "labels": [
     {
@@ -417,7 +417,7 @@
       "labels": [],
       "body": "Should we return 4.09 Conflict for the case when the client tries to create a topic that already exists? \r\n\r\n**Indicates that the request could not be processed because of conflict in the request, such as an edit conflict between multiple simultaneous updates.**\r\n\r\nThe draft currently specifies 4.03\r\n\r\n**The request was valid, but the server is refusing action. The user might not have the necessary permissions for a resource, or may need an account of some sort.**\r\n",
       "createdAt": "2018-03-19T21:16:20Z",
-      "updatedAt": "2018-07-18T22:46:09Z",
+      "updatedAt": "2023-10-02T16:19:05Z",
       "closedAt": null,
       "comments": [
         {
@@ -440,6 +440,13 @@
           "body": "4.03 is same as HTTP 403 per 7252: \r\n> The HTTP 403 Forbidden client error status response code indicates that the server understood the request but refuses to authorize it.\r\n\r\n4.09 is registered by 8132: https://tools.ietf.org/html/rfc8132#section-6\r\nhttps://tools.ietf.org/html/rfc8132#section-3.4\r\n\r\n>    Conflicting state:  If the modification specified by a PATCH or\r\n      iPATCH request causes the resource to enter an inconsistent state\r\n      that the server cannot resolve, the server can return the 4.09\r\n      (Conflict) CoAP response.",
           "createdAt": "2018-07-18T22:46:08Z",
           "updatedAt": "2018-07-18T22:46:08Z"
+        },
+        {
+          "author": "jaimejim",
+          "authorAssociation": "MEMBER",
+          "body": "This case is now handled here: https://core-wg.github.io/coap-pubsub/ps-rev/draft-ietf-core-coap-pubsub.html#name-updating-the-topic-resource",
+          "createdAt": "2023-10-02T16:19:05Z",
+          "updatedAt": "2023-10-02T16:19:05Z"
         }
       ]
     },
@@ -480,16 +487,24 @@
       "id": "MDU6SXNzdWU0MjE5OTAxODg=",
       "title": "Handle topic timeout w/URI-query option and 4.04 and data staleness with max-age",
       "url": "https://github.com/core-wg/coap-pubsub/issues/34",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mjkoster",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "As per the CoRE interim discussion, we would like to support topic lifetime setting using a URI-query option (e.g. \"tlt\") on topic creation. If the topic isn't published to before the lifetime expires, the topic is removed, resulting in a 4.04 response to new SUBSCRIBE or READ requests, and the broker closes outstanding observes with a 4.04. Publishing to the topic resets the lifetime counter.\r\n\r\nMax-age will be used for data staleness. We suggest to provide the same feature to subscribing clients that a cache would use. One issue with Max-age is that it only applies to responses, and we need to convey the data lifetime on publish. We could use a uri-query option (e.g. \"dlt\") or a new header option for publish-max-age. Without this, the default Max-Age of 60 seconds would be required. For READ and SUBSCRIBE responses it will be (60 seconds - seconds since publish). ",
       "createdAt": "2019-03-17T23:57:29Z",
-      "updatedAt": "2019-03-17T23:57:29Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2023-10-02T16:14:17Z",
+      "closedAt": "2023-10-02T16:12:36Z",
+      "comments": [
+        {
+          "author": "jaimejim",
+          "authorAssociation": "MEMBER",
+          "body": "This is now handled by https://core-wg.github.io/coap-pubsub/ps-rev/draft-ietf-core-coap-pubsub.html#name-topic-properties: expiration_date\r\nMax-Age is handled here https://core-wg.github.io/coap-pubsub/ps-rev/draft-ietf-core-coap-pubsub.html#name-caching-and-freshness\r\n\r\nClosing the issue.",
+          "createdAt": "2023-10-02T16:12:36Z",
+          "updatedAt": "2023-10-02T16:14:17Z"
+        }
+      ]
     },
     {
       "number": 40,
@@ -499,13 +514,24 @@
       "state": "OPEN",
       "author": "bdamm",
       "authorAssociation": "NONE",
-      "assignees": [],
+      "assignees": [
+        "cabo",
+        "marco-tiloca-sics"
+      ],
       "labels": [],
       "body": "The protocol requires that publishers and subscribers create topics before publishing or subscribing to topics. There is an option for a single-shot topic creation with publish, but no option for subscribing to a topic that hasn't been created yet.\r\n\r\nThe result is that if you have a very large tree of potential but not realized topics, subscribers need to actually create a topic before subscribing, regardless of whether the topic will actually be used or not. This converts potential topics into actual topics, which is a major resource burden in the case where there is a large number of potential topics but a small number of actual topics within that potential topic tree.\r\n",
       "createdAt": "2019-10-30T19:30:25Z",
-      "updatedAt": "2019-10-30T19:30:25Z",
+      "updatedAt": "2023-10-02T14:00:26Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "jaimejim",
+          "authorAssociation": "MEMBER",
+          "body": "Hi @bdamm , thank you for the comment (and sorry for the very belated response).\r\n\r\nThe draft has undergone many changes since Janruary, please have a look at the latest version  https://core-wg.github.io/coap-pubsub/ps-rev/draft-ietf-core-coap-pubsub.html . In particular the topic lifecycle section: https://core-wg.github.io/coap-pubsub/ps-rev/draft-ietf-core-coap-pubsub.html#name-topic-lifecycle\r\n\r\nThe draft now splits the part of topic configuration and actual pub/sub data interactions. A topic is not fully created until someone posts in it, thus subscribers can only find actual working topics. \r\n\r\nHowever in any case, for subscribers to subscribe the publisher should have created the topic first. Therefore, on the topic of single-shot subscription to a non-existing topic, the result would be the same as a GET to a CoAP resource that does not exist; 4.04 Not Found. \r\n\r\nA broker manager could change this behaviour and we could envision a mechanism by which the CoAP server allows for observations on resources that not-yet exist but I would guess that this is something to be checked with CoRE. \r\n\r\nLet core (core@ietf.org) know if you are still interested in this topic please.",
+          "createdAt": "2023-10-02T13:59:58Z",
+          "updatedAt": "2023-10-02T13:59:58Z"
+        }
+      ]
     },
     {
       "number": 41,
@@ -515,13 +541,23 @@
       "state": "OPEN",
       "author": "bdamm",
       "authorAssociation": "NONE",
-      "assignees": [],
+      "assignees": [
+        "marco-tiloca-sics"
+      ],
       "labels": [],
       "body": "The pubsub protocol -09 requires the broker to always provide the most recent message to a subscriber. Why? The message might be very out-dated. Also, this requires the broker to retain the most recent message for every topic. If the topic tree is large and the broker is acting as an exchange point for millions of devices then the requirement that all topics have a cached message puts a big burden on the broker.",
       "createdAt": "2019-10-30T19:35:39Z",
-      "updatedAt": "2019-10-30T19:35:39Z",
+      "updatedAt": "2023-10-04T13:14:34Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "jaimejim",
+          "authorAssociation": "MEMBER",
+          "body": "Hi @bdamm please find the current working version here https://core-wg.github.io/coap-pubsub/ps-rev/draft-ietf-core-coap-pubsub.html\r\n\r\n**NEW COMMENT**\r\nEditing my comment here sorry. I realized I missunderstood the request \"cached message\" to be related to caching and freshness in the CoAP sense.  Topics are just links to CoAP resources hosted by a server. \r\nAFAIK when the broker is hosting the topic_data as well, it obviously needs to provide a resource representation when requested. \r\nHowever if the broker is just an \"exchange point for millions of devices\", that would mean that the topic_data resource is hosted elsewhere. When a subscriber subscribes to a topic in that context, the broker does not mediate in that.\r\n\r\nhttps://core-wg.github.io/coap-pubsub/ps-rev/draft-ietf-core-coap-pubsub.html#name-topic-data-interactions\r\n\r\n**OLD COMMENT**\r\nThe current version does not specify anything new in relation to caching freshness so the same logic as that for CoAP and CoAP Observe will apply. \r\n\r\nThe default Max-Age Option value is 60 in CoAP but that can be modified to cater to different deployment scenarios. If an origin server (i.e., origin server for the topic_data resource) wishes to prevent caching, it MUST explicitly include a Max-Age Option with a value of zero seconds.\r\n\r\nhttps://www.rfc-editor.org/rfc/rfc7252#section-5.6\r\nhttps://www.rfc-editor.org/rfc/rfc7641.html#section-3.3\r\n",
+          "createdAt": "2023-10-02T14:13:05Z",
+          "updatedAt": "2023-10-04T13:14:34Z"
+        }
+      ]
     },
     {
       "number": 42,
@@ -531,11 +567,14 @@
       "state": "OPEN",
       "author": "bdamm",
       "authorAssociation": "NONE",
-      "assignees": [],
+      "assignees": [
+        "cabo",
+        "marco-tiloca-sics"
+      ],
       "labels": [],
       "body": "Suppose there is a topic structure such as /${tenant-id}/${device-mac}/${event-id}\r\n\r\nSuppose a subscriber wants to receive all events with a specific ID. There is no way to do that in this protocol.\r\n\r\nSuppose a subscriber wants to receive all events from a specific device-mac. \r\nSuppose a subscriber wants to receive all events from a specific tenant-id.\r\n\r\nHow could this be efficiently realized at all, even with complete freedom to structure the topic tree in any way? With the current protocol I don't see how to do it. Subscribers would need to subscribe to millions of potential topics, even though there may not be millions of actual topics. Even worse, subscribers would need intimate knowledge of all possible topics (all possible IDs and MACs) which may not even be possible.",
       "createdAt": "2019-10-30T21:01:44Z",
-      "updatedAt": "2022-09-28T15:30:21Z",
+      "updatedAt": "2023-10-04T12:48:16Z",
       "closedAt": null,
       "comments": [
         {
@@ -544,6 +583,13 @@
           "body": "This proposal could be extended to support topic wildcard subscriptions following MQTT conventions (`+` for single path segments and `#` for multiple path segments). \r\nWhen a wildcard is included in the subscription, the broker is responsible for notifying all subscribers when any resources change on any matching topics. \r\nWhen a notify response is then delivered to the subscriber on a wildcard topic, the broker MUST include the `URI-PATH` option in the message which indicates the full topic path of the resource being sent. \r\n\r\nE.G: \r\n```\r\n    Client1   Client2                                          Broker\r\n       |          |                   Subscribe                    |\r\n       |          | --- GET /ps/+ Obs:0 Token:XX ----------------> | \r\n       |          | <--- ACK ------------------------------------- | \r\n       |          |                                                |\r\n       |          |                    Publish                     |\r\n       | ---------|---- PUT /ps/topic1 \"1033.3\"  ----------------> |\r\n       |<---------|---- 2.01 Location:/ps/topic1 ----------------- |\r\n       |          |                    Notify                      |\r\n       |          | <-- 2.05 \"1033.3\" Obs:11 Uri-Path:/ps/topic1 - |\r\n```",
           "createdAt": "2022-09-23T18:14:25Z",
           "updatedAt": "2022-09-28T15:30:21Z"
+        },
+        {
+          "author": "jaimejim",
+          "authorAssociation": "MEMBER",
+          "body": "Dear @bdamm and @mattaylor, sorry for the late response to this. \r\n\r\nAs I mentioned in other issues, the draft has now undergone many changes. \r\nYou can find the [editor's version of the draft](https://core-wg.github.io/coap-pubsub/ps-rev/draft-ietf-core-coap-pubsub.html) and an [early implementation](https://github.com/jaimejim/aiocoap-pubsub-broker).\r\n\r\nIn relation to `#` and `+` wildcards, the currnt draft does not define them. The current spec does not mandate for the topics to be hierarchically organized within the same broker, the path is a URL to a resource, unlike the MQTT topic structure.\r\n\r\nThe issue is at least twofold:\r\n\r\n### 1. Finding all topic_data URLs\r\n\r\nI htink this part is solved, there are many ways to find the topic resources and if your broker had a specific hierarchy you could design wildcards. For example a collection with some topics under it on a predefined path like `/ps` and under it the topic data under another predefined path like `/ps/data` could be used to set wildcard subscription to all topic_data resources. Another mechanism would be to use FETCH  with \"resource_type\" : \"core.ps.data\" , you would get a series of topic_data URIs.\r\n\r\nAs @mattaylor points out, you can also subscribe to the collection resource itself `/ps` with `rt=core.ps.data` and `obs` to get notified of new topic_data resources.\r\n\r\nThe usual discovery mechanisms apply https://core-wg.github.io/coap-pubsub/ps-rev/draft-ietf-core-coap-pubsub.html#name-discovery \r\n\r\n### 2. Subscribing to them in one single message\r\n\r\nAssuming that under the topic collectiong there are 100 resources like ps/data/<blabla> (they can also be labeled with rt=core.ps.data). How does a client observe all of them with one GET message?\r\n\r\nThis part that is not there yet. You could craft specific FETCH + obs messages that contain topic data URIs and subscribe to them in one go. \r\n\r\n@cabo for example mentions these two potential payloads:\r\n`{ match: \u201c/my/path/*\u201d }` or `{ prefix: \u201c/my/path/\u201c }`",
+          "createdAt": "2023-10-02T15:59:33Z",
+          "updatedAt": "2023-10-02T16:25:53Z"
         }
       ]
     },
@@ -552,15 +598,15 @@
       "id": "I_kwDOBEc_t85ca7ql",
       "title": "Brokerless case",
       "url": "https://github.com/core-wg/coap-pubsub/issues/44",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "jaimejim",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "This issue is to discuss the need for the brokerless case, originally proposed for the L+G field bus. \r\n\r\nIn the past we have discussed expanding it and moving it to a new draft or an appendix. There has also been discussion around additional input on configuration and topics, combining the PubSub and Resource Directory patterns, and the interface for topic discovery.\r\n\r\nAs we have not enough material for now and we have chosen to keep this draft simple, I propose to remove it for now in https://github.com/core-wg/coap-pubsub/commit/88e17ec5d60c18d5bcf476a462be18e84cdbf4d5.",
       "createdAt": "2023-01-20T09:42:22Z",
-      "updatedAt": "2023-01-20T09:43:33Z",
-      "closedAt": null,
+      "updatedAt": "2023-10-02T13:49:06Z",
+      "closedAt": "2023-10-02T13:49:06Z",
       "comments": []
     },
     {
@@ -568,16 +614,42 @@
       "id": "I_kwDOBEc_t85cbSvV",
       "title": "CoAP pub/sub client",
       "url": "https://github.com/core-wg/coap-pubsub/issues/45",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "jaimejim",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "After multiple reads of the document I think it would make more sense to simply keep \"CoAP Clients\" as a general term for the endpoints and just have the classic publisher and subscriber roles indicated when needed. There is no need for a new term  \"CoAP pub/sub Client\" as it may introduce confusion to the reader. \r\n\r\nFor now I have removed the term on https://github.com/core-wg/coap-pubsub/commit/a27f6a5d03fab445f0a47b8d7cc55aa59ba69e26",
       "createdAt": "2023-01-20T10:53:44Z",
-      "updatedAt": "2023-01-20T10:53:44Z",
-      "closedAt": null,
+      "updatedAt": "2023-10-02T13:48:47Z",
+      "closedAt": "2023-10-02T13:48:47Z",
       "comments": []
+    },
+    {
+      "number": 56,
+      "id": "I_kwDOBEc_t86GLS4j",
+      "title": "Feature requests",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/56",
+      "state": "OPEN",
+      "author": "jaimejim",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [
+        "enhancement"
+      ],
+      "body": "As per email discussions:\r\n\r\n\r\nThe features requested were:\r\n\r\n1. CoAP client should subscribe by default without getting a 4.04 in every case.\r\n2. One-shot publication and topic creation.\r\n\r\nMy approach to do this would be:\r\n\r\n1. Making sure that topic-data path can be created/selected by the client. Which is something want enabled anyways.\r\n\r\n2. Populating topic-data with an empty string. This would in principle not be the way the broker works now, so it is either something we enable in a boolean parameter like \"initialize : true\" or we change the behaviour, I would prefer to have it as a parameter choice.\r\n\r\n\r\nThe following CoAP communication would then be possible:\r\n\r\nClient ---> Broker : one-shot topic creation\r\n```sh\r\n\u276f ./client.py -m POST coap://127.0.0.1:5683/ps --payload \"{\\\"topic-name\\\": \\\"Room Temperature Sensor\\\", \\\"resource-type\\\": \\\"core.ps.conf\\\", \\\"media-type\\\": \\\"application/json\\\", \\\"topic-type\\\": \\\"temperature\\\", \\\"expiration-date\\\": \\\"2023-04-05T23:59:59Z\\\", \\\"max-subscribers\\\": 200, \\\"observer-check\\\": 86400, \\\"topic-data\\\": \\\"david-topic\\\", \\\"initialize\\\": true}\"\r\n```\r\n\r\nBroker ---> Client\r\n\r\n```sh\r\nResponse arrived from different address; base URI is coap://127.0.0.1/ps\r\nLocation options indicate new resource: /ps/4309ab\r\n\r\nJSON re-formated and indented\r\n{\r\n    \"topic-name\": \"Room Temperature Sensor\",\r\n    \"topic-data\": \"david-topic\",\r\n    \"resource-type\": \"core.ps.conf\",\r\n    \"media-type\": \"application/json\",\r\n    \"topic-type\": \"temperature\",\r\n    \"expiration-date\": \"2023-04-05T23:59:59Z\",\r\n    \"max-subscribers\": 200,\r\n    \"observer-check\": 86400,\r\n    \"initialize\": true\r\n}\r\n``````\r\nSubscriber ---> Broker : subscription before publication\r\n```sh\r\n\u276f ./client.py -m GET --observe 'coap://127.0.0.1:5683/david-topic'\r\nResponse arrived from different address; base URI is coap://127.0.0.1/david-topic\r\n```\r\nPublisher ---> Broker\r\n```sh\r\n\u276f ./client.py -m PUT coap://127.0.0.1:5683/david-topic --payload \"{\"n\": \"temperature\",\"u\": \"Cel\",\"t\": 1621452122,\"v\": 22}\"\r\nResponse arrived from different address; base URI is coap://127.0.0.1/david-topic\r\n{n: temperature,u: Cel,t: 1621452122,v: 22}\r\n```\r\n\r\nAfter which the client get the following notification\r\n\r\nSubscriber ---> Broker\r\n```sh\r\n\u276f ./client.py -m GET --observe 'coap://127.0.0.1:5683/david-topic'\r\nResponse arrived from different address; base URI is coap://127.0.0.1/david-topic\r\n\r\n---\r\n{n: temperature,u: Cel,t: 1621452122,v: 22}\r\n```",
+      "createdAt": "2024-04-18T16:27:31Z",
+      "updatedAt": "2024-10-20T12:05:05Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "jaimejim",
+          "authorAssociation": "MEMBER",
+          "body": "Added on v15",
+          "createdAt": "2024-10-20T12:05:04Z",
+          "updatedAt": "2024-10-20T12:05:04Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -1512,24 +1584,254 @@
       "id": "PR_kwDOBEc_t85L70r5",
       "title": "Merging v12 on main",
       "url": "https://github.com/core-wg/coap-pubsub/pull/49",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "jaimejim",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "New pubsub draft merge",
       "createdAt": "2023-03-13T21:12:12Z",
-      "updatedAt": "2023-03-13T21:17:10Z",
+      "updatedAt": "2023-10-03T10:23:20Z",
       "baseRepository": "core-wg/coap-pubsub",
       "baseRefName": "main",
       "baseRefOid": "e1b2724949b44830f244acfee0b1d61537ff2a32",
       "headRepository": "core-wg/coap-pubsub",
       "headRefName": "ps-rev",
-      "headRefOid": "0b50aa2b88663bdb547d44979202e6c073067d1e",
-      "closedAt": null,
+      "headRefOid": "c3e764b8d3a45f273a3c1f71b34bdbdd1f1dfe47",
+      "closedAt": "2023-10-03T10:23:19Z",
+      "mergedAt": "2023-10-03T10:23:19Z",
+      "mergedBy": "jaimejim",
+      "mergeCommit": {
+        "oid": "f603c70c245c349b6e44bfeb4be2d1ff6dc12c12"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 50,
+      "id": "PR_kwDOBEc_t85RUdIt",
+      "title": "Update LICENSE.md",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/50",
+      "state": "CLOSED",
+      "author": "akirataguchi115",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "If I am to read this right: https://github.com/core-wg/coap-pubsub/blob/main/CONTRIBUTING.md this repository is licensed under the \"simplified BSD license\". Do correct me however if I'm wrong. I've already added my comments to the root issue from which this stems from: https://github.com/martinthomson/i-d-template/issues/328",
+      "createdAt": "2023-05-25T08:32:00Z",
+      "updatedAt": "2024-04-11T07:54:47Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "main",
+      "baseRefOid": "e1b2724949b44830f244acfee0b1d61537ff2a32",
+      "headRepository": "akirataguchi115/coap-pubsub",
+      "headRefName": "patch-1",
+      "headRefOid": "b88ad82cda2ef30df5b3a0844794564611442529",
+      "closedAt": "2024-04-11T06:29:07Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
+      "comments": [
+        {
+          "author": "jaimejim",
+          "authorAssociation": "MEMBER",
+          "body": "Hi Akira, license-wise the same provisions as with other IETF documents apply.\r\nI believe the new repos have the license information below, which is the one I will use:\r\n\r\n# License\r\n\r\nThis repository relates to activities in the [Internet Engineering Task\r\nForce (IETF)](https://www.ietf.org/). All material in this repository is\r\nconsidered Contributions to the IETF Standards Process, as defined in\r\nthe intellectual property policies of the IETF currently designated as\r\n[BCP 78](https://www.rfc-editor.org/info/bcp78),\r\n[BCP 79](https://www.rfc-editor.org/info/bcp79) and the [IETF Trust\r\nLegal Provisions (TLP) Relating to IETF\r\nDocuments](https://trustee.ietf.org/trust-legal-provisions.html).\r\n\r\nAny edit, commit, pull request, issue, comment or other change made to\r\nthis repository constitutes Contributions to the [IETF Standards\r\nProcess](https://www.rfc-editor.org/info/bcp9).\r\n\r\nYou agree to comply with all applicable IETF policies and procedures,\r\nincluding, BCP 78, 79, the TLP, and the TLP rules regarding code\r\ncomponents (e.g., being subject to a Revised BSD License) in\r\nContributions.",
+          "createdAt": "2024-04-11T06:29:07Z",
+          "updatedAt": "2024-04-11T06:29:07Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 51,
+      "id": "PR_kwDOBEc_t85dPvwx",
+      "title": "Ps rev",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/51",
+      "state": "MERGED",
+      "author": "jaimejim",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Merging on main the security section and IANA parts.",
+      "createdAt": "2023-10-19T09:28:15Z",
+      "updatedAt": "2023-10-19T10:00:25Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "main",
+      "baseRefOid": "f603c70c245c349b6e44bfeb4be2d1ff6dc12c12",
+      "headRepository": "core-wg/coap-pubsub",
+      "headRefName": "ps-rev",
+      "headRefOid": "1763521bc3bd082e64b14bf3ff80108b08d8e4dd",
+      "closedAt": "2023-10-19T10:00:25Z",
+      "mergedAt": "2023-10-19T10:00:24Z",
+      "mergedBy": "jaimejim",
+      "mergeCommit": {
+        "oid": "04f0fe1218a7560bba657edf1057e722451b2298"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 52,
+      "id": "PR_kwDOBEc_t85dYG4b",
+      "title": "Ps rev",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/52",
+      "state": "CLOSED",
+      "author": "jaimejim",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "seccons modification",
+      "createdAt": "2023-10-20T12:23:10Z",
+      "updatedAt": "2023-10-20T12:24:52Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "main",
+      "baseRefOid": "04f0fe1218a7560bba657edf1057e722451b2298",
+      "headRepository": "core-wg/coap-pubsub",
+      "headRefName": "ps-rev",
+      "headRefOid": "aca925cc0eb44404b3ed60dea27641e562f8c757",
+      "closedAt": "2023-10-20T12:24:52Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 53,
+      "id": "PR_kwDOBEc_t85dYJ9v",
+      "title": "Ps rev",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/53",
+      "state": "MERGED",
+      "author": "jaimejim",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-10-20T12:32:14Z",
+      "updatedAt": "2023-10-20T12:32:56Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "main",
+      "baseRefOid": "04f0fe1218a7560bba657edf1057e722451b2298",
+      "headRepository": "core-wg/coap-pubsub",
+      "headRefName": "ps-rev",
+      "headRefOid": "025873deececb09fa20606a6863c4826d32dc4b5",
+      "closedAt": "2023-10-20T12:32:56Z",
+      "mergedAt": "2023-10-20T12:32:56Z",
+      "mergedBy": "jaimejim",
+      "mergeCommit": {
+        "oid": "27ff888caf28d32a9f97f2b3fe44e8d1799f4cf2"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 54,
+      "id": "PR_kwDOBEc_t85dgZBK",
+      "title": "Editorial fixes to text and examples",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/54",
+      "state": "MERGED",
+      "author": "akeranen",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2023-10-23T09:10:56Z",
+      "updatedAt": "2023-11-05T13:40:36Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "main",
+      "baseRefOid": "79e401639e8b2fa1e52da376fb395cb495de1d0c",
+      "headRepository": "core-wg/coap-pubsub",
+      "headRefName": "edit-fixes",
+      "headRefOid": "01f61069a965b8e18b67d37e045a182621591f28",
+      "closedAt": "2023-11-05T13:40:36Z",
+      "mergedAt": "2023-11-05T13:40:36Z",
+      "mergedBy": "jaimejim",
+      "mergeCommit": {
+        "oid": "de4a54e2711759c2ed3a8f6a4dbe2a700fe7ad7a"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 55,
+      "id": "PR_kwDOBEc_t85eni-0",
+      "title": "Ps rev",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/55",
+      "state": "MERGED",
+      "author": "jaimejim",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "added iPATCH",
+      "createdAt": "2023-11-05T13:35:39Z",
+      "updatedAt": "2023-11-05T13:36:20Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "main",
+      "baseRefOid": "27ff888caf28d32a9f97f2b3fe44e8d1799f4cf2",
+      "headRepository": "core-wg/coap-pubsub",
+      "headRefName": "ps-rev",
+      "headRefOid": "a1c5d859960c9475f837d7ca13a06453b6a50cec",
+      "closedAt": "2023-11-05T13:36:20Z",
+      "mergedAt": "2023-11-05T13:36:20Z",
+      "mergedBy": "jaimejim",
+      "mergeCommit": {
+        "oid": "79e401639e8b2fa1e52da376fb395cb495de1d0c"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 57,
+      "id": "PR_kwDOBEc_t85tE-P3",
+      "title": "Ps rev",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/57",
+      "state": "MERGED",
+      "author": "jaimejim",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Small updates pre-submission",
+      "createdAt": "2024-04-18T17:23:54Z",
+      "updatedAt": "2024-04-18T17:34:32Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "main",
+      "baseRefOid": "b23d2a725cd3442e93da76c11730b17917da1e38",
+      "headRepository": "core-wg/coap-pubsub",
+      "headRefName": "ps-rev",
+      "headRefOid": "6094613f441499e7dd6ca42d1d5e9aee8998f0e8",
+      "closedAt": "2024-04-18T17:34:32Z",
+      "mergedAt": "2024-04-18T17:34:32Z",
+      "mergedBy": "jaimejim",
+      "mergeCommit": {
+        "oid": "d3ad85fdab599092c7acc67db8c81ad8e37c21ea"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 58,
+      "id": "PR_kwDOBEc_t85_SKpf",
+      "title": "Nits before -15",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/58",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-10-21T08:45:38Z",
+      "updatedAt": "2024-10-21T11:05:04Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "main",
+      "baseRefOid": "5ad51eeb9e03bd46c2dd595aaf2610a25be90707",
+      "headRepository": "cabo/coap-pubsub",
+      "headRefName": "nits",
+      "headRefOid": "c2978329eebd970a2e006f6696aac8f4ed3dc743",
+      "closedAt": "2024-10-21T11:05:04Z",
+      "mergedAt": "2024-10-21T11:05:04Z",
+      "mergedBy": "jaimejim",
+      "mergeCommit": {
+        "oid": "38ea9fd6804065e4945ff2c7ec9a3c0c27423159"
+      },
       "comments": [],
       "reviews": []
     }
