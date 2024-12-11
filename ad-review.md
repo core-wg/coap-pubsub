@@ -141,7 +141,7 @@ I think this should be better specified: what are "attribute or property"? From 
 
 Why not use any defined CBOR tagged time format? Maybe allowing any is a bad idea, but why not reuse existing time definitions (see tags for dates at  https://www.iana.org/assignments/cbor-tags/cbor-tags.xhtml#tags)
 
- 
+ 3.4.1. {{RFC8949}}
 
 > The broker can use this field to automatically remove topics that are no longer valid.
 
