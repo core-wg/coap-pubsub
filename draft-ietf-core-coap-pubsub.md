@@ -451,7 +451,7 @@ The broker MUST issue a 4.00 (Bad Request) error if a received parameter is inva
       / topic-name /         0: "living-room-sensor",
       / topic-data /         1: "ps/data/1bd0d6d",
       / resource-type /      2: "core.ps.conf"
-      
+
    }
 ~~~~
 
