@@ -1085,7 +1085,7 @@ Reference: [RFC-XXXX]
 
 This specification establishes the "CoAP Pubsub topic-configuration Parameters" IANA subregistry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
-Values in this registry are covered by different registration policies as indicated below. Some policies require Expert Review; guidelines are provided in {{review}}.
+The registration policy is either "Private Use", "Standards Action with Expert Review", or "Specification Required" or "Expert Review" per {{RFC8126}}. "Expert Review" guidelines are provided in {{review}}.
 
 All assignments according to "Standards Action with Expert Review" are made on a "Standards Action" basis per Section 4.9 of {{RFC8126}} with "Expert Review" additionally required per Section 4.5 of {{RFC8126}}. The procedure for early IANA allocation of "standards track code points" defined in {{RFC7120}} also applies. When such a procedure is used, IANA will ask the designated expert(s) to approve the early allocation before registration. In addition, working group chairs are encouraged to consult the expert(s) early during the process outlined in Section 3.1 of {{RFC7120}}.
 
