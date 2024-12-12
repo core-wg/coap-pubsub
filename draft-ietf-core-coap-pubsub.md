@@ -214,7 +214,7 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 * 'topic-data': A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI as a CBOR text string.
 
-* 'resource-type': A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value should be "core.ps.conf".
+* 'resource-type': A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value should be "core.ps.config".
 
 * 'topic-content-format': This optional field specifies the content-format of the topic-data resource. It is represented as an integer, corresponding to the CoAP content-format identifier (e.g., "50" for "application/json") or a custom unregistered integer value.
 
@@ -1058,24 +1058,6 @@ ID: TBD
 
 Reference: {{&SELF}}
 
-## CoAP Pubsub Parameters {#iana-coap-pubsub-parameters}
-
-This specification establishes the "CoAP Pubsub topic-configuration Parameters" IANA subregistry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
-
-The registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{review}}. Values in this registry are covered by different registration policies as indicated. It should be noted that, in addition to the expert review, some portions of the registry require a specification, potentially a Standards Track RFC, to be supplied as well.
-
-The columns of this registry are:
-
-* Name: This is a descriptive name that enables easier reference to the item. The name MUST be unique. It is not used in the encoding.
-
-* CBOR Key: This is the value used as the CBOR key of the item. These values MUST be unique. The value can be a positive integer, a negative integer, or a text string. Different ranges of values use different registration policies {{RFC8126}}. Integer values from -256 to 255 as well as text strings of length 1 are designated as "Standards Action With Expert Review". Integer values from -65536 to -257 and from 256 to 65535, as well as text strings of length 2 are designated as "Specification Required". Integer values greater than 65535 as well as text strings of length greater than 2 are designated as "Expert Review". Integer values less than -65536 are marked as "Private Use".
-
-* CBOR Type: This contains the CBOR type of the item, or a pointer to the registry that defines its type, when that depends on another item.
-
-* Reference: This contains a pointer to the public specification for the item.
-
-This registry has been initially populated with the values in {{fig-CoAP-Pubsub-Parameters}}.
-
 ## Resource Types {#iana-rt}
 
 IANA is asked to enter the following values in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group.
@@ -1098,18 +1080,37 @@ Description: Topic-data resource of a broker
 Reference: [RFC-XXXX]
 ~~~
 
+## CoAP Pubsub Parameters {#iana-coap-pubsub-parameters}
+
+This specification establishes the "CoAP Pubsub topic-configuration Parameters" IANA subregistry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
+
+Values in this registry are covered by different registration policies as indicated below. Some policies require Expert Review; guidelines are provided in {{review}}.
+
+The columns of this registry are:
+
+* Name: This is a descriptive name that enables easier reference to the item. The name MUST be unique. It is not used in the encoding.
+
+* CBOR Key: This is the value used as the CBOR key of the item. These values MUST be unique. The value can be a positive integer, a negative integer, or a text string. Different ranges of values use different registration policies {{RFC8126}}. Integer values from -256 to 255 as well as text strings of length 1 are designated as "Standards Action With Expert Review". Integer values from -65536 to -257 and from 256 to 65535, as well as text strings of length 2 are designated as "Specification Required". Integer values greater than 65535 as well as text strings of length greater than 2 are designated as "Expert Review". Integer values less than -65536 are marked as "Private Use".
+
+* CBOR Type: This contains the CBOR type of the item, or a pointer to the registry that defines its type, when that depends on another item.
+
+* Reference: This contains a pointer to the public specification for the item.
+
+This subregistry has been initially populated with the values in {{fig-CoAP-Pubsub-Parameters}}.
+
 ## Expert Review Instructions {#review}
 
-The IANA Registries established in this document are defined as expert review.
-This section gives some general guidelines for what the experts should be looking for, but they are being designated as experts for a reason so they should be given substantial latitude.
+The IANA registry established in this document is defined as "Standards Action with Expert Review", "Specification Required", and "Epert Review" are three of the registration policies defined for the IANA subregistry established in {{iana-coap-pubsub-parameters}}. This section gives some general guidelines for what the experts should be looking for; however, they are being designated as experts for a reason, so they should be given substantial latitude.
 
 Expert reviewers should take into consideration the following points:
 
-* Point squatting should be discouraged. Reviewers are encouraged to get sufficient information for registration requests to ensure that the usage is not going to duplicate one that is already registered and that the point is likely to be used in deployments. The zones tagged as private use are intended for testing purposes and closed environments, code points in other ranges should not be assigned for testing.
+* Clarity and correctness of registrations. Experts are expected to check the clarity of purpose and use of the requested entries. Experts need to make sure that registered parameters are clearly defined in the corresponding specification. Parameters that do not meet these objectives of clarity and completeness must not be registered.
 
-* Specifications are required for the standards track range of point assignment. Specifications should exist for specification required ranges, but early assignment before a specification is available is considered to be permissible. When specifications are not provided, the description provided needs to have sufficient information to identify what the point is being used for.
+* Point squatting should be discouraged. Reviewers are encouraged to get sufficient information for registration requests to ensure that the usage is not going to duplicate one that is already registered and that the point is likely to be used in deployments. The zones tagged as "Private Use" are intended for testing purposes and closed environments. Code points in other ranges should not be assigned for testing.
 
-* Experts should take into account the expected usage of fields when approving point assignments. The fact that there is a range for Standards Track documents does not mean that a Standards Track document cannot have points assigned outside of that range. The length of the encoded value should be weighed against how many code points of that length are left, the size of device it will be used on, and the number of code points left that encode to that size.
+* Specifications are required for the "Standards Action With Expert Review" range of point assignment. Specifications should exist for "Specification Required" ranges, but early assignment before a specification is available is considered to be permissible. When specifications are not provided, the description provided needs to have sufficient information to identify what the point is being used for.
+
+* Experts should take into account the expected usage of fields when approving point assignment. Documents published via Standards Action can also register points outside the Standards Action range. The length of the encoded value should be weighed against how many code points of that length are left, the size of device it will be used on, and the number of code points left that encode to that size.
 
 --- back
 
@@ -1136,6 +1137,10 @@ Expert reviewers should take into consideration the following points:
 * Clarifications on Topic Configuration creation.
 * Other editorial changes
 
+## Version -15 to -16
+
+* Various updates throughout the document based on AD review.
+* IANA clarifications
 
 # Acknowledgements
 {: numbered='no'}
