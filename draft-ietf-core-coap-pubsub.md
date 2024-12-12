@@ -215,9 +215,9 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 * 'topic-data': A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI as a CBOR text string.
 
-* 'resource-type': A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value should be "core.ps.config".
+* 'resource-type': A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value should be "core.ps.data".
 
-* 'topic-content-format': This optional field specifies the content-format of the topic-data resource. It is represented as an integer, corresponding to the CoAP content-format identifier (e.g., "50" for "application/json") or a custom unregistered integer value.
+* 'topic-content-format': This optional field specifies the CoAP Content-Format identifier of the topic-data resource representation, e.g., 60 for the media-type "application/cbor".
 
 * 'topic-type': An optional field used to indicate the attribute or property of the topic-data resource for the topic. It encodes the attribute as a CBOR text string. Example attributes include "temperature".
 
@@ -402,7 +402,7 @@ Example:
    Content-Format: TBD (application/core-pubsub+cbor)
    Payload:
    {
-      "resource-type": "core.ps.conf",
+      "resource-type": "core.ps.data",
       "topic-type": "temperature"
    }
 
@@ -440,7 +440,7 @@ The broker MUST issue a 4.00 (Bad Request) error if a received parameter is inva
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /         0: "living-room-sensor",
-      / resource-type /      2: "core.ps.conf"
+      / resource-type /      2: "core.ps.data"
    }
 
    Response:
@@ -452,7 +452,7 @@ The broker MUST issue a 4.00 (Bad Request) error if a received parameter is inva
    {
       / topic-name /         0: "living-room-sensor",
       / topic-data /         1: "ps/data/1bd0d6d",
-      / resource-type /      2: "core.ps.conf"
+      / resource-type /      2: "core.ps.data"
 
    }
 ~~~~
@@ -494,14 +494,14 @@ For example, below is a request on the topic "ps/h9392":
    Content-Format: TBD2 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
-      / topic-name /         0: "living-room-sensor",
-      / topic-data /         1: "ps/data/1bd0d6d",
-      / resource-type /      2: "core.ps.conf",
-      / topic-content-format /   3: 112,
-      / topic-type /         4: "temperature",
-      / expiration-date /    5: "2023-04-00T23:59:59Z",
-      / max-subscribers /    6: 100,
-      / topic-history /      7: 10
+      / topic-name /            0: "living-room-sensor",
+      / topic-data /            1: "ps/data/1bd0d6d",
+      / resource-type /         2: "core.ps.data",
+      / topic-content-format /  3: 112,
+      / topic-type /            4: "temperature",
+      / expiration-date /       5: "2023-04-00T23:59:59Z",
+      / max-subscribers /       6: 100,
+      / topic-history /         7: 10
    }
 ~~~~
 
@@ -580,12 +580,12 @@ Example:
    Content-Format: TBD2 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
-      / topic-name /        0: "living-room-sensor",
-      / topic-data /        1: "ps/data/1bd0d6d",
-      / resource-type /     2: "core.ps.conf",
+      / topic-name /            0: "living-room-sensor",
+      / topic-data /            1: "ps/data/1bd0d6d",
+      / resource-type /         2: "core.ps.data",
       / topic-content-format /  3: 112,
-      / topic-type /        4: "temperature",
-      / expiration-date /   5: "2023-04-28T23:59:59Z"
+      / topic-type /            4: "temperature",
+      / expiration-date /       5: "2023-04-28T23:59:59Z"
    }
 
    Response:
@@ -594,14 +594,14 @@ Example:
    Content-Format: TBD2 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
-      / topic-name /        0: "living-room-sensor",
-      / topic-data /        1: "ps/data/1bd0d6d",
-      / resource-type /     2: "core.ps.conf",
+      / topic-name /            0: "living-room-sensor",
+      / topic-data /            1: "ps/data/1bd0d6d",
+      / resource-type /         2: "core.ps.data",
       / topic-content-format /  3: 112,
-      / topic-type /        4: "temperature",
-      / expiration-date /   5: "2023-04-28T23:59:59Z",
-      / max-subscribers /   6: 100,
-      / observer-check /    7: 86400
+      / topic-type /            4: "temperature",
+      / expiration-date /       5: "2023-04-28T23:59:59Z",
+      / max-subscribers /       6: 100,
+      / observer-check /        7: 86400
    }
 ~~~~
 
@@ -630,7 +630,7 @@ Contrary to PUT, iPATCH operations will explicitly update some parameters, leavi
    Content-Format: TBD2 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
-      / expiration-date /   5: "2024-02-28T23:59:59Z",
+      / expiration-date /  5: "2024-02-28T23:59:59Z",
       / max-subscribers /  6: 5
    }
 
@@ -640,14 +640,14 @@ Contrary to PUT, iPATCH operations will explicitly update some parameters, leavi
    Content-Format: TBD2 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
-      / topic-name /        0: "living-room-sensor",
-      / topic-data /        1: "ps/data/1bd0d6d",
-      / resource-type /     2: "core.ps.conf",
+      / topic-name /            0: "living-room-sensor",
+      / topic-data /            1: "ps/data/1bd0d6d",
+      / resource-type /         2: "core.ps.data",
       / topic-content-format /  3: 112,
-      / topic-type /        4: "temperature",
-      / expiration-date /   5: "2024-02-28T23:59:59Z",
-      / max-subscribers /   6: 5,
-      / observer-check /    7: 86400
+      / topic-type /            4: "temperature",
+      / expiration-date /       5: "2024-02-28T23:59:59Z",
+      / max-subscribers /       6: 5,
+      / observer-check /        7: 86400
    }
 ~~~~
 
