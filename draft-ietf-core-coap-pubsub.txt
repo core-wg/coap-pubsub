@@ -1770,21 +1770,21 @@ Internet-Draft                 CoAP pubsub                 December 2024
    policies as indicated below.  Some policies require Expert Review;
    guidelines are provided in Section 6.5.
 
+   All assignments according to "Standards Action with Expert Review"
+   are made on a "Standards Action" basis per Section 4.9 of [RFC8126]
+   with "Expert Review" additionally required per Section 4.5 of
+   [RFC8126].  The procedure for early IANA allocation of "standards
+   track code points" defined in [RFC7120] also applies.  When such a
+   procedure is used, IANA will ask the designated expert(s) to approve
+   the early allocation before registration.  In addition, working group
+   chairs are encouraged to consult the expert(s) early during the
+   process outlined in Section 3.1 of [RFC7120].
+
    The columns of this registry are:
 
    *  Name: This is a descriptive name that enables easier reference to
       the item.  The name MUST be unique.  It is not used in the
       encoding.
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1889,15 +1889,15 @@ Internet-Draft                 CoAP pubsub                 December 2024
               RFC 6838, DOI 10.17487/RFC6838, January 2013,
               <https://www.rfc-editor.org/rfc/rfc6838>.
 
+   [RFC7120]  Cotton, M., "Early IANA Allocation of Standards Track Code
+              Points", BCP 100, RFC 7120, DOI 10.17487/RFC7120, January
+              2014, <https://www.rfc-editor.org/rfc/rfc7120>.
+
    [RFC7252]  Shelby, Z., Hartke, K., and C. Bormann, "The Constrained
               Application Protocol (CoAP)", RFC 7252,
               DOI 10.17487/RFC7252, June 2014,
               <https://www.rfc-editor.org/rfc/rfc7252>.
 
-   [RFC7641]  Hartke, K., "Observing Resources in the Constrained
-              Application Protocol (CoAP)", RFC 7641,
-              DOI 10.17487/RFC7641, September 2015,
-              <https://www.rfc-editor.org/rfc/rfc7641>.
 
 
 
@@ -1905,6 +1905,11 @@ Jimenez, et al.           Expires 15 June 2025                 [Page 34]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
+
+   [RFC7641]  Hartke, K., "Observing Resources in the Constrained
+              Application Protocol (CoAP)", RFC 7641,
+              DOI 10.17487/RFC7641, September 2015,
+              <https://www.rfc-editor.org/rfc/rfc7641>.
 
    [RFC8126]  Cotton, M., Leiba, B., and T. Narten, "Guidelines for
               Writing an IANA Considerations Section in RFCs", BCP 26,
@@ -1944,13 +1949,8 @@ Internet-Draft                 CoAP pubsub                 December 2024
               <https://datatracker.ietf.org/doc/html/draft-hartke-t2trg-
               coral-pubsub-01>.
 
-   [I-D.ietf-ace-oscore-gm-admin]
-              Tiloca, M., Höglund, R., Van der Stok, P., and F.
-              Palombini, "Admin Interface for the OSCORE Group Manager",
-              Work in Progress, Internet-Draft, draft-ietf-ace-oscore-
-              gm-admin-12, 8 July 2024,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-ace-
-              oscore-gm-admin-12>.
+
+
 
 
 
@@ -1961,6 +1961,14 @@ Jimenez, et al.           Expires 15 June 2025                 [Page 35]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
+
+   [I-D.ietf-ace-oscore-gm-admin]
+              Tiloca, M., Höglund, R., Van der Stok, P., and F.
+              Palombini, "Admin Interface for the OSCORE Group Manager",
+              Work in Progress, Internet-Draft, draft-ietf-ace-oscore-
+              gm-admin-12, 8 July 2024,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-ace-
+              oscore-gm-admin-12>.
 
    [I-D.ietf-ace-pubsub-profile]
               Palombini, F., Sengul, C., and M. Tiloca, "Publish-
@@ -2003,20 +2011,17 @@ Internet-Draft                 CoAP pubsub                 December 2024
               (ACE-OAuth)", RFC 9200, DOI 10.17487/RFC9200, August 2022,
               <https://www.rfc-editor.org/rfc/rfc9200>.
 
-   [RFC9338]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
-              Countersignatures", STD 96, RFC 9338,
-              DOI 10.17487/RFC9338, December 2022,
-              <https://www.rfc-editor.org/rfc/rfc9338>.
-
-
-
-
 
 
 Jimenez, et al.           Expires 15 June 2025                 [Page 36]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
+
+   [RFC9338]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
+              Countersignatures", STD 96, RFC 9338,
+              DOI 10.17487/RFC9338, December 2022,
+              <https://www.rfc-editor.org/rfc/rfc9338>.
 
    [RFC9594]  Palombini, F. and M. Tiloca, "Key Provisioning for Group
               Communication Using Authentication and Authorization for
@@ -2061,11 +2066,6 @@ A.2.  Version -14 to -15
 
    *  Clarifications on Topic Configuration creation.
 
-   *  Other editorial changes
-
-
-
-
 
 
 
@@ -2073,6 +2073,8 @@ Jimenez, et al.           Expires 15 June 2025                 [Page 37]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
+
+   *  Other editorial changes
 
 A.3.  Version -15 to -16
 
@@ -2119,10 +2121,64 @@ Authors' Addresses
    Email: michaeljohnkoster@gmail.com
 
 
+
+
+
+
+Jimenez, et al.           Expires 15 June 2025                 [Page 38]
+
+Internet-Draft                 CoAP pubsub                 December 2024
+
+
    Ari Keranen
    Ericsson
    Email: ari.keranen@ericsson.com
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 38]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.           Expires 15 June 2025                 [Page 39]

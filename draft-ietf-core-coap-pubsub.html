@@ -2636,22 +2636,23 @@ Reference: [RFC-XXXX]
         </h3>
 <p id="section-6.4-1">This specification establishes the "CoAP Pubsub topic-configuration Parameters" IANA subregistry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-6.4-1" class="pilcrow">¶</a></p>
 <p id="section-6.4-2">Values in this registry are covered by different registration policies as indicated below. Some policies require Expert Review; guidelines are provided in <a href="#review" class="auto internal xref">Section 6.5</a>.<a href="#section-6.4-2" class="pilcrow">¶</a></p>
-<p id="section-6.4-3">The columns of this registry are:<a href="#section-6.4-3" class="pilcrow">¶</a></p>
+<p id="section-6.4-3">All assignments according to "Standards Action with Expert Review" are made on a "Standards Action" basis per Section 4.9 of <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span> with "Expert Review" additionally required per Section 4.5 of <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>. The procedure for early IANA allocation of "standards track code points" defined in <span>[<a href="#RFC7120" class="cite xref">RFC7120</a>]</span> also applies. When such a procedure is used, IANA will ask the designated expert(s) to approve the early allocation before registration. In addition, working group chairs are encouraged to consult the expert(s) early during the process outlined in Section 3.1 of <span>[<a href="#RFC7120" class="cite xref">RFC7120</a>]</span>.<a href="#section-6.4-3" class="pilcrow">¶</a></p>
+<p id="section-6.4-4">The columns of this registry are:<a href="#section-6.4-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.4-4.1">
-            <p id="section-6.4-4.1.1">Name: This is a descriptive name that enables easier reference to the item. The name MUST be unique. It is not used in the encoding.<a href="#section-6.4-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.4-5.1">
+            <p id="section-6.4-5.1.1">Name: This is a descriptive name that enables easier reference to the item. The name MUST be unique. It is not used in the encoding.<a href="#section-6.4-5.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.4-4.2">
-            <p id="section-6.4-4.2.1">CBOR Key: This is the value used as the CBOR key of the item. These values MUST be unique. The value can be a positive integer, a negative integer, or a text string. Different ranges of values use different registration policies <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>. Integer values from -256 to 255 as well as text strings of length 1 are designated as "Standards Action With Expert Review". Integer values from -65536 to -257 and from 256 to 65535, as well as text strings of length 2 are designated as "Specification Required". Integer values greater than 65535 as well as text strings of length greater than 2 are designated as "Expert Review". Integer values less than -65536 are marked as "Private Use".<a href="#section-6.4-4.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-6.4-5.2">
+            <p id="section-6.4-5.2.1">CBOR Key: This is the value used as the CBOR key of the item. These values MUST be unique. The value can be a positive integer, a negative integer, or a text string. Different ranges of values use different registration policies <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>. Integer values from -256 to 255 as well as text strings of length 1 are designated as "Standards Action With Expert Review". Integer values from -65536 to -257 and from 256 to 65535, as well as text strings of length 2 are designated as "Specification Required". Integer values greater than 65535 as well as text strings of length greater than 2 are designated as "Expert Review". Integer values less than -65536 are marked as "Private Use".<a href="#section-6.4-5.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.4-4.3">
-            <p id="section-6.4-4.3.1">CBOR Type: This contains the CBOR type of the item, or a pointer to the registry that defines its type, when that depends on another item.<a href="#section-6.4-4.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-6.4-5.3">
+            <p id="section-6.4-5.3.1">CBOR Type: This contains the CBOR type of the item, or a pointer to the registry that defines its type, when that depends on another item.<a href="#section-6.4-5.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.4-4.4">
-            <p id="section-6.4-4.4.1">Reference: This contains a pointer to the public specification for the item.<a href="#section-6.4-4.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-6.4-5.4">
+            <p id="section-6.4-5.4.1">Reference: This contains a pointer to the public specification for the item.<a href="#section-6.4-5.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-6.4-5">This subregistry has been initially populated with the values in <a href="#fig-CoAP-Pubsub-Parameters" class="auto internal xref">Figure 5</a>.<a href="#section-6.4-5" class="pilcrow">¶</a></p>
+<p id="section-6.4-6">This subregistry has been initially populated with the values in <a href="#fig-CoAP-Pubsub-Parameters" class="auto internal xref">Figure 5</a>.<a href="#section-6.4-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="review">
@@ -2705,6 +2706,10 @@ Reference: [RFC-XXXX]
 <dt id="RFC6838">[RFC6838]</dt>
         <dd>
 <span class="refAuthor">Freed, N.</span>, <span class="refAuthor">Klensin, J.</span>, and <span class="refAuthor">T. Hansen</span>, <span class="refTitle">"Media Type Specifications and Registration Procedures"</span>, <span class="seriesInfo">BCP 13</span>, <span class="seriesInfo">RFC 6838</span>, <span class="seriesInfo">DOI 10.17487/RFC6838</span>, <time datetime="2013-01" class="refDate">January 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6838">https://www.rfc-editor.org/rfc/rfc6838</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7120">[RFC7120]</dt>
+        <dd>
+<span class="refAuthor">Cotton, M.</span>, <span class="refTitle">"Early IANA Allocation of Standards Track Code Points"</span>, <span class="seriesInfo">BCP 100</span>, <span class="seriesInfo">RFC 7120</span>, <span class="seriesInfo">DOI 10.17487/RFC7120</span>, <time datetime="2014-01" class="refDate">January 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7120">https://www.rfc-editor.org/rfc/rfc7120</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7252">[RFC7252]</dt>
         <dd>
