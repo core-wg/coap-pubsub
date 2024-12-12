@@ -1766,9 +1766,10 @@ Internet-Draft                 CoAP pubsub                 December 2024
    Parameters" IANA subregistry within the "Constrained RESTful
    Environments (CoRE) Parameters" registry group.
 
-   Values in this registry are covered by different registration
-   policies as indicated below.  Some policies require Expert Review;
-   guidelines are provided in Section 6.5.
+   The registration policy is either "Private Use", "Standards Action
+   with Expert Review", or "Specification Required" or "Expert Review"
+   per [RFC8126].  "Expert Review" guidelines are provided in
+   Section 6.5.
 
    All assignments according to "Standards Action with Expert Review"
    are made on a "Standards Action" basis per Section 4.9 of [RFC8126]
@@ -1785,7 +1786,6 @@ Internet-Draft                 CoAP pubsub                 December 2024
    *  Name: This is a descriptive name that enables easier reference to
       the item.  The name MUST be unique.  It is not used in the
       encoding.
-
 
 
 
