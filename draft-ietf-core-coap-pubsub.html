@@ -1049,7 +1049,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Jimenez, et al.</td>
-<td class="center">Expires 14 June 2025</td>
+<td class="center">Expires 15 June 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,12 +1062,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-core-coap-pubsub-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-12-11" class="published">11 December 2024</time>
+<time datetime="2024-12-12" class="published">12 December 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-06-14">14 June 2025</time></dd>
+<dd class="expires"><time datetime="2025-06-15">15 June 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1124,7 +1124,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 14 June 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 15 June 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -2256,8 +2256,10 @@ representation of a list of topics in the collection (see
                   <text x="204" y="180">Delete</text>
                   <text x="324" y="180">Delete</text>
                   <text x="436" y="180">Update</text>
+                  <text x="68" y="196">topic-config</text>
                   <text x="200" y="196">Topic</text>
                   <text x="320" y="196">Topic</text>
+                  <text x="452" y="196">topic-data</text>
                   <text x="264" y="212">DELETED</text>
                 </g>
               </svg><a href="#section-3.1-2.1.1" class="pilcrow">¶</a>
@@ -2285,7 +2287,7 @@ representation of a list of topics in the collection (see
           </h4>
 <p id="section-3.2.1-1">A topic-configuration with a topic-data resource must have been created in order to publish data to it (See <a href="#topic-create" class="auto internal xref">Section 2.4.3</a>) and be in the half-created or fully-created state in order to the publish operation to work (see <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>).<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.1-2">A client can publish data to a topic by submitting the data in a PUT request to the topic-data URI as indicated in its topic resource property. Please note that the topic-data URI is not the same as the topic-configuration URI used for configuring the topic (see <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>).<a href="#section-3.2.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.2.1-3">On success, the broker returns a 2.04 (Updated) response. However, when data is published to the topic for the first time, the broker instead MUST return a 2.01 (Created) response and set the topic in the fully-created state (see <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>).<a href="#section-3.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-3">On success, the broker returns a 2.04 (Changed) response. However, when data is published to the topic for the first time, the broker instead MUST return a 2.01 (Created) response and set the topic in the fully-created state (see <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>).<a href="#section-3.2.1-3" class="pilcrow">¶</a></p>
 <p id="section-3.2.1-4">If the request does not have an acceptable content-format, the broker returns a 4.15 (Unsupported Content-Format) response.<a href="#section-3.2.1-4" class="pilcrow">¶</a></p>
 <p id="section-3.2.1-5">If the client is sending publications too fast, the broker returns a
 4.29 (Too Many Requests) response <span>[<a href="#RFC8516" class="cite xref">RFC8516</a>]</span>.<a href="#section-3.2.1-5" class="pilcrow">¶</a></p>
@@ -2332,7 +2334,7 @@ representation of a list of topics in the collection (see
 
    Response:
 
-   Header: Updated (Code=2.04)
+   Header: Changed (Code=2.04)
 </pre><a href="#section-3.2.1-9" class="pilcrow">¶</a>
 </div>
 </section>
@@ -2342,9 +2344,9 @@ representation of a list of topics in the collection (see
           <h4 id="name-subscribe">
 <a href="#section-3.2.2" class="section-number selfRef">3.2.2. </a><a href="#name-subscribe" class="section-name selfRef">Subscribe</a>
           </h4>
-<p id="section-3.2.2-1">A client can subscribe to a topic-data by sending a CoAP GET request with the Observe set to 0 to subscribe to resource updates <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>.<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-1">A client can subscribe to a topic-data by sending a CoAP GET request with the CoAP Observe Option set to 0 to subscribe to resource updates <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>.<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.2-2">On success, the server hosting the topic-data resource MUST return 2.05 (Content) notifications with the data and the Observe Option. Otherwise, if no Observe Option is present the client should assume that the subscription was not successful.<a href="#section-3.2.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.2.2-3">If the topic is not yet in the fully created state (see <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>) the broker SHOULD return a response code 4.04 (Not Found).<a href="#section-3.2.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-3">If the topic is not yet in the fully created state (see <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>) the broker MUST return a response code 4.04 (Not Found).<a href="#section-3.2.2-3" class="pilcrow">¶</a></p>
 <p id="section-3.2.2-4">The following response codes are defined for the Subscribe operation:<a href="#section-3.2.2-4" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-3.2.2-5">
             <dt id="section-3.2.2-5.1">Success:</dt>
@@ -2359,7 +2361,7 @@ representation of a list of topics in the collection (see
           <dd class="break"></dd>
 </dl>
 <p id="section-3.2.2-6">If the 'max-subscribers' parameter has been reached, the broker must treat that as specified in <span><a href="https://rfc-editor.org/rfc/rfc7641#section-4.1" class="relref">Section 4.1</a> of [<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. The response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.<a href="#section-3.2.2-6" class="pilcrow">¶</a></p>
-<p id="section-3.2.2-7">Example:<a href="#section-3.2.2-7" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-7">Example of a successful subscription followed by one update:<a href="#section-3.2.2-7" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.2.2-8">
 <pre>
    Request:
@@ -2418,8 +2420,8 @@ representation of a list of topics in the collection (see
           </h4>
 <p id="section-3.2.4-1">A publisher MAY delete a topic by making a CoAP DELETE request on the topic-data URI.<a href="#section-3.2.4-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.4-2">On success, the broker returns a 2.02 (Deleted) response.<a href="#section-3.2.4-2" class="pilcrow">¶</a></p>
-<p id="section-3.2.4-3">When a topic-data resource is deleted, the broker SHOULD also delete the topic-data parameter in the topic resource, unsubscribe all subscribers by removing them from the list of observers and return a final 4.04 (Not Found) response as per <span><a href="https://rfc-editor.org/rfc/rfc7641#section-3.2" class="relref">Section 3.2</a> of [<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. The topic is then set back to the half created state as per <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>.<a href="#section-3.2.4-3" class="pilcrow">¶</a></p>
-<p id="section-3.2.4-4">Example:<a href="#section-3.2.4-4" class="pilcrow">¶</a></p>
+<p id="section-3.2.4-3">When a topic-data resource is deleted, the broker MUST also delete the topic-data parameter in the topic resource, unsubscribe all subscribers by removing them from the list of observers and return a final 4.04 (Not Found) response as per <span><a href="https://rfc-editor.org/rfc/rfc7641#section-3.2" class="relref">Section 3.2</a> of [<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. The topic is then set back to the half created state as per <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>.<a href="#section-3.2.4-3" class="pilcrow">¶</a></p>
+<p id="section-3.2.4-4">Example of a successful deletion:<a href="#section-3.2.4-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.2.4-5">
 <pre>
    Request:
@@ -2524,10 +2526,10 @@ representation of a list of topics in the collection (see
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
 <p id="section-5-1">The architecture presented in this document inherits the security considerations from CoAP <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span> and Observe <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, as well as from Web Linking <span>[<a href="#RFC8288" class="cite xref">RFC8288</a>]</span>, Link-Format <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>, and the CoRE Resource Directory <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span>.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2">Communications between each client and the broker MUST be secured, e.g., by using OSCORE <span>[<a href="#RFC8613" class="cite xref">RFC8613</a>]</span> or DTLS <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>. Security considerations for the used secure communication protocols apply too.<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-2">Communications between each client and the broker are RECOMMENDED to be secured, e.g., by using OSCORE <span>[<a href="#RFC8613" class="cite xref">RFC8613</a>]</span> or DTLS <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>. Security considerations for the used secure communication protocols apply too.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <p id="section-5-3">The content published on a topic by a publisher client SHOULD be protected end-to-end between the publisher and all the subscribers to that topic. In such a case, it MUST be possible to assert source authentication of the published data. This can be achieved at the application layer, e.g., by using COSE <span>[<a href="#RFC9052" class="cite xref">RFC9052</a>]</span>, <span>[<a href="#RFC9053" class="cite xref">RFC9053</a>]</span>, <span>[<a href="#RFC9338" class="cite xref">RFC9338</a>]</span>.<a href="#section-5-3" class="pilcrow">¶</a></p>
 <p id="section-5-4">Access control of clients at the broker MAY be enforced for performing discovery operation, and SHOULD be enforced in a fine-grained fashion for operations related to the creation, update, and deletion of topic resources, as well as for operations on topic-data resources such as publication on and subscription to topics. This prevents rogue clients to, among other things, repeatedly create topics at the broker or publish (large) contents, which may result in Denial of Service against the broker and the active subscribers.<a href="#section-5-4" class="pilcrow">¶</a></p>
-<p id="section-5-5">Building on <span>[<a href="#I-D.ietf-ace-key-groupcomm" class="cite xref">I-D.ietf-ace-key-groupcomm</a>]</span>, its application profile for publish-subscribe communication with CoAP <span>[<a href="#I-D.ietf-ace-pubsub-profile" class="cite xref">I-D.ietf-ace-pubsub-profile</a>]</span> provides a security model that can be used in the architecture presented in this document, in order to enable secure communication between the different parties as well as secure, authorized operations of publishers and subscribers that fulfill the requirements above.<a href="#section-5-5" class="pilcrow">¶</a></p>
+<p id="section-5-5">Building on <span>[<a href="#RFC9594" class="cite xref">RFC9594</a>]</span>, its application profile for publish-subscribe communication with CoAP <span>[<a href="#I-D.ietf-ace-pubsub-profile" class="cite xref">I-D.ietf-ace-pubsub-profile</a>]</span> provides a security model that can be used in the architecture presented in this document, in order to enable secure communication between the different parties as well as secure, authorized operations of publishers and subscribers that fulfill the requirements above.<a href="#section-5-5" class="pilcrow">¶</a></p>
 <p id="section-5-6">In particular, the application profile above relies on the ACE framework for Authentication and Authorization in Constrained Environments (ACE) <span>[<a href="#RFC9200" class="cite xref">RFC9200</a>]</span> and defines a method to: authorize publishers and subscribers to perform operations at the broker, with fine-grained access control; authorize publishers and subscribers to obtain the keying material required to take part to a topic managed by the broker; protect published data end-to-end between its publisher and all the subscribers to the targeted topic, ensuring confidentiality, integrity, and source authentication of the published content end-to-end. That approach can be extended to enforce authorization and fine-grained access control for administrator clients that are intended to create, update, and delete topic-configurations at the broker.<a href="#section-5-6" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2776,6 +2778,10 @@ Reference: [RFC-XXXX]
         <dd>
 <span class="refAuthor">Hartke, K.</span>, <span class="refTitle">"Observing Resources in the Constrained Application Protocol (CoAP)"</span>, <span class="seriesInfo">RFC 7641</span>, <span class="seriesInfo">DOI 10.17487/RFC7641</span>, <time datetime="2015-09" class="refDate">September 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7641">https://www.rfc-editor.org/rfc/rfc7641</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC8126">[RFC8126]</dt>
+        <dd>
+<span class="refAuthor">Cotton, M.</span>, <span class="refAuthor">Leiba, B.</span>, and <span class="refAuthor">T. Narten</span>, <span class="refTitle">"Guidelines for Writing an IANA Considerations Section in RFCs"</span>, <span class="seriesInfo">BCP 26</span>, <span class="seriesInfo">RFC 8126</span>, <span class="seriesInfo">DOI 10.17487/RFC8126</span>, <time datetime="2017-06" class="refDate">June 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8126">https://www.rfc-editor.org/rfc/rfc8126</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
         <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
@@ -2787,10 +2793,6 @@ Reference: [RFC-XXXX]
 <dt id="RFC8516">[RFC8516]</dt>
         <dd>
 <span class="refAuthor">Keranen, A.</span>, <span class="refTitle">""Too Many Requests" Response Code for the Constrained Application Protocol"</span>, <span class="seriesInfo">RFC 8516</span>, <span class="seriesInfo">DOI 10.17487/RFC8516</span>, <time datetime="2019-01" class="refDate">January 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8516">https://www.rfc-editor.org/rfc/rfc8516</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC8613">[RFC8613]</dt>
-        <dd>
-<span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Mattsson, J.</span>, <span class="refAuthor">Palombini, F.</span>, and <span class="refAuthor">L. Seitz</span>, <span class="refTitle">"Object Security for Constrained RESTful Environments (OSCORE)"</span>, <span class="seriesInfo">RFC 8613</span>, <span class="seriesInfo">DOI 10.17487/RFC8613</span>, <time datetime="2019-07" class="refDate">July 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8613">https://www.rfc-editor.org/rfc/rfc8613</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8949">[RFC8949]</dt>
         <dd>
@@ -2813,10 +2815,6 @@ Reference: [RFC-XXXX]
         <dd>
 <span class="refAuthor">Hartke, K.</span>, <span class="refTitle">"Publish/Subscribe over the Constrained Application Protocol (CoAP) using the Constrained RESTful Application Language (CoRAL)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-hartke-t2trg-coral-pubsub-01</span>, <time datetime="2020-05-09" class="refDate">9 May 2020</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-hartke-t2trg-coral-pubsub-01">https://datatracker.ietf.org/doc/html/draft-hartke-t2trg-coral-pubsub-01</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.ietf-ace-key-groupcomm">[I-D.ietf-ace-key-groupcomm]</dt>
-        <dd>
-<span class="refAuthor">Palombini, F.</span> and <span class="refAuthor">M. Tiloca</span>, <span class="refTitle">"Key Provisioning for Group Communication using ACE"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-key-groupcomm-19</span>, <time datetime="2024-04-30" class="refDate">30 April 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-19">https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-groupcomm-19</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="I-D.ietf-ace-oscore-gm-admin">[I-D.ietf-ace-oscore-gm-admin]</dt>
         <dd>
 <span class="refAuthor">Tiloca, M.</span>, <span class="refAuthor">Höglund, R.</span>, <span class="refAuthor">Van der Stok, P.</span>, and <span class="refAuthor">F. Palombini</span>, <span class="refTitle">"Admin Interface for the OSCORE Group Manager"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-oscore-gm-admin-12</span>, <time datetime="2024-07-08" class="refDate">8 July 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-oscore-gm-admin-12">https://datatracker.ietf.org/doc/html/draft-ietf-ace-oscore-gm-admin-12</a>&gt;</span>. </dd>
@@ -2829,9 +2827,9 @@ Reference: [RFC-XXXX]
         <dd>
 <span class="refAuthor">Shelby, Z.</span>, <span class="refAuthor">Koster, M.</span>, <span class="refAuthor">Groves, C.</span>, <span class="refAuthor">Zhu, J.</span>, and <span class="refAuthor">B. Silverajan</span>, <span class="refTitle">"Reusable Interface Definitions for Constrained RESTful Environments"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-core-interfaces-14</span>, <time datetime="2019-03-11" class="refDate">11 March 2019</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-interfaces-14">https://datatracker.ietf.org/doc/html/draft-ietf-core-interfaces-14</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC8126">[RFC8126]</dt>
+<dt id="RFC8613">[RFC8613]</dt>
         <dd>
-<span class="refAuthor">Cotton, M.</span>, <span class="refAuthor">Leiba, B.</span>, and <span class="refAuthor">T. Narten</span>, <span class="refTitle">"Guidelines for Writing an IANA Considerations Section in RFCs"</span>, <span class="seriesInfo">BCP 26</span>, <span class="seriesInfo">RFC 8126</span>, <span class="seriesInfo">DOI 10.17487/RFC8126</span>, <time datetime="2017-06" class="refDate">June 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8126">https://www.rfc-editor.org/rfc/rfc8126</a>&gt;</span>. </dd>
+<span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Mattsson, J.</span>, <span class="refAuthor">Palombini, F.</span>, and <span class="refAuthor">L. Seitz</span>, <span class="refTitle">"Object Security for Constrained RESTful Environments (OSCORE)"</span>, <span class="seriesInfo">RFC 8613</span>, <span class="seriesInfo">DOI 10.17487/RFC8613</span>, <time datetime="2019-07" class="refDate">July 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8613">https://www.rfc-editor.org/rfc/rfc8613</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9052">[RFC9052]</dt>
         <dd>
@@ -2850,8 +2848,12 @@ Reference: [RFC-XXXX]
 <span class="refAuthor">Seitz, L.</span>, <span class="refAuthor">Selander, G.</span>, <span class="refAuthor">Wahlstroem, E.</span>, <span class="refAuthor">Erdtman, S.</span>, and <span class="refAuthor">H. Tschofenig</span>, <span class="refTitle">"Authentication and Authorization for Constrained Environments Using the OAuth 2.0 Framework (ACE-OAuth)"</span>, <span class="seriesInfo">RFC 9200</span>, <span class="seriesInfo">DOI 10.17487/RFC9200</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9200">https://www.rfc-editor.org/rfc/rfc9200</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9338">[RFC9338]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Schaad, J.</span>, <span class="refTitle">"CBOR Object Signing and Encryption (COSE): Countersignatures"</span>, <span class="seriesInfo">STD 96</span>, <span class="seriesInfo">RFC 9338</span>, <span class="seriesInfo">DOI 10.17487/RFC9338</span>, <time datetime="2022-12" class="refDate">December 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9338">https://www.rfc-editor.org/rfc/rfc9338</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9594">[RFC9594]</dt>
+      <dd>
+<span class="refAuthor">Palombini, F.</span> and <span class="refAuthor">M. Tiloca</span>, <span class="refTitle">"Key Provisioning for Group Communication Using Authentication and Authorization for Constrained Environments (ACE)"</span>, <span class="seriesInfo">RFC 9594</span>, <span class="seriesInfo">DOI 10.17487/RFC9594</span>, <time datetime="2024-09" class="refDate">September 2024</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9594">https://www.rfc-editor.org/rfc/rfc9594</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>

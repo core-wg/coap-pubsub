@@ -5,10 +5,10 @@
 CoRE Working Group                                            J. Jimenez
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                               M. Koster
-Expires: 14 June 2025                                      Dogtiger Labs
+Expires: 15 June 2025                                      Dogtiger Labs
                                                               A. Keranen
                                                                 Ericsson
-                                                        11 December 2024
+                                                        12 December 2024
 
 
     A publish-subscribe architecture for the Constrained Application
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Jimenez, et al.           Expires 14 June 2025                  [Page 1]
+Jimenez, et al.           Expires 15 June 2025                  [Page 1]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -63,7 +63,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 June 2025.
+   This Internet-Draft will expire on 15 June 2025.
 
 Copyright Notice
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Jimenez, et al.           Expires 14 June 2025                  [Page 2]
+Jimenez, et al.           Expires 15 June 2025                  [Page 2]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -165,7 +165,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                  [Page 3]
+Jimenez, et al.           Expires 15 June 2025                  [Page 3]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -221,7 +221,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                  [Page 4]
+Jimenez, et al.           Expires 15 June 2025                  [Page 4]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -277,7 +277,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                  [Page 5]
+Jimenez, et al.           Expires 15 June 2025                  [Page 5]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -333,7 +333,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                  [Page 6]
+Jimenez, et al.           Expires 15 June 2025                  [Page 6]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -389,7 +389,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                  [Page 7]
+Jimenez, et al.           Expires 15 June 2025                  [Page 7]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -445,7 +445,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                  [Page 8]
+Jimenez, et al.           Expires 15 June 2025                  [Page 8]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -501,7 +501,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                  [Page 9]
+Jimenez, et al.           Expires 15 June 2025                  [Page 9]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -557,7 +557,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 10]
+Jimenez, et al.           Expires 15 June 2025                 [Page 10]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -613,7 +613,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 11]
+Jimenez, et al.           Expires 15 June 2025                 [Page 11]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -669,7 +669,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 12]
+Jimenez, et al.           Expires 15 June 2025                 [Page 12]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -725,7 +725,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 13]
+Jimenez, et al.           Expires 15 June 2025                 [Page 13]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -781,7 +781,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 14]
+Jimenez, et al.           Expires 15 June 2025                 [Page 14]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -837,7 +837,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 15]
+Jimenez, et al.           Expires 15 June 2025                 [Page 15]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -893,7 +893,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 16]
+Jimenez, et al.           Expires 15 June 2025                 [Page 16]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -949,7 +949,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 17]
+Jimenez, et al.           Expires 15 June 2025                 [Page 17]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -1005,7 +1005,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 18]
+Jimenez, et al.           Expires 15 June 2025                 [Page 18]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -1061,7 +1061,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 19]
+Jimenez, et al.           Expires 15 June 2025                 [Page 19]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -1117,7 +1117,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 20]
+Jimenez, et al.           Expires 15 June 2025                 [Page 20]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -1173,7 +1173,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 21]
+Jimenez, et al.           Expires 15 June 2025                 [Page 21]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -1229,7 +1229,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 22]
+Jimenez, et al.           Expires 15 June 2025                 [Page 22]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -1244,7 +1244,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
                    |   ^   \       ___       /   |   ^
              Read/ |   |    '-->  |   |  <--'    |   | Read/
             Update |   |  Delete  |___|  Delete  |   | Update
-                    '-'   Topic          Topic    '-'
+      topic-config  '-'   Topic          Topic    '-'  topic-data
                                  DELETED
 
                        Figure 4: Lifecycle of a Topic
@@ -1285,12 +1285,12 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 23]
+Jimenez, et al.           Expires 15 June 2025                 [Page 23]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
 
-   On success, the broker returns a 2.04 (Updated) response.  However,
+   On success, the broker returns a 2.04 (Changed) response.  However,
    when data is published to the topic for the first time, the broker
    instead MUST return a 2.01 (Created) response and set the topic in
    the fully-created state (see Section 3.1).
@@ -1341,7 +1341,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 24]
+Jimenez, et al.           Expires 15 June 2025                 [Page 24]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -1363,12 +1363,13 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
       Response:
 
-      Header: Updated (Code=2.04)
+      Header: Changed (Code=2.04)
 
 3.2.2.  Subscribe
 
    A client can subscribe to a topic-data by sending a CoAP GET request
-   with the Observe set to 0 to subscribe to resource updates [RFC7641].
+   with the CoAP Observe Option set to 0 to subscribe to resource
+   updates [RFC7641].
 
    On success, the server hosting the topic-data resource MUST return
    2.05 (Content) notifications with the data and the Observe Option.
@@ -1376,7 +1377,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
    that the subscription was not successful.
 
    If the topic is not yet in the fully created state (see Section 3.1)
-   the broker SHOULD return a response code 4.04 (Not Found).
+   the broker MUST return a response code 4.04 (Not Found).
 
    The following response codes are defined for the Subscribe operation:
 
@@ -1390,14 +1391,13 @@ Internet-Draft                 CoAP pubsub                 December 2024
    MUST NOT include an Observe Option, the absence of which signals to
    the subscriber that the subscription failed.
 
-   Example:
+   Example of a successful subscription followed by one update:
 
 
 
 
 
-
-Jimenez, et al.           Expires 14 June 2025                 [Page 25]
+Jimenez, et al.           Expires 15 June 2025                 [Page 25]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -1453,7 +1453,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 26]
+Jimenez, et al.           Expires 15 June 2025                 [Page 26]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -1476,13 +1476,13 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
    On success, the broker returns a 2.02 (Deleted) response.
 
-   When a topic-data resource is deleted, the broker SHOULD also delete
+   When a topic-data resource is deleted, the broker MUST also delete
    the topic-data parameter in the topic resource, unsubscribe all
    subscribers by removing them from the list of observers and return a
    final 4.04 (Not Found) response as per Section 3.2 of [RFC7641].  The
    topic is then set back to the half created state as per Section 3.1.
 
-   Example:
+   Example of a successful deletion:
 
       Request:
 
@@ -1509,7 +1509,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 27]
+Jimenez, et al.           Expires 15 June 2025                 [Page 27]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -1565,7 +1565,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 28]
+Jimenez, et al.           Expires 15 June 2025                 [Page 28]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -1607,9 +1607,10 @@ Internet-Draft                 CoAP pubsub                 December 2024
    from Web Linking [RFC8288], Link-Format [RFC6690], and the CoRE
    Resource Directory [RFC9176].
 
-   Communications between each client and the broker MUST be secured,
-   e.g., by using OSCORE [RFC8613] or DTLS [RFC9147].  Security
-   considerations for the used secure communication protocols apply too.
+   Communications between each client and the broker are RECOMMENDED to
+   be secured, e.g., by using OSCORE [RFC8613] or DTLS [RFC9147].
+   Security considerations for the used secure communication protocols
+   apply too.
 
    The content published on a topic by a publisher client SHOULD be
    protected end-to-end between the publisher and all the subscribers to
@@ -1620,8 +1621,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-
-Jimenez, et al.           Expires 14 June 2025                 [Page 29]
+Jimenez, et al.           Expires 15 June 2025                 [Page 29]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -1635,13 +1635,12 @@ Internet-Draft                 CoAP pubsub                 December 2024
    topics at the broker or publish (large) contents, which may result in
    Denial of Service against the broker and the active subscribers.
 
-   Building on [I-D.ietf-ace-key-groupcomm], its application profile for
-   publish-subscribe communication with CoAP
-   [I-D.ietf-ace-pubsub-profile] provides a security model that can be
-   used in the architecture presented in this document, in order to
-   enable secure communication between the different parties as well as
-   secure, authorized operations of publishers and subscribers that
-   fulfill the requirements above.
+   Building on [RFC9594], its application profile for publish-subscribe
+   communication with CoAP [I-D.ietf-ace-pubsub-profile] provides a
+   security model that can be used in the architecture presented in this
+   document, in order to enable secure communication between the
+   different parties as well as secure, authorized operations of
+   publishers and subscribers that fulfill the requirements above.
 
    In particular, the application profile above relies on the ACE
    framework for Authentication and Authorization in Constrained
@@ -1677,7 +1676,8 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 30]
+
+Jimenez, et al.           Expires 15 June 2025                 [Page 30]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -1733,7 +1733,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 31]
+Jimenez, et al.           Expires 15 June 2025                 [Page 31]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -1789,7 +1789,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 32]
+Jimenez, et al.           Expires 15 June 2025                 [Page 32]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -1845,7 +1845,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 33]
+Jimenez, et al.           Expires 15 June 2025                 [Page 33]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
@@ -1854,6 +1854,11 @@ Internet-Draft                 CoAP pubsub                 December 2024
               Application Protocol (CoAP)", RFC 7641,
               DOI 10.17487/RFC7641, September 2015,
               <https://www.rfc-editor.org/rfc/rfc7641>.
+
+   [RFC8126]  Cotton, M., Leiba, B., and T. Narten, "Guidelines for
+              Writing an IANA Considerations Section in RFCs", BCP 26,
+              RFC 8126, DOI 10.17487/RFC8126, June 2017,
+              <https://www.rfc-editor.org/rfc/rfc8126>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
@@ -1867,11 +1872,6 @@ Internet-Draft                 CoAP pubsub                 December 2024
               Constrained Application Protocol", RFC 8516,
               DOI 10.17487/RFC8516, January 2019,
               <https://www.rfc-editor.org/rfc/rfc8516>.
-
-   [RFC8613]  Selander, G., Mattsson, J., Palombini, F., and L. Seitz,
-              "Object Security for Constrained RESTful Environments
-              (OSCORE)", RFC 8613, DOI 10.17487/RFC8613, July 2019,
-              <https://www.rfc-editor.org/rfc/rfc8613>.
 
    [RFC8949]  Bormann, C. and P. Hoffman, "Concise Binary Object
               Representation (CBOR)", STD 94, RFC 8949,
@@ -1901,17 +1901,10 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 34]
+Jimenez, et al.           Expires 15 June 2025                 [Page 34]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
-
-   [I-D.ietf-ace-key-groupcomm]
-              Palombini, F. and M. Tiloca, "Key Provisioning for Group
-              Communication using ACE", Work in Progress, Internet-
-              Draft, draft-ietf-ace-key-groupcomm-19, 30 April 2024,
-              <https://datatracker.ietf.org/doc/html/draft-ietf-ace-key-
-              groupcomm-19>.
 
    [I-D.ietf-ace-oscore-gm-admin]
               Tiloca, M., Höglund, R., Van der Stok, P., and F.
@@ -1937,10 +1930,10 @@ Internet-Draft                 CoAP pubsub                 December 2024
               2019, <https://datatracker.ietf.org/doc/html/draft-ietf-
               core-interfaces-14>.
 
-   [RFC8126]  Cotton, M., Leiba, B., and T. Narten, "Guidelines for
-              Writing an IANA Considerations Section in RFCs", BCP 26,
-              RFC 8126, DOI 10.17487/RFC8126, June 2017,
-              <https://www.rfc-editor.org/rfc/rfc8126>.
+   [RFC8613]  Selander, G., Mattsson, J., Palombini, F., and L. Seitz,
+              "Object Security for Constrained RESTful Environments
+              (OSCORE)", RFC 8613, DOI 10.17487/RFC8613, July 2019,
+              <https://www.rfc-editor.org/rfc/rfc8613>.
 
    [RFC9052]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
               Structures and Process", STD 96, RFC 9052,
@@ -1950,17 +1943,6 @@ Internet-Draft                 CoAP pubsub                 December 2024
    [RFC9053]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
               Initial Algorithms", RFC 9053, DOI 10.17487/RFC9053,
               August 2022, <https://www.rfc-editor.org/rfc/rfc9053>.
-
-
-
-
-
-
-
-Jimenez, et al.           Expires 14 June 2025                 [Page 35]
-
-Internet-Draft                 CoAP pubsub                 December 2024
-
 
    [RFC9147]  Rescorla, E., Tschofenig, H., and N. Modadugu, "The
               Datagram Transport Layer Security (DTLS) Protocol Version
@@ -1973,10 +1955,23 @@ Internet-Draft                 CoAP pubsub                 December 2024
               (ACE-OAuth)", RFC 9200, DOI 10.17487/RFC9200, August 2022,
               <https://www.rfc-editor.org/rfc/rfc9200>.
 
+
+
+Jimenez, et al.           Expires 15 June 2025                 [Page 35]
+
+Internet-Draft                 CoAP pubsub                 December 2024
+
+
    [RFC9338]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
               Countersignatures", STD 96, RFC 9338,
               DOI 10.17487/RFC9338, December 2022,
               <https://www.rfc-editor.org/rfc/rfc9338>.
+
+   [RFC9594]  Palombini, F. and M. Tiloca, "Key Provisioning for Group
+              Communication Using Authentication and Authorization for
+              Constrained Environments (ACE)", RFC 9594,
+              DOI 10.17487/RFC9594, September 2024,
+              <https://www.rfc-editor.org/rfc/rfc9594>.
 
 Appendix A.  Document Updates
 
@@ -2011,16 +2006,17 @@ A.2.  Version -14 to -15
    *  Added the explicit cancelation of ongoing subscriptions when topic
       configuration parameters are changed.
 
-
-
-Jimenez, et al.           Expires 14 June 2025                 [Page 36]
-
-Internet-Draft                 CoAP pubsub                 December 2024
-
-
    *  Added editorial changes based on feedback.
 
    *  Clarifications on Topic Configuration creation.
+
+
+
+
+Jimenez, et al.           Expires 15 June 2025                 [Page 36]
+
+Internet-Draft                 CoAP pubsub                 December 2024
+
 
    *  Other editorial changes
 
@@ -2069,4 +2065,8 @@ Authors' Addresses
 
 
 
-Jimenez, et al.           Expires 14 June 2025                 [Page 37]
+
+
+
+
+Jimenez, et al.           Expires 15 June 2025                 [Page 37]
