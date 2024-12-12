@@ -39,20 +39,20 @@ normative:
   RFC8516:
   RFC8949:
   RFC9176:
-  RFC8613:
   RFC7641:
+  RFC8126:
 
 informative:
-  RFC8126:
+  RFC8613:
   RFC9052:
   RFC9147:
   RFC9053:
   RFC9200:
   RFC9338:
+  RFC9594:
   I-D.hartke-t2trg-coral-pubsub:
   I-D.ietf-ace-oscore-gm-admin:
   I-D.ietf-ace-pubsub-profile:
-  I-D.ietf-ace-key-groupcomm:
   I-D.ietf-core-interfaces:
 
 entity:
@@ -708,7 +708,7 @@ Also, we might want to restrict the discovery part ONLY for FULLY created topics
                |   ^   \       ___       /   |   ^
          Read/ |   |    '-->  |   |  <--'    |   | Read/
         Update |   |  Delete  |___|  Delete  |   | Update
-                '-'   Topic          Topic    '-'
+  topic-config  '-'   Topic          Topic    '-'  topic-data
                              DELETED
 ~~~~
 {: #fig-life title='Lifecycle of a Topic' artwork-align="center"}
@@ -739,7 +739,7 @@ A topic-configuration with a topic-data resource must have been created in order
 
 A client can publish data to a topic by submitting the data in a PUT request to the topic-data URI as indicated in its topic resource property. Please note that the topic-data URI is not the same as the topic-configuration URI used for configuring the topic (see {{topic-resource-representation}}).
 
-On success, the broker returns a 2.04 (Updated) response. However, when data is published to the topic for the first time, the broker instead MUST return a 2.01 (Created) response and set the topic in the fully-created state (see {{topic-lifecycle}}).
+On success, the broker returns a 2.04 (Changed) response. However, when data is published to the topic for the first time, the broker instead MUST return a 2.01 (Created) response and set the topic in the fully-created state (see {{topic-lifecycle}}).
 
 If the request does not have an acceptable content-format, the broker returns a 4.15 (Unsupported Content-Format) response.
 
@@ -789,16 +789,16 @@ Example of subsequent publication:
 
    Response:
 
-   Header: Updated (Code=2.04)
+   Header: Changed (Code=2.04)
 ~~~~
 
 ### Subscribe {#subscribe}
 
-A client can subscribe to a topic-data by sending a CoAP GET request with the Observe set to 0 to subscribe to resource updates {{RFC7641}}.
+A client can subscribe to a topic-data by sending a CoAP GET request with the CoAP Observe Option set to 0 to subscribe to resource updates {{RFC7641}}.
 
 On success, the server hosting the topic-data resource MUST return 2.05 (Content) notifications with the data and the Observe Option. Otherwise, if no Observe Option is present the client should assume that the subscription was not successful.
 
-If the topic is not yet in the fully created state (see {{topic-lifecycle}}) the broker SHOULD return a response code 4.04 (Not Found).
+If the topic is not yet in the fully created state (see {{topic-lifecycle}}) the broker MUST return a response code 4.04 (Not Found).
 
 <!--
 TODO: After a publisher publishes to the topic-data for the first time, the topic is placed into the FULLY CREATED state.
@@ -823,7 +823,7 @@ If the 'max-subscribers' parameter has been reached, the broker must treat that 
 TODO Right. However, how can this work when the server hosting the topic-data resource is not the broker? The broker knows the maximum number of subscribers, but that separate server does not. Is it just up to a not-specified-here synchronization protocol between the broker and that server?
 -->
 
-Example:
+Example of a successful subscription followed by one update:
 
 ~~~~
    Request:
@@ -883,9 +883,16 @@ A publisher MAY delete a topic by making a CoAP DELETE request on the topic-data
 
 On success, the broker returns a 2.02 (Deleted) response.
 
-When a topic-data resource is deleted, the broker SHOULD also delete the topic-data parameter in the topic resource, unsubscribe all subscribers by removing them from the list of observers and return a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The topic is then set back to the half created state as per {{topic-lifecycle}}.
 
-Example:
+<!-- 
+Q: Same question here, why is this a SHOULD (see comment above).
+A: Changed to MUST but I think we could discuss it. Could the broker have reasons to keep the uri of the topic-data path for later reuse in some cases? for example the broker could also implement a different behaviour for the topic-data deletion, sending back 2.02 but keeping the resource in fully created state without returning a final 4.04 to cancel existing observations BUT still having the resource addressable to allow normal GET on it, for example for retrieving the last published/historical value/s. I am ambivalent here and would welcome guidance from others. I think MUST should not be used if there are no interoperability issues cause by using SHOULD.
+-->
+
+When a topic-data resource is deleted, the broker MUST also delete the topic-data parameter in the topic resource, unsubscribe all subscribers by removing them from the list of observers and return a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The topic is then set back to the half created state as per {{topic-lifecycle}}.
+
+Example of a successful deletion:
+
 
 ~~~~
    Request:
@@ -993,13 +1000,13 @@ Note that the media type application/core-pubsub+cbor MUST be used when these pa
 
 The architecture presented in this document inherits the security considerations from CoAP {{RFC7252}} and Observe {{RFC7641}}, as well as from Web Linking {{RFC8288}}, Link-Format {{RFC6690}}, and the CoRE Resource Directory {{RFC9176}}.
 
-Communications between each client and the broker MUST be secured, e.g., by using OSCORE {{RFC8613}} or DTLS {{RFC9147}}. Security considerations for the used secure communication protocols apply too.
+Communications between each client and the broker are RECOMMENDED to be secured, e.g., by using OSCORE {{RFC8613}} or DTLS {{RFC9147}}. Security considerations for the used secure communication protocols apply too.
 
 The content published on a topic by a publisher client SHOULD be protected end-to-end between the publisher and all the subscribers to that topic. In such a case, it MUST be possible to assert source authentication of the published data. This can be achieved at the application layer, e.g., by using COSE {{RFC9052}}, {{RFC9053}}, {{RFC9338}}.
 
 Access control of clients at the broker MAY be enforced for performing discovery operation, and SHOULD be enforced in a fine-grained fashion for operations related to the creation, update, and deletion of topic resources, as well as for operations on topic-data resources such as publication on and subscription to topics. This prevents rogue clients to, among other things, repeatedly create topics at the broker or publish (large) contents, which may result in Denial of Service against the broker and the active subscribers.
 
-Building on {{I-D.ietf-ace-key-groupcomm}}, its application profile for publish-subscribe communication with CoAP {{I-D.ietf-ace-pubsub-profile}} provides a security model that can be used in the architecture presented in this document, in order to enable secure communication between the different parties as well as secure, authorized operations of publishers and subscribers that fulfill the requirements above.
+Building on {{RFC9594}}, its application profile for publish-subscribe communication with CoAP {{I-D.ietf-ace-pubsub-profile}} provides a security model that can be used in the architecture presented in this document, in order to enable secure communication between the different parties as well as secure, authorized operations of publishers and subscribers that fulfill the requirements above.
 
 In particular, the application profile above relies on the ACE framework for Authentication and Authorization in Constrained Environments (ACE) {{RFC9200}} and defines a method to: authorize publishers and subscribers to perform operations at the broker, with fine-grained access control; authorize publishers and subscribers to obtain the keying material required to take part to a topic managed by the broker; protect published data end-to-end between its publisher and all the subscribers to the targeted topic, ensuring confidentiality, integrity, and source authentication of the published content end-to-end. That approach can be extended to enforce authorization and fine-grained access control for administrator clients that are intended to create, update, and delete topic-configurations at the broker.
 
