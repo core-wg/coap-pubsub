@@ -41,6 +41,7 @@ normative:
   RFC9176:
   RFC7641:
   RFC8126:
+  RFC6838:
 
 informative:
   RFC8613:
@@ -955,20 +956,6 @@ The server hosting the topic-data may have to handle a potentially large number 
 
 In this situation, if a publisher is sending publications too fast, the server SHOULD return a 4.29 (Too Many Requests) response {{RFC8516}}.  As described in {{RFC8516}}, the Max-Age option {{RFC7252}} in this response indicates the number of seconds after which the client may retry. The broker MAY also stop publishing messages from that publisher for the indicated time.
 
-<!--
-TODO DISCUSS
-* "The broker MAY also stop publishing messages from that publisher for the indicated time."
-
-   It's not necessarily the broker, but rather the server hosting the topic-data resource.
-
-   What does "stop publishing" practically mean? Suppose that the client sends a new PUT request right away? What error response does the server send?
-
-   (note that this opens for the server to keep more state about the publishers, which in turn requires pairwise secure association in order to identify them)
-
-   This does not contradict the next, legitimate paragraph on forbidding a client to do so.
-
--->
-
 When a publisher receives a 4.29 (Too Many Requests) response, it MUST NOT send any new publication requests to the same topic-data resource before the time indicated by the Max-Age option has passed.
 
 # CoAP Pubsub Parameters {#pubsub-parameters}
@@ -977,24 +964,25 @@ This document defines parameters used in the messages exchanged between a client
 
 Note that the media type application/core-pubsub+cbor MUST be used when these parameters are transported in the respective message fields.
 
-~~~~
-+------------------+-----------+-----------+------------+
-| Name             | CBOR Key  | CBOR Type | Reference  |
-|------------------|-----------|-----------|------------|
-| topic-name       | TBD1      | tstr      | [RFC-XXXX] |
-| topic-data       | TBD2      | tstr      | [RFC-XXXX] |
-| resource-type    | TBD3      | tstr      | [RFC-XXXX] |
-| topic-content-format | TBD4      | uint      | [RFC-XXXX] |
-| topic-type       | TBD5      | tstr      | [RFC-XXXX] |
-| expiration-date  | TBD6      | tstr      | [RFC-XXXX] |
-| max-subscribers  | TBD7      | uint      | [RFC-XXXX] |
-| observer-check   | TBD8      | uint      | [RFC-XXXX] |
-| topic-history    | TBD9      | uint      | [RFC-XXXX] |
-| initialize       | TBD10     | bool      | [RFC-XXXX] |
-| conf-filter      | TBD11     | array     | [RFC-XXXX] |
-+------------------+-----------+-----------+------------+
-~~~~
+~~~~~~~~~~~
++----------------------+----------+-----------+------------+
+| Name                 | CBOR Key | CBOR Type | Reference  |
+| -------------------- | -------- | --------- | ---------- |
+| topic-name           | TBD1     | tstr      | [RFC-XXXX] |
+| topic-data           | TBD2     | tstr      | [RFC-XXXX] |
+| resource-type        | TBD3     | tstr      | [RFC-XXXX] |
+| topic-content-format | TBD4     | uint      | [RFC-XXXX] |
+| topic-type           | TBD5     | tstr      | [RFC-XXXX] |
+| expiration-date      | TBD6     | tstr      | [RFC-XXXX] |
+| max-subscribers      | TBD7     | uint      | [RFC-XXXX] |
+| observer-check       | TBD8     | uint      | [RFC-XXXX] |
+| topic-history        | TBD9     | uint      | [RFC-XXXX] |
+| initialize           | TBD10    | bool      | [RFC-XXXX] |
+| conf-filter          | TBD11    | array     | [RFC-XXXX] |
++----------------------+----------+-----------+------------+
+~~~~~~~~~~~
 {: #fig-CoAP-Pubsub-Parameters title="CoAP Pubsub Parameters" artwork-align="center"}
+
 
 # Security Considerations {#seccons}
 
@@ -1012,97 +1000,82 @@ In particular, the application profile above relies on the ACE framework for Aut
 
 # IANA Considerations {#iana}
 
+<!-- We register:
+media type: application/core-pubsub+cbor
+content format/type: application/core-pubsub+cbor
+subregistry for the topic config
+-->
+
 This document has the following actions for IANA.
 
 Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with the RFC number of this specification and delete this paragraph.
 
-## Media Type
+## Media Type Registrations {#media-type}
 
-IANA is requested to add the following Media-Type to the "Media Types"
-registry {{!IANA.media-types}}.
+This specification registers the 'application/core-pubsub+cbor' media type for messages of the protocols defined in this document and carrying parameters encoded in CBOR. This registration follows the procedures specified in {{RFC6838}}.
 
-| Name                         | Template                                 | Reference              |
-| core-pubsub+cbor | application/core-pubsub+cbor | RFC XXXX, {{media-type}} |
-{: #new-media-type align="left" title="New Media Type application/core-pubsub+cbor"}
+      Type name: application
 
-{:compact}
-Type name:
-: application
+      Subtype name: core-pubsub+cbor
 
-Subtype name:
-: core-pubsub+cbor
+      Required parameters: N/A
 
-Required parameters:
-: N/A
+      Optional parameters: N/A
 
-Optional parameters:
-: N/A
+      Encoding considerations: Must be encoded as a CBOR map containing the parameters defined in {{&SELF}}.
 
-Encoding considerations:
-: binary (CBOR data item)
+      Security considerations: See {{sec-cons}} of {{&SELF}}.
 
-Security considerations:
-: {{seccons}} of RFC XXXX
+      Interoperability considerations: none
 
-Interoperability considerations:
-: none
+      Published specification: {{&SELF}}
 
-Published specification:
-: {{media-type}} of RFC XXXX
+      Applications that use this media type:  This type is used by clients that create, retrieve, and update topic-configurations at servers acting as a broker.
 
-Applications that use this media type:
-:  This type is used by clients that create, retrieve, and update topic-configurations at servers acting as a pub-sub broker.
+      Fragment identifier considerations: N/A
 
-Fragment identifier considerations:
-: N/A
+      Additional information: N/A
 
-Person & email address to contact for further information:
-: CoRE WG mailing list (core@ietf.org),
-  or IETF Applications and Real-Time Area (art@ietf.org)
+      Person & email address to contact for further information: CoRE WG mailing list (core@ietf.org),
+      or IETF Web and Internet Transport (WIT) Area (wit@ietf.org)
 
-Intended usage:
-: COMMON
+      Intended usage: COMMON
 
-Restrictions on usage:
-: none
+      Restrictions on usage: none
 
-Author/Change controller:
-: IETF
+      Author/Change controller: IETF
 
-Provisional registration:
-: no
+      Provisional registration: no
 
-## Content-Format
+## CoAP Content-Formats {#content-type}
 
-IANA has added the following Content-Formats to the
-{{content-formats ("CoAP Content-Formats")<IANA.core-parameters}}
-sub-registry, within the "Constrained RESTful Environments (CoRE)
-Parameters" Registry {{!IANA.core-parameters}}, as follows:
+IANA is asked to register the following entry to the "CoAP Content-Formats" registry within the "CoRE Parameters" registry group.
 
-| Content Type                | Content Coding | ID   | Reference |
-| application/core-pubsub+cbor     | -              | TBD9 | RFC XXXX  |
-{: align="left" title="New Content-Format"}
+Content Type: application/core-pubsub+cbor
 
-TBD9 is to be assigned from the space 256..999.
+Content Coding: -
+
+ID: TBD
+
+Reference: {{&SELF}}
 
 ## CoAP Pubsub Parameters {#iana-coap-pubsub-parameters}
 
-IANA is asked to register the following entries in the subregistry of the "Constrained RESTful Environments (CoRE) Parameters" registry group.
+This specification establishes the "CoAP Pubsub topic-configuration Parameters" IANA subregistry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
-This specification establishes the "Pubsub Topic Configuration Parameters" IANA registry within the "Constrained RESTful Environments (CoRE)
-Parameters" registry group.
+The registry has been created to use the "Expert Review" registration procedure {{RFC8126}}. Expert review guidelines are provided in {{review}}. Values in this registry are covered by different registration policies as indicated. It should be noted that, in addition to the expert review, some portions of the registry require a specification, potentially a Standards Track RFC, to be supplied as well.
 
 The columns of this registry are:
 
 * Name: This is a descriptive name that enables easier reference to the item. The name MUST be unique. It is not used in the encoding.
 
-* CBOR Key: This is the value used as CBOR key of the item. These values MUST be unique. The value can be a positive integer, a negative integer, or a text string. Different ranges of values use different registration policies {{RFC8126}}. Integer values from -256 to 255 as well as text strings of length 1 are designated as "Standards Action With Expert Review". Integer values from -65536 to -257 and from 256 to 65535, as well as text strings of length 2 are designated as "Specification Required". Integer values greater than 65535 as well as text strings of length greater than 2 are designated as "Expert Review". Integer values less than -65536 are marked as "Private Use".
+* CBOR Key: This is the value used as the CBOR key of the item. These values MUST be unique. The value can be a positive integer, a negative integer, or a text string. Different ranges of values use different registration policies {{RFC8126}}. Integer values from -256 to 255 as well as text strings of length 1 are designated as "Standards Action With Expert Review". Integer values from -65536 to -257 and from 256 to 65535, as well as text strings of length 2 are designated as "Specification Required". Integer values greater than 65535 as well as text strings of length greater than 2 are designated as "Expert Review". Integer values less than -65536 are marked as "Private Use".
 
 * CBOR Type: This contains the CBOR type of the item, or a pointer to the registry that defines its type, when that depends on another item.
 
 * Reference: This contains a pointer to the public specification for the item.
 
-The registry is initially populated with the entries in {{fig-CoAP-Pubsub-Parameters}} of {{pubsub-parameters}}.
+This registry has been initially populated with the values in {{fig-CoAP-Pubsub-Parameters}}.
 
 ## Resource Types {#iana-rt}
 
@@ -1125,6 +1098,19 @@ Value: core.ps.data
 Description: Topic-data resource of a broker
 Reference: [RFC-XXXX]
 ~~~
+
+## Expert Review Instructions {#review}
+
+The IANA Registries established in this document are defined as expert review.
+This section gives some general guidelines for what the experts should be looking for, but they are being designated as experts for a reason so they should be given substantial latitude.
+
+Expert reviewers should take into consideration the following points:
+
+* Point squatting should be discouraged. Reviewers are encouraged to get sufficient information for registration requests to ensure that the usage is not going to duplicate one that is already registered and that the point is likely to be used in deployments. The zones tagged as private use are intended for testing purposes and closed environments, code points in other ranges should not be assigned for testing.
+
+* Specifications are required for the standards track range of point assignment. Specifications should exist for specification required ranges, but early assignment before a specification is available is considered to be permissible. When specifications are not provided, the description provided needs to have sufficient information to identify what the point is being used for.
+
+* Experts should take into account the expected usage of fields when approving point assignments. The fact that there is a range for Standards Track documents does not mean that a Standards Track document cannot have points assigned outside of that range. The length of the encoded value should be weighed against how many code points of that length are left, the size of device it will be used on, and the number of code points left that encode to that size.
 
 --- back
 
