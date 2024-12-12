@@ -884,7 +884,7 @@ A publisher MAY delete a topic by making a CoAP DELETE request on the topic-data
 On success, the broker returns a 2.02 (Deleted) response.
 
 
-<!-- 
+<!--
 Q: Same question here, why is this a SHOULD (see comment above).
 A: Changed to MUST but I think we could discuss it. Could the broker have reasons to keep the uri of the topic-data path for later reuse in some cases? for example the broker could also implement a different behaviour for the topic-data deletion, sending back 2.02 but keeping the resource in fully created state without returning a final 4.04 to cancel existing observations BUT still having the resource addressable to allow normal GET on it, for example for retrieving the last published/historical value/s. I am ambivalent here and would welcome guidance from others. I think MUST should not be used if there are no interoperability issues cause by using SHOULD.
 -->
