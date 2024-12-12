@@ -126,16 +126,17 @@ Internet-Draft                 CoAP pubsub                 December 2024
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  30
      6.1.  Media Type Registrations  . . . . . . . . . . . . . . . .  30
      6.2.  CoAP Content-Formats  . . . . . . . . . . . . . . . . . .  31
-     6.3.  CoAP Pubsub Parameters  . . . . . . . . . . . . . . . . .  32
-     6.4.  Resource Types  . . . . . . . . . . . . . . . . . . . . .  32
+     6.3.  Resource Types  . . . . . . . . . . . . . . . . . . . . .  32
+     6.4.  CoAP Pubsub Parameters  . . . . . . . . . . . . . . . . .  32
      6.5.  Expert Review Instructions  . . . . . . . . . . . . . . .  33
    7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  34
      7.1.  Normative References  . . . . . . . . . . . . . . . . . .  34
      7.2.  Informative References  . . . . . . . . . . . . . . . . .  35
-   Appendix A.  Document Updates . . . . . . . . . . . . . . . . . .  36
+   Appendix A.  Document Updates . . . . . . . . . . . . . . . . . .  37
      A.1.  Version -13 to -14  . . . . . . . . . . . . . . . . . . .  37
      A.2.  Version -14 to -15  . . . . . . . . . . . . . . . . . . .  37
-   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  37
+     A.3.  Version -15 to -16  . . . . . . . . . . . . . . . . . . .  38
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  38
    Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  38
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  38
 
@@ -161,7 +162,6 @@ Internet-Draft                 CoAP pubsub                 December 2024
    themselves.  A publish/subscribe-oriented architecture where nodes
    exchange data via topics through a broker entity might fit these
    nodes better.
-
 
 
 
@@ -437,7 +437,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
    *  'resource-type': A required field used to indicate the resource
       type of the topic-data resource for the topic.  It encodes the
       resource type as a CBOR text string.  The value should be
-      "core.ps.conf".
+      "core.ps.config".
 
 
 
@@ -1738,25 +1738,61 @@ Jimenez, et al.           Expires 15 June 2025                 [Page 31]
 Internet-Draft                 CoAP pubsub                 December 2024
 
 
-6.3.  CoAP Pubsub Parameters
+6.3.  Resource Types
+
+   IANA is asked to enter the following values in the "Resource Type
+   (rt=) Link Target Attribute Values" registry within the "Constrained
+   Restful Environments (CoRE) Parameters" registry group.
+
+ Value: core.ps
+ Description: Publish-Subscribe Broker
+ Reference: [RFC-XXXX]
+
+ Value: core.ps.coll
+ Description: Topic-collection resource of a Publish-Subscribe Broker
+ Reference: [RFC-XXXX]
+
+ Value: core.ps.conf
+ Description: Topic-configuration resource of a Publish-Subscribe Broker
+ Reference: [RFC-XXXX]
+
+ Value: core.ps.data
+ Description: Topic-data resource of a broker
+ Reference: [RFC-XXXX]
+
+6.4.  CoAP Pubsub Parameters
 
    This specification establishes the "CoAP Pubsub topic-configuration
    Parameters" IANA subregistry within the "Constrained RESTful
    Environments (CoRE) Parameters" registry group.
 
-   The registry has been created to use the "Expert Review" registration
-   procedure [RFC8126].  Expert review guidelines are provided in
-   Section 6.5.  Values in this registry are covered by different
-   registration policies as indicated.  It should be noted that, in
-   addition to the expert review, some portions of the registry require
-   a specification, potentially a Standards Track RFC, to be supplied as
-   well.
+   Values in this registry are covered by different registration
+   policies as indicated below.  Some policies require Expert Review;
+   guidelines are provided in Section 6.5.
 
    The columns of this registry are:
 
    *  Name: This is a descriptive name that enables easier reference to
       the item.  The name MUST be unique.  It is not used in the
       encoding.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.           Expires 15 June 2025                 [Page 32]
+
+Internet-Draft                 CoAP pubsub                 December 2024
+
 
    *  CBOR Key: This is the value used as the CBOR key of the item.
       These values MUST be unique.  The value can be a positive integer,
@@ -1777,71 +1813,35 @@ Internet-Draft                 CoAP pubsub                 December 2024
    *  Reference: This contains a pointer to the public specification for
       the item.
 
-   This registry has been initially populated with the values in
+   This subregistry has been initially populated with the values in
    Figure 5.
-
-6.4.  Resource Types
-
-   IANA is asked to enter the following values in the "Resource Type
-   (rt=) Link Target Attribute Values" registry within the "Constrained
-   Restful Environments (CoRE) Parameters" registry group.
-
-
-
-
-Jimenez, et al.           Expires 15 June 2025                 [Page 32]
-
-Internet-Draft                 CoAP pubsub                 December 2024
-
-
- Value: core.ps
- Description: Publish-Subscribe Broker
- Reference: [RFC-XXXX]
-
- Value: core.ps.coll
- Description: Topic-collection resource of a Publish-Subscribe Broker
- Reference: [RFC-XXXX]
-
- Value: core.ps.conf
- Description: Topic-configuration resource of a Publish-Subscribe Broker
- Reference: [RFC-XXXX]
-
- Value: core.ps.data
- Description: Topic-data resource of a broker
- Reference: [RFC-XXXX]
 
 6.5.  Expert Review Instructions
 
-   The IANA Registries established in this document are defined as
-   expert review.  This section gives some general guidelines for what
-   the experts should be looking for, but they are being designated as
-   experts for a reason so they should be given substantial latitude.
+   The IANA registry established in this document is defined as
+   "Standards Action with Expert Review", "Specification Required", and
+   "Epert Review" are three of the registration policies defined for the
+   IANA subregistry established in Section 6.4.  This section gives some
+   general guidelines for what the experts should be looking for;
+   however, they are being designated as experts for a reason, so they
+   should be given substantial latitude.
 
    Expert reviewers should take into consideration the following points:
+
+   *  Clarity and correctness of registrations.  Experts are expected to
+      check the clarity of purpose and use of the requested entries.
+      Experts need to make sure that registered parameters are clearly
+      defined in the corresponding specification.  Parameters that do
+      not meet these objectives of clarity and completeness must not be
+      registered.
 
    *  Point squatting should be discouraged.  Reviewers are encouraged
       to get sufficient information for registration requests to ensure
       that the usage is not going to duplicate one that is already
       registered and that the point is likely to be used in deployments.
-      The zones tagged as private use are intended for testing purposes
-      and closed environments, code points in other ranges should not be
-      assigned for testing.
-
-   *  Specifications are required for the standards track range of point
-      assignment.  Specifications should exist for specification
-      required ranges, but early assignment before a specification is
-      available is considered to be permissible.  When specifications
-      are not provided, the description provided needs to have
-      sufficient information to identify what the point is being used
-      for.
-
-
-
-
-
-
-
-
+      The zones tagged as "Private Use" are intended for testing
+      purposes and closed environments.  Code points in other ranges
+      should not be assigned for testing.
 
 
 
@@ -1850,14 +1850,21 @@ Jimenez, et al.           Expires 15 June 2025                 [Page 33]
 Internet-Draft                 CoAP pubsub                 December 2024
 
 
+   *  Specifications are required for the "Standards Action With Expert
+      Review" range of point assignment.  Specifications should exist
+      for "Specification Required" ranges, but early assignment before a
+      specification is available is considered to be permissible.  When
+      specifications are not provided, the description provided needs to
+      have sufficient information to identify what the point is being
+      used for.
+
    *  Experts should take into account the expected usage of fields when
-      approving point assignments.  The fact that there is a range for
-      Standards Track documents does not mean that a Standards Track
-      document cannot have points assigned outside of that range.  The
-      length of the encoded value should be weighed against how many
-      code points of that length are left, the size of device it will be
-      used on, and the number of code points left that encode to that
-      size.
+      approving point assignment.  Documents published via Standards
+      Action can also register points outside the Standards Action
+      range.  The length of the encoded value should be weighed against
+      how many code points of that length are left, the size of device
+      it will be used on, and the number of code points left that encode
+      to that size.
 
 7.  References
 
@@ -1892,19 +1899,17 @@ Internet-Draft                 CoAP pubsub                 December 2024
               DOI 10.17487/RFC7641, September 2015,
               <https://www.rfc-editor.org/rfc/rfc7641>.
 
-   [RFC8126]  Cotton, M., Leiba, B., and T. Narten, "Guidelines for
-              Writing an IANA Considerations Section in RFCs", BCP 26,
-              RFC 8126, DOI 10.17487/RFC8126, June 2017,
-              <https://www.rfc-editor.org/rfc/rfc8126>.
-
-
-
 
 
 Jimenez, et al.           Expires 15 June 2025                 [Page 34]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
+
+   [RFC8126]  Cotton, M., Leiba, B., and T. Narten, "Guidelines for
+              Writing an IANA Considerations Section in RFCs", BCP 26,
+              RFC 8126, DOI 10.17487/RFC8126, June 2017,
+              <https://www.rfc-editor.org/rfc/rfc8126>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
@@ -1947,13 +1952,8 @@ Internet-Draft                 CoAP pubsub                 December 2024
               <https://datatracker.ietf.org/doc/html/draft-ietf-ace-
               oscore-gm-admin-12>.
 
-   [I-D.ietf-ace-pubsub-profile]
-              Palombini, F., Sengul, C., and M. Tiloca, "Publish-
-              Subscribe Profile for Authentication and Authorization for
-              Constrained Environments (ACE)", Work in Progress,
-              Internet-Draft, draft-ietf-ace-pubsub-profile-10, 7 July
-              2024, <https://datatracker.ietf.org/doc/html/draft-ietf-
-              ace-pubsub-profile-10>.
+
+
 
 
 
@@ -1961,6 +1961,14 @@ Jimenez, et al.           Expires 15 June 2025                 [Page 35]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
+
+   [I-D.ietf-ace-pubsub-profile]
+              Palombini, F., Sengul, C., and M. Tiloca, "Publish-
+              Subscribe Profile for Authentication and Authorization for
+              Constrained Environments (ACE)", Work in Progress,
+              Internet-Draft, draft-ietf-ace-pubsub-profile-10, 7 July
+              2024, <https://datatracker.ietf.org/doc/html/draft-ietf-
+              ace-pubsub-profile-10>.
 
    [I-D.ietf-core-interfaces]
               Shelby, Z., Koster, M., Groves, C., Zhu, J., and B.
@@ -2000,6 +2008,16 @@ Internet-Draft                 CoAP pubsub                 December 2024
               DOI 10.17487/RFC9338, December 2022,
               <https://www.rfc-editor.org/rfc/rfc9338>.
 
+
+
+
+
+
+Jimenez, et al.           Expires 15 June 2025                 [Page 36]
+
+Internet-Draft                 CoAP pubsub                 December 2024
+
+
    [RFC9594]  Palombini, F. and M. Tiloca, "Key Provisioning for Group
               Communication Using Authentication and Authorization for
               Constrained Environments (ACE)", RFC 9594,
@@ -2009,14 +2027,6 @@ Internet-Draft                 CoAP pubsub                 December 2024
 Appendix A.  Document Updates
 
    This section is to be removed before publishing as an RFC.
-
-
-
-
-Jimenez, et al.           Expires 15 June 2025                 [Page 36]
-
-Internet-Draft                 CoAP pubsub                 December 2024
-
 
 A.1.  Version -13 to -14
 
@@ -2053,16 +2063,6 @@ A.2.  Version -14 to -15
 
    *  Other editorial changes
 
-Acknowledgements
-
-   The current version of this document contains a substantial
-   contribution by Klaus Hartke's proposal
-   [I-D.hartke-t2trg-coral-pubsub], which defines the topic resource
-   model and structure as well as the topic lifecycle and interactions.
-   It also follows a similar architectural design as that provided by
-   Marco Tiloca's [I-D.ietf-ace-oscore-gm-admin].
-
-
 
 
 
@@ -2073,6 +2073,21 @@ Jimenez, et al.           Expires 15 June 2025                 [Page 37]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
+
+A.3.  Version -15 to -16
+
+   *  Various updates throughout the document based on AD review.
+
+   *  IANA clarifications
+
+Acknowledgements
+
+   The current version of this document contains a substantial
+   contribution by Klaus Hartke's proposal
+   [I-D.hartke-t2trg-coral-pubsub], which defines the topic resource
+   model and structure as well as the topic lifecycle and interactions.
+   It also follows a similar architectural design as that provided by
+   Marco Tiloca's [I-D.ietf-ace-oscore-gm-admin].
 
    The authors would like to also thank Marco Tiloca, Francesca
    Palombini, Carsten Bormann, Hannes Tschofenig, Zach Shelby, Mohit
@@ -2107,21 +2122,6 @@ Authors' Addresses
    Ari Keranen
    Ericsson
    Email: ari.keranen@ericsson.com
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
