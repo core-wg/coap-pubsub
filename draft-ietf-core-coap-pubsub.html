@@ -1719,10 +1719,10 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
               <p id="section-2.2.1-2.2.1">'topic-data': A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI as a CBOR text string.<a href="#section-2.2.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.3">
-              <p id="section-2.2.1-2.3.1">'resource-type': A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value should be "core.ps.config".<a href="#section-2.2.1-2.3.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.1-2.3.1">'resource-type': A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value should be "core.ps.data".<a href="#section-2.2.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.4">
-              <p id="section-2.2.1-2.4.1">'topic-content-format': This optional field specifies the content-format of the topic-data resource. It is represented as an integer, corresponding to the CoAP content-format identifier (e.g., "50" for "application/json") or a custom unregistered integer value.<a href="#section-2.2.1-2.4.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.1-2.4.1">'topic-content-format': This optional field specifies the CoAP Content-Format identifier of the topic-data resource representation, e.g., 60 for the media-type "application/cbor".<a href="#section-2.2.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.5">
               <p id="section-2.2.1-2.5.1">'topic-type': An optional field used to indicate the attribute or property of the topic-data resource for the topic. It encodes the attribute as a CBOR text string. Example attributes include "temperature".<a href="#section-2.2.1-2.5.1" class="pilcrow">¶</a></p>
@@ -1918,7 +1918,7 @@ representation of a list of topics in the collection (see
    Content-Format: TBD (application/core-pubsub+cbor)
    Payload:
    {
-      "resource-type": "core.ps.conf",
+      "resource-type": "core.ps.data",
       "topic-type": "temperature"
    }
 
@@ -1954,7 +1954,7 @@ representation of a list of topics in the collection (see
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /         0: "living-room-sensor",
-      / resource-type /      2: "core.ps.conf"
+      / resource-type /      2: "core.ps.data"
    }
 
    Response:
@@ -1966,7 +1966,7 @@ representation of a list of topics in the collection (see
    {
       / topic-name /         0: "living-room-sensor",
       / topic-data /         1: "ps/data/1bd0d6d",
-      / resource-type /      2: "core.ps.conf"
+      / resource-type /      2: "core.ps.data"
 
    }
 </pre><a href="#section-2.4.3-8" class="pilcrow">¶</a>
@@ -2005,14 +2005,14 @@ representation of a list of topics in the collection (see
    Content-Format: TBD2 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
-      / topic-name /         0: "living-room-sensor",
-      / topic-data /         1: "ps/data/1bd0d6d",
-      / resource-type /      2: "core.ps.conf",
-      / topic-content-format /   3: 112,
-      / topic-type /         4: "temperature",
-      / expiration-date /    5: "2023-04-00T23:59:59Z",
-      / max-subscribers /    6: 100,
-      / topic-history /      7: 10
+      / topic-name /            0: "living-room-sensor",
+      / topic-data /            1: "ps/data/1bd0d6d",
+      / resource-type /         2: "core.ps.data",
+      / topic-content-format /  3: 112,
+      / topic-type /            4: "temperature",
+      / expiration-date /       5: "2023-04-00T23:59:59Z",
+      / max-subscribers /       6: 100,
+      / topic-history /         7: 10
    }
 </pre><a href="#section-2.5.1-6" class="pilcrow">¶</a>
 </div>
@@ -2077,12 +2077,12 @@ representation of a list of topics in the collection (see
    Content-Format: TBD2 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
-      / topic-name /        0: "living-room-sensor",
-      / topic-data /        1: "ps/data/1bd0d6d",
-      / resource-type /     2: "core.ps.conf",
+      / topic-name /            0: "living-room-sensor",
+      / topic-data /            1: "ps/data/1bd0d6d",
+      / resource-type /         2: "core.ps.data",
       / topic-content-format /  3: 112,
-      / topic-type /        4: "temperature",
-      / expiration-date /   5: "2023-04-28T23:59:59Z"
+      / topic-type /            4: "temperature",
+      / expiration-date /       5: "2023-04-28T23:59:59Z"
    }
 
    Response:
@@ -2091,14 +2091,14 @@ representation of a list of topics in the collection (see
    Content-Format: TBD2 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
-      / topic-name /        0: "living-room-sensor",
-      / topic-data /        1: "ps/data/1bd0d6d",
-      / resource-type /     2: "core.ps.conf",
+      / topic-name /            0: "living-room-sensor",
+      / topic-data /            1: "ps/data/1bd0d6d",
+      / resource-type /         2: "core.ps.data",
       / topic-content-format /  3: 112,
-      / topic-type /        4: "temperature",
-      / expiration-date /   5: "2023-04-28T23:59:59Z",
-      / max-subscribers /   6: 100,
-      / observer-check /    7: 86400
+      / topic-type /            4: "temperature",
+      / expiration-date /       5: "2023-04-28T23:59:59Z",
+      / max-subscribers /       6: 100,
+      / observer-check /        7: 86400
    }
 </pre><a href="#section-2.5.3-7" class="pilcrow">¶</a>
 </div>
@@ -2135,7 +2135,7 @@ representation of a list of topics in the collection (see
    Content-Format: TBD2 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
-      / expiration-date /   5: "2024-02-28T23:59:59Z",
+      / expiration-date /  5: "2024-02-28T23:59:59Z",
       / max-subscribers /  6: 5
    }
 
@@ -2145,14 +2145,14 @@ representation of a list of topics in the collection (see
    Content-Format: TBD2 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
-      / topic-name /        0: "living-room-sensor",
-      / topic-data /        1: "ps/data/1bd0d6d",
-      / resource-type /     2: "core.ps.conf",
+      / topic-name /            0: "living-room-sensor",
+      / topic-data /            1: "ps/data/1bd0d6d",
+      / resource-type /         2: "core.ps.data",
       / topic-content-format /  3: 112,
-      / topic-type /        4: "temperature",
-      / expiration-date /   5: "2024-02-28T23:59:59Z",
-      / max-subscribers /   6: 5,
-      / observer-check /    7: 86400
+      / topic-type /            4: "temperature",
+      / expiration-date /       5: "2024-02-28T23:59:59Z",
+      / max-subscribers /       6: 5,
+      / observer-check /        7: 86400
    }
 </pre><a href="#section-2.5.4-5" class="pilcrow">¶</a>
 </div>

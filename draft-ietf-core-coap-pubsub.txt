@@ -91,11 +91,11 @@ Table of Contents
        2.2.1.  Topic Properties  . . . . . . . . . . . . . . . . . .   8
      2.3.  Discovery . . . . . . . . . . . . . . . . . . . . . . . .  10
        2.3.1.  Broker Discovery  . . . . . . . . . . . . . . . . . .  10
-       2.3.2.  Topic Collection Discovery  . . . . . . . . . . . . .  11
+       2.3.2.  Topic Collection Discovery  . . . . . . . . . . . . .  10
        2.3.3.  Topic-Configuration Discovery . . . . . . . . . . . .  11
        2.3.4.  Topic-Data Discovery  . . . . . . . . . . . . . . . .  12
      2.4.  Topic Collection Interactions . . . . . . . . . . . . . .  12
-       2.4.1.  Retrieving all topic-configurations . . . . . . . . .  13
+       2.4.1.  Retrieving all topic-configurations . . . . . . . . .  12
        2.4.2.  Getting topic-configurations by Properties  . . . . .  13
        2.4.3.  Creating a Topic  . . . . . . . . . . . . . . . . . .  14
      2.5.  Topic-Configuration Interactions  . . . . . . . . . . . .  15
@@ -437,11 +437,11 @@ Internet-Draft                 CoAP pubsub                 December 2024
    *  'resource-type': A required field used to indicate the resource
       type of the topic-data resource for the topic.  It encodes the
       resource type as a CBOR text string.  The value should be
-      "core.ps.config".
+      "core.ps.data".
 
-
-
-
+   *  'topic-content-format': This optional field specifies the CoAP
+      Content-Format identifier of the topic-data resource
+      representation, e.g., 60 for the media-type "application/cbor".
 
 
 
@@ -449,12 +449,6 @@ Jimenez, et al.           Expires 15 June 2025                  [Page 8]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
-
-   *  'topic-content-format': This optional field specifies the content-
-      format of the topic-data resource.  It is represented as an
-      integer, corresponding to the CoAP content-format identifier
-      (e.g., "50" for "application/json") or a custom unregistered
-      integer value.
 
    *  'topic-type': An optional field used to indicate the attribute or
       property of the topic-data resource for the topic.  It encodes the
@@ -496,7 +490,13 @@ Internet-Draft                 CoAP pubsub                 December 2024
       context is required (e.g., for data analytics or auditing).  If
       this field is not present, no historical data will be stored.
 
-
+   *  'initialize': An optional boolean field that, when set to true,
+      allows the topic-data path to be pre-populated with an empty
+      string or other initial value during the topic creation process.
+      This behavior facilitates one-shot publication and topic creation,
+      enabling CoAP clients to subscribe by default without encountering
+      a 4.04 Not Found error.  If this field is not present, the broker
+      behaves as usual, and the topic-data path is not initialized.
 
 
 
@@ -505,14 +505,6 @@ Jimenez, et al.           Expires 15 June 2025                  [Page 9]
 
 Internet-Draft                 CoAP pubsub                 December 2024
 
-
-   *  'initialize': An optional boolean field that, when set to true,
-      allows the topic-data path to be pre-populated with an empty
-      string or other initial value during the topic creation process.
-      This behavior facilitates one-shot publication and topic creation,
-      enabling CoAP clients to subscribe by default without encountering
-      a 4.04 Not Found error.  If this field is not present, the broker
-      behaves as usual, and the topic-data path is not initialized.
 
 2.3.  Discovery
 
@@ -548,20 +540,6 @@ Internet-Draft                 CoAP pubsub                 December 2024
       Payload:
       <coap://mythinguri.com/broker/v1>;rt="core.ps"
 
-
-
-
-
-
-
-
-
-
-Jimenez, et al.           Expires 15 June 2025                 [Page 10]
-
-Internet-Draft                 CoAP pubsub                 December 2024
-
-
 2.3.2.  Topic Collection Discovery
 
    A Broker SHOULD offer a topic discovery entry point to enable clients
@@ -573,6 +551,16 @@ Internet-Draft                 CoAP pubsub                 December 2024
    The specific resource path is left for implementations, examples in
    this document use the "/ps" path.  The interactions with a topic
    collection are further defined in Section 2.4.
+
+
+
+
+
+
+Jimenez, et al.           Expires 15 June 2025                 [Page 10]
+
+Internet-Draft                 CoAP pubsub                 December 2024
+
 
    Since the representation of the topic collection resource includes
    the links to the associated topic resources, it is not required to
@@ -608,16 +596,6 @@ Internet-Draft                 CoAP pubsub                 December 2024
    rt=core.ps.conf that returns a list of topics, as the list of links
    to the corresponding topic resources.
 
-
-
-
-
-
-Jimenez, et al.           Expires 15 June 2025                 [Page 11]
-
-Internet-Draft                 CoAP pubsub                 December 2024
-
-
       Request:
 
       Header: GET (Code=0.01)
@@ -632,6 +610,13 @@ Internet-Draft                 CoAP pubsub                 December 2024
       Payload:
       </ps/h9392>;rt="core.ps.conf";ct=TBD,
       </other/path/2e3570>;rt="core.ps.conf";ct=TBD
+
+
+
+Jimenez, et al.           Expires 15 June 2025                 [Page 11]
+
+Internet-Draft                 CoAP pubsub                 December 2024
+
 
 2.3.4.  Topic-Data Discovery
 
@@ -666,14 +651,6 @@ Internet-Draft                 CoAP pubsub                 December 2024
    These are the interactions that can happen directly with a specific
    topic collection.
 
-
-
-
-Jimenez, et al.           Expires 15 June 2025                 [Page 12]
-
-Internet-Draft                 CoAP pubsub                 December 2024
-
-
 2.4.1.  Retrieving all topic-configurations
 
    A client can request a collection of the topics present in the broker
@@ -687,6 +664,15 @@ Internet-Draft                 CoAP pubsub                 December 2024
    access, based on its permissions.
 
    Example:
+
+
+
+
+
+Jimenez, et al.           Expires 15 June 2025                 [Page 12]
+
+Internet-Draft                 CoAP pubsub                 December 2024
+
 
       Request:
 
@@ -725,6 +711,20 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Jimenez, et al.           Expires 15 June 2025                 [Page 13]
 
 Internet-Draft                 CoAP pubsub                 December 2024
@@ -737,7 +737,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
       Content-Format: TBD (application/core-pubsub+cbor)
       Payload:
       {
-         "resource-type": "core.ps.conf",
+         "resource-type": "core.ps.data",
          "topic-type": "temperature"
       }
 
@@ -804,7 +804,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
       Payload (in CBOR diagnostic notation):
       {
          / topic-name /         0: "living-room-sensor",
-         / resource-type /      2: "core.ps.conf"
+         / resource-type /      2: "core.ps.data"
       }
 
       Response:
@@ -816,7 +816,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
       {
          / topic-name /         0: "living-room-sensor",
          / topic-data /         1: "ps/data/1bd0d6d",
-         / resource-type /      2: "core.ps.conf"
+         / resource-type /      2: "core.ps.data"
 
       }
 
@@ -865,14 +865,14 @@ Internet-Draft                 CoAP pubsub                 December 2024
       Content-Format: TBD2 (application/core-pubsub+cbor)
       Payload (in CBOR diagnostic notation):
       {
-         / topic-name /         0: "living-room-sensor",
-         / topic-data /         1: "ps/data/1bd0d6d",
-         / resource-type /      2: "core.ps.conf",
-         / topic-content-format /   3: 112,
-         / topic-type /         4: "temperature",
-         / expiration-date /    5: "2023-04-00T23:59:59Z",
-         / max-subscribers /    6: 100,
-         / topic-history /      7: 10
+         / topic-name /            0: "living-room-sensor",
+         / topic-data /            1: "ps/data/1bd0d6d",
+         / resource-type /         2: "core.ps.data",
+         / topic-content-format /  3: 112,
+         / topic-type /            4: "temperature",
+         / expiration-date /       5: "2023-04-00T23:59:59Z",
+         / max-subscribers /       6: 100,
+         / topic-history /         7: 10
       }
 
 2.5.2.  Getting part of a topic-configuration
@@ -1018,12 +1018,12 @@ Internet-Draft                 CoAP pubsub                 December 2024
       Content-Format: TBD2 (application/core-pubsub+cbor)
       Payload (in CBOR diagnostic notation):
       {
-         / topic-name /        0: "living-room-sensor",
-         / topic-data /        1: "ps/data/1bd0d6d",
-         / resource-type /     2: "core.ps.conf",
+         / topic-name /            0: "living-room-sensor",
+         / topic-data /            1: "ps/data/1bd0d6d",
+         / resource-type /         2: "core.ps.data",
          / topic-content-format /  3: 112,
-         / topic-type /        4: "temperature",
-         / expiration-date /   5: "2023-04-28T23:59:59Z"
+         / topic-type /            4: "temperature",
+         / expiration-date /       5: "2023-04-28T23:59:59Z"
       }
 
       Response:
@@ -1032,14 +1032,14 @@ Internet-Draft                 CoAP pubsub                 December 2024
       Content-Format: TBD2 (application/core-pubsub+cbor)
       Payload (in CBOR diagnostic notation):
       {
-         / topic-name /        0: "living-room-sensor",
-         / topic-data /        1: "ps/data/1bd0d6d",
-         / resource-type /     2: "core.ps.conf",
+         / topic-name /            0: "living-room-sensor",
+         / topic-data /            1: "ps/data/1bd0d6d",
+         / resource-type /         2: "core.ps.data",
          / topic-content-format /  3: 112,
-         / topic-type /        4: "temperature",
-         / expiration-date /   5: "2023-04-28T23:59:59Z",
-         / max-subscribers /   6: 100,
-         / observer-check /    7: 86400
+         / topic-type /            4: "temperature",
+         / expiration-date /       5: "2023-04-28T23:59:59Z",
+         / max-subscribers /       6: 100,
+         / observer-check /        7: 86400
       }
 
    Note that when a topic-configuration changes, it may result in
@@ -1130,7 +1130,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
       Content-Format: TBD2 (application/core-pubsub+cbor)
       Payload (in CBOR diagnostic notation):
       {
-         / expiration-date /   5: "2024-02-28T23:59:59Z",
+         / expiration-date /  5: "2024-02-28T23:59:59Z",
          / max-subscribers /  6: 5
       }
 
@@ -1140,14 +1140,14 @@ Internet-Draft                 CoAP pubsub                 December 2024
       Content-Format: TBD2 (application/core-pubsub+cbor)
       Payload (in CBOR diagnostic notation):
       {
-         / topic-name /        0: "living-room-sensor",
-         / topic-data /        1: "ps/data/1bd0d6d",
-         / resource-type /     2: "core.ps.conf",
+         / topic-name /            0: "living-room-sensor",
+         / topic-data /            1: "ps/data/1bd0d6d",
+         / resource-type /         2: "core.ps.data",
          / topic-content-format /  3: 112,
-         / topic-type /        4: "temperature",
-         / expiration-date /   5: "2024-02-28T23:59:59Z",
-         / max-subscribers /   6: 5,
-         / observer-check /    7: 86400
+         / topic-type /            4: "temperature",
+         / expiration-date /       5: "2024-02-28T23:59:59Z",
+         / max-subscribers /       6: 5,
+         / observer-check /        7: 86400
       }
 
    Note that when a topic-configuration changes through an iPATCH
