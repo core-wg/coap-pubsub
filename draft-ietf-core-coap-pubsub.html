@@ -1275,16 +1275,19 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
-                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-media-type" class="internal xref">Media Type</a></p>
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-media-type-registrations" class="internal xref">Media Type Registrations</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
-                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-content-format" class="internal xref">Content-Format</a></p>
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-coap-content-formats" class="internal xref">CoAP Content-Formats</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
                 <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="auto internal xref">6.3</a>.  <a href="#name-coap-pubsub-parameters-3" class="internal xref">CoAP Pubsub Parameters</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.4">
                 <p id="section-toc.1-1.6.2.4.1"><a href="#section-6.4" class="auto internal xref">6.4</a>.  <a href="#name-resource-types" class="internal xref">Resource Types</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.5">
+                <p id="section-toc.1-1.6.2.5.1"><a href="#section-6.5" class="auto internal xref">6.5</a>.  <a href="#name-expert-review-instructions" class="internal xref">Expert Review Instructions</a></p>
 </li>
             </ul>
 </li>
@@ -2497,21 +2500,21 @@ representation of a list of topics in the collection (see
 <figure id="figure-5">
         <div class="alignCenter art-text artwork" id="section-4-3.1">
 <pre>
-+------------------+-----------+-----------+------------+
-| Name             | CBOR Key  | CBOR Type | Reference  |
-|------------------|-----------|-----------|------------|
-| topic-name       | TBD1      | tstr      | [RFC-XXXX] |
-| topic-data       | TBD2      | tstr      | [RFC-XXXX] |
-| resource-type    | TBD3      | tstr      | [RFC-XXXX] |
-| topic-content-format | TBD4      | uint      | [RFC-XXXX] |
-| topic-type       | TBD5      | tstr      | [RFC-XXXX] |
-| expiration-date  | TBD6      | tstr      | [RFC-XXXX] |
-| max-subscribers  | TBD7      | uint      | [RFC-XXXX] |
-| observer-check   | TBD8      | uint      | [RFC-XXXX] |
-| topic-history    | TBD9      | uint      | [RFC-XXXX] |
-| initialize       | TBD10     | bool      | [RFC-XXXX] |
-| conf-filter      | TBD11     | array     | [RFC-XXXX] |
-+------------------+-----------+-----------+------------+
++----------------------+----------+-----------+------------+
+| Name                 | CBOR Key | CBOR Type | Reference  |
+| -------------------- | -------- | --------- | ---------- |
+| topic-name           | TBD1     | tstr      | [RFC-XXXX] |
+| topic-data           | TBD2     | tstr      | [RFC-XXXX] |
+| resource-type        | TBD3     | tstr      | [RFC-XXXX] |
+| topic-content-format | TBD4     | uint      | [RFC-XXXX] |
+| topic-type           | TBD5     | tstr      | [RFC-XXXX] |
+| expiration-date      | TBD6     | tstr      | [RFC-XXXX] |
+| max-subscribers      | TBD7     | uint      | [RFC-XXXX] |
+| observer-check       | TBD8     | uint      | [RFC-XXXX] |
+| topic-history        | TBD9     | uint      | [RFC-XXXX] |
+| initialize           | TBD10    | bool      | [RFC-XXXX] |
+| conf-filter          | TBD11    | array     | [RFC-XXXX] |
++----------------------+----------+-----------+------------+
 </pre>
 </div>
 <figcaption><a href="#figure-5" class="selfRef">Figure 5</a>:
@@ -2542,146 +2545,58 @@ representation of a list of topics in the collection (see
 <p id="section-6-2">Note to RFC Editor: Please replace all occurrences of "[RFC-XXXX]" with the RFC number of this specification and delete this paragraph.<a href="#section-6-2" class="pilcrow">¶</a></p>
 <div id="media-type">
 <section id="section-6.1">
-        <h3 id="name-media-type">
-<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-media-type" class="section-name selfRef">Media Type</a>
+        <h3 id="name-media-type-registrations">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-media-type-registrations" class="section-name selfRef">Media Type Registrations</a>
         </h3>
-<p id="section-6.1-1">IANA is requested to add the following Media-Type to the "Media Types"
-registry <span>[<a href="#IANA.media-types" class="cite xref">IANA.media-types</a>]</span>.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
-<span id="name-new-media-type-application-"></span><div id="new-media-type">
-<table class="left" id="table-1">
-          <caption>
-<a href="#table-1" class="selfRef">Table 1</a>:
-<a href="#name-new-media-type-application-" class="selfRef">New Media Type application/core-pubsub+cbor</a>
-          </caption>
-<thead>
-            <tr>
-              <th class="text-left" rowspan="1" colspan="1">Name</th>
-              <th class="text-left" rowspan="1" colspan="1">Template</th>
-              <th class="text-left" rowspan="1" colspan="1">Reference</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">core-pubsub+cbor</td>
-              <td class="text-left" rowspan="1" colspan="1">application/core-pubsub+cbor</td>
-              <td class="text-left" rowspan="1" colspan="1">RFC XXXX, <a href="#media-type" class="auto internal xref">Section 6.1</a>
-</td>
-            </tr>
-          </tbody>
-        </table>
+<p id="section-6.1-1">This specification registers the 'application/core-pubsub+cbor' media type for messages of the protocols defined in this document and carrying parameters encoded in CBOR. This registration follows the procedures specified in <span>[<a href="#RFC6838" class="cite xref">RFC6838</a>]</span>.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.1-2">
+<pre>
+  Type name: application
+
+  Subtype name: core-pubsub+cbor
+
+  Required parameters: N/A
+
+  Optional parameters: N/A
+
+  Encoding considerations: Must be encoded as a CBOR map containing the parameters defined in {{&amp;SELF}}.
+
+  Security considerations: See {{sec-cons}} of {{&amp;SELF}}.
+
+  Interoperability considerations: none
+
+  Published specification: {{&amp;SELF}}
+
+  Applications that use this media type:  This type is used by clients that create, retrieve, and update topic-configurations at servers acting as a broker.
+
+  Fragment identifier considerations: N/A
+
+  Additional information: N/A
+
+  Person &amp; email address to contact for further information: CoRE WG mailing list (core@ietf.org),
+  or IETF Web and Internet Transport (WIT) Area (wit@ietf.org)
+
+  Intended usage: COMMON
+
+  Restrictions on usage: none
+
+  Author/Change controller: IETF
+
+  Provisional registration: no
+</pre><a href="#section-6.1-2" class="pilcrow">¶</a>
 </div>
-<span class="break"></span><dl class="dlCompact dlParallel" id="section-6.1-3">
-          <dt id="section-6.1-3.1">Type name:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-3.2">
-            <p id="section-6.1-3.2.1">application<a href="#section-6.1-3.2.1" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-3.3">Subtype name:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-3.4">
-            <p id="section-6.1-3.4.1">core-pubsub+cbor<a href="#section-6.1-3.4.1" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-3.5">Required parameters:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-3.6">
-            <p id="section-6.1-3.6.1">N/A<a href="#section-6.1-3.6.1" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-3.7">Optional parameters:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-3.8">
-            <p id="section-6.1-3.8.1">N/A<a href="#section-6.1-3.8.1" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-3.9">Encoding considerations:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-3.10">
-            <p id="section-6.1-3.10.1">binary (CBOR data item)<a href="#section-6.1-3.10.1" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-3.11">Security considerations:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-3.12">
-            <p id="section-6.1-3.12.1"><a href="#seccons" class="auto internal xref">Section 5</a> of RFC XXXX<a href="#section-6.1-3.12.1" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-3.13">Interoperability considerations:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-3.14">
-            <p id="section-6.1-3.14.1">none<a href="#section-6.1-3.14.1" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-3.15">Published specification:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-3.16">
-            <p id="section-6.1-3.16.1"><a href="#media-type" class="auto internal xref">Section 6.1</a> of RFC XXXX<a href="#section-6.1-3.16.1" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-3.17">Applications that use this media type:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-3.18">
-            <p id="section-6.1-3.18.1">This type is used by clients that create, retrieve, and update topic-configurations at servers acting as a pub-sub broker.<a href="#section-6.1-3.18.1" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-3.19">Fragment identifier considerations:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-3.20">
-            <p id="section-6.1-3.20.1">N/A<a href="#section-6.1-3.20.1" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-3.21">Person &amp; email address to contact for further information:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-3.22">
-            <p id="section-6.1-3.22.1">CoRE WG mailing list (core@ietf.org),
-or IETF Applications and Real-Time Area (art@ietf.org)<a href="#section-6.1-3.22.1" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-3.23">Intended usage:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-3.24">
-            <p id="section-6.1-3.24.1">COMMON<a href="#section-6.1-3.24.1" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-3.25">Restrictions on usage:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-3.26">
-            <p id="section-6.1-3.26.1">none<a href="#section-6.1-3.26.1" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-3.27">Author/Change controller:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-3.28">
-            <p id="section-6.1-3.28.1">IETF<a href="#section-6.1-3.28.1" class="pilcrow">¶</a></p>
-</dd>
-          <dd class="break"></dd>
-<dt id="section-6.1-3.29">Provisional registration:</dt>
-          <dd style="margin-left: 1.5em" id="section-6.1-3.30">
-            <p id="section-6.1-3.30.1">no<a href="#section-6.1-3.30.1" class="pilcrow">¶</a></p>
-</dd>
-        <dd class="break"></dd>
-</dl>
 </section>
 </div>
-<div id="content-format">
+<div id="content-type">
 <section id="section-6.2">
-        <h3 id="name-content-format">
-<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-content-format" class="section-name selfRef">Content-Format</a>
+        <h3 id="name-coap-content-formats">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-coap-content-formats" class="section-name selfRef">CoAP Content-Formats</a>
         </h3>
-<p id="section-6.2-1">IANA has added the following Content-Formats to the
-<a href="https://www.iana.org/assignments/core-parameters#content-formats" class="relref">"CoAP Content-Formats"</a>
-sub-registry, within the "Constrained RESTful Environments (CoRE)
-Parameters" Registry <span>[<a href="#IANA.core-parameters" class="cite xref">IANA.core-parameters</a>]</span>, as follows:<a href="#section-6.2-1" class="pilcrow">¶</a></p>
-<span id="name-new-content-format"></span><table class="left" id="table-2">
-          <caption>
-<a href="#table-2" class="selfRef">Table 2</a>:
-<a href="#name-new-content-format" class="selfRef">New Content-Format</a>
-          </caption>
-<thead>
-            <tr>
-              <th class="text-left" rowspan="1" colspan="1">Content Type</th>
-              <th class="text-left" rowspan="1" colspan="1">Content Coding</th>
-              <th class="text-left" rowspan="1" colspan="1">ID</th>
-              <th class="text-left" rowspan="1" colspan="1">Reference</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">application/core-pubsub+cbor</td>
-              <td class="text-left" rowspan="1" colspan="1">-</td>
-              <td class="text-left" rowspan="1" colspan="1">TBD9</td>
-              <td class="text-left" rowspan="1" colspan="1">RFC XXXX</td>
-            </tr>
-          </tbody>
-        </table>
-<p id="section-6.2-3">TBD9 is to be assigned from the space 256..999.<a href="#section-6.2-3" class="pilcrow">¶</a></p>
+<p id="section-6.2-1">IANA is asked to register the following entry to the "CoAP Content-Formats" registry within the "CoRE Parameters" registry group.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2-2">Content Type: application/core-pubsub+cbor<a href="#section-6.2-2" class="pilcrow">¶</a></p>
+<p id="section-6.2-3">Content Coding: -<a href="#section-6.2-3" class="pilcrow">¶</a></p>
+<p id="section-6.2-4">ID: TBD<a href="#section-6.2-4" class="pilcrow">¶</a></p>
+<p id="section-6.2-5">Reference: [RFC-XXXX]<a href="#section-6.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-coap-pubsub-parameters">
@@ -2689,16 +2604,15 @@ Parameters" Registry <span>[<a href="#IANA.core-parameters" class="cite xref">IA
         <h3 id="name-coap-pubsub-parameters-3">
 <a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-coap-pubsub-parameters-3" class="section-name selfRef">CoAP Pubsub Parameters</a>
         </h3>
-<p id="section-6.3-1">IANA is asked to register the following entries in the subregistry of the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
-<p id="section-6.3-2">This specification establishes the "Pubsub Topic Configuration Parameters" IANA registry within the "Constrained RESTful Environments (CoRE)
-Parameters" registry group.<a href="#section-6.3-2" class="pilcrow">¶</a></p>
+<p id="section-6.3-1">This specification establishes the "CoAP Pubsub topic-configuration Parameters" IANA subregistry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-6.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.3-2">The registry has been created to use the "Expert Review" registration procedure <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>. Expert review guidelines are provided in <a href="#review" class="auto internal xref">Section 6.5</a>. Values in this registry are covered by different registration policies as indicated. It should be noted that, in addition to the expert review, some portions of the registry require a specification, potentially a Standards Track RFC, to be supplied as well.<a href="#section-6.3-2" class="pilcrow">¶</a></p>
 <p id="section-6.3-3">The columns of this registry are:<a href="#section-6.3-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.3-4.1">
             <p id="section-6.3-4.1.1">Name: This is a descriptive name that enables easier reference to the item. The name MUST be unique. It is not used in the encoding.<a href="#section-6.3-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.3-4.2">
-            <p id="section-6.3-4.2.1">CBOR Key: This is the value used as CBOR key of the item. These values MUST be unique. The value can be a positive integer, a negative integer, or a text string. Different ranges of values use different registration policies <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>. Integer values from -256 to 255 as well as text strings of length 1 are designated as "Standards Action With Expert Review". Integer values from -65536 to -257 and from 256 to 65535, as well as text strings of length 2 are designated as "Specification Required". Integer values greater than 65535 as well as text strings of length greater than 2 are designated as "Expert Review". Integer values less than -65536 are marked as "Private Use".<a href="#section-6.3-4.2.1" class="pilcrow">¶</a></p>
+            <p id="section-6.3-4.2.1">CBOR Key: This is the value used as the CBOR key of the item. These values MUST be unique. The value can be a positive integer, a negative integer, or a text string. Different ranges of values use different registration policies <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>. Integer values from -256 to 255 as well as text strings of length 1 are designated as "Standards Action With Expert Review". Integer values from -65536 to -257 and from 256 to 65535, as well as text strings of length 2 are designated as "Specification Required". Integer values greater than 65535 as well as text strings of length greater than 2 are designated as "Expert Review". Integer values less than -65536 are marked as "Private Use".<a href="#section-6.3-4.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.3-4.3">
             <p id="section-6.3-4.3.1">CBOR Type: This contains the CBOR type of the item, or a pointer to the registry that defines its type, when that depends on another item.<a href="#section-6.3-4.3.1" class="pilcrow">¶</a></p>
@@ -2707,7 +2621,7 @@ Parameters" registry group.<a href="#section-6.3-2" class="pilcrow">¶</a></p>
             <p id="section-6.3-4.4.1">Reference: This contains a pointer to the public specification for the item.<a href="#section-6.3-4.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-6.3-5">The registry is initially populated with the entries in <a href="#fig-CoAP-Pubsub-Parameters" class="auto internal xref">Figure 5</a> of <a href="#pubsub-parameters" class="auto internal xref">Section 4</a>.<a href="#section-6.3-5" class="pilcrow">¶</a></p>
+<p id="section-6.3-5">This registry has been initially populated with the values in <a href="#fig-CoAP-Pubsub-Parameters" class="auto internal xref">Figure 5</a>.<a href="#section-6.3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-rt">
@@ -2737,6 +2651,27 @@ Reference: [RFC-XXXX]
 </div>
 </section>
 </div>
+<div id="review">
+<section id="section-6.5">
+        <h3 id="name-expert-review-instructions">
+<a href="#section-6.5" class="section-number selfRef">6.5. </a><a href="#name-expert-review-instructions" class="section-name selfRef">Expert Review Instructions</a>
+        </h3>
+<p id="section-6.5-1">The IANA Registries established in this document are defined as expert review.
+This section gives some general guidelines for what the experts should be looking for, but they are being designated as experts for a reason so they should be given substantial latitude.<a href="#section-6.5-1" class="pilcrow">¶</a></p>
+<p id="section-6.5-2">Expert reviewers should take into consideration the following points:<a href="#section-6.5-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.5-3.1">
+            <p id="section-6.5-3.1.1">Point squatting should be discouraged. Reviewers are encouraged to get sufficient information for registration requests to ensure that the usage is not going to duplicate one that is already registered and that the point is likely to be used in deployments. The zones tagged as private use are intended for testing purposes and closed environments, code points in other ranges should not be assigned for testing.<a href="#section-6.5-3.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.5-3.2">
+            <p id="section-6.5-3.2.1">Specifications are required for the standards track range of point assignment. Specifications should exist for specification required ranges, but early assignment before a specification is available is considered to be permissible. When specifications are not provided, the description provided needs to have sufficient information to identify what the point is being used for.<a href="#section-6.5-3.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.5-3.3">
+            <p id="section-6.5-3.3.1">Experts should take into account the expected usage of fields when approving point assignments. The fact that there is a range for Standards Track documents does not mean that a Standards Track document cannot have points assigned outside of that range. The length of the encoded value should be weighed against how many code points of that length are left, the size of device it will be used on, and the number of code points left that encode to that size.<a href="#section-6.5-3.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
 </section>
 </div>
 <div id="sec-combined-references">
@@ -2750,14 +2685,6 @@ Reference: [RFC-XXXX]
 <a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
-<dt id="IANA.core-parameters">[IANA.core-parameters]</dt>
-        <dd>
-<span class="refAuthor">IANA</span>, <span class="refTitle">"Constrained RESTful Environments (CoRE) Parameters"</span>, <span>&lt;<a href="https://www.iana.org/assignments/core-parameters">https://www.iana.org/assignments/core-parameters</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="IANA.media-types">[IANA.media-types]</dt>
-        <dd>
-<span class="refAuthor">IANA</span>, <span class="refTitle">"Media Types"</span>, <span>&lt;<a href="https://www.iana.org/assignments/media-types">https://www.iana.org/assignments/media-types</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
@@ -2769,6 +2696,10 @@ Reference: [RFC-XXXX]
 <dt id="RFC6690">[RFC6690]</dt>
         <dd>
 <span class="refAuthor">Shelby, Z.</span>, <span class="refTitle">"Constrained RESTful Environments (CoRE) Link Format"</span>, <span class="seriesInfo">RFC 6690</span>, <span class="seriesInfo">DOI 10.17487/RFC6690</span>, <time datetime="2012-08" class="refDate">August 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6690">https://www.rfc-editor.org/rfc/rfc6690</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6838">[RFC6838]</dt>
+        <dd>
+<span class="refAuthor">Freed, N.</span>, <span class="refAuthor">Klensin, J.</span>, and <span class="refAuthor">T. Hansen</span>, <span class="refTitle">"Media Type Specifications and Registration Procedures"</span>, <span class="seriesInfo">BCP 13</span>, <span class="seriesInfo">RFC 6838</span>, <span class="seriesInfo">DOI 10.17487/RFC6838</span>, <time datetime="2013-01" class="refDate">January 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6838">https://www.rfc-editor.org/rfc/rfc6838</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC7252">[RFC7252]</dt>
         <dd>
