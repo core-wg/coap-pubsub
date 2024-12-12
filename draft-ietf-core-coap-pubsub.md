@@ -983,7 +983,6 @@ Note that the media type application/core-pubsub+cbor MUST be used when these pa
 ~~~~~~~~~~~
 {: #fig-CoAP-Pubsub-Parameters title="CoAP Pubsub Parameters" artwork-align="center"}
 
-
 # Security Considerations {#seccons}
 
 The architecture presented in this document inherits the security considerations from CoAP {{RFC7252}} and Observe {{RFC7641}}, as well as from Web Linking {{RFC8288}}, Link-Format {{RFC6690}}, and the CoRE Resource Directory {{RFC9176}}.
@@ -1000,7 +999,7 @@ In particular, the application profile above relies on the ACE framework for Aut
 
 # IANA Considerations {#iana}
 
-<!-- We register:
+<!-- To be registerd in IANA:
 media type: application/core-pubsub+cbor
 content format/type: application/core-pubsub+cbor
 subregistry for the topic config
