@@ -872,7 +872,7 @@ Example of a successful subscription followed by one update:
 
 ### Unsubscribe {#unsubscribe}
 
-A CoAP client can unsubscribe simply by cancelling the observation as described in {{Section 3.6 of RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification. Also on {{Section 3.6 of RFC7641}} the client can simply "forget" the observation and the broker will remove it from the list of observers after the next notification.
+A CoAP client can unsubscribe simply by canceling the observation as described in {{Section 3.6 of RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification. Also on {{Section 3.6 of RFC7641}} the client can simply "forget" the observation and the broker will remove it from the list of observers after the next notification.
 
 As per {{RFC7641}} a server that transmits notifications mostly in non-confirmable messages, but it MUST send a notification in a confirmable message instead of a non-confirmable message at least every 24 hours.
 
@@ -1140,7 +1140,7 @@ Expert reviewers should take into consideration the following points:
 * Code bug fix https://github.com/jaimejim/aiocoap-pubsub-broker/commit/f32ce4866a81319238d6e905de439c9410cce175
 * Added two new optional topic configuration parameters; ‘initialize,’ and ‘topic-history’.
 * Modified all examples to conform to RFC9594.
-* Added the explicit cancelation of ongoing subscriptions when topic configuration parameters are changed.
+* Added the explicit cancellation of ongoing subscriptions when topic configuration parameters are changed.
 * Added editorial changes based on feedback.
 * Clarifications on Topic Configuration creation.
 * Other editorial changes
