@@ -37,20 +37,25 @@ normative:
   RFC7252:
   RFC8288:
   RFC8516:
-  RFC8949:
+  STD94:
+# RFC8949:
   RFC9176:
   RFC7641:
-  RFC8126:
-  RFC6838:
-  RFC7120:
+  BCP26:
+# RFC8126:
+  BCP13:
+# RFC6838:
+  BCP100:
+# RFC7120:
 
 informative:
   RFC8613:
-  RFC9052:
+  STD96:
+# RFC9052:
+# RFC9338:
   RFC9147:
   RFC9053:
   RFC9200:
-  RFC9338:
   RFC9594:
   I-D.hartke-t2trg-coral-pubsub:
   I-D.ietf-ace-oscore-gm-admin:
@@ -80,7 +85,7 @@ This document applies the idea of broker-based publish-subscribe to Constrained 
 
 ## Terminology {#terminology}
 
-{::boilerplate bcp14}
+{::boilerplate bcp14-tagged-bcp14}
 
 This specification requires readers to be familiar with all the terms and concepts that are discussed in {{RFC8288}} and {{RFC6690}}. Readers should also be familiar with the terms and concepts discussed in {{RFC7252}}, {{RFC9176}} and {{RFC7641}}. The URI template format {{RFC6570}} is used to describe the REST API defined in this specification.
 
@@ -990,7 +995,7 @@ The architecture presented in this document inherits the security considerations
 
 Communications between each client and the broker are RECOMMENDED to be secured, e.g., by using OSCORE {{RFC8613}} or DTLS {{RFC9147}}. Security considerations for the used secure communication protocols apply too.
 
-The content published on a topic by a publisher client SHOULD be protected end-to-end between the publisher and all the subscribers to that topic. In such a case, it MUST be possible to assert source authentication of the published data. This can be achieved at the application layer, e.g., by using COSE {{RFC9052}}, {{RFC9053}}, {{RFC9338}}.
+The content published on a topic by a publisher client SHOULD be protected end-to-end between the publisher and all the subscribers to that topic. In such a case, it MUST be possible to assert source authentication of the published data. This can be achieved at the application layer, e.g., by using COSE {{STD96}}, {{RFC9053}}.
 
 Access control of clients at the broker MAY be enforced for performing discovery operation, and SHOULD be enforced in a fine-grained fashion for operations related to the creation, update, and deletion of topic resources, as well as for operations on topic-data resources such as publication on and subscription to topics. This prevents rogue clients to, among other things, repeatedly create topics at the broker or publish (large) contents, which may result in Denial of Service against the broker and the active subscribers.
 
@@ -1012,7 +1017,7 @@ Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with the RFC n
 
 ## Media Type Registrations {#media-type}
 
-This specification registers the 'application/core-pubsub+cbor' media type for messages of the protocols defined in this document and carrying parameters encoded in CBOR. This registration follows the procedures specified in {{RFC6838}}.
+This specification registers the 'application/core-pubsub+cbor' media type for messages of the protocols defined in this document and carrying parameters encoded in CBOR. This registration follows the procedures specified in {{BCP13}}.
 
       Type name: application
 
