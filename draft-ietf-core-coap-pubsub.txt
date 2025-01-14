@@ -5,10 +5,10 @@
 CoRE Working Group                                            J. Jimenez
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                               M. Koster
-Expires: 15 June 2025                                      Dogtiger Labs
+Expires: 18 July 2025                                      Dogtiger Labs
                                                               A. Keranen
                                                                 Ericsson
-                                                        12 December 2024
+                                                         14 January 2025
 
 
     A publish-subscribe architecture for the Constrained Application
@@ -53,9 +53,9 @@ Status of This Memo
 
 
 
-Jimenez, et al.           Expires 15 June 2025                  [Page 1]
+Jimenez, et al.           Expires 18 July 2025                  [Page 1]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
    Internet-Drafts are draft documents valid for a maximum of six months
@@ -63,11 +63,11 @@ Internet-Draft                 CoAP pubsub                 December 2024
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 June 2025.
+   This Internet-Draft will expire on 18 July 2025.
 
 Copyright Notice
 
-   Copyright (c) 2024 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Jimenez, et al.           Expires 15 June 2025                  [Page 2]
+Jimenez, et al.           Expires 18 July 2025                  [Page 2]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
      3.2.  Topic-Data Interactions . . . . . . . . . . . . . . . . .  23
@@ -131,14 +131,14 @@ Internet-Draft                 CoAP pubsub                 December 2024
      6.5.  Expert Review Instructions  . . . . . . . . . . . . . . .  33
    7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  34
      7.1.  Normative References  . . . . . . . . . . . . . . . . . .  34
-     7.2.  Informative References  . . . . . . . . . . . . . . . . .  35
+     7.2.  Informative References  . . . . . . . . . . . . . . . . .  36
    Appendix A.  Document Updates . . . . . . . . . . . . . . . . . .  37
      A.1.  Version -13 to -14  . . . . . . . . . . . . . . . . . . .  37
-     A.2.  Version -14 to -15  . . . . . . . . . . . . . . . . . . .  37
+     A.2.  Version -14 to -15  . . . . . . . . . . . . . . . . . . .  38
      A.3.  Version -15 to -16  . . . . . . . . . . . . . . . . . . .  38
    Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  38
-   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  38
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  38
+   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  39
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  39
 
 1.  Introduction
 
@@ -165,9 +165,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                  [Page 3]
+Jimenez, et al.           Expires 18 July 2025                  [Page 3]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
    This document applies the idea of broker-based publish-subscribe to
@@ -179,7 +179,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
    "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   [BCP14] (RFC2119) (RFC8174) when, and only when, they appear in all
    capitals, as shown here.
 
    This specification requires readers to be familiar with all the terms
@@ -208,7 +208,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
    topic collection:
       A set of topic-configurations.  A topic collection is hosted as
-      one collection resource (See Section 3.1 on
+      one collection resource (See Section 3.1 of
       [I-D.ietf-core-interfaces]) at the broker, and its representation
       is the list of links to the topic resources corresponding to each
       topic-configuration.
@@ -221,9 +221,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                  [Page 4]
+Jimenez, et al.           Expires 18 July 2025                  [Page 4]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
       topic resources associated with the same topic collection share a
@@ -277,9 +277,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                  [Page 5]
+Jimenez, et al.           Expires 18 July 2025                  [Page 5]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
            CoAP                      CoAP                 CoAP
@@ -333,9 +333,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                  [Page 6]
+Jimenez, et al.           Expires 18 July 2025                  [Page 6]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
    The Broker exports one or more topic-collection resources, with
@@ -389,9 +389,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                  [Page 7]
+Jimenez, et al.           Expires 18 July 2025                  [Page 7]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
    A topic resource with a topic-data link can also be simply called
@@ -445,9 +445,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                  [Page 8]
+Jimenez, et al.           Expires 18 July 2025                  [Page 8]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
    *  'topic-type': An optional field used to indicate the attribute or
@@ -458,9 +458,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
    *  'expiration-date': An optional field used to indicate the
       expiration date of the topic.  It encodes the expiration date as a
       CBOR text string.  The value should be a date string as defined in
-      3.4.1.  [RFC8949] (e.g., the CBOR encoded version of
-      "2023-03-31T23:59:59Z").  If this field is not present, the topic
-      will not expire automatically.
+      Section 3.4.1 of RFC 8949 [STD94] (e.g., the CBOR encoded version
+      of "2023-03-31T23:59:59Z").  If this field is not present, the
+      topic will not expire automatically.
 
    *  'max-subscribers': An optional field used to indicate the maximum
       number of simultaneous subscribers allowed for the topic.  It
@@ -473,11 +473,11 @@ Internet-Draft                 CoAP pubsub                 December 2024
    *  'observer-check': An optional field that controls the maximum
       number of seconds between two consecutive Observe notifications
       sent as Confirmable messages to each topic subscriber (see
-      Section Section 3.2.3).  Encoded as a CBOR unsigned integer
-      greater than 0, it ensures subscribers who have lost interest and
-      silently forgotten the observation do not remain indefinitely on
-      the server's observer list.  If another CoAP server hosts the
-      topic-data resource, that server is responsible for applying the
+      Section 3.2.3).  Encoded as a CBOR unsigned integer greater than
+      0, it ensures subscribers who have lost interest and silently
+      forgotten the observation do not remain indefinitely on the
+      server's observer list.  If another CoAP server hosts the topic-
+      data resource, that server is responsible for applying the
       observer-check value.  The default value for this field is 86400,
       as defined in [RFC7641], which corresponds to 24 hours.
 
@@ -501,9 +501,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                  [Page 9]
+Jimenez, et al.           Expires 18 July 2025                  [Page 9]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
 2.3.  Discovery
@@ -557,9 +557,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 10]
+Jimenez, et al.           Expires 18 July 2025                 [Page 10]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
    Since the representation of the topic collection resource includes
@@ -613,9 +613,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 11]
+Jimenez, et al.           Expires 18 July 2025                 [Page 11]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
 2.3.4.  Topic-Data Discovery
@@ -669,9 +669,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 12]
+Jimenez, et al.           Expires 18 July 2025                 [Page 12]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
       Request:
@@ -725,9 +725,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 13]
+Jimenez, et al.           Expires 18 July 2025                 [Page 13]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
       Request:
@@ -781,9 +781,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 14]
+Jimenez, et al.           Expires 18 July 2025                 [Page 14]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
    If requirements are defined for the client to create the topic as
@@ -837,9 +837,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 15]
+Jimenez, et al.           Expires 18 July 2025                 [Page 15]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
    If requirements are defined for the client to read the topic as
@@ -884,7 +884,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
    The request contains a CBOR map with a configuration filter or 'conf-
    filter', a CBOR array of configuration parameters, as defined in
-   Section Section 4.  Each element of the array specifies one requested
+   Section 4.  Each element of the array specifies one requested
    configuration parameter of the current topic resource (see
    Section 2.2).
 
@@ -893,9 +893,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 16]
+Jimenez, et al.           Expires 18 July 2025                 [Page 16]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
    On success, the broker returns a 2.05 (Content) response with a
@@ -949,9 +949,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 17]
+Jimenez, et al.           Expires 18 July 2025                 [Page 17]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
    On success, the topic-configuration is overwritten and broker returns
@@ -1005,9 +1005,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 18]
+Jimenez, et al.           Expires 18 July 2025                 [Page 18]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
       Request:
@@ -1061,9 +1061,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 19]
+Jimenez, et al.           Expires 18 July 2025                 [Page 19]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
 2.5.4.  Updating the topic-configuration with iPATCH
@@ -1117,9 +1117,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 20]
+Jimenez, et al.           Expires 18 July 2025                 [Page 20]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
       Request:
@@ -1173,9 +1173,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 21]
+Jimenez, et al.           Expires 18 July 2025                 [Page 21]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
       Request:
@@ -1229,9 +1229,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 22]
+Jimenez, et al.           Expires 18 July 2025                 [Page 22]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
                     HALF                          FULLY
@@ -1285,9 +1285,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 23]
+Jimenez, et al.           Expires 18 July 2025                 [Page 23]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
    On success, the broker returns a 2.04 (Changed) response.  However,
@@ -1341,9 +1341,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 24]
+Jimenez, et al.           Expires 18 July 2025                 [Page 24]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
       Request:
@@ -1397,9 +1397,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 25]
+Jimenez, et al.           Expires 18 July 2025                 [Page 25]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
       Request:
@@ -1440,7 +1440,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 3.2.3.  Unsubscribe
 
-   A CoAP client can unsubscribe simply by cancelling the observation as
+   A CoAP client can unsubscribe simply by canceling the observation as
    described in Section 3.6 of [RFC7641].  The client MUST either use
    CoAP GET with the Observe Option set to 1 or send a CoAP Reset
    message in response to a notification.  Also on Section 3.6 of
@@ -1453,9 +1453,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 26]
+Jimenez, et al.           Expires 18 July 2025                 [Page 26]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
    As per [RFC7641] a server that transmits notifications mostly in non-
@@ -1509,9 +1509,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 27]
+Jimenez, et al.           Expires 18 July 2025                 [Page 27]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
    If the target URI does not match an existing resource or the topic is
@@ -1565,9 +1565,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 28]
+Jimenez, et al.           Expires 18 July 2025                 [Page 28]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
 4.  CoAP Pubsub Parameters
@@ -1616,14 +1616,14 @@ Internet-Draft                 CoAP pubsub                 December 2024
    protected end-to-end between the publisher and all the subscribers to
    that topic.  In such a case, it MUST be possible to assert source
    authentication of the published data.  This can be achieved at the
-   application layer, e.g., by using COSE [RFC9052], [RFC9053],
-   [RFC9338].
+   application layer, e.g., by using COSE [STD96], [RFC9053].
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 29]
+
+Jimenez, et al.           Expires 18 July 2025                 [Page 29]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
    Access control of clients at the broker MAY be enforced for
@@ -1668,7 +1668,7 @@ Internet-Draft                 CoAP pubsub                 December 2024
    This specification registers the 'application/core-pubsub+cbor' media
    type for messages of the protocols defined in this document and
    carrying parameters encoded in CBOR.  This registration follows the
-   procedures specified in [RFC6838].
+   procedures specified in [BCP13].
 
 
 
@@ -1677,9 +1677,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 30]
+Jimenez, et al.           Expires 18 July 2025                 [Page 30]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
   Type name: application
@@ -1733,9 +1733,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 31]
+Jimenez, et al.           Expires 18 July 2025                 [Page 31]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
 6.3.  Resource Types
@@ -1768,18 +1768,17 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
    The registration policy is either "Private Use", "Standards Action
    with Expert Review", or "Specification Required" or "Expert Review"
-   per [RFC8126].  "Expert Review" guidelines are provided in
-   Section 6.5.
+   per [BCP26].  "Expert Review" guidelines are provided in Section 6.5.
 
    All assignments according to "Standards Action with Expert Review"
-   are made on a "Standards Action" basis per Section 4.9 of [RFC8126]
-   with "Expert Review" additionally required per Section 4.5 of
-   [RFC8126].  The procedure for early IANA allocation of "standards
-   track code points" defined in [RFC7120] also applies.  When such a
-   procedure is used, IANA will ask the designated expert(s) to approve
-   the early allocation before registration.  In addition, working group
-   chairs are encouraged to consult the expert(s) early during the
-   process outlined in Section 3.1 of [RFC7120].
+   are made on a "Standards Action" basis per Section 4.9 of RFC 8126
+   [BCP26] with "Expert Review" additionally required per Section 4.5 of
+   RFC 8126 [BCP26].  The procedure for early IANA allocation of
+   "standards track code points" defined in [BCP100] also applies.  When
+   such a procedure is used, IANA will ask the designated expert(s) to
+   approve the early allocation before registration.  In addition,
+   working group chairs are encouraged to consult the expert(s) early
+   during the process outlined in Section 3.1 of RFC 7120 [BCP100].
 
    The columns of this registry are:
 
@@ -1789,22 +1788,23 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 32]
+
+Jimenez, et al.           Expires 18 July 2025                 [Page 32]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
    *  CBOR Key: This is the value used as the CBOR key of the item.
       These values MUST be unique.  The value can be a positive integer,
       a negative integer, or a text string.  Different ranges of values
-      use different registration policies [RFC8126].  Integer values
-      from -256 to 255 as well as text strings of length 1 are
-      designated as "Standards Action With Expert Review".  Integer
-      values from -65536 to -257 and from 256 to 65535, as well as text
-      strings of length 2 are designated as "Specification Required".
-      Integer values greater than 65535 as well as text strings of
-      length greater than 2 are designated as "Expert Review".  Integer
-      values less than -65536 are marked as "Private Use".
+      use different registration policies [BCP26].  Integer values from
+      -256 to 255 as well as text strings of length 1 are designated as
+      "Standards Action With Expert Review".  Integer values from -65536
+      to -257 and from 256 to 65535, as well as text strings of length 2
+      are designated as "Specification Required".  Integer values
+      greater than 65535 as well as text strings of length greater than
+      2 are designated as "Expert Review".  Integer values less than
+      -65536 are marked as "Private Use".
 
    *  CBOR Type: This contains the CBOR type of the item, or a pointer
       to the registry that defines its type, when that depends on
@@ -1845,9 +1845,9 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-Jimenez, et al.           Expires 15 June 2025                 [Page 33]
+Jimenez, et al.           Expires 18 July 2025                 [Page 33]
 
-Internet-Draft                 CoAP pubsub                 December 2024
+Internet-Draft                 CoAP pubsub                  January 2025
 
 
    *  Specifications are required for the "Standards Action With Expert
@@ -1870,10 +1870,59 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 7.1.  Normative References
 
-   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+   [BCP100]   Best Current Practice 100,
+              <https://www.rfc-editor.org/info/bcp100>.
+              At the time of writing, this BCP comprises the following:
+
+              Cotton, M., "Early IANA Allocation of Standards Track Code
+              Points", BCP 100, RFC 7120, DOI 10.17487/RFC7120, January
+              2014, <https://www.rfc-editor.org/info/rfc7120>.
+
+   [BCP13]    Best Current Practice 13,
+              <https://www.rfc-editor.org/info/bcp13>.
+              At the time of writing, this BCP comprises the following:
+
+              Freed, N. and J. Klensin, "Multipurpose Internet Mail
+              Extensions (MIME) Part Four: Registration Procedures",
+              BCP 13, RFC 4289, DOI 10.17487/RFC4289, December 2005,
+              <https://www.rfc-editor.org/info/rfc4289>.
+
+              Freed, N., Klensin, J., and T. Hansen, "Media Type
+              Specifications and Registration Procedures", BCP 13,
+              RFC 6838, DOI 10.17487/RFC6838, January 2013,
+              <https://www.rfc-editor.org/info/rfc6838>.
+
+   [BCP14]    Best Current Practice 14,
+              <https://www.rfc-editor.org/info/bcp14>.
+              At the time of writing, this BCP comprises the following:
+
+
+
+
+
+
+Jimenez, et al.           Expires 18 July 2025                 [Page 34]
+
+Internet-Draft                 CoAP pubsub                  January 2025
+
+
+              Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
-              <https://www.rfc-editor.org/rfc/rfc2119>.
+              <https://www.rfc-editor.org/info/rfc2119>.
+
+              Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
+   [BCP26]    Best Current Practice 26,
+              <https://www.rfc-editor.org/info/bcp26>.
+              At the time of writing, this BCP comprises the following:
+
+              Cotton, M., Leiba, B., and T. Narten, "Guidelines for
+              Writing an IANA Considerations Section in RFCs", BCP 26,
+              RFC 8126, DOI 10.17487/RFC8126, June 2017,
+              <https://www.rfc-editor.org/info/rfc8126>.
 
    [RFC6570]  Gregorio, J., Fielding, R., Hadley, M., Nottingham, M.,
               and D. Orchard, "URI Template", RFC 6570,
@@ -1884,41 +1933,15 @@ Internet-Draft                 CoAP pubsub                 December 2024
               Format", RFC 6690, DOI 10.17487/RFC6690, August 2012,
               <https://www.rfc-editor.org/rfc/rfc6690>.
 
-   [RFC6838]  Freed, N., Klensin, J., and T. Hansen, "Media Type
-              Specifications and Registration Procedures", BCP 13,
-              RFC 6838, DOI 10.17487/RFC6838, January 2013,
-              <https://www.rfc-editor.org/rfc/rfc6838>.
-
-   [RFC7120]  Cotton, M., "Early IANA Allocation of Standards Track Code
-              Points", BCP 100, RFC 7120, DOI 10.17487/RFC7120, January
-              2014, <https://www.rfc-editor.org/rfc/rfc7120>.
-
    [RFC7252]  Shelby, Z., Hartke, K., and C. Bormann, "The Constrained
               Application Protocol (CoAP)", RFC 7252,
               DOI 10.17487/RFC7252, June 2014,
               <https://www.rfc-editor.org/rfc/rfc7252>.
 
-
-
-
-Jimenez, et al.           Expires 15 June 2025                 [Page 34]
-
-Internet-Draft                 CoAP pubsub                 December 2024
-
-
    [RFC7641]  Hartke, K., "Observing Resources in the Constrained
               Application Protocol (CoAP)", RFC 7641,
               DOI 10.17487/RFC7641, September 2015,
               <https://www.rfc-editor.org/rfc/rfc7641>.
-
-   [RFC8126]  Cotton, M., Leiba, B., and T. Narten, "Guidelines for
-              Writing an IANA Considerations Section in RFCs", BCP 26,
-              RFC 8126, DOI 10.17487/RFC8126, June 2017,
-              <https://www.rfc-editor.org/rfc/rfc8126>.
-
-   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
-              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
-              May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
 
    [RFC8288]  Nottingham, M., "Web Linking", RFC 8288,
               DOI 10.17487/RFC8288, October 2017,
@@ -1929,15 +1952,29 @@ Internet-Draft                 CoAP pubsub                 December 2024
               DOI 10.17487/RFC8516, January 2019,
               <https://www.rfc-editor.org/rfc/rfc8516>.
 
-   [RFC8949]  Bormann, C. and P. Hoffman, "Concise Binary Object
-              Representation (CBOR)", STD 94, RFC 8949,
-              DOI 10.17487/RFC8949, December 2020,
-              <https://www.rfc-editor.org/rfc/rfc8949>.
+
+
+
+
+
+Jimenez, et al.           Expires 18 July 2025                 [Page 35]
+
+Internet-Draft                 CoAP pubsub                  January 2025
+
 
    [RFC9176]  Amsüss, C., Ed., Shelby, Z., Koster, M., Bormann, C., and
               P. van der Stok, "Constrained RESTful Environments (CoRE)
               Resource Directory", RFC 9176, DOI 10.17487/RFC9176, April
               2022, <https://www.rfc-editor.org/rfc/rfc9176>.
+
+   [STD94]    Internet Standard 94,
+              <https://www.rfc-editor.org/info/std94>.
+              At the time of writing, this STD comprises the following:
+
+              Bormann, C. and P. Hoffman, "Concise Binary Object
+              Representation (CBOR)", STD 94, RFC 8949,
+              DOI 10.17487/RFC8949, December 2020,
+              <https://www.rfc-editor.org/info/rfc8949>.
 
 7.2.  Informative References
 
@@ -1949,34 +1986,21 @@ Internet-Draft                 CoAP pubsub                 December 2024
               <https://datatracker.ietf.org/doc/html/draft-hartke-t2trg-
               coral-pubsub-01>.
 
-
-
-
-
-
-
-
-
-Jimenez, et al.           Expires 15 June 2025                 [Page 35]
-
-Internet-Draft                 CoAP pubsub                 December 2024
-
-
    [I-D.ietf-ace-oscore-gm-admin]
               Tiloca, M., Höglund, R., Van der Stok, P., and F.
               Palombini, "Admin Interface for the OSCORE Group Manager",
               Work in Progress, Internet-Draft, draft-ietf-ace-oscore-
-              gm-admin-12, 8 July 2024,
+              gm-admin-13, 8 January 2025,
               <https://datatracker.ietf.org/doc/html/draft-ietf-ace-
-              oscore-gm-admin-12>.
+              oscore-gm-admin-13>.
 
    [I-D.ietf-ace-pubsub-profile]
               Palombini, F., Sengul, C., and M. Tiloca, "Publish-
               Subscribe Profile for Authentication and Authorization for
               Constrained Environments (ACE)", Work in Progress,
-              Internet-Draft, draft-ietf-ace-pubsub-profile-10, 7 July
-              2024, <https://datatracker.ietf.org/doc/html/draft-ietf-
-              ace-pubsub-profile-10>.
+              Internet-Draft, draft-ietf-ace-pubsub-profile-11, 7
+              January 2025, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-ace-pubsub-profile-11>.
 
    [I-D.ietf-core-interfaces]
               Shelby, Z., Koster, M., Groves, C., Zhu, J., and B.
@@ -1986,15 +2010,18 @@ Internet-Draft                 CoAP pubsub                 December 2024
               2019, <https://datatracker.ietf.org/doc/html/draft-ietf-
               core-interfaces-14>.
 
+
+
+
+Jimenez, et al.           Expires 18 July 2025                 [Page 36]
+
+Internet-Draft                 CoAP pubsub                  January 2025
+
+
    [RFC8613]  Selander, G., Mattsson, J., Palombini, F., and L. Seitz,
               "Object Security for Constrained RESTful Environments
               (OSCORE)", RFC 8613, DOI 10.17487/RFC8613, July 2019,
               <https://www.rfc-editor.org/rfc/rfc8613>.
-
-   [RFC9052]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
-              Structures and Process", STD 96, RFC 9052,
-              DOI 10.17487/RFC9052, August 2022,
-              <https://www.rfc-editor.org/rfc/rfc9052>.
 
    [RFC9053]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
               Initial Algorithms", RFC 9053, DOI 10.17487/RFC9053,
@@ -2011,23 +2038,25 @@ Internet-Draft                 CoAP pubsub                 December 2024
               (ACE-OAuth)", RFC 9200, DOI 10.17487/RFC9200, August 2022,
               <https://www.rfc-editor.org/rfc/rfc9200>.
 
-
-
-Jimenez, et al.           Expires 15 June 2025                 [Page 36]
-
-Internet-Draft                 CoAP pubsub                 December 2024
-
-
-   [RFC9338]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
-              Countersignatures", STD 96, RFC 9338,
-              DOI 10.17487/RFC9338, December 2022,
-              <https://www.rfc-editor.org/rfc/rfc9338>.
-
    [RFC9594]  Palombini, F. and M. Tiloca, "Key Provisioning for Group
               Communication Using Authentication and Authorization for
               Constrained Environments (ACE)", RFC 9594,
               DOI 10.17487/RFC9594, September 2024,
               <https://www.rfc-editor.org/rfc/rfc9594>.
+
+   [STD96]    Internet Standard 96,
+              <https://www.rfc-editor.org/info/std96>.
+              At the time of writing, this STD comprises the following:
+
+              Schaad, J., "CBOR Object Signing and Encryption (COSE):
+              Structures and Process", STD 96, RFC 9052,
+              DOI 10.17487/RFC9052, August 2022,
+              <https://www.rfc-editor.org/info/rfc9052>.
+
+              Schaad, J., "CBOR Object Signing and Encryption (COSE):
+              Countersignatures", STD 96, RFC 9338,
+              DOI 10.17487/RFC9338, December 2022,
+              <https://www.rfc-editor.org/info/rfc9338>.
 
 Appendix A.  Document Updates
 
@@ -2036,6 +2065,14 @@ Appendix A.  Document Updates
 A.1.  Version -13 to -14
 
    *  Section restructuring for better readability.
+
+
+
+
+Jimenez, et al.           Expires 18 July 2025                 [Page 37]
+
+Internet-Draft                 CoAP pubsub                  January 2025
+
 
    *  Updated topic configuration interactions.
 
@@ -2059,20 +2096,12 @@ A.2.  Version -14 to -15
 
    *  Modified all examples to conform to RFC9594.
 
-   *  Added the explicit cancelation of ongoing subscriptions when topic
-      configuration parameters are changed.
+   *  Added the explicit cancellation of ongoing subscriptions when
+      topic configuration parameters are changed.
 
    *  Added editorial changes based on feedback.
 
    *  Clarifications on Topic Configuration creation.
-
-
-
-
-Jimenez, et al.           Expires 15 June 2025                 [Page 37]
-
-Internet-Draft                 CoAP pubsub                 December 2024
-
 
    *  Other editorial changes
 
@@ -2090,6 +2119,16 @@ Acknowledgements
    model and structure as well as the topic lifecycle and interactions.
    It also follows a similar architectural design as that provided by
    Marco Tiloca's [I-D.ietf-ace-oscore-gm-admin].
+
+
+
+
+
+
+Jimenez, et al.           Expires 18 July 2025                 [Page 38]
+
+Internet-Draft                 CoAP pubsub                  January 2025
+
 
    The authors would like to also thank Marco Tiloca, Francesca
    Palombini, Carsten Bormann, Hannes Tschofenig, Zach Shelby, Mohit
@@ -2121,15 +2160,6 @@ Authors' Addresses
    Email: michaeljohnkoster@gmail.com
 
 
-
-
-
-
-Jimenez, et al.           Expires 15 June 2025                 [Page 38]
-
-Internet-Draft                 CoAP pubsub                 December 2024
-
-
    Ari Keranen
    Ericsson
    Email: ari.keranen@ericsson.com
@@ -2151,34 +2181,4 @@ Internet-Draft                 CoAP pubsub                 December 2024
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Jimenez, et al.           Expires 15 June 2025                 [Page 39]
+Jimenez, et al.           Expires 18 July 2025                 [Page 39]
