@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-12T01:38:36.281147+00:00",
+  "timestamp": "2025-01-14T01:20:32.452693+00:00",
   "repo": "core-wg/coap-pubsub",
   "labels": [
     {
@@ -1832,6 +1832,32 @@
       "mergeCommit": {
         "oid": "38ea9fd6804065e4945ff2c7ec9a3c0c27423159"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 59,
+      "id": "PR_kwDOBEc_t86HjsRV",
+      "title": "Nits (beyond -15)",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/59",
+      "state": "OPEN",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-01-13T16:02:35Z",
+      "updatedAt": "2025-01-13T16:02:35Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "main",
+      "baseRefOid": "f06a085b4dce2211588084921f4e4723ec8d9887",
+      "headRepository": "core-wg/coap-pubsub",
+      "headRefName": "nits15",
+      "headRefOid": "696f426b706daf033225508c5c7a21a1f42693a4",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
