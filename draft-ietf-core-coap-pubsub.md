@@ -37,20 +37,25 @@ normative:
   RFC7252:
   RFC8288:
   RFC8516:
-  RFC8949:
+  STD94:
+# RFC8949:
   RFC9176:
   RFC7641:
-  RFC8126:
-  RFC6838:
-  RFC7120:
+  BCP26:
+# RFC8126:
+  BCP13:
+# RFC6838:
+  BCP100:
+# RFC7120:
 
 informative:
   RFC8613:
-  RFC9052:
+  STD96:
+# RFC9052:
+# RFC9338:
   RFC9147:
   RFC9053:
   RFC9200:
-  RFC9338:
   RFC9594:
   I-D.hartke-t2trg-coral-pubsub:
   I-D.ietf-ace-oscore-gm-admin:
@@ -80,7 +85,7 @@ This document applies the idea of broker-based publish-subscribe to Constrained 
 
 ## Terminology {#terminology}
 
-{::boilerplate bcp14}
+{::boilerplate bcp14-tagged-bcp14}
 
 This specification requires readers to be familiar with all the terms and concepts that are discussed in {{RFC8288}} and {{RFC6690}}. Readers should also be familiar with the terms and concepts discussed in {{RFC7252}}, {{RFC9176}} and {{RFC7641}}. The URI template format {{RFC6570}} is used to describe the REST API defined in this specification.
 
@@ -94,7 +99,7 @@ publishers and subscribers:
 : CoAP clients can act as publishers or as subscribers. Publishers send CoAP messages (publications) to the broker on specific topics. Subscribers have an ongoing observation relation (subscription) to a topic. Both roles operate without any mutual knowledge, guided by their respective topic interests.
 
 topic collection:
-: A set of topic-configurations. A topic collection is hosted as one collection resource (See Section 3.1 on {{I-D.ietf-core-interfaces}}) at the broker, and its representation is the list of links to the topic resources corresponding to each topic-configuration.
+: A set of topic-configurations. A topic collection is hosted as one collection resource (See {{Section 3.1 of I-D.ietf-core-interfaces}}) at the broker, and its representation is the list of links to the topic resources corresponding to each topic-configuration.
 
 topic-configuration:
 : A set of information concerning a topic, including its configuration and other metadata. A topic-configuration is hosted as one topic resource at the broker, and its representation is the set of configuration information concerning the topic. All the topic resources associated with the same topic collection share a common base URI, i.e., the URI of the collection resource. Throughout this document the words "topic resource" and "topic-configuration resource" can be used interchangeably.
@@ -221,11 +226,11 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 * 'topic-type': An optional field used to indicate the attribute or property of the topic-data resource for the topic. It encodes the attribute as a CBOR text string. Example attributes include "temperature".
 
-* 'expiration-date': An optional field used to indicate the expiration date of the topic. It encodes the expiration date as a CBOR text string. The value should be a date string as defined in 3.4.1. {{RFC8949}} (e.g., the CBOR encoded version of "2023-03-31T23:59:59Z"). If this field is not present, the topic will not expire automatically.
+* 'expiration-date': An optional field used to indicate the expiration date of the topic. It encodes the expiration date as a CBOR text string. The value should be a date string as defined in {{Section 3.4.1 of RFC8949@STD94}} (e.g., the CBOR encoded version of "2023-03-31T23:59:59Z"). If this field is not present, the topic will not expire automatically.
 
 * 'max-subscribers': An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as an unsigned CBOR integer. If this field is not present or if the field is empty, then there is no limit to the number of simultaneous subscribers allowed. The broker can use this field to limit the number of subscribers for the topic.
 
-* 'observer-check': An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber (see Section {{unsubscribe}}). Encoded as a CBOR unsigned integer greater than 0, it ensures subscribers who have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. If another CoAP server hosts the topic-data resource, that server is responsible for applying the observer-check value. The default value for this field is 86400, as defined in {{RFC7641}}, which corresponds to 24 hours.
+* 'observer-check': An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber (see {{unsubscribe}}). Encoded as a CBOR unsigned integer greater than 0, it ensures subscribers who have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. If another CoAP server hosts the topic-data resource, that server is responsible for applying the observer-check value. The default value for this field is 86400, as defined in {{RFC7641}}, which corresponds to 24 hours.
 
 * 'topic-history': An optional field used to indicate how many previous resource representations the broker shall store for a topic. Encoded as an unsigned CBOR integer, it defines a counter representing the number of historical resource states the broker retains. This enables subscribers to retrieve past states of the topic data when necessary, useful in scenarios where historical context is required (e.g., for data analytics or auditing). If this field is not present, no historical data will be stored.
 
@@ -515,7 +520,7 @@ response is cbor
 
 A client can read the configuration of a topic by making a FETCH request to the topic resource URI with a filter for specific parameters. This is done in order to retrieve part of the current topic resource.
 
-The request contains a CBOR map with a configuration filter or 'conf-filter', a CBOR array of configuration parameters, as defined in Section {{pubsub-parameters}}. Each element of the array specifies one requested configuration parameter of the current topic resource (see {{topic-resource-representation}}).
+The request contains a CBOR map with a configuration filter or 'conf-filter', a CBOR array of configuration parameters, as defined in {{pubsub-parameters}}. Each element of the array specifies one requested configuration parameter of the current topic resource (see {{topic-resource-representation}}).
 
 On success, the broker returns a 2.05 (Content) response with a representation of the topic resource. The response has as payload the partial representation of the topic resource as specified in {{topic-resource-representation}}.
 
@@ -867,7 +872,7 @@ Example of a successful subscription followed by one update:
 
 ### Unsubscribe {#unsubscribe}
 
-A CoAP client can unsubscribe simply by cancelling the observation as described in {{Section 3.6 of RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification. Also on {{Section 3.6 of RFC7641}} the client can simply "forget" the observation and the broker will remove it from the list of observers after the next notification.
+A CoAP client can unsubscribe simply by canceling the observation as described in {{Section 3.6 of RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification. Also on {{Section 3.6 of RFC7641}} the client can simply "forget" the observation and the broker will remove it from the list of observers after the next notification.
 
 As per {{RFC7641}} a server that transmits notifications mostly in non-confirmable messages, but it MUST send a notification in a confirmable message instead of a non-confirmable message at least every 24 hours.
 
@@ -990,7 +995,7 @@ The architecture presented in this document inherits the security considerations
 
 Communications between each client and the broker are RECOMMENDED to be secured, e.g., by using OSCORE {{RFC8613}} or DTLS {{RFC9147}}. Security considerations for the used secure communication protocols apply too.
 
-The content published on a topic by a publisher client SHOULD be protected end-to-end between the publisher and all the subscribers to that topic. In such a case, it MUST be possible to assert source authentication of the published data. This can be achieved at the application layer, e.g., by using COSE {{RFC9052}}, {{RFC9053}}, {{RFC9338}}.
+The content published on a topic by a publisher client SHOULD be protected end-to-end between the publisher and all the subscribers to that topic. In such a case, it MUST be possible to assert source authentication of the published data. This can be achieved at the application layer, e.g., by using COSE {{STD96}}, {{RFC9053}}.
 
 Access control of clients at the broker MAY be enforced for performing discovery operation, and SHOULD be enforced in a fine-grained fashion for operations related to the creation, update, and deletion of topic resources, as well as for operations on topic-data resources such as publication on and subscription to topics. This prevents rogue clients to, among other things, repeatedly create topics at the broker or publish (large) contents, which may result in Denial of Service against the broker and the active subscribers.
 
@@ -1012,7 +1017,7 @@ Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with the RFC n
 
 ## Media Type Registrations {#media-type}
 
-This specification registers the 'application/core-pubsub+cbor' media type for messages of the protocols defined in this document and carrying parameters encoded in CBOR. This registration follows the procedures specified in {{RFC6838}}.
+This specification registers the 'application/core-pubsub+cbor' media type for messages of the protocols defined in this document and carrying parameters encoded in CBOR. This registration follows the procedures specified in {{BCP13}}.
 
       Type name: application
 
@@ -1085,15 +1090,15 @@ Reference: [RFC-XXXX]
 
 This specification establishes the "CoAP Pubsub topic-configuration Parameters" IANA subregistry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
-The registration policy is either "Private Use", "Standards Action with Expert Review", or "Specification Required" or "Expert Review" per {{RFC8126}}. "Expert Review" guidelines are provided in {{review}}.
+The registration policy is either "Private Use", "Standards Action with Expert Review", or "Specification Required" or "Expert Review" per {{BCP26}}. "Expert Review" guidelines are provided in {{review}}.
 
-All assignments according to "Standards Action with Expert Review" are made on a "Standards Action" basis per Section 4.9 of {{RFC8126}} with "Expert Review" additionally required per Section 4.5 of {{RFC8126}}. The procedure for early IANA allocation of "standards track code points" defined in {{RFC7120}} also applies. When such a procedure is used, IANA will ask the designated expert(s) to approve the early allocation before registration. In addition, working group chairs are encouraged to consult the expert(s) early during the process outlined in Section 3.1 of {{RFC7120}}.
+All assignments according to "Standards Action with Expert Review" are made on a "Standards Action" basis per {{Section 4.9 of RFC8126@BCP26}} with "Expert Review" additionally required per {{Section 4.5 of RFC8126@BCP26}}. The procedure for early IANA allocation of "standards track code points" defined in {{BCP100}} also applies. When such a procedure is used, IANA will ask the designated expert(s) to approve the early allocation before registration. In addition, working group chairs are encouraged to consult the expert(s) early during the process outlined in {{Section 3.1 of RFC7120@BCP100}}.
 
 The columns of this registry are:
 
 * Name: This is a descriptive name that enables easier reference to the item. The name MUST be unique. It is not used in the encoding.
 
-* CBOR Key: This is the value used as the CBOR key of the item. These values MUST be unique. The value can be a positive integer, a negative integer, or a text string. Different ranges of values use different registration policies {{RFC8126}}. Integer values from -256 to 255 as well as text strings of length 1 are designated as "Standards Action With Expert Review". Integer values from -65536 to -257 and from 256 to 65535, as well as text strings of length 2 are designated as "Specification Required". Integer values greater than 65535 as well as text strings of length greater than 2 are designated as "Expert Review". Integer values less than -65536 are marked as "Private Use".
+* CBOR Key: This is the value used as the CBOR key of the item. These values MUST be unique. The value can be a positive integer, a negative integer, or a text string. Different ranges of values use different registration policies {{BCP26}}. Integer values from -256 to 255 as well as text strings of length 1 are designated as "Standards Action With Expert Review". Integer values from -65536 to -257 and from 256 to 65535, as well as text strings of length 2 are designated as "Specification Required". Integer values greater than 65535 as well as text strings of length greater than 2 are designated as "Expert Review". Integer values less than -65536 are marked as "Private Use".
 
 * CBOR Type: This contains the CBOR type of the item, or a pointer to the registry that defines its type, when that depends on another item.
 
@@ -1135,7 +1140,7 @@ Expert reviewers should take into consideration the following points:
 * Code bug fix https://github.com/jaimejim/aiocoap-pubsub-broker/commit/f32ce4866a81319238d6e905de439c9410cce175
 * Added two new optional topic configuration parameters; ‘initialize,’ and ‘topic-history’.
 * Modified all examples to conform to RFC9594.
-* Added the explicit cancelation of ongoing subscriptions when topic configuration parameters are changed.
+* Added the explicit cancellation of ongoing subscriptions when topic configuration parameters are changed.
 * Added editorial changes based on feedback.
 * Clarifications on Topic Configuration creation.
 * Other editorial changes
