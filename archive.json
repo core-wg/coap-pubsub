@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-14T01:20:32.452693+00:00",
+  "timestamp": "2025-01-16T01:21:37.890676+00:00",
   "repo": "core-wg/coap-pubsub",
   "labels": [
     {
@@ -129,15 +129,15 @@
       "id": "MDU6SXNzdWUyMTgwNTg3MjI=",
       "title": "Response code for stale published value or empty response, \"no content\"",
       "url": "https://github.com/core-wg/coap-pubsub/issues/4",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mjkoster",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Currently we define a \"no content\" response, such as when a GET is done on a value which has expired its lifetime, with 2.04. We should probably define a new response code like 2.06 for this instead of trying to overload the 2.04 when used as a \"changed\" response to POST or PUT.",
       "createdAt": "2017-03-30T01:53:44Z",
-      "updatedAt": "2018-07-18T21:52:06Z",
-      "closedAt": null,
+      "updatedAt": "2025-01-14T07:41:00Z",
+      "closedAt": "2025-01-14T07:41:00Z",
       "comments": [
         {
           "author": "mjkoster",
@@ -152,6 +152,13 @@
           "body": "Suggest we create an equivalent response code to HTTP 202 Accepted\r\n\r\n202 Accepted\r\nThe request has been accepted for processing, but the processing has not been completed. The request might or might not be eventually acted upon, and may be disallowed when processing occurs.\r\n\r\nSuggest using 2.07\r\n\r\n",
           "createdAt": "2018-07-18T21:52:06Z",
           "updatedAt": "2018-07-18T21:52:06Z"
+        },
+        {
+          "author": "jaimejim",
+          "authorAssociation": "MEMBER",
+          "body": "This issue IMO might be something to be handled in another document.",
+          "createdAt": "2025-01-14T07:41:00Z",
+          "updatedAt": "2025-01-14T07:41:00Z"
         }
       ]
     },
@@ -160,7 +167,7 @@
       "id": "MDU6SXNzdWUyMTgwNjEzMjc=",
       "title": "POST for queueing doesn't solve the QoS issue with missed publications ",
       "url": "https://github.com/core-wg/coap-pubsub/issues/5",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mjkoster",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
@@ -169,9 +176,17 @@
       ],
       "body": "If a client subscribes using Observe, there is no handshake on the observe response to indicate that the notification was received by the subscriber. Creating a list of published representations in the broker using POST only covers the case where the broker can't keep up with sending notifications. The notifications are still \"best effort\".\r\n\r\nTo solve the QoS issue, we should have the subscriber create a queueing resource on the broker, which is specific to that subscriber, for each subscribed topic for which more than \"best effort\" QoS is desired. This resource will store published representations until the subscriber can retrieve or accept them. \r\n\r\nThe subscriber may use GET to return the representation of the queueing resource, receiving a list of links to published representations which may then be fetched using GET. The subscriber would be responsible for removing the representations it has fetched.\r\n\r\nThis enables sleepy subscribers and subscribers behind NAT firewalls to receive notifications without data loss. \r\n\r\nWe may also provide a resource that may be observed which returns and removes representations from the queue, in published order, using GET or Observe. Using GET, the broker would return \"no data\" upon fetches to an empty queue.\r\n\r\nA sleepy subscriber could wake up, subscribe, receive notifications, unsubscribe, and sleep again.\r\n\r\nWe may also provide a means for the subscriber to request a push or \"web callback\" using PUT or POST to update a resource on the subscriber upon notifications.\r\n\r\nWe could keep \"simple pubsub\" as it is, and allow queueing pubsub as an optional feature for enhanced QoS, sleepy subscribers, etc.\r\n",
       "createdAt": "2017-03-30T02:14:21Z",
-      "updatedAt": "2018-07-18T21:15:02Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-01-14T07:46:01Z",
+      "closedAt": "2025-01-14T07:46:01Z",
+      "comments": [
+        {
+          "author": "jaimejim",
+          "authorAssociation": "MEMBER",
+          "body": "The comment refers to the previous version of the document at the time, which has gone through major changes. \r\nSee diff:  https://author-tools.ietf.org/iddiff?url1=draft-ietf-core-coap-pubsub-01&url2=draft-ietf-core-coap-pubsub-15&difftype=--html\r\n\r\nThe current architecture has topic configuration parameters to handle topic expirations, maximum number of subscribers, topic history, etc.",
+          "createdAt": "2025-01-14T07:46:01Z",
+          "updatedAt": "2025-01-14T07:46:01Z"
+        }
+      ]
     },
     {
       "number": 8,
@@ -287,7 +302,7 @@
       "id": "MDU6SXNzdWUyNzkzNDg0NzA=",
       "title": "Notification information to publisher",
       "url": "https://github.com/core-wg/coap-pubsub/issues/12",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "lauri-piikivi",
       "authorAssociation": "NONE",
       "assignees": [],
@@ -296,8 +311,8 @@
       ],
       "body": "Hi,\r\n\r\nMore of a feature wish. If a client subscribes for notifications, I would like to have an option that allows the broker to forward the notification attributes -- the greater than, less than, minimum period etc --  to the publishing client. The publishing client can use those to adjust it's own publishing. ",
       "createdAt": "2017-12-05T11:56:32Z",
-      "updatedAt": "2018-07-18T21:12:12Z",
-      "closedAt": null,
+      "updatedAt": "2025-01-14T07:54:16Z",
+      "closedAt": "2025-01-14T07:54:16Z",
       "comments": [
         {
           "author": "akeranen",
@@ -392,33 +407,39 @@
       "id": "MDU6SXNzdWUzMDY1OTI4MDc=",
       "title": "How does a client use Conditional Notification parameters (CoRE Dynlink)?",
       "url": "https://github.com/core-wg/coap-pubsub/issues/22",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mjkoster",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
-      "labels": [
-        "for-future-docs"
-      ],
+      "labels": [],
       "body": "Should we support conditional notification on subscriptions? If so, how should we enable it? Can it only support pmin and pmax since we only forward representations?",
       "createdAt": "2018-03-19T19:03:44Z",
-      "updatedAt": "2018-07-18T21:04:08Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2025-01-14T07:53:42Z",
+      "closedAt": "2025-01-14T07:53:35Z",
+      "comments": [
+        {
+          "author": "jaimejim",
+          "authorAssociation": "MEMBER",
+          "body": "Pmin is now on [draft-ietf-core-conditional-attributes](https://datatracker.ietf.org/doc/draft-ietf-core-conditional-attributes/). Conditional Control Attributes and Conditional Notification Attributes.\r\n\r\nSince the Subscription works as with any CoAP server, it should behave according to the support of the server at the time, getting 3.05 if the observatioj was accepted.\r\n\r\nSo if you use for example `GET /CO2?c.gt=1000` with `Obs: 0` to a topic-data, you should get just the notifications for that resource when lower than 1000.\r\n\r\nhttps://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-15#name-subscribe",
+          "createdAt": "2025-01-14T07:53:35Z",
+          "updatedAt": "2025-01-14T07:53:35Z"
+        }
+      ]
     },
     {
       "number": 24,
       "id": "MDU6SXNzdWUzMDY2Mzg4NzQ=",
       "title": "What happens when a client tries to create a topic that already exists?",
       "url": "https://github.com/core-wg/coap-pubsub/issues/24",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "mjkoster",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "Should we return 4.09 Conflict for the case when the client tries to create a topic that already exists? \r\n\r\n**Indicates that the request could not be processed because of conflict in the request, such as an edit conflict between multiple simultaneous updates.**\r\n\r\nThe draft currently specifies 4.03\r\n\r\n**The request was valid, but the server is refusing action. The user might not have the necessary permissions for a resource, or may need an account of some sort.**\r\n",
       "createdAt": "2018-03-19T21:16:20Z",
-      "updatedAt": "2023-10-02T16:19:05Z",
-      "closedAt": null,
+      "updatedAt": "2025-01-14T07:54:46Z",
+      "closedAt": "2025-01-14T07:54:46Z",
       "comments": [
         {
           "author": "akeranen",
@@ -511,18 +532,20 @@
       "id": "MDU6SXNzdWU1MTQ5Mjc5MTI=",
       "title": "Why do topics need to be created?",
       "url": "https://github.com/core-wg/coap-pubsub/issues/40",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "bdamm",
       "authorAssociation": "NONE",
       "assignees": [
         "cabo",
         "marco-tiloca-sics"
       ],
-      "labels": [],
+      "labels": [
+        "for-future-docs"
+      ],
       "body": "The protocol requires that publishers and subscribers create topics before publishing or subscribing to topics. There is an option for a single-shot topic creation with publish, but no option for subscribing to a topic that hasn't been created yet.\r\n\r\nThe result is that if you have a very large tree of potential but not realized topics, subscribers need to actually create a topic before subscribing, regardless of whether the topic will actually be used or not. This converts potential topics into actual topics, which is a major resource burden in the case where there is a large number of potential topics but a small number of actual topics within that potential topic tree.\r\n",
       "createdAt": "2019-10-30T19:30:25Z",
-      "updatedAt": "2023-10-02T14:00:26Z",
-      "closedAt": null,
+      "updatedAt": "2025-01-14T07:58:20Z",
+      "closedAt": "2025-01-14T07:58:20Z",
       "comments": [
         {
           "author": "jaimejim",
@@ -538,7 +561,7 @@
       "id": "MDU6SXNzdWU1MTQ5MzA4MTI=",
       "title": "Messages are always retained",
       "url": "https://github.com/core-wg/coap-pubsub/issues/41",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "bdamm",
       "authorAssociation": "NONE",
       "assignees": [
@@ -547,8 +570,8 @@
       "labels": [],
       "body": "The pubsub protocol -09 requires the broker to always provide the most recent message to a subscriber. Why? The message might be very out-dated. Also, this requires the broker to retain the most recent message for every topic. If the topic tree is large and the broker is acting as an exchange point for millions of devices then the requirement that all topics have a cached message puts a big burden on the broker.",
       "createdAt": "2019-10-30T19:35:39Z",
-      "updatedAt": "2023-10-04T13:14:34Z",
-      "closedAt": null,
+      "updatedAt": "2025-01-14T07:59:25Z",
+      "closedAt": "2025-01-14T07:59:25Z",
       "comments": [
         {
           "author": "jaimejim",
@@ -564,7 +587,7 @@
       "id": "MDU6SXNzdWU1MTQ5ODAxMTQ=",
       "title": "No way to wildcard subscriptions or subscribe to subtrees",
       "url": "https://github.com/core-wg/coap-pubsub/issues/42",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "bdamm",
       "authorAssociation": "NONE",
       "assignees": [
@@ -574,8 +597,8 @@
       "labels": [],
       "body": "Suppose there is a topic structure such as /${tenant-id}/${device-mac}/${event-id}\r\n\r\nSuppose a subscriber wants to receive all events with a specific ID. There is no way to do that in this protocol.\r\n\r\nSuppose a subscriber wants to receive all events from a specific device-mac. \r\nSuppose a subscriber wants to receive all events from a specific tenant-id.\r\n\r\nHow could this be efficiently realized at all, even with complete freedom to structure the topic tree in any way? With the current protocol I don't see how to do it. Subscribers would need to subscribe to millions of potential topics, even though there may not be millions of actual topics. Even worse, subscribers would need intimate knowledge of all possible topics (all possible IDs and MACs) which may not even be possible.",
       "createdAt": "2019-10-30T21:01:44Z",
-      "updatedAt": "2023-10-04T12:48:16Z",
-      "closedAt": null,
+      "updatedAt": "2025-01-14T07:59:58Z",
+      "closedAt": "2025-01-14T07:59:58Z",
       "comments": [
         {
           "author": "mattaylor",
@@ -630,7 +653,7 @@
       "id": "I_kwDOBEc_t86GLS4j",
       "title": "Feature requests",
       "url": "https://github.com/core-wg/coap-pubsub/issues/56",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "jaimejim",
       "authorAssociation": "MEMBER",
       "assignees": [],
@@ -639,8 +662,8 @@
       ],
       "body": "As per email discussions:\r\n\r\n\r\nThe features requested were:\r\n\r\n1. CoAP client should subscribe by default without getting a 4.04 in every case.\r\n2. One-shot publication and topic creation.\r\n\r\nMy approach to do this would be:\r\n\r\n1. Making sure that topic-data path can be created/selected by the client. Which is something want enabled anyways.\r\n\r\n2. Populating topic-data with an empty string. This would in principle not be the way the broker works now, so it is either something we enable in a boolean parameter like \"initialize : true\" or we change the behaviour, I would prefer to have it as a parameter choice.\r\n\r\n\r\nThe following CoAP communication would then be possible:\r\n\r\nClient ---> Broker : one-shot topic creation\r\n```sh\r\n\u276f ./client.py -m POST coap://127.0.0.1:5683/ps --payload \"{\\\"topic-name\\\": \\\"Room Temperature Sensor\\\", \\\"resource-type\\\": \\\"core.ps.conf\\\", \\\"media-type\\\": \\\"application/json\\\", \\\"topic-type\\\": \\\"temperature\\\", \\\"expiration-date\\\": \\\"2023-04-05T23:59:59Z\\\", \\\"max-subscribers\\\": 200, \\\"observer-check\\\": 86400, \\\"topic-data\\\": \\\"david-topic\\\", \\\"initialize\\\": true}\"\r\n```\r\n\r\nBroker ---> Client\r\n\r\n```sh\r\nResponse arrived from different address; base URI is coap://127.0.0.1/ps\r\nLocation options indicate new resource: /ps/4309ab\r\n\r\nJSON re-formated and indented\r\n{\r\n    \"topic-name\": \"Room Temperature Sensor\",\r\n    \"topic-data\": \"david-topic\",\r\n    \"resource-type\": \"core.ps.conf\",\r\n    \"media-type\": \"application/json\",\r\n    \"topic-type\": \"temperature\",\r\n    \"expiration-date\": \"2023-04-05T23:59:59Z\",\r\n    \"max-subscribers\": 200,\r\n    \"observer-check\": 86400,\r\n    \"initialize\": true\r\n}\r\n``````\r\nSubscriber ---> Broker : subscription before publication\r\n```sh\r\n\u276f ./client.py -m GET --observe 'coap://127.0.0.1:5683/david-topic'\r\nResponse arrived from different address; base URI is coap://127.0.0.1/david-topic\r\n```\r\nPublisher ---> Broker\r\n```sh\r\n\u276f ./client.py -m PUT coap://127.0.0.1:5683/david-topic --payload \"{\"n\": \"temperature\",\"u\": \"Cel\",\"t\": 1621452122,\"v\": 22}\"\r\nResponse arrived from different address; base URI is coap://127.0.0.1/david-topic\r\n{n: temperature,u: Cel,t: 1621452122,v: 22}\r\n```\r\n\r\nAfter which the client get the following notification\r\n\r\nSubscriber ---> Broker\r\n```sh\r\n\u276f ./client.py -m GET --observe 'coap://127.0.0.1:5683/david-topic'\r\nResponse arrived from different address; base URI is coap://127.0.0.1/david-topic\r\n\r\n---\r\n{n: temperature,u: Cel,t: 1621452122,v: 22}\r\n```",
       "createdAt": "2024-04-18T16:27:31Z",
-      "updatedAt": "2024-10-20T12:05:05Z",
-      "closedAt": null,
+      "updatedAt": "2025-01-14T08:00:21Z",
+      "closedAt": "2025-01-14T08:00:21Z",
       "comments": [
         {
           "author": "jaimejim",
@@ -1840,20 +1863,56 @@
       "id": "PR_kwDOBEc_t86HjsRV",
       "title": "Nits (beyond -15)",
       "url": "https://github.com/core-wg/coap-pubsub/pull/59",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "cabo",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-01-13T16:02:35Z",
-      "updatedAt": "2025-01-13T16:02:35Z",
+      "updatedAt": "2025-01-14T07:37:09Z",
       "baseRepository": "core-wg/coap-pubsub",
       "baseRefName": "main",
       "baseRefOid": "f06a085b4dce2211588084921f4e4723ec8d9887",
       "headRepository": "core-wg/coap-pubsub",
       "headRefName": "nits15",
       "headRefOid": "696f426b706daf033225508c5c7a21a1f42693a4",
+      "closedAt": "2025-01-14T07:37:09Z",
+      "mergedAt": "2025-01-14T07:37:09Z",
+      "mergedBy": "jaimejim",
+      "mergeCommit": {
+        "oid": "514c2691335de371f63a519d747003432e0d0782"
+      },
+      "comments": [
+        {
+          "author": "jaimejim",
+          "authorAssociation": "MEMBER",
+          "body": "Thanks for the nits Carsten, merging now.",
+          "createdAt": "2025-01-14T07:36:09Z",
+          "updatedAt": "2025-01-14T07:36:09Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 60,
+      "id": "PR_kwDOBEc_t86HvOyY",
+      "title": "Fix terminology and a broken sentence.",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/60",
+      "state": "OPEN",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "(Contents still to be fixed.)",
+      "createdAt": "2025-01-14T16:50:27Z",
+      "updatedAt": "2025-01-14T16:50:27Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "main",
+      "baseRefOid": "514c2691335de371f63a519d747003432e0d0782",
+      "headRepository": "cabo/coap-pubsub",
+      "headRefName": "iana",
+      "headRefOid": "aa37e8951419324eeccc58cdc5759ad4443840a4",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
