@@ -144,10 +144,6 @@ Topic-configuration interactions are discovery, create, read configuration, upda
 
 Topic-data interactions are publish, subscribe, unsubscribe, read, and delete. These operations are oriented on how data is transferred from a publisher to a subscriber.
 
-<!--
-Throughout the document there is a number of TBDs that need updating, mostly content formats or cbor data representations
--->
-
 ## Managing Topics {#managing-topics}
 
 {{fig-api}} shows the resources related to a Topic Collection that can be managed at the Broker.
@@ -296,10 +292,6 @@ Each topic collection is associated with a group of topic resources, each detail
 
 Below is an example of discovery via /.well-known/core with rt=core.ps.conf that returns a list of topics, as the list of links to the corresponding topic resources.
 
-<!--
-TODO: add the ct part in IANA and add the example here:
-- If you want to indicate ct= in one of this links, then it should be ct=X, where is the the Content-Format identifier for application/core-pubsub+cbor
--->
 
 ~~~~
    Request:
@@ -320,15 +312,6 @@ TODO: add the ct part in IANA and add the example here:
 
 ### Topic-Data Discovery
 
-<!--
-TODO DISCUSS Decide on this section
-
-   Also, as based on {{ection 1.2.2 of RFC6690}}, I'd realistically expect to have located by /.well-known/core certainly the topic collection resources and MAYBE the topic resources (and likely limited only to "perpetual", hence well-known topics).
-
-   Instead, I'd expect to discover the links to the topic resources mostly by GET/FETCH accessing the topic collection resource.
-
-   Practically, you may have to literally *discover* the broker, its collection resource, and a particular topic resource. At that point, you just *learn* the URI of the topic-data resource, from the corresponding parameter within the exact, corresponding topic resource.
--->
 
 Within a topic, there is the topic-data property containing the URI of the topic-data resource that a CoAP client can subscribe and publish to. Resources exposing resources of the topic-data type are expected to use the resource type 'core.ps.data'.
 
@@ -441,7 +424,7 @@ The broker MUST issue a 4.00 (Bad Request) error if a received parameter is inva
 
    Header: POST (Code=0.02)
    Uri-Path: "ps"
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Content-Format: TBD (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /         0: "living-room-sensor",
@@ -452,7 +435,7 @@ The broker MUST issue a 4.00 (Bad Request) error if a received parameter is inva
 
    Header: Created (Code=2.01)
    Location-Path: "ps/h9392"
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Content-Format: TBD (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /         0: "living-room-sensor",
@@ -496,7 +479,7 @@ For example, below is a request on the topic "ps/h9392":
    Response:
 
    Header: Content (Code=2.05)
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Content-Format: TBD (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /            0: "living-room-sensor",
@@ -538,7 +521,7 @@ Example:
    Header: FETCH (Code=0.05)
    Uri-Path: "ps"
    Uri-Path: "h9392"
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Content-Format: TBD (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / conf-filter / 11: ["topic-data", "media-type"]
@@ -547,7 +530,7 @@ Example:
    Response:
 
    Header: Content (Code=2.05)
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Content-Format: TBD (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / topic-data /            1: "ps/data/1bd0d6d",
@@ -582,7 +565,7 @@ Example:
    Header: PUT (Code=0.03)
    Uri-Path: "ps"
    Uri-Path: "h9392"
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Content-Format: TBD (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /            0: "living-room-sensor",
@@ -596,7 +579,7 @@ Example:
    Response:
 
    Header: Changed (Code=2.04)
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Content-Format: TBD (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /            0: "living-room-sensor",
@@ -632,7 +615,7 @@ Contrary to PUT, iPATCH operations will explicitly update some parameters, leavi
    Header: iPATCH (Code=0.07)
    Uri-Path: "ps"
    Uri-Path: "h9392"
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Content-Format: TBD (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / expiration-date /  5: "2024-02-28T23:59:59Z",
@@ -642,7 +625,7 @@ Contrary to PUT, iPATCH operations will explicitly update some parameters, leavi
    Response:
 
    Header: Changed (Code=2.04)
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Content-Format: TBD (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /            0: "living-room-sensor",
@@ -698,11 +681,6 @@ URIs for topic resources are broker-generated (see {{topic-create}}). There is n
 
 When a topic is newly created, it is first placed by the broker into the HALF CREATED state (see {{fig-life}}). In this state, a client can read and update the configuration of the topic and delete the topic. A publisher can publish to the topic-data resource.  However, a subscriber cannot yet subscribe to the topic-data resource nor read the latest data.
 
-<!--
-TODO I got a comment that mqtt folks my want to pre-subscribe to topics, so they'd like to be able to place an observation even if the resource is not "fully created"
-
-Also, we might want to restrict the discovery part ONLY for FULLY created topics. If so, let's mention it.
--->
 
 ~~~~ aasvg
                 HALF                          FULLY
@@ -728,15 +706,6 @@ When a client deletes a topic-configuration resource, the topic is placed into t
 When a client deletes a topic-data, the topic is placed into the HALF CREATED state, where clients can read, update and delete the topic-configuration and await for a publisher to begin publication.
 
 ## Topic-Data Interactions {#topic-data-interactions}
-
-<!--
-TODO: Should we remove this
-   See comments above. I'm not sure whether the client should have any say on where the topic-data resource is hosted.
-
-   It'd already be difficult to have some sort of coordination between the broker and the separate server hosting the topic-data resource, let alone involving the client as yet another actor in the process.
-
-JJ: Also note that the broker has no way to know anything about a topic-data hosted elsewhere.
--->
 
 Interactions with the topic-data resource are covered in this section.
 
@@ -807,14 +776,6 @@ On success, the server hosting the topic-data resource MUST return 2.05 (Content
 
 If the topic is not yet in the fully created state (see {{topic-lifecycle}}) the broker MUST return a response code 4.04 (Not Found).
 
-<!--
-TODO: After a publisher publishes to the topic-data for the first time, the topic is placed into the FULLY CREATED state.
-
-This is a problem if the topic-data is hosted elsewhere and not in the broker, how does the broker know when to put it in fully created state if the pub/sub mechanism is happening directly btw pub and sub?
-
-Shall I add: The topic-data URI may link to resources that are not hosted directly by the broker as shown in {{fig-external-server}}.
-Thus, subscribers would use the broker for discovery only.
--->
 
 The following response codes are defined for the Subscribe operation:
 
@@ -826,9 +787,6 @@ Failure:
 
 If the 'max-subscribers' parameter has been reached, the broker must treat that as specified in {{Section 4.1 of RFC7641}}. The response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
 
-<!--
-TODO Right. However, how can this work when the server hosting the topic-data resource is not the broker? The broker knows the maximum number of subscribers, but that separate server does not. Is it just up to a not-specified-here synchronization protocol between the broker and that server?
--->
 
 Example of a successful subscription followed by one update:
 
@@ -878,23 +836,12 @@ As per {{RFC7641}} a server that transmits notifications mostly in non-confirmab
 
 This value can be modified at the broker by the administrator of a topic by modifying the parameter "observer-check" on {{topic-resource-representation}}. This would allow changing the rate at which different implementations verify that a subscriber is still interested in observing a topic-data resource.
 
-<!--
-TODO: another item that points to make topic-data a broker thing only.
-
-   Yes, and again, what if the topic-data resource is not hosted at the broker but at a different server? Is it just up to a not-specified-here synchronization protocol between the broker and that server?
--->
 
 ### Delete topic-data {#delete-topic-data}
 
 A publisher MAY delete a topic by making a CoAP DELETE request on the topic-data URI.
 
 On success, the broker returns a 2.02 (Deleted) response.
-
-
-<!--
-Q: Same question here, why is this a SHOULD (see comment above).
-A: Changed to MUST but I think we could discuss it. Could the broker have reasons to keep the uri of the topic-data path for later reuse in some cases? for example the broker could also implement a different behaviour for the topic-data deletion, sending back 2.02 but keeping the resource in fully created state without returning a final 4.04 to cancel existing observations BUT still having the resource addressable to allow normal GET on it, for example for retrieving the last published/historical value/s. I am ambivalent here and would welcome guidance from others. I think MUST should not be used if there are no interoperability issues cause by using SHOULD.
--->
 
 When a topic-data resource is deleted, the broker MUST also delete the topic-data parameter in the topic resource, unsubscribe all subscribers by removing them from the list of observers and return a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The topic is then set back to the half created state as per {{topic-lifecycle}}.
 
@@ -946,15 +893,6 @@ Example:
    }
 ~~~~
 
-<!--
-TODO: Do we add wildcards here?
-https://github.com/core-wg/coap-pubsub/issues/42
-
-### Subscribe to a subset of topic-data resources  {#wildcard}
-
-Some implementations may want to subscribe to multiple topic-data resources with one single request. That is possible by using FETCH with
-
--->
 
 ## Rate Limiting {#rate-limit}
 
@@ -970,23 +908,21 @@ This document defines parameters used in the messages exchanged between a client
 
 Note that the media type application/core-pubsub+cbor MUST be used when these parameters are transported in the respective message fields.
 
-<!-- To be registerd in IANA: TODO Populate the TBDs non-negative unsigned -->
-
 ~~~~~~~~~~~
 +----------------------+----------+-----------+------------+
 | Name                 | CBOR Key | CBOR Type | Reference  |
 | -------------------- | -------- | --------- | ---------- |
-| topic-name           | TBD1     | tstr      | [RFC-XXXX] |
-| topic-data           | TBD2     | tstr      | [RFC-XXXX] |
-| resource-type        | TBD3     | tstr      | [RFC-XXXX] |
-| topic-content-format | TBD4     | uint      | [RFC-XXXX] |
-| topic-type           | TBD5     | tstr      | [RFC-XXXX] |
-| expiration-date      | TBD6     | tstr      | [RFC-XXXX] |
-| max-subscribers      | TBD7     | uint      | [RFC-XXXX] |
-| observer-check       | TBD8     | uint      | [RFC-XXXX] |
-| topic-history        | TBD9     | uint      | [RFC-XXXX] |
-| initialize           | TBD10    | bool      | [RFC-XXXX] |
-| conf-filter          | TBD11    | array     | [RFC-XXXX] |
+| topic-name           | 0        | tstr      | [RFC-XXXX] |
+| topic-data           | 1        | tstr      | [RFC-XXXX] |
+| resource-type        | 2        | tstr      | [RFC-XXXX] |
+| topic-content-format | 3        | uint      | [RFC-XXXX] |
+| topic-type           | 4        | tstr      | [RFC-XXXX] |
+| expiration-date      | 5        | tstr      | [RFC-XXXX] |
+| max-subscribers      | 6        | uint      | [RFC-XXXX] |
+| observer-check       | 7        | uint      | [RFC-XXXX] |
+| topic-history        | 8        | uint      | [RFC-XXXX] |
+| initialize           | 9        | bool      | [RFC-XXXX] |
+| conf-filter          | 10       | array     | [RFC-XXXX] |
 +----------------------+----------+-----------+------------+
 ~~~~~~~~~~~
 {: #fig-CoAP-Pubsub-Parameters title="CoAP Pubsub Parameters" artwork-align="center"}
