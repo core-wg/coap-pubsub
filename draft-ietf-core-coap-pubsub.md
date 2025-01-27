@@ -1088,7 +1088,7 @@ Reference: [RFC-XXXX]
 
 ## CoAP Pubsub Parameters {#iana-coap-pubsub-parameters}
 
-This specification establishes the "CoAP Pubsub topic-configuration Parameters" IANA subregistry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
+This specification establishes the "CoAP Pubsub topic-configuration Parameters" IANA registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
 The registration policy is either "Private Use", "Standards Action with Expert Review", or "Specification Required" or "Expert Review" per {{BCP26}}. "Expert Review" guidelines are provided in {{review}}.
 
@@ -1104,11 +1104,11 @@ The columns of this registry are:
 
 * Reference: This contains a pointer to the public specification for the item.
 
-This subregistry has been initially populated with the values in {{fig-CoAP-Pubsub-Parameters}}.
+This registry has been initially populated with the values in {{fig-CoAP-Pubsub-Parameters}}.
 
 ## Expert Review Instructions {#review}
 
-The IANA registry established in this document is defined as "Standards Action with Expert Review", "Specification Required", and "Epert Review" are three of the registration policies defined for the IANA subregistry established in {{iana-coap-pubsub-parameters}}. This section gives some general guidelines for what the experts should be looking for; however, they are being designated as experts for a reason, so they should be given substantial latitude.
+The registration policy for the IANA registry established in  {{iana-coap-pubsub-parameters}} is defined as one of "Standards Action with Expert Review", "Specification Required", and "Expert Review". This section gives some general guidelines for what the experts should be looking for; however, they are being designated as experts for a reason, so they should be given substantial latitude.
 
 Expert reviewers should take into consideration the following points:
 
