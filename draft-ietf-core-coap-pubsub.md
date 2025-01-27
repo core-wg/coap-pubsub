@@ -1108,17 +1108,16 @@ This registry has been initially populated with the values in {{fig-CoAP-Pubsub-
 
 ## Expert Review Instructions {#review}
 
-The registration policy for the IANA registry established in  {{iana-coap-pubsub-parameters}} is defined as one of "Standards Action with Expert Review", "Specification Required", and "Expert Review". This section gives some general guidelines for what the experts should be looking for; however, they are being designated as experts for a reason, so they should be given substantial latitude.
+The registration policy for the IANA registry established in  {{iana-coap-pubsub-parameters}} is defined as "Expert Review". This section gives some general guidelines for what the experts should be looking for; however, they are being designated as experts for a reason, so they should be given substantial latitude.
 
 Expert reviewers should take into consideration the following points:
 
-* Clarity and correctness of registrations. Experts are expected to check the clarity of purpose and use of the requested entries. Experts need to make sure that registered parameters are clearly defined in the corresponding specification. Parameters that do not meet these objectives of clarity and completeness must not be registered.
+* Clarity and correctness of registrations. Experts are expected to check the clarity of purpose and use of the requested entries. Experts need to make sure that registered parameters are clearly defined in the corresponding specification. Parameters that do not meet these objectives of clarity and completeness must not be registered. Experts should consider requesting an opinion on correctness from the Constrained RESTful Environments (CoRE) Working Group.
 
-* Point squatting should be discouraged. Reviewers are encouraged to get sufficient information for registration requests to ensure that the usage is not going to duplicate one that is already registered and that the point is likely to be used in deployments. The zones tagged as "Private Use" are intended for testing purposes and closed environments. Code points in other ranges should not be assigned for testing.
+* Duplicated registration and point squatting (the use of unregistered code points) should be discouraged. Reviewers should gather enough information to ensure registration requests do not duplicate existing ones and are likely to see deployment. The zones tagged as "Private Use" are intended for testing purposes and closed environments. Code points in other ranges should not be assigned for testing.
 
-* Specifications are required for the "Standards Action With Expert Review" range of point assignment. Specifications should exist for "Specification Required" ranges, but early assignment before a specification is available is considered to be permissible. When specifications are not provided, the description provided needs to have sufficient information to identify what the point is being used for.
+* Specifications are recommended. When specifications are not provided, the description provided needs to have sufficient information to verify the points above.
 
-* Experts should take into account the expected usage of fields when approving point assignment. Documents published via Standards Action can also register points outside the Standards Action range. The length of the encoded value should be weighed against how many code points of that length are left, the size of device it will be used on, and the number of code points left that encode to that size.
 
 --- back
 
