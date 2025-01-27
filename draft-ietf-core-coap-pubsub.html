@@ -2661,15 +2661,21 @@ Reference: [RFC-XXXX]
         </h3>
 <p id="section-6.5-1">The registration policy for the IANA registry established in  <a href="#iana-coap-pubsub-parameters" class="auto internal xref">Section 6.4</a> is defined as "Expert Review". This section gives some general guidelines for what the experts should be looking for; however, they are being designated as experts for a reason, so they should be given substantial latitude.<a href="#section-6.5-1" class="pilcrow">¶</a></p>
 <p id="section-6.5-2">Expert reviewers should take into consideration the following points:<a href="#section-6.5-2" class="pilcrow">¶</a></p>
+<p id="section-6.5-3">The registration policy for the IANA registry established in  <a href="#iana-coap-pubsub-parameters" class="auto internal xref">Section 6.4</a> is defined as one of "Standards Action with Expert Review", "Specification Required", and "Expert Review". This section gives some general guidelines for what the experts should be looking for; however, they are being designated as experts for a reason, so they should be given substantial latitude.<a href="#section-6.5-3" class="pilcrow">¶</a></p>
+<p id="section-6.5-4">These registration policies are designed to accommodate different use cases; “Standards Action with Expert Review” allows for further IETF standards and extensions, maintaining consistency and alignment with established protocols; “Specification Required” allows third-party specifications from Standards Development Organizations (SDOs) to register parameters, enabling interoperability and broader applicability; and “Expert Review” provides a flexible mechanism for exposing new parameters that implementors do not want to keep in a private range.<a href="#section-6.5-4" class="pilcrow">¶</a></p>
+<p id="section-6.5-5">Expert reviewers should take into consideration the following points:<a href="#section-6.5-5" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.5-3.1">
-            <p id="section-6.5-3.1.1">Clarity and correctness of registrations. Experts are expected to check the clarity of purpose and use of the requested entries. Experts need to make sure that registered parameters are clearly defined in the corresponding specification. Parameters that do not meet these objectives of clarity and completeness must not be registered. Experts should consider requesting an opinion on correctness from the Constrained RESTful Environments (CoRE) Working Group.<a href="#section-6.5-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.5-6.1">
+            <p id="section-6.5-6.1.1">Clarity and correctness of registrations. Experts are expected to check the clarity of purpose and use of the requested entries. Experts need to make sure that registered parameters are clearly defined in the corresponding specification. Parameters that do not meet these objectives of clarity and completeness must not be registered.<a href="#section-6.5-6.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.5-3.2">
-            <p id="section-6.5-3.2.1">Duplicated registration and point squatting (the use of unregistered code points) should be discouraged. Reviewers should gather enough information to ensure registration requests do not duplicate existing ones and are likely to see deployment. The zones tagged as "Private Use" are intended for testing purposes and closed environments. Code points in other ranges should not be assigned for testing.<a href="#section-6.5-3.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-6.5-6.2">
+            <p id="section-6.5-6.2.1">Point squatting should be discouraged. Reviewers are encouraged to get sufficient information for registration requests to ensure that the usage is not going to duplicate one that is already registered and that the point is likely to be used in deployments. The zones tagged as "Private Use" are intended for testing purposes and closed environments. Code points in other ranges should not be assigned for testing.<a href="#section-6.5-6.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.5-3.3">
-            <p id="section-6.5-3.3.1">Specifications are recommended. When specifications are not provided, the description provided needs to have sufficient information to verify the points above.<a href="#section-6.5-3.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-6.5-6.3">
+            <p id="section-6.5-6.3.1">Specifications are required for the "Standards Action With Expert Review" range of point assignment. Specifications should exist for "Specification Required" ranges, but early assignment before a specification is available is considered to be permissible. When specifications are not provided, the description provided needs to have sufficient information to identify what the point is being used for.<a href="#section-6.5-6.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.5-6.4">
+            <p id="section-6.5-6.4.1">Experts should take into account the expected usage of fields when approving point assignment. Documents published via Standards Action can also register points outside the Standards Action range. The length of the encoded value should be weighed against how many code points of that length are left, the size of device it will be used on, and the number of code points left that encode to that size.<a href="#section-6.5-6.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
