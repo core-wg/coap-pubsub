@@ -1949,7 +1949,7 @@ representation of a list of topics in the collection (see
 
    Header: POST (Code=0.02)
    Uri-Path: "ps"
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Content-Format: TBD (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /         0: "living-room-sensor",
@@ -1960,7 +1960,7 @@ representation of a list of topics in the collection (see
 
    Header: Created (Code=2.01)
    Location-Path: "ps/h9392"
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Content-Format: TBD (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /         0: "living-room-sensor",
@@ -2001,7 +2001,7 @@ representation of a list of topics in the collection (see
    Response:
 
    Header: Content (Code=2.05)
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Content-Format: TBD (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /            0: "living-room-sensor",
@@ -2036,7 +2036,7 @@ representation of a list of topics in the collection (see
    Header: FETCH (Code=0.05)
    Uri-Path: "ps"
    Uri-Path: "h9392"
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Content-Format: TBD (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / conf-filter / 11: ["topic-data", "media-type"]
@@ -2045,7 +2045,7 @@ representation of a list of topics in the collection (see
    Response:
 
    Header: Content (Code=2.05)
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Content-Format: TBD (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / topic-data /            1: "ps/data/1bd0d6d",
@@ -2073,7 +2073,7 @@ representation of a list of topics in the collection (see
    Header: PUT (Code=0.03)
    Uri-Path: "ps"
    Uri-Path: "h9392"
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Content-Format: TBD (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /            0: "living-room-sensor",
@@ -2087,7 +2087,7 @@ representation of a list of topics in the collection (see
    Response:
 
    Header: Changed (Code=2.04)
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Content-Format: TBD (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /            0: "living-room-sensor",
@@ -2131,7 +2131,7 @@ representation of a list of topics in the collection (see
    Header: iPATCH (Code=0.07)
    Uri-Path: "ps"
    Uri-Path: "h9392"
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Content-Format: TBD (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / expiration-date /  5: "2024-02-28T23:59:59Z",
@@ -2141,7 +2141,7 @@ representation of a list of topics in the collection (see
    Response:
 
    Header: Changed (Code=2.04)
-   Content-Format: TBD2 (application/core-pubsub+cbor)
+   Content-Format: TBD (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /            0: "living-room-sensor",
@@ -2505,17 +2505,17 @@ representation of a list of topics in the collection (see
 +----------------------+----------+-----------+------------+
 | Name                 | CBOR Key | CBOR Type | Reference  |
 | -------------------- | -------- | --------- | ---------- |
-| topic-name           | TBD1     | tstr      | [RFC-XXXX] |
-| topic-data           | TBD2     | tstr      | [RFC-XXXX] |
-| resource-type        | TBD3     | tstr      | [RFC-XXXX] |
-| topic-content-format | TBD4     | uint      | [RFC-XXXX] |
-| topic-type           | TBD5     | tstr      | [RFC-XXXX] |
-| expiration-date      | TBD6     | tstr      | [RFC-XXXX] |
-| max-subscribers      | TBD7     | uint      | [RFC-XXXX] |
-| observer-check       | TBD8     | uint      | [RFC-XXXX] |
-| topic-history        | TBD9     | uint      | [RFC-XXXX] |
-| initialize           | TBD10    | bool      | [RFC-XXXX] |
-| conf-filter          | TBD11    | array     | [RFC-XXXX] |
+| topic-name           | 0        | tstr      | [RFC-XXXX] |
+| topic-data           | 1        | tstr      | [RFC-XXXX] |
+| resource-type        | 2        | tstr      | [RFC-XXXX] |
+| topic-content-format | 3        | uint      | [RFC-XXXX] |
+| topic-type           | 4        | tstr      | [RFC-XXXX] |
+| expiration-date      | 5        | tstr      | [RFC-XXXX] |
+| max-subscribers      | 6        | uint      | [RFC-XXXX] |
+| observer-check       | 7        | uint      | [RFC-XXXX] |
+| topic-history        | 8        | uint      | [RFC-XXXX] |
+| initialize           | 9        | bool      | [RFC-XXXX] |
+| conf-filter          | 10       | array     | [RFC-XXXX] |
 +----------------------+----------+-----------+------------+
 </pre>
 </div>
