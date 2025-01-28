@@ -1921,6 +1921,7 @@ representation of a list of topics in the collection (see
       "topic-type": "temperature"
    }
 
+
    Response:
 
    Header: Content (Code=2.05)
@@ -2011,7 +2012,7 @@ representation of a list of topics in the collection (see
       / topic-type /            4: "temperature",
       / expiration-date /       5: "2023-04-00T23:59:59Z",
       / max-subscribers /       6: 100,
-      / topic-history /         7: 10
+      / topic-history /         8: 10
    }
 </pre><a href="#section-2.5.1-6" class="pilcrow">¶</a>
 </div>
@@ -2039,7 +2040,7 @@ representation of a list of topics in the collection (see
    Content-Format: TBD606 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
-      / conf-filter / 11: ["topic-data", "media-type"]
+      / conf-filter / 10: ["topic-data", "media-type"]
    }
 
    Response:
