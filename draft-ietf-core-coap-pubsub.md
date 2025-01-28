@@ -306,8 +306,8 @@ Below is an example of discovery via /.well-known/core with rt=core.ps.conf that
    Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
    Payload:
-   </ps/h9392>;rt="core.ps.conf";ct=TBD,
-   </other/path/2e3570>;rt="core.ps.conf";ct=TBD
+   </ps/h9392>;rt="core.ps.conf";ct=TBD606,
+   </other/path/2e3570>;rt="core.ps.conf";ct=TBD606
 ~~~~
 
 ### Topic-Data Discovery
@@ -387,7 +387,7 @@ Example:
 
    Header: FETCH (Code=0.05)
    Uri-Path: "ps"
-   Content-Format: TBD (application/core-pubsub+cbor)
+   Content-Format: TBD606 (application/core-pubsub+cbor)
    Payload:
    {
       "resource-type": "core.ps.data",
@@ -424,7 +424,7 @@ The broker MUST issue a 4.00 (Bad Request) error if a received parameter is inva
 
    Header: POST (Code=0.02)
    Uri-Path: "ps"
-   Content-Format: TBD (application/core-pubsub+cbor)
+   Content-Format: TBD606 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /         0: "living-room-sensor",
@@ -435,7 +435,7 @@ The broker MUST issue a 4.00 (Bad Request) error if a received parameter is inva
 
    Header: Created (Code=2.01)
    Location-Path: "ps/h9392"
-   Content-Format: TBD (application/core-pubsub+cbor)
+   Content-Format: TBD606 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /         0: "living-room-sensor",
@@ -479,7 +479,7 @@ For example, below is a request on the topic "ps/h9392":
    Response:
 
    Header: Content (Code=2.05)
-   Content-Format: TBD (application/core-pubsub+cbor)
+   Content-Format: TBD606 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /            0: "living-room-sensor",
@@ -521,7 +521,7 @@ Example:
    Header: FETCH (Code=0.05)
    Uri-Path: "ps"
    Uri-Path: "h9392"
-   Content-Format: TBD (application/core-pubsub+cbor)
+   Content-Format: TBD606 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / conf-filter / 11: ["topic-data", "media-type"]
@@ -530,7 +530,7 @@ Example:
    Response:
 
    Header: Content (Code=2.05)
-   Content-Format: TBD (application/core-pubsub+cbor)
+   Content-Format: TBD606 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / topic-data /            1: "ps/data/1bd0d6d",
@@ -565,7 +565,7 @@ Example:
    Header: PUT (Code=0.03)
    Uri-Path: "ps"
    Uri-Path: "h9392"
-   Content-Format: TBD (application/core-pubsub+cbor)
+   Content-Format: TBD606 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /            0: "living-room-sensor",
@@ -579,7 +579,7 @@ Example:
    Response:
 
    Header: Changed (Code=2.04)
-   Content-Format: TBD (application/core-pubsub+cbor)
+   Content-Format: TBD606 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /            0: "living-room-sensor",
@@ -615,7 +615,7 @@ Contrary to PUT, iPATCH operations will explicitly update some parameters, leavi
    Header: iPATCH (Code=0.07)
    Uri-Path: "ps"
    Uri-Path: "h9392"
-   Content-Format: TBD (application/core-pubsub+cbor)
+   Content-Format: TBD606 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / expiration-date /  5: "2024-02-28T23:59:59Z",
@@ -625,7 +625,7 @@ Contrary to PUT, iPATCH operations will explicitly update some parameters, leavi
    Response:
 
    Header: Changed (Code=2.04)
-   Content-Format: TBD (application/core-pubsub+cbor)
+   Content-Format: TBD606 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /            0: "living-room-sensor",
@@ -998,7 +998,7 @@ Content Type: application/core-pubsub+cbor
 
 Content Coding: -
 
-ID: TBD
+ID: TBD606
 
 Reference: {{&SELF}}
 
