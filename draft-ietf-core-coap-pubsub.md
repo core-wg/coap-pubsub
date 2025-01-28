@@ -394,6 +394,7 @@ Example:
       "topic-type": "temperature"
    }
 
+
    Response:
 
    Header: Content (Code=2.05)
@@ -401,6 +402,7 @@ Example:
    Payload:
    </ps/2e3570>;rt="core.ps.conf"
 ~~~~
+
 
 ### Creating a Topic {#topic-create}
 
@@ -489,7 +491,7 @@ For example, below is a request on the topic "ps/h9392":
       / topic-type /            4: "temperature",
       / expiration-date /       5: "2023-04-00T23:59:59Z",
       / max-subscribers /       6: 100,
-      / topic-history /         7: 10
+      / topic-history /         8: 10
    }
 ~~~~
 
@@ -524,7 +526,7 @@ Example:
    Content-Format: TBD606 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
-      / conf-filter / 11: ["topic-data", "media-type"]
+      / conf-filter / 10: ["topic-data", "media-type"]
    }
 
    Response:
