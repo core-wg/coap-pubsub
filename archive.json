@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-26T01:24:29.879979+00:00",
+  "timestamp": "2025-01-28T01:21:39.806027+00:00",
   "repo": "core-wg/coap-pubsub",
   "labels": [
     {
@@ -1899,24 +1899,26 @@
       "id": "PR_kwDOBEc_t86HvOyY",
       "title": "Fix terminology and a broken sentence.",
       "url": "https://github.com/core-wg/coap-pubsub/pull/60",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "cabo",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "(Contents still to be fixed.)",
       "createdAt": "2025-01-14T16:50:27Z",
-      "updatedAt": "2025-01-14T16:50:27Z",
+      "updatedAt": "2025-01-27T08:19:04Z",
       "baseRepository": "core-wg/coap-pubsub",
       "baseRefName": "main",
       "baseRefOid": "514c2691335de371f63a519d747003432e0d0782",
       "headRepository": "cabo/coap-pubsub",
       "headRefName": "iana",
       "headRefOid": "aa37e8951419324eeccc58cdc5759ad4443840a4",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2025-01-27T08:19:04Z",
+      "mergedAt": "2025-01-27T08:19:04Z",
+      "mergedBy": "jaimejim",
+      "mergeCommit": {
+        "oid": "11c715410f382480c500b82598daedeff12c6d01"
+      },
       "comments": [],
       "reviews": []
     }
