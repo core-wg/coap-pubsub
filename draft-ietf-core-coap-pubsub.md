@@ -920,52 +920,52 @@ Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with the RFC n
 
 This specification registers the 'application/core-pubsub+cbor' media type for messages of the protocols defined in this document and carrying parameters encoded in CBOR. This registration follows the procedures specified in {{BCP13}}.
 
-Type name
+Type name:
 : application
 
-Subtype name
+Subtype name:
 : core-pubsub+cbor
 
-Required parameters
+Required parameters:
 : N/A
 
-Optional parameters
+Optional parameters:
 : N/A
 
-Encoding considerations
+Encoding considerations:
 : Must be encoded as a CBOR map containing the parameters defined in {{&SELF}}.
 
-Security considerations
+Security considerations:
 : See {{seccons}} of {{&SELF}}.
 
-Interoperability considerations
+Interoperability considerations:
 : none
 
-Published specification
+Published specification:
 : {{&SELF}}
 
-Applications that use this media type
+Applications that use this media type:
 : This type is used by clients that create, retrieve, and update topics at servers acting as a broker.
 
-Fragment identifier considerations
+Fragment identifier considerations:
 : N/A
 
-Additional information
+Additional information:
 : N/A
 
-Person & email address to contact for further information
+Person & email address to contact for further information:
 : CoRE WG mailing list (core@ietf.org), or IETF Web and Internet Transport (WIT) Area (wit@ietf.org)
 
-Intended usage
+Intended usage:
 : COMMON
 
-Restrictions on usage
+Restrictions on usage:
 : none
 
-Author/Change controller
+Author/Change controller:
 : IETF
 
-Provisional registration
+Provisional registration:
 : no
 
 ## CoAP Content-Formats {#content-type}
@@ -995,7 +995,6 @@ IANA is asked to enter the following values in the "Resource Type (rt=) Link Tar
 | core.ps.conf   | Topic resource of a Publish-Subscribe Broker   |
 | core.ps.data   | Topic-data resource of a broker                |
 
-{: #fig-coap-pubsub-rt title="Resource Types" artwork-align="center"}
 
 ## CoAP Pubsub Parameters {#iana-coap-pubsub-parameters}
 
