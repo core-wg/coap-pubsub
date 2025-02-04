@@ -124,7 +124,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
    4.  CoAP Pubsub Parameters  . . . . . . . . . . . . . . . . . . .  29
    5.  Security Considerations . . . . . . . . . . . . . . . . . . .  29
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  30
-     6.1.  Media Type Registrations  . . . . . . . . . . . . . . . .  30
+     6.1.  Media Type Registrations  . . . . . . . . . . . . . . . .  31
      6.2.  CoAP Content-Formats  . . . . . . . . . . . . . . . . . .  31
      6.3.  Resource Types  . . . . . . . . . . . . . . . . . . . . .  32
      6.4.  CoAP Pubsub Parameters  . . . . . . . . . . . . . . . . .  32
@@ -1582,23 +1582,33 @@ Internet-Draft                 CoAP pubsub                 February 2025
    when these parameters are transported in the respective message
    fields.
 
-       +----------------------+----------+-----------+------------+
+       +======================+==========+===========+============+
        | Name                 | CBOR Key | CBOR Type | Reference  |
-       | -------------------- | -------- | --------- | ---------- |
+       +======================+==========+===========+============+
        | topic-name           | 0        | tstr      | [RFC-XXXX] |
+       +----------------------+----------+-----------+------------+
        | topic-data           | 1        | tstr      | [RFC-XXXX] |
+       +----------------------+----------+-----------+------------+
        | resource-type        | 2        | tstr      | [RFC-XXXX] |
+       +----------------------+----------+-----------+------------+
        | topic-content-format | 3        | uint      | [RFC-XXXX] |
+       +----------------------+----------+-----------+------------+
        | topic-type           | 4        | tstr      | [RFC-XXXX] |
+       +----------------------+----------+-----------+------------+
        | expiration-date      | 5        | tstr      | [RFC-XXXX] |
+       +----------------------+----------+-----------+------------+
        | max-subscribers      | 6        | uint      | [RFC-XXXX] |
+       +----------------------+----------+-----------+------------+
        | observer-check       | 7        | uint      | [RFC-XXXX] |
+       +----------------------+----------+-----------+------------+
        | topic-history        | 8        | uint      | [RFC-XXXX] |
+       +----------------------+----------+-----------+------------+
        | initialize           | 9        | bool      | [RFC-XXXX] |
+       +----------------------+----------+-----------+------------+
        | conf-filter          | 10       | array     | [RFC-XXXX] |
        +----------------------+----------+-----------+------------+
 
-                      Figure 5: CoAP Pubsub Parameters
+                     Table 1: CoAP Pubsub Parameters
 
 5.  Security Considerations
 
@@ -1606,6 +1616,15 @@ Internet-Draft                 CoAP pubsub                 February 2025
    considerations from CoAP [RFC7252] and Observe [RFC7641], as well as
    from Web Linking [RFC8288], Link-Format [RFC6690], and the CoRE
    Resource Directory [RFC9176].
+
+
+
+
+
+Jimenez, et al.           Expires 8 August 2025                [Page 29]
+
+Internet-Draft                 CoAP pubsub                 February 2025
+
 
    Communications between each client and the broker are RECOMMENDED to
    be secured, e.g., by using OSCORE [RFC8613] or DTLS [RFC9147].
@@ -1617,14 +1636,6 @@ Internet-Draft                 CoAP pubsub                 February 2025
    that topic.  In such a case, it MUST be possible to assert source
    authentication of the published data.  This can be achieved at the
    application layer, e.g., by using COSE [STD96], [RFC9053].
-
-
-
-
-Jimenez, et al.           Expires 8 August 2025                [Page 29]
-
-Internet-Draft                 CoAP pubsub                 February 2025
-
 
    Access control of clients at the broker MAY be enforced for
    performing discovery operation, and SHOULD be enforced in a fine-
@@ -1663,6 +1674,14 @@ Internet-Draft                 CoAP pubsub                 February 2025
    Note to RFC Editor: Please replace all occurrences of "[RFC-XXXX]"
    with the RFC number of this specification and delete this paragraph.
 
+
+
+
+Jimenez, et al.           Expires 8 August 2025                [Page 30]
+
+Internet-Draft                 CoAP pubsub                 February 2025
+
+
 6.1.  Media Type Registrations
 
    This specification registers the 'application/core-pubsub+cbor' media
@@ -1673,14 +1692,6 @@ Internet-Draft                 CoAP pubsub                 February 2025
    Type name:  application
 
    Subtype name:  core-pubsub+cbor
-
-
-
-
-Jimenez, et al.           Expires 8 August 2025                [Page 30]
-
-Internet-Draft                 CoAP pubsub                 February 2025
-
 
    Required parameters:  N/A
 
@@ -1720,6 +1731,13 @@ Internet-Draft                 CoAP pubsub                 February 2025
    IANA is asked to register the following entry to the "CoAP Content-
    Formats" registry within the "CoRE Parameters" registry group.
 
+
+
+Jimenez, et al.           Expires 8 August 2025                [Page 31]
+
+Internet-Draft                 CoAP pubsub                 February 2025
+
+
    Content Type  application/core-pubsub+cbor
 
    Content Coding  -
@@ -1727,16 +1745,6 @@ Internet-Draft                 CoAP pubsub                 February 2025
    ID  TBD606
 
    Reference  [RFC-XXXX]
-
-
-
-
-
-
-Jimenez, et al.           Expires 8 August 2025                [Page 31]
-
-Internet-Draft                 CoAP pubsub                 February 2025
-
 
 6.3.  Resource Types
 
@@ -1760,7 +1768,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
               |              | broker                       |
               +--------------+------------------------------+
 
-                                  Table 1
+                                  Table 2
 
 6.4.  CoAP Pubsub Parameters
 
@@ -1778,14 +1786,6 @@ Internet-Draft                 CoAP pubsub                 February 2025
    RFC 8126 [BCP26].  The procedure for early IANA allocation of
    "standards track code points" defined in [BCP100] also applies.  When
    such a procedure is used, IANA will ask the designated expert(s) to
-   approve the early allocation before registration.  In addition,
-   working group chairs are encouraged to consult the expert(s) early
-   during the process outlined in Section 3.1 of RFC 7120 [BCP100].
-
-   The columns of this registry are:
-
-
-
 
 
 
@@ -1793,6 +1793,12 @@ Jimenez, et al.           Expires 8 August 2025                [Page 32]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
+
+   approve the early allocation before registration.  In addition,
+   working group chairs are encouraged to consult the expert(s) early
+   during the process outlined in Section 3.1 of RFC 7120 [BCP100].
+
+   The columns of this registry are:
 
    *  Name: This is a descriptive name that enables easier reference to
       the item.  The name MUST be unique.  It is not used in the
@@ -1818,7 +1824,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
       the item.
 
    This registry has been initially populated with the values in
-   Figure 5.
+   Table 1.
 
 6.5.  Expert Review Instructions
 
@@ -1837,12 +1843,6 @@ Internet-Draft                 CoAP pubsub                 February 2025
    for; however, they are being designated as experts for a reason, so
    they should be given substantial latitude.
 
-   These registration policies are designed to accommodate different use
-   cases; “Standards Action with Expert Review” allows for further IETF
-   standards and extensions, maintaining consistency and alignment with
-   established protocols; “Specification Required” allows third-party
-   specifications from Standards Development Organizations (SDOs) to
-
 
 
 Jimenez, et al.           Expires 8 August 2025                [Page 33]
@@ -1850,6 +1850,11 @@ Jimenez, et al.           Expires 8 August 2025                [Page 33]
 Internet-Draft                 CoAP pubsub                 February 2025
 
 
+   These registration policies are designed to accommodate different use
+   cases; “Standards Action with Expert Review” allows for further IETF
+   standards and extensions, maintaining consistency and alignment with
+   established protocols; “Specification Required” allows third-party
+   specifications from Standards Development Organizations (SDOs) to
    register parameters, enabling interoperability and broader
    applicability; and “Expert Review” provides a flexible mechanism for
    exposing new parameters that implementors do not want to keep in a
@@ -1892,11 +1897,6 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 7.1.  Normative References
 
-   [BCP100]   Best Current Practice 100,
-              <https://www.rfc-editor.org/info/bcp100>.
-              At the time of writing, this BCP comprises the following:
-
-
 
 
 
@@ -1905,6 +1905,10 @@ Jimenez, et al.           Expires 8 August 2025                [Page 34]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
+
+   [BCP100]   Best Current Practice 100,
+              <https://www.rfc-editor.org/info/bcp100>.
+              At the time of writing, this BCP comprises the following:
 
               Cotton, M., "Early IANA Allocation of Standards Track Code
               Points", BCP 100, RFC 7120, DOI 10.17487/RFC7120, January
@@ -1951,16 +1955,16 @@ Internet-Draft                 CoAP pubsub                 February 2025
               DOI 10.17487/RFC6570, March 2012,
               <https://www.rfc-editor.org/rfc/rfc6570>.
 
-   [RFC6690]  Shelby, Z., "Constrained RESTful Environments (CoRE) Link
-              Format", RFC 6690, DOI 10.17487/RFC6690, August 2012,
-              <https://www.rfc-editor.org/rfc/rfc6690>.
-
 
 
 Jimenez, et al.           Expires 8 August 2025                [Page 35]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
+
+   [RFC6690]  Shelby, Z., "Constrained RESTful Environments (CoRE) Link
+              Format", RFC 6690, DOI 10.17487/RFC6690, August 2012,
+              <https://www.rfc-editor.org/rfc/rfc6690>.
 
    [RFC7252]  Shelby, Z., Hartke, K., and C. Bormann, "The Constrained
               Application Protocol (CoAP)", RFC 7252,
@@ -2004,10 +2008,6 @@ Internet-Draft                 CoAP pubsub                 February 2025
               Draft, draft-hartke-t2trg-coral-pubsub-01, 9 May 2020,
               <https://datatracker.ietf.org/doc/html/draft-hartke-t2trg-
               coral-pubsub-01>.
-
-
-
-
 
 
 
