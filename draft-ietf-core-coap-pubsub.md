@@ -966,25 +966,14 @@ Reference: {{&SELF}}
 
 ## Resource Types {#iana-rt}
 
-IANA is asked to enter the following values in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group.
+IANA is asked to enter the following values in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group. Reference ishould always be RFC-XXXX
 
-~~~
-Value: core.ps
-Description: Publish-Subscribe Broker
-Reference: [RFC-XXXX]
-
-Value: core.ps.coll
-Description: Topic collection resource of a Publish-Subscribe Broker
-Reference: [RFC-XXXX]
-
-Value: core.ps.conf
-Description: Topic resource of a Publish-Subscribe Broker
-Reference: [RFC-XXXX]
-
-Value: core.ps.data
-Description: Topic-data resource of a broker
-Reference: [RFC-XXXX]
-~~~
+| Value          | Description                                    |
+|----------------|------------------------------------------------|
+| core.ps        | Publish-Subscribe Broker                       |
+| core.ps.coll   | Topic collection resource of a Publish-Subscribe Broker |
+| core.ps.conf   | Topic resource of a Publish-Subscribe Broker   |
+| core.ps.data   | Topic-data resource of a broker                |
 
 ## CoAP Pubsub Parameters {#iana-coap-pubsub-parameters}
 
