@@ -930,7 +930,7 @@ Optional parameters: N/A
 
 Encoding considerations: Must be encoded as a CBOR map containing the parameters defined in {{&SELF}}.
 
-Security considerations: See {{sec-cons}} of {{&SELF}}.
+Security considerations: See {{seccons}} of {{&SELF}}.
 
 Interoperability considerations: none
 
