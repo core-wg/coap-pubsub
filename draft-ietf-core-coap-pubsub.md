@@ -995,7 +995,7 @@ IANA is asked to enter the following values in the "Resource Type (rt=) Link Tar
 | core.ps.conf   | Topic resource of a Publish-Subscribe Broker   |
 | core.ps.data   | Topic-data resource of a broker                |
 
-{: #fig-coap-pubsub-rt title="Resource Type (rt=) Link Target Attribute Values" artwork-align="center"}
+{: #fig-coap-pubsub-rt title="Resource Types" artwork-align="center"}
 
 ## CoAP Pubsub Parameters {#iana-coap-pubsub-parameters}
 
