@@ -92,7 +92,7 @@ This specification requires readers to be familiar with all the terms and concep
 This specification makes use of the following terminology:
 
 {:vspace}
-publish-subscribe (pub-sub):
+publish-subscribe (pubsub):
 : A message communication model where messages associated with specific topics are sent to a broker. Interested parties, i.e. subscribers, receive these topic-based messages from the broker without the original sender knowing the recipients. The broker handles matching and delivering these messages to the appropriate subscribers.
 
 publishers and subscribers:
@@ -164,9 +164,9 @@ The Broker exports one or more topic collection resources, with resource type "c
 
 A topic collection resource can have topic resources as its child resources, with resource type "core.ps.conf".
 
-# Pub-Sub Topics {#topics}
+# PubSub Topics {#topics}
 
-The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}). Each topic is associated with a topic resource and a topic-data resource. The topic resource is used by a client creating or administering a topic. The topic-data resource is used by the publishers and the subscribers to a topic.
+The configuration side of a publish and subscribe broker consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}). Each topic is associated with a topic resource and a topic-data resource. The topic resource is used by a client creating or administering a topic. The topic-data resource is used by the publishers and the subscribers to a topic.
 
 ~~~~ aasvg
               ___
@@ -177,8 +177,8 @@ The configuration side of a "publish/subscribe broker" consists of a collection 
                     \          \               \
                      \ ......   \ ......        \ ......
              topic  : \___  :  : \___  :       : \___  :
-     configuration  : / * \ :  : / * \ :       : / * \ :
-          resource  : \_|_/ :  : \_|_/ :       : \_|_/ :
+          resource  : / * \ :  : / * \ :       : / * \ :
+                    : \_|_/ :  : \_|_/ :       : \_|_/ :
                     ....|....  ....|....       ....|....
                     ....|....  ....|....       ....|....
                     :  _|_  :  :  _|_  :  ...  :  _|_  :
@@ -658,7 +658,6 @@ URIs for topic resources are broker-generated (see {{topic-create}}). There is n
 
 When a topic is newly created, it is first placed by the broker into the HALF CREATED state (see {{fig-life}}). In this state, a client can read and update the configuration of the topic and delete the topic. A publisher can publish to the topic-data resource.  However, a subscriber cannot yet subscribe to the topic-data resource nor read the latest data.
 
-
 ~~~~ aasvg
                 HALF                          FULLY
                CREATED       Delete          CREATED
@@ -670,7 +669,7 @@ When a topic is newly created, it is first placed by the broker into the HALF CR
                |   ^   \       ___       /   |   ^
          Read/ |   |    '-->  |   |  <--'    |   | Read/
         Update |   |  Delete  |___|  Delete  |   | Update
-  topic-config  '-'   Topic          Topic    '-'  topic-data
+         Topic  '-'   Topic          Topic    '-'  topic-data
                              DELETED
 ~~~~
 {: #fig-life title='Lifecycle of a Topic' artwork-align="center"}
@@ -1071,9 +1070,13 @@ Expert reviewers should take into consideration the following points:
 * Various updates throughout the document based on AD review.
 * IANA clarifications
 
+## Version -16 to -17
+
+* Addressing Esko's and Ari's review.
+
 # Acknowledgements
 {: numbered='no'}
 
 The current version of this document contains a substantial contribution by Klaus Hartke's proposal {{I-D.hartke-t2trg-coral-pubsub}}, which defines the topic resource model and structure as well as the topic lifecycle and interactions. It also follows a similar architectural design as that provided by Marco Tiloca's {{I-D.ietf-ace-oscore-gm-admin}}.
 
-The authors would like to also thank {{{Marco Tiloca}}}, {{{Francesca Palombini}}}, {{{Carsten Bormann}}}, {{{Hannes Tschofenig}}}, {{{Zach Shelby}}}, {{{Mohit Sethi}}}, Peter van der Stok, Tim Kellogg, Anders Eriksson, {{{Goran Selander}}}, Mikko Majanen, {{{Olaf Bergmann}}}, {{{David Navarro}}}, Oscar Novo and Lorenzo Corneo for their valuable contributions and reviews.
+The authors would like to also thank {{{Marco Tiloca}}}, {{{Francesca Palombini}}}, {{{Carsten Bormann}}}, {{Esko Dijk}}, {{{Hannes Tschofenig}}}, {{{Zach Shelby}}}, {{{Mohit Sethi}}}, Peter van der Stok, Tim Kellogg, Anders Eriksson, {{{Goran Selander}}}, Mikko Majanen, {{{Olaf Bergmann}}}, {{{David Navarro}}}, Oscar Novo and Lorenzo Corneo for their valuable contributions and reviews.
