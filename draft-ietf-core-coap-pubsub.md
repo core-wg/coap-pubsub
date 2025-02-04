@@ -99,16 +99,16 @@ publishers and subscribers:
 : CoAP clients can act as publishers or as subscribers. Publishers send CoAP messages (publications) to the broker on specific topics. Subscribers have an ongoing observation relation (subscription) to a topic. Both roles operate without any mutual knowledge, guided by their respective topic interests.
 
 topic collection:
-: A set of topic-configurations. A topic collection is hosted as one collection resource (See {{Section 3.1 of I-D.ietf-core-interfaces}}) at the broker, and its representation is the list of links to the topic resources corresponding to each topic-configuration.
+: A set of topics. A topic collection is hosted as one collection resource (See {{Section 3.1 of I-D.ietf-core-interfaces}}) at the broker, and its representation is the list of links to the topic resources corresponding to each topic.
 
-topic-configuration:
-: A set of information concerning a topic, including its configuration and other metadata. A topic-configuration is hosted as one topic resource at the broker, and its representation is the set of configuration information concerning the topic. All the topic resources associated with the same topic collection share a common base URI, i.e., the URI of the collection resource. Throughout this document the words "topic resource" and "topic-configuration resource" can be used interchangeably.
+topic:
+: A set of information concerning a topic, including its configuration and other metadata. A topic is hosted as one topic resource at the broker, and its representation is the set of configuration information concerning the topic. All the topic resources associated with the same topic collection share a common base URI, i.e., the URI of the collection resource.
 
 topic-data resource:
 : A resource where clients can publish data and/or subscribe to data for a specific topic. The representation of the topic resource corresponding to such a topic also specifies the URI to the present topic-data resource.
 
 broker:
-: A CoAP server that hosts one or more topic collections with their topic-configurations, and also topic-data resources. The broker is responsible for the store-and-forward of state update representations, for the topics for which it hosts the corresponding topic-data resources. The broker is also responsible for handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
+: A CoAP server that hosts one or more topic collections with their topics, and also topic-data resources. The broker is responsible for the store-and-forward of state update representations, for the topics for which it hosts the corresponding topic-data resources. The broker is also responsible for handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
 
 ## CoAP Publish-Subscribe Architecture
 
@@ -140,7 +140,7 @@ The broker is responsible for the store-and-forward of state update representati
 
 This document describes two sets of interactions; interactions to configure topics and their lifecycle (see {{topic-configuration-interactions}}) and interactions about the topic-data (see {{topic-data-interactions}}).
 
-Topic-configuration interactions are discovery, create, read configuration, update configuration, and delete configuration. These operations handle the management of the topics.
+Topic interactions are discovery, create, read configuration, update configuration, and delete configuration. These operations handle the management of the topics.
 
 Topic-data interactions are publish, subscribe, unsubscribe, read, and delete. These operations are oriented on how data is transferred from a publisher to a subscriber.
 
@@ -166,7 +166,7 @@ A topic collection resource can have topic resources as its child resources, wit
 
 # Pub-Sub Topics {#topics}
 
-The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}). Each topic is associated with a topic-configuration resource and a topic-data resource. The topic-configuration resource is used by a client creating or administering a topic. The topic-data resource is used by the publishers and the subscribers to a topic.
+The configuration side of a "publish/subscribe broker" consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}). Each topic is associated with a topic resource and a topic-data resource. The topic resource is used by a client creating or administering a topic. The topic-data resource is used by the publishers and the subscribers to a topic.
 
 ~~~~ aasvg
               ___
@@ -192,7 +192,7 @@ The configuration side of a "publish/subscribe broker" consists of a collection 
 
 ## Collection Representation
 
-Each topic-configuration is represented as a link, where the link target is the URI of the corresponding topic resource.
+Each topic is represented as a link, where the link target is the URI of the corresponding topic resource.
 
 Publication and subscription to a topic occur at a link, where the link target is the URI of the corresponding topic-data resource. Such a link is specified by the topic-data entry within the topic resource (see {{topic-properties}}).
 
@@ -200,11 +200,11 @@ A topic resource with a topic-data link can also be simply called "topic".
 
 The list of links to the topic resources can be retrieved from the associated topic collection resource, and represented as a Link Format document {{RFC6690}}where each such link specifies the link target attribute 'rt' (Resource Type), with value "core.ps.conf" defined in this document.
 
-## Topic-Configuration Representation {#topic-resource-representation}
+## Topic Representation {#topic-resource-representation}
 
 A CoAP client can create a new topic by submitting an initial configuration for the topic (see {{topic-create}}). It can also read and update the configuration of existing topics and topic properties as well as delete them when they are no longer needed (see {{topic-configuration-interactions}}).
 
-The configuration of a topic itself consists of a set of properties that can be set by a client or by the broker. The topic-configuration is represented as a CBOR map containing the configuration properties of the topic as top-level elements.
+The configuration of a topic itself consists of a set of properties that can be set by a client or by the broker. The topic is represented as a CBOR map containing the configuration properties of the topic as top-level elements.
 
 Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in {{pubsub-parameters}}.
 
@@ -261,7 +261,7 @@ The following example shows an endpoint discovering a broker using the "core.ps"
 
 ### Topic Collection Discovery
 
-A Broker SHOULD offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point is the topic collection resource collecting the topic-configurations for those topics (see {{Section 1.2.2 of RFC6690}}) and is identified by the resource type "core.ps.coll".
+A Broker SHOULD offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point is the topic collection resource collecting the topics for those topics (see {{Section 1.2.2 of RFC6690}}) and is identified by the resource type "core.ps.coll".
 
 The specific resource path is left for implementations, examples in this document use the "/ps" path. The interactions with a topic collection are further defined in {{topic-collection-interactions}}.
 
@@ -286,7 +286,7 @@ Example:
    </other/path>;rt="core.ps.coll";ct=40
 ~~~~
 
-### Topic-Configuration Discovery {#topic-discovery}
+### Topic Discovery {#topic-discovery}
 
 Each topic collection is associated with a group of topic resources, each detailing the configuration of its respective topic (refer to {{topic-properties}}). Each topic resource is identified by the resource type "core.ps.conf".
 
@@ -315,7 +315,7 @@ Below is an example of discovery via /.well-known/core with rt=core.ps.conf that
 
 Within a topic, there is the topic-data property containing the URI of the topic-data resource that a CoAP client can subscribe and publish to. Resources exposing resources of the topic-data type are expected to use the resource type 'core.ps.data'.
 
-The topic-data contains the URI of the topic-data resource for publishing and subscribing. So retrieving the topic-configuration will also provide the URL of the topic-data (see {{topic-get-resource}}).
+The topic-data contains the URI of the topic-data resource for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data (see {{topic-get-resource}}).
 
 It is also possible to discover a list of topic-data resources by sending a request to the collection with rt=core.ps.data resources as shown below.
 
@@ -338,7 +338,7 @@ It is also possible to discover a list of topic-data resources by sending a requ
 
 These are the interactions that can happen directly with a specific topic collection.
 
-### Retrieving all topic-configurations {#topic-get-all}
+### Retrieving all topics {#topic-get-all}
 
 A client can request a collection of the topics present in the broker by making a GET request to the collection URI.
 
@@ -363,7 +363,7 @@ Example:
    </ps/2e3570>;rt="core.ps.conf"
 ~~~~
 
-### Getting topic-configurations by Properties {#topic-get-properties}
+### Getting topics by Properties {#topic-get-properties}
 
 A client can filter a collection of topics by submitting the
 representation of a topic filter (see {{topic-fetch-resource}}) in a FETCH request to the topic collection URI.
@@ -400,7 +400,7 @@ Example:
 
 ### Creating a Topic {#topic-create}
 
-A client can add a new topic-configurations to a collection of topics by submitting an initial representation of the initial topic resource (see {{topic-resource-representation}}) in a POST request to the topic collection URI. The request MUST specify at least a subset of the properties in {{topic-properties}}, namely: topic-name and resource-type.
+A client can add a new topics to a collection of topics by submitting an initial representation of the initial topic resource (see {{topic-resource-representation}}) in a POST request to the topic collection URI. The request MUST specify at least a subset of the properties in {{topic-properties}}, namely: topic-name and resource-type.
 
 Please note that the topic will NOT be fully created until a publisher has published some data to it (See {{topic-lifecycle}}).
 
@@ -441,19 +441,11 @@ The broker MUST issue a 4.00 (Bad Request) error if a received parameter is inva
    }
 ~~~~
 
-
-
-## Topic-Configuration Interactions {#topic-configuration-interactions}
+## Topic Interactions {#topic-configuration-interactions}
 
 These are the interactions that can happen at the topic resource level.
 
-### Getting a topic-configuration {#topic-get-resource}
-
-<!--
-GET to /topic-config
-retrieve a topic-configuration
-response is cbor
--->
+### Getting a topic {#topic-get-resource}
 
 A client can read the configuration of a topic by making a GET request to the topic resource URI.
 
@@ -489,13 +481,7 @@ For example, below is a request on the topic "ps/h9392":
    }
 ~~~~
 
-### Getting part of a topic-configuration {#topic-fetch-resource}
-<!--
-FETCH to /topic-conf with filter
-retrieve only certain parameters from the configuration
-request is cbor
-response is cbor
--->
+### Getting part of a topic {#topic-fetch-resource}
 
 A client can read the configuration of a topic by making a FETCH request to the topic resource URI with a filter for specific parameters. This is done in order to retrieve part of the current topic resource.
 
@@ -534,7 +520,7 @@ Example:
    }
 ~~~~
 
-### Updating the topic-configuration {#topic-update-resource}
+### Updating the topic {#topic-update-resource}
 
 <!--
 PUT to /topic-conf
@@ -545,13 +531,13 @@ response is cbor
 
 A client can update a topic's configuration by submitting the updated topic representation in a PUT request to the topic URI. However, the parameters "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.
 
-On success, the topic-configuration is overwritten and broker returns a 2.04 (Changed) response and the current full resource representation. The broker may choose not to overwrite parameters that are not explicitly modified in the request.
+On success, the topic is overwritten and broker returns a 2.04 (Changed) response and the current full resource representation. The broker may choose not to overwrite parameters that are not explicitly modified in the request.
 
-Note that updating the "topic-data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Updating the "topic-data" may happen also after it being deleted, as described on {{delete-topic-data}}, this will in turn create a new "topic-data" path for that topic-configuration.
+Note that updating the "topic-data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Updating the "topic-data" may happen also after it being deleted, as described on {{delete-topic-data}}, this will in turn create a new "topic-data" path for that topic.
 
 Similarly, decreasing max-subscribers will also cause that some subscribers get unsubscribed. Unsubscribed endpoints receive a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The specific queue management for unsubscribing is left for implementors.
 
-Please note that when using PUT the topic-configuration is being overwritten, thus some of the optional parameters (e.g., "max-subscribers", "observer-check") not included in the PUT message will be reset to their default values.
+Please note that when using PUT the topic is being overwritten, thus some of the optional parameters (e.g., "max-subscribers", "observer-check") not included in the PUT message will be reset to their default values.
 
 Example:
 
@@ -589,15 +575,15 @@ Example:
    }
 ~~~~
 
-Note that when a topic-configuration changes, it may result in disruptions for the subscribers. Some potential issues that may arise include:
+Note that when a topic changes, it may result in disruptions for the subscribers. Some potential issues that may arise include:
 
 * Limiting the number of subscribers will cause cancellation of ongoing subscriptions until max-subscribers has been reached.
 * Changing the topic-data value will cancel all ongoing subscriptions.
 * Changing of the expiration-date may cause cancellation of ongoing subscriptions if the topic expires at an earlier data.
 
-### Updating the topic-configuration with iPATCH {#topic-update-resource-patch}
+### Updating the topic with iPATCH {#topic-update-resource-patch}
 
-A client can partially update a topic's configuration by submitting a partial topic representation in an iPATCH request to the topic URI. The iPATCH request allows for updating only specific fields of the topic-configuration while leaving the others unchanged. As with the PUT method, the parameters "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.
+A client can partially update a topic's configuration by submitting a partial topic representation in an iPATCH request to the topic URI. The iPATCH request allows for updating only specific fields of the topic while leaving the others unchanged. As with the PUT method, the parameters "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.
 
 On success, the broker returns a 2.04 (Changed) response and the current full resource representation. The broker only updates parameters that are explicitly mentioned in the request.
 
@@ -635,15 +621,15 @@ Contrary to PUT, iPATCH operations will explicitly update some parameters, leavi
    }
 ~~~~
 
-Note that when a topic-configuration changes through an iPATCH request, it may result in disruptions for the subscribers. For example, limiting the number of subscribers will cause cancellation of ongoing subscriptions until max-subscribers has been reached.
+Note that when a topic changes through an iPATCH request, it may result in disruptions for the subscribers. For example, limiting the number of subscribers will cause cancellation of ongoing subscriptions until max-subscribers has been reached.
 
-### Deleting a topic-configuration {#topic-delete}
+### Deleting a topic {#topic-delete}
 
 A client can delete a topic by making a CoAP DELETE request on the topic resource URI.
 
 On success, the broker returns a 2.02 (Deleted) response.
 
-When a topic-configuration resource is deleted, the broker MUST also delete the topic-data resource, unsubscribe all subscribers by removing them from the list of observers and returning a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}.
+When a topic resource is deleted, the broker MUST also delete the topic-data resource, unsubscribe all subscribers by removing them from the list of observers and returning a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}.
 
 Example:
 
@@ -665,13 +651,8 @@ The overview of the publish/subscribe mechanism over CoAP is as follows: a publi
 
 A topic-data resource does not exist until some initial data has been published to it. Before initial data publication, a GET request to the topic-data resource URI results in a 4.04 (Not Found) response. If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created" (see {{topic-lifecycle}}).
 
-<!--
-* "URIs for topic-data MAY be broker-generated or client-generated."
 
-   See a comment above. I think that only the host of the topic-data resource should be in control of generating this URI (to be provided to the broker if that host is not the broker already).
--->
-
-URIs for topic resources are broker-generated (see {{topic-create}}). There is no necessary URI pattern dependence between the URI where the topic-data exists and the URI of the topic-configuration resource.
+URIs for topic resources are broker-generated (see {{topic-create}}). There is no necessary URI pattern dependence between the URI where the topic-data exists and the URI of the topic resource.
 
 ## Topic Lifecycle {#topic-lifecycle}
 
@@ -697,9 +678,9 @@ When a topic is newly created, it is first placed by the broker into the HALF CR
 After a publisher publishes to the topic-data for the first time, the topic is placed into the FULLY CREATED state. In this state, a client can read data by means of a GET request without observe. A publisher can publish to the topic-data resource and a subscriber can observe the topic-data resource.
 
 
-When a client deletes a topic-configuration resource, the topic is placed into the DELETED state and shortly after removed from the server. In this state, all subscribers are removed from the list of observers of the topic-data resource and no further interactions with the topic are possible.
+When a client deletes a topic resource, the topic is placed into the DELETED state and shortly after removed from the server. In this state, all subscribers are removed from the list of observers of the topic-data resource and no further interactions with the topic are possible.
 
-When a client deletes a topic-data, the topic is placed into the HALF CREATED state, where clients can read, update and delete the topic-configuration and await for a publisher to begin publication.
+When a client deletes a topic-data, the topic is placed into the HALF CREATED state, where clients can read, update and delete the topic and await for a publisher to begin publication.
 
 ## Topic-Data Interactions {#topic-data-interactions}
 
@@ -707,9 +688,9 @@ Interactions with the topic-data resource are covered in this section.
 
 ### Publish {#publish}
 
-A topic-configuration with a topic-data resource must have been created in order to publish data to it (See {{topic-create}}) and be in the half-created or fully-created state in order to the publish operation to work (see {{topic-lifecycle}}).
+A topic with a topic-data resource must have been created in order to publish data to it (See {{topic-create}}) and be in the half-created or fully-created state in order to the publish operation to work (see {{topic-lifecycle}}).
 
-A client can publish data to a topic by submitting the data in a PUT request to the topic-data URI as indicated in its topic resource property. Please note that the topic-data URI is not the same as the topic-configuration URI used for configuring the topic (see {{topic-resource-representation}}).
+A client can publish data to a topic by submitting the data in a PUT request to the topic-data URI as indicated in its topic resource property. Please note that the topic-data URI is not the same as the topic URI used for configuring the topic (see {{topic-resource-representation}}).
 
 On success, the broker returns a 2.04 (Changed) response. However, when data is published to the topic for the first time, the broker instead MUST return a 2.01 (Created) response and set the topic in the fully-created state (see {{topic-lifecycle}}).
 
@@ -935,7 +916,7 @@ Access control of clients at the broker MAY be enforced for performing discovery
 
 Building on {{RFC9594}}, its application profile for publish-subscribe communication with CoAP {{I-D.ietf-ace-pubsub-profile}} provides a security model that can be used in the architecture presented in this document, in order to enable secure communication between the different parties as well as secure, authorized operations of publishers and subscribers that fulfill the requirements above.
 
-In particular, the application profile above relies on the ACE framework for Authentication and Authorization in Constrained Environments (ACE) {{RFC9200}} and defines a method to: authorize publishers and subscribers to perform operations at the broker, with fine-grained access control; authorize publishers and subscribers to obtain the keying material required to take part to a topic managed by the broker; protect published data end-to-end between its publisher and all the subscribers to the targeted topic, ensuring confidentiality, integrity, and source authentication of the published content end-to-end. That approach can be extended to enforce authorization and fine-grained access control for administrator clients that are intended to create, update, and delete topic-configurations at the broker.
+In particular, the application profile above relies on the ACE framework for Authentication and Authorization in Constrained Environments (ACE) {{RFC9200}} and defines a method to: authorize publishers and subscribers to perform operations at the broker, with fine-grained access control; authorize publishers and subscribers to obtain the keying material required to take part to a topic managed by the broker; protect published data end-to-end between its publisher and all the subscribers to the targeted topic, ensuring confidentiality, integrity, and source authentication of the published content end-to-end. That approach can be extended to enforce authorization and fine-grained access control for administrator clients that are intended to create, update, and delete topics at the broker.
 
 # IANA Considerations {#iana}
 
@@ -969,7 +950,7 @@ This specification registers the 'application/core-pubsub+cbor' media type for m
 
       Published specification: {{&SELF}}
 
-      Applications that use this media type:  This type is used by clients that create, retrieve, and update topic-configurations at servers acting as a broker.
+      Applications that use this media type:  This type is used by clients that create, retrieve, and update topics at servers acting as a broker.
 
       Fragment identifier considerations: N/A
 
@@ -1012,7 +993,7 @@ Description: Topic collection resource of a Publish-Subscribe Broker
 Reference: [RFC-XXXX]
 
 Value: core.ps.conf
-Description: Topic-configuration resource of a Publish-Subscribe Broker
+Description: Topic resource of a Publish-Subscribe Broker
 Reference: [RFC-XXXX]
 
 Value: core.ps.data
@@ -1022,7 +1003,7 @@ Reference: [RFC-XXXX]
 
 ## CoAP Pubsub Parameters {#iana-coap-pubsub-parameters}
 
-This specification establishes the "CoAP Pubsub topic-configuration Parameters" IANA registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
+This specification establishes the "CoAP Pubsub topic configuration Parameters" IANA registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
 The registration policy is either "Private Use", "Standards Action with Expert Review", or "Specification Required" or "Expert Review" per {{BCP26}}. "Expert Review" guidelines are provided in {{review}}.
 
