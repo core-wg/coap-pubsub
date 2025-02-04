@@ -873,7 +873,7 @@ When a publisher receives a 4.29 (Too Many Requests) response, it MUST NOT send 
 
 # CoAP Pubsub Parameters {#pubsub-parameters}
 
-This document defines parameters used in the messages exchanged between a client and the broker during the topic creation and configuration process (see {{topic-resource-representation}}). The table below summarizes them and specifies the CBOR key to use instead of the full descriptive name.
+This document defines parameters used in the messages exchanged between a client and the broker during the topic creation and configuration process (see {{topic-resource-representation}}). The table {{fig-CoAP-Pubsub-Parameters}} summarizes them and specifies the CBOR key to use instead of the full descriptive name.
 
 Note that the media type application/core-pubsub+cbor MUST be used when these parameters are transported in the respective message fields. Reference should always be RFC-XXXX.
 
@@ -969,27 +969,27 @@ Provisional registration:
 
 IANA is asked to register the following entry to the "CoAP Content-Formats" registry within the "CoRE Parameters" registry group.
 
-Content Type
+Content Type:
 : application/core-pubsub+cbor
 
-Content Coding
+Content Coding:
 : -
 
-ID
+ID:
 : TBD606
 
-Reference
+Reference:
 : {{&SELF}}
 
 ## Resource Types {#iana-rt}
 
-IANA is asked to enter the following values in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group. Reference should always be RFC-XXXX.
+IANA is asked to enter the following values from the table {{fig-CoAP-Pubsub-Resource-Types}} in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group. Reference should always be RFC-XXXX.
 
 | Value          | Description                                    |
 |----------------|------------------------------------------------|
-| core.ps        | Publish Subscribe Broker                       |
-| core.ps.coll   | Topic collection resource of a Publish Subscribe Broker |
-| core.ps.conf   | Topic resource of a Publish Subscribe Broker   |
+| core.ps        | publish-subscribe broker                       |
+| core.ps.coll   | Topic collection resource of a publish-subscribe broker |
+| core.ps.conf   | Topic resource of a publish-subscribe broker   |
 | core.ps.data   | Topic-data resource of a broker                |
 {: #fig-CoAP-Pubsub-Resource-Types title="CoAP Pubsub Resource Types"}
 
