@@ -1011,7 +1011,7 @@ The columns of this registry are:
 
 * Reference: This contains a pointer to the public specification for the item.
 
-This registry has been initially populated with the values in {{fig-CoAP-Pubsub-Parameters}}.
+This registry has been initially populated with the values in {{tab-CoAP-Pubsub-Parameters}}.
 
 ## Expert Review Instructions {#review}
 
