@@ -230,7 +230,7 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 * 'topic-history': An optional field used to indicate how many previous resource representations the broker shall store for a topic. Encoded as an unsigned CBOR integer, it defines a counter representing the number of historical resource states the broker retains. This enables subscribers to retrieve past states of the topic data when necessary, useful in scenarios where historical context is required (e.g., for data analytics or auditing). If this field is not present, no historical data will be stored.
 
-* 'initialize': An optional boolean field that, when set to `true`, allows the topic-data path to be pre-populated with an empty string or other initial value during the topic creation process. This behavior facilitates one-shot publication and topic creation, enabling CoAP clients to subscribe by default without encountering a `4.04 Not Found` error. If this field is not present, the broker behaves as usual, and the topic-data path is not initialized.
+* 'initialize': An optional boolean field that, when set to `true`, allows the topic-data path to be pre-populated with a zero-length (empty) payload without an explicit Content-Format. This behavior facilitates one-shot publication and topic creation, enabling CoAP clients to subscribe by default without encountering a `4.04 Not Found` error. If this field is not present, the broker behaves as usual, and the topic-data path is not initialized.
 
 ## Discovery
 
@@ -404,7 +404,7 @@ A client can add a new topics to a collection of topics by submitting an initial
 
 Please note that the topic will NOT be fully created until a publisher has published some data to it (See {{topic-lifecycle}}).
 
-To facilitate immediate subscription and allow clients to observe the topic before data has been published, the client can include the "initialize" set to "true". When supported, the broker will create the topic and pre-populate the "topic-data" field with an empty value. This allows subscribers to observe the topic without encountering a 4.04 (Not Found) error, even if no data has been published yet.
+To facilitate immediate subscription and allow clients to observe the topic before data has been published, the client can include the "initialize" set to "true". When supported, the broker will create the topic and pre-populate the "topic-data" field with a zero-length (empty) payload without an explicit Content-Format. That is, a subscribing client would get this zero-length representation without an associated Content-Format Option in the CoAP resonse. This means “indeterminate” per {{Section 5.10.3 of RFC7252}}. 
 
 When "initialize" is set to "false" or omitted, the topic will only be fully created after data is published to it.
 
