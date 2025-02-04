@@ -875,22 +875,22 @@ When a publisher receives a 4.29 (Too Many Requests) response, it MUST NOT send 
 
 This document defines parameters used in the messages exchanged between a client and the broker during the topic creation and configuration process (see {{topic-resource-representation}}). The table below summarizes them and specifies the CBOR key to use instead of the full descriptive name.
 
-Note that the media type application/core-pubsub+cbor MUST be used when these parameters are transported in the respective message fields.
+Note that the media type application/core-pubsub+cbor MUST be used when these parameters are transported in the respective message fields. Reference should always be RFC-XXXX.
 
 
-| Name                 | CBOR Key | CBOR Type | Reference  |
-|----------------------|----------|-----------|------------|
-| topic-name           | 0        | tstr      | [RFC-XXXX] |
-| topic-data           | 1        | tstr      | [RFC-XXXX] |
-| resource-type        | 2        | tstr      | [RFC-XXXX] |
-| topic-content-format | 3        | uint      | [RFC-XXXX] |
-| topic-type           | 4        | tstr      | [RFC-XXXX] |
-| expiration-date      | 5        | tstr      | [RFC-XXXX] |
-| max-subscribers      | 6        | uint      | [RFC-XXXX] |
-| observer-check       | 7        | uint      | [RFC-XXXX] |
-| topic-history        | 8        | uint      | [RFC-XXXX] |
-| initialize           | 9        | bool      | [RFC-XXXX] |
-| conf-filter          | 10       | array     | [RFC-XXXX] |
+| Name                 | CBOR Key | CBOR Type |
+|----------------------|----------|-----------|
+| topic-name           | 0        | tstr      |
+| topic-data           | 1        | tstr      |
+| resource-type        | 2        | tstr      |
+| topic-content-format | 3        | uint      |
+| topic-type           | 4        | tstr      |
+| expiration-date      | 5        | tstr      |
+| max-subscribers      | 6        | uint      |
+| observer-check       | 7        | uint      |
+| topic-history        | 8        | uint      |
+| initialize           | 9        | bool      |
+| conf-filter          | 10       | array     |
 {: #fig-CoAP-Pubsub-Parameters title="CoAP Pubsub Parameters"}
 
 # Security Considerations {#seccons}
@@ -991,7 +991,7 @@ IANA is asked to enter the following values in the "Resource Type (rt=) Link Tar
 | core.ps.coll   | Topic collection resource of a Publish-Subscribe Broker |
 | core.ps.conf   | Topic resource of a Publish-Subscribe Broker   |
 | core.ps.data   | Topic-data resource of a broker                |
-
+{: #fig-CoAP-Pubsub-Resource-Types title="CoAP Pubsub Resource Types"}
 
 ## CoAP Pubsub Parameters {#iana-coap-pubsub-parameters}
 
