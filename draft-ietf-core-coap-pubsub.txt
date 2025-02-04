@@ -1670,9 +1670,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
    carrying parameters encoded in CBOR.  This registration follows the
    procedures specified in [BCP13].
 
+   Type name: application
 
-
-
+   Subtype name: core-pubsub+cbor
 
 
 
@@ -1682,38 +1682,38 @@ Jimenez, et al.           Expires 8 August 2025                [Page 30]
 Internet-Draft                 CoAP pubsub                 February 2025
 
 
-  Type name: application
+   Required parameters: N/A
 
-  Subtype name: core-pubsub+cbor
+   Optional parameters: N/A
 
-  Required parameters: N/A
+   Encoding considerations: Must be encoded as a CBOR map containing the
+   parameters defined in [RFC-XXXX].
 
-  Optional parameters: N/A
+   Security considerations: See Section 5 of [RFC-XXXX].
 
-  Encoding considerations: Must be encoded as a CBOR map containing the parameters defined in {{&SELF}}.
+   Interoperability considerations: none
 
-  Security considerations: See {{sec-cons}} of {{&SELF}}.
+   Published specification: [RFC-XXXX]
 
-  Interoperability considerations: none
+   Applications that use this media type: This type is used by clients
+   that create, retrieve, and update topics at servers acting as a
+   broker.
 
-  Published specification: {{&SELF}}
+   Fragment identifier considerations: N/A
 
-  Applications that use this media type:  This type is used by clients that create, retrieve, and update topics at servers acting as a broker.
+   Additional information: N/A
 
-  Fragment identifier considerations: N/A
+   Person & email address to contact for further information: CoRE WG
+   mailing list (core@ietf.org), or IETF Web and Internet Transport
+   (WIT) Area (wit@ietf.org)
 
-  Additional information: N/A
+   Intended usage: COMMON
 
-  Person & email address to contact for further information: CoRE WG mailing list (core@ietf.org),
-  or IETF Web and Internet Transport (WIT) Area (wit@ietf.org)
+   Restrictions on usage: none
 
-  Intended usage: COMMON
+   Author/Change controller: IETF
 
-  Restrictions on usage: none
-
-  Author/Change controller: IETF
-
-  Provisional registration: no
+   Provisional registration: no
 
 6.2.  CoAP Content-Formats
 
