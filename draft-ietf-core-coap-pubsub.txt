@@ -1580,35 +1580,35 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
    Note that the media type application/core-pubsub+cbor MUST be used
    when these parameters are transported in the respective message
-   fields.
+   fields.  Reference should always be RFC-XXXX.
 
-       +======================+==========+===========+============+
-       | Name                 | CBOR Key | CBOR Type | Reference  |
-       +======================+==========+===========+============+
-       | topic-name           | 0        | tstr      | [RFC-XXXX] |
-       +----------------------+----------+-----------+------------+
-       | topic-data           | 1        | tstr      | [RFC-XXXX] |
-       +----------------------+----------+-----------+------------+
-       | resource-type        | 2        | tstr      | [RFC-XXXX] |
-       +----------------------+----------+-----------+------------+
-       | topic-content-format | 3        | uint      | [RFC-XXXX] |
-       +----------------------+----------+-----------+------------+
-       | topic-type           | 4        | tstr      | [RFC-XXXX] |
-       +----------------------+----------+-----------+------------+
-       | expiration-date      | 5        | tstr      | [RFC-XXXX] |
-       +----------------------+----------+-----------+------------+
-       | max-subscribers      | 6        | uint      | [RFC-XXXX] |
-       +----------------------+----------+-----------+------------+
-       | observer-check       | 7        | uint      | [RFC-XXXX] |
-       +----------------------+----------+-----------+------------+
-       | topic-history        | 8        | uint      | [RFC-XXXX] |
-       +----------------------+----------+-----------+------------+
-       | initialize           | 9        | bool      | [RFC-XXXX] |
-       +----------------------+----------+-----------+------------+
-       | conf-filter          | 10       | array     | [RFC-XXXX] |
-       +----------------------+----------+-----------+------------+
+              +======================+==========+===========+
+              | Name                 | CBOR Key | CBOR Type |
+              +======================+==========+===========+
+              | topic-name           | 0        | tstr      |
+              +----------------------+----------+-----------+
+              | topic-data           | 1        | tstr      |
+              +----------------------+----------+-----------+
+              | resource-type        | 2        | tstr      |
+              +----------------------+----------+-----------+
+              | topic-content-format | 3        | uint      |
+              +----------------------+----------+-----------+
+              | topic-type           | 4        | tstr      |
+              +----------------------+----------+-----------+
+              | expiration-date      | 5        | tstr      |
+              +----------------------+----------+-----------+
+              | max-subscribers      | 6        | uint      |
+              +----------------------+----------+-----------+
+              | observer-check       | 7        | uint      |
+              +----------------------+----------+-----------+
+              | topic-history        | 8        | uint      |
+              +----------------------+----------+-----------+
+              | initialize           | 9        | bool      |
+              +----------------------+----------+-----------+
+              | conf-filter          | 10       | array     |
+              +----------------------+----------+-----------+
 
-                     Table 1: CoAP Pubsub Parameters
+                      Table 1: CoAP Pubsub Parameters
 
 5.  Security Considerations
 
@@ -1768,7 +1768,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
               |              | broker                       |
               +--------------+------------------------------+
 
-                                  Table 2
+                    Table 2: CoAP Pubsub Resource Types
 
 6.4.  CoAP Pubsub Parameters
 
