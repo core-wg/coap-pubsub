@@ -256,7 +256,7 @@ The following example shows an endpoint discovering a broker using the "core.ps"
    Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
    Payload:
-   <coap://mythinguri.com/broker/v1>;rt="core.ps"
+   <coaps://mythinguri.com/broker/v1>;rt="core.ps"
 ~~~~
 
 ### Topic Collection Discovery
@@ -710,7 +710,7 @@ Example of first publication:
    Content-Format: 110
    Payload:
    {
-      "n": "coap://dev1.example.com/temperature",
+      "n": "coaps://dev1.example.com/temperature",
       "u": "Cel",
       "t": 1621452122,
       "v": 23.5
@@ -733,7 +733,7 @@ Example of subsequent publication:
    Content-Format: 110
    Payload:
    {
-      "n": "coap://dev1.example.com/temperature",
+      "n": "coaps://dev1.example.com/temperature",
       "u": "Cel",
       "t": 1621452149,
       "v": 22.5
@@ -862,7 +862,7 @@ Example:
    Max-Age: 15
    Payload:
    {
-      "n": "coap://dev1.example.com/temperature",
+      "n": "coaps://dev1.example.com/temperature",
       "u": "Cel",
       "t": 1621452122,
       "v": 23.5
