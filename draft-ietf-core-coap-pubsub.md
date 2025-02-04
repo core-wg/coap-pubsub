@@ -877,10 +877,9 @@ This document defines parameters used in the messages exchanged between a client
 
 Note that the media type application/core-pubsub+cbor MUST be used when these parameters are transported in the respective message fields.
 
-~~~~~~~~~~~
-+----------------------+----------+-----------+------------+
+
 | Name                 | CBOR Key | CBOR Type | Reference  |
-| -------------------- | -------- | --------- | ---------- |
+|----------------------|----------|-----------|------------|
 | topic-name           | 0        | tstr      | [RFC-XXXX] |
 | topic-data           | 1        | tstr      | [RFC-XXXX] |
 | resource-type        | 2        | tstr      | [RFC-XXXX] |
@@ -892,9 +891,7 @@ Note that the media type application/core-pubsub+cbor MUST be used when these pa
 | topic-history        | 8        | uint      | [RFC-XXXX] |
 | initialize           | 9        | bool      | [RFC-XXXX] |
 | conf-filter          | 10       | array     | [RFC-XXXX] |
-+----------------------+----------+-----------+------------+
-~~~~~~~~~~~
-{: #fig-CoAP-Pubsub-Parameters title="CoAP Pubsub Parameters" artwork-align="center"}
+{: #fig-CoAP-Pubsub-Parameters title="CoAP Pubsub Parameters"}
 
 # Security Considerations {#seccons}
 
