@@ -1743,7 +1743,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
    IANA is asked to enter the following values in the "Resource Type
    (rt=) Link Target Attribute Values" registry within the "Constrained
    Restful Environments (CoRE) Parameters" registry group.  Reference
-   should always be RFC-XXXX
+   should always be RFC-XXXX.
 
               +==============+==============================+
               | Value        | Description                  |
