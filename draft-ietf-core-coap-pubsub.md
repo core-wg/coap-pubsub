@@ -404,7 +404,7 @@ A client can add a new topics to a collection of topics by submitting an initial
 
 Please note that the topic will NOT be fully created until a publisher has published some data to it (See {{topic-lifecycle}}).
 
-To facilitate immediate subscription and allow clients to observe the topic before data has been published, the client can include the "initialize" set to "true". When supported, the broker will create the topic and pre-populate the "topic-data" field with a zero-length (empty) payload without an explicit Content-Format. That is, a subscribing client would get this zero-length representation without an associated Content-Format Option in the CoAP resonse. This means “indeterminate” per {{Section 5.10.3 of RFC7252}}. 
+To facilitate immediate subscription and allow clients to observe the topic before data has been published, the client can include the "initialize" set to "true". When supported, the broker will create the topic and pre-populate the "topic-data" field with a zero-length (empty) payload without an explicit Content-Format. That is, a subscribing client would get this zero-length representation without an associated Content-Format Option in the CoAP resonse. This means “indeterminate” per {{Section 5.10.3 of RFC7252}}.
 
 When "initialize" is set to "false" or omitted, the topic will only be fully created after data is published to it.
 
@@ -521,13 +521,6 @@ Example:
 ~~~~
 
 ### Updating the topic {#topic-update-resource}
-
-<!--
-PUT to /topic-conf
-override the whole configuration
-request is cbor
-response is cbor
--->
 
 A client can update a topic's configuration by submitting the updated topic representation in a PUT request to the topic URI. However, the parameters "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.
 
@@ -918,12 +911,6 @@ Building on {{RFC9594}}, its application profile for publish-subscribe communica
 In particular, the application profile above relies on the ACE framework for Authentication and Authorization in Constrained Environments (ACE) {{RFC9200}} and defines a method to: authorize publishers and subscribers to perform operations at the broker, with fine-grained access control; authorize publishers and subscribers to obtain the keying material required to take part to a topic managed by the broker; protect published data end-to-end between its publisher and all the subscribers to the targeted topic, ensuring confidentiality, integrity, and source authentication of the published content end-to-end. That approach can be extended to enforce authorization and fine-grained access control for administrator clients that are intended to create, update, and delete topics at the broker.
 
 # IANA Considerations {#iana}
-
-<!-- To be registerd in IANA:
-media type: application/core-pubsub+cbor
-content format/type: application/core-pubsub+cbor
-subregistry for the topic config
--->
 
 This document has the following actions for IANA.
 
