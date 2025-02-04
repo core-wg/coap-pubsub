@@ -873,7 +873,7 @@ When a publisher receives a 4.29 (Too Many Requests) response, it MUST NOT send 
 
 # CoAP Pubsub Parameters {#pubsub-parameters}
 
-This document defines parameters used in the messages exchanged between a client and the broker during the topic creation and configuration process (see {{topic-resource-representation}}). The table {{tab-CoAP-Pubsub-Parameters}} summarizes them and specifies the CBOR key to use instead of the full descriptive name.
+This document defines parameters used in the messages exchanged between a client and the broker during the topic creation and configuration process (see {{topic-resource-representation}}). {{tab-CoAP-Pubsub-Parameters}} summarizes them and specifies the CBOR key to use instead of the full descriptive name.
 
 Note that the media type application/core-pubsub+cbor MUST be used when these parameters are transported in the respective message fields. Reference should always be RFC-XXXX.
 
