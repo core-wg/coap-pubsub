@@ -1574,9 +1574,8 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
    This document defines parameters used in the messages exchanged
    between a client and the broker during the topic creation and
-   configuration process (see Section 2.2).  The table Table 1
-   summarizes them and specifies the CBOR key to use instead of the full
-   descriptive name.
+   configuration process (see Section 2.2).  Table 1 summarizes them and
+   specifies the CBOR key to use instead of the full descriptive name.
 
    Note that the media type application/core-pubsub+cbor MUST be used
    when these parameters are transported in the respective message
@@ -1616,6 +1615,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
    considerations from CoAP [RFC7252] and Observe [RFC7641], as well as
    from Web Linking [RFC8288], Link-Format [RFC6690], and the CoRE
    Resource Directory [RFC9176].
+
 
 
 
@@ -1748,10 +1748,10 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 6.3.  Resource Types
 
-   IANA is asked to enter the following values from the table Table 2 in
-   the "Resource Type (rt=) Link Target Attribute Values" registry
-   within the "Constrained Restful Environments (CoRE) Parameters"
-   registry group.  Reference should always be RFC-XXXX.
+   IANA is asked to enter the following values from Table 2 in the
+   "Resource Type (rt=) Link Target Attribute Values" registry within
+   the "Constrained Restful Environments (CoRE) Parameters" registry
+   group.  Reference should always be RFC-XXXX.
 
               +==============+==============================+
               | Value        | Description                  |
@@ -2151,6 +2151,8 @@ A.4.  Version -16 to -17
 
    *  Addressing Esko's and Ari's review.
 
+   *  Fixing formatting
+
 Acknowledgements
 
    The current version of this document contains a substantial
@@ -2174,10 +2176,8 @@ Contributors
    Email: marco.tiloca@ri.se
 
 
-   Marco offered comprehensive reviews and insightful guidance on the
-   recent iterations of this document.  His contributions were
-   particularly notable in the Security Considerations section, among
-   others.
+
+
 
 
 
@@ -2185,6 +2185,11 @@ Jimenez, et al.           Expires 8 August 2025                [Page 39]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
+
+   Marco offered comprehensive reviews and insightful guidance on the
+   recent iterations of this document.  His contributions were
+   particularly notable in the Security Considerations section, among
+   others.
 
 Authors' Addresses
 
@@ -2201,11 +2206,6 @@ Authors' Addresses
    Ari Keranen
    Ericsson
    Email: ari.keranen@ericsson.com
-
-
-
-
-
 
 
 
