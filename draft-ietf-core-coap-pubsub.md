@@ -987,9 +987,9 @@ IANA is asked to enter the following values in the "Resource Type (rt=) Link Tar
 
 | Value          | Description                                    |
 |----------------|------------------------------------------------|
-| core.ps        | Publish-Subscribe Broker                       |
-| core.ps.coll   | Topic collection resource of a Publish-Subscribe Broker |
-| core.ps.conf   | Topic resource of a Publish-Subscribe Broker   |
+| core.ps        | Publish Subscribe Broker                       |
+| core.ps.coll   | Topic collection resource of a Publish Subscribe Broker |
+| core.ps.conf   | Topic resource of a Publish Subscribe Broker   |
 | core.ps.data   | Topic-data resource of a broker                |
 {: #fig-CoAP-Pubsub-Resource-Types title="CoAP Pubsub Resource Types"}
 
