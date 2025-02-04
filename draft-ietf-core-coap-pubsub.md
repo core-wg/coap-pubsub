@@ -92,7 +92,7 @@ This specification requires readers to be familiar with all the terms and concep
 This specification makes use of the following terminology:
 
 {:vspace}
-publish-subscribe (pub/sub):
+publish-subscribe (pub-sub):
 : A message communication model where messages associated with specific topics are sent to a broker. Interested parties, i.e. subscribers, receive these topic-based messages from the broker without the original sender knowing the recipients. The broker handles matching and delivering these messages to the appropriate subscribers.
 
 publishers and subscribers:
