@@ -986,7 +986,7 @@ Reference
 
 ## Resource Types {#iana-rt}
 
-IANA is asked to enter the following values in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group. Reference ishould always be RFC-XXXX
+IANA is asked to enter the following values in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group. Reference should always be RFC-XXXX
 
 | Value          | Description                                    |
 |----------------|------------------------------------------------|
