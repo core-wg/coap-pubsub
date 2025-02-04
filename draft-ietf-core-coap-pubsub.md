@@ -160,9 +160,9 @@ Topic-data interactions are publish, subscribe, unsubscribe, read, and delete. T
 ~~~~
 {: #fig-api title="Resources of a Broker" artwork-align="center"}
 
-The Broker exports one or more topic-collection resources, with resource type "core.ps.coll" defined in {{iana}} of this document. The interfaces for the topic-collection resource is defined in {{topic-collection-interactions}}.
+The Broker exports one or more topic collection resources, with resource type "core.ps.coll" defined in {{iana}} of this document. The interfaces for the topic collection resource is defined in {{topic-collection-interactions}}.
 
-A topic-collection resource can have topic resources as its child resources, with resource type "core.ps.conf".
+A topic collection resource can have topic resources as its child resources, with resource type "core.ps.conf".
 
 # Pub-Sub Topics {#topics}
 
@@ -364,12 +364,6 @@ Example:
 ~~~~
 
 ### Getting topic-configurations by Properties {#topic-get-properties}
-<!--
-FETCH to /topic-collection with filter
-retrieve only the topics that match the filter
-request is cbor
-response is link format
--->
 
 A client can filter a collection of topics by submitting the
 representation of a topic filter (see {{topic-fetch-resource}}) in a FETCH request to the topic collection URI.
@@ -1014,7 +1008,7 @@ Description: Publish-Subscribe Broker
 Reference: [RFC-XXXX]
 
 Value: core.ps.coll
-Description: Topic-collection resource of a Publish-Subscribe Broker
+Description: Topic collection resource of a Publish-Subscribe Broker
 Reference: [RFC-XXXX]
 
 Value: core.ps.conf
