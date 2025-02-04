@@ -1066,6 +1066,7 @@ Expert reviewers should take into consideration the following points:
 ## Version -16 to -17
 
 * Addressing Esko's and Ari's review.
+* Fixing formatting
 
 # Acknowledgements
 {: numbered='no'}
