@@ -163,6 +163,7 @@ Topic-data interactions are publish, subscribe, unsubscribe, read, and delete. T
 The Broker exports one or more topic collection resources, with resource type "core.ps.coll" defined in {{iana}} of this document. The interfaces for the topic collection resource is defined in {{topic-collection-interactions}}.
 
 A topic collection resource can have topic resources as its child resources, with resource type "core.ps.conf".
+Other child resource types are currently not defined for a topic collection resource.
 
 # PubSub Topics {#topics}
 
@@ -198,7 +199,7 @@ Publication and subscription to a topic occur at a link, where the link target i
 
 A topic resource with a topic-data link can also be simply called "topic".
 
-The list of links to the topic resources can be retrieved from the associated topic collection resource, and represented as a Link Format document {{RFC6690}}where each such link specifies the link target attribute 'rt' (Resource Type), with value "core.ps.conf" defined in this document.
+The list of links to the topic resources can be retrieved from the associated topic collection resource, represented as a Link Format document {{RFC6690}} where each link is a topic resource of type "core.ps.conf" as defined in this document.
 
 ## Topic Representation {#topic-resource-representation}
 
@@ -235,10 +236,11 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 ## Discovery
 
 A client can perform a discovery of: the broker; the topic collection resources and topic resources hosted by the broker; and the topic-data resources associated with those topic resources.
+Any server implementing a pubsub broker MUST support CoAP discovery with a query parameter as defined in {{Section 4.1 of RFC6690}} and as used in the examples in this section.
 
 ### Broker Discovery {#broker-discovery}
 
-CoAP clients MAY discover brokers by using CoAP Simple Discovery, via multicast, through a Resource Directory (RD) {{RFC9176}} or by other means specified in extensions to {{RFC7252}}. Brokers MAY register with a RD by following the steps on {{Section 5 of RFC9176}} with the resource type set to "core.ps" as defined in {{iana}} of this document.
+CoAP clients MAY discover brokers by using CoAP discovery, via multicast, through a Resource Directory (RD) {{RFC9176}} or by other means specified in extensions to {{RFC7252}}. Brokers MAY register with a RD by following the steps on {{Section 5 of RFC9176}} with the resource type set to "core.ps" as defined in {{iana}} of this document.
 
 The following example shows an endpoint discovering a broker using the "core.ps" resource type over a multicast network. Brokers within the multicast scope will answer the query.
 
@@ -282,15 +284,19 @@ Example:
    Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
    Payload:
-   </ps>;rt="core.ps.coll";ct=40,
-   </other/path>;rt="core.ps.coll";ct=40
+   </ps>;rt="core.ps.coll",
+   </other/path>;rt="core.ps.coll"
 ~~~~
+
+Note that the "ct" attribute is not included for the two collections in the returned link format document.
+This is because the content-format of each topic collection resource is implied by its resource type (rt="core.ps.coll") to be 40 ("application/link-format").
+
 
 ### Topic Discovery {#topic-discovery}
 
 Each topic collection is associated with a group of topic resources, each detailing the configuration of its respective topic (refer to {{topic-properties}}). Each topic resource is identified by the resource type "core.ps.conf".
 
-Below is an example of discovery via /.well-known/core with rt=core.ps.conf that returns a list of topics, as the list of links to the corresponding topic resources.
+Below is an example of discovery via /.well-known/core with query rt=core.ps.conf that returns a list of topics, as the list of links to the corresponding topic resources.
 
 
 ~~~~
@@ -306,8 +312,8 @@ Below is an example of discovery via /.well-known/core with rt=core.ps.conf that
    Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
    Payload:
-   </ps/h9392>;rt="core.ps.conf";ct=TBD606,
-   </other/path/2e3570>;rt="core.ps.conf";ct=TBD606
+   </ps/h9392>;rt="core.ps.conf",
+   </other/path/2e3570>;rt="core.ps.conf"
 ~~~~
 
 ### Topic-Data Discovery
@@ -315,9 +321,10 @@ Below is an example of discovery via /.well-known/core with rt=core.ps.conf that
 
 Within a topic, there is the topic-data property containing the URI of the topic-data resource that a CoAP client can subscribe and publish to. Resources exposing resources of the topic-data type are expected to use the resource type 'core.ps.data'.
 
-The topic-data contains the URI of the topic-data resource for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data (see {{topic-get-resource}}).
+The topic-data key in the topic resource contains the URI of the topic-data resource for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data (see {{topic-get-resource}}).
 
-It is also possible to discover a list of topic-data resources by sending a request to the collection with rt=core.ps.data resources as shown below.
+It is also possible to discover a list of topic-data resources by sending a request to the collection with query rt=core.ps.data resources as shown below.
+Any topic collection resource MUST support this query.
 
 ~~~~
    Request:
@@ -331,8 +338,11 @@ It is also possible to discover a list of topic-data resources by sending a requ
    Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
    Payload:
-   </ps/data/62e4f8d>;rt="core.ps.data";obs
+   </ps/data/62e4f8d>
 ~~~~
+
+Note that the "rt" attribute is not included in the returned link in the example response.
+This is because the query in the request already constrains all links in the response to be only of type "core.ps.data".
 
 ## Topic Collection Interactions {#topic-collection-interactions}
 
@@ -345,6 +355,10 @@ A client can request a collection of the topics present in the broker by making 
 On success, the broker returns a 2.05 (Content) response, specifying the list of links to topic resources associated with this topic collection (see {{topic-resource-representation}}).
 
 A client MAY retrieve a list of links to topics it is authorized to access, based on its permissions.
+The payload content-format 40 ("application/link-format") MUST be at least supported for the collection resource.
+Note that no "rt" or "ct" attributes are returned for the topic resources in the example payload, because
+the resource type (rt="core.ps.conf") is already implied by this specification for the topic collection and
+the content-format (TBD606) is implied by the resource type.
 
 Example:
 
@@ -359,8 +373,7 @@ Example:
    Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
    Payload:
-   </ps/h9392>;rt="core.ps.conf",
-   </ps/2e3570>;rt="core.ps.conf"
+   </ps/h9392>,</ps/2e3570>
 ~~~~
 
 ### Getting topics by Properties {#topic-get-properties}
@@ -394,9 +407,11 @@ Example:
    Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
    Payload:
-   </ps/2e3570>;rt="core.ps.conf"
+   </ps/2e3570>
 ~~~~
 
+Note that no "rt" or "ct" attributes are returned in the link format document, since the type of each link
+(topic resource with rt="core.ps.conf") is implied as the default resource type of each topic resource by this specification.
 
 ### Creating a Topic {#topic-create}
 
