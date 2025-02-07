@@ -487,9 +487,9 @@ For example, below is a request on the topic "ps/h9392":
 
 ### Getting part of a topic {#topic-fetch-resource}
 
-A client can read the configuration of a topic by making a FETCH request to the topic resource URI with a filter for specific parameters. This is done in order to retrieve part of the current topic resource.
+A client can read the configuration of a topic by making a FETCH request to the topic resource URI with a filter for specific topic properties. This is done in order to retrieve part of the current topic resource.
 
-The request contains a CBOR map with a configuration filter or 'conf-filter', a CBOR array of configuration parameters, as defined in {{pubsub-parameters}}. Each element of the array specifies one requested configuration parameter of the current topic resource (see {{topic-resource-representation}}).
+The request contains a CBOR map with a configuration filter or 'conf-filter', a CBOR array of topic properties, as defined in {{pubsub-parameters}}. Each element of the array specifies one requested topic property of the current topic resource (see {{topic-resource-representation}}).
 
 On success, the broker returns a 2.05 (Content) response with a representation of the topic resource. The response has as payload the partial representation of the topic resource as specified in {{topic-resource-representation}}.
 
@@ -526,15 +526,15 @@ Example:
 
 ### Updating the topic {#topic-update-resource}
 
-A client can update a topic's configuration by submitting the updated topic representation in a PUT request to the topic URI. However, the parameters "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.
+A client can update a topic's configuration by submitting the updated topic representation in a PUT request to the topic URI. However, the topic properties "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.
 
-On success, the topic is overwritten and broker returns a 2.04 (Changed) response and the current full resource representation. The broker may choose not to overwrite parameters that are not explicitly modified in the request.
+On success, the topic is overwritten and broker returns a 2.04 (Changed) response and the current full resource representation. The broker may choose not to overwrite topic properties that are not explicitly modified in the request.
 
 Note that updating the "topic-data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Updating the "topic-data" may happen also after it being deleted, as described on {{delete-topic-data}}, this will in turn create a new "topic-data" path for that topic.
 
 Similarly, decreasing max-subscribers will also cause that some subscribers get unsubscribed. Unsubscribed endpoints receive a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The specific queue management for unsubscribing is left for implementors.
 
-Please note that when using PUT the topic is being overwritten, thus some of the optional parameters (e.g., "max-subscribers", "observer-check") not included in the PUT message will be reset to their default values.
+Please note that when using PUT the topic is being overwritten, thus some of the optional topic properties (e.g., "max-subscribers", "observer-check") not included in the PUT message will be reset to their default values.
 
 Example:
 
@@ -580,13 +580,13 @@ Note that when a topic changes, it may result in disruptions for the subscribers
 
 ### Updating the topic with iPATCH {#topic-update-resource-patch}
 
-A client can partially update a topic's configuration by submitting a partial topic representation in an iPATCH request to the topic URI. The iPATCH request allows for updating only specific fields of the topic while leaving the others unchanged. As with the PUT method, the parameters "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.
+A client can partially update a topic's configuration by submitting a partial topic representation in an iPATCH request to the topic URI. The iPATCH request allows for updating only specific fields of the topic while leaving the others unchanged. As with the PUT method, the topic properties "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.
 
-On success, the broker returns a 2.04 (Changed) response and the current full resource representation. The broker only updates parameters that are explicitly mentioned in the request.
+On success, the broker returns a 2.04 (Changed) response and the current full resource representation. The broker only updates topic properties that are explicitly mentioned in the request.
 
 As with the PUT method, updating the "topic-data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Decreasing max-subscribers will also cause some subscribers to get unsubscribed. Unsubscribed endpoints receive a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}.
 
-Contrary to PUT, iPATCH operations will explicitly update some parameters, leaving others unmodified.
+Contrary to PUT, iPATCH operations will explicitly update some topic properties, leaving others unmodified.
 
 ~~~~
    Request:
@@ -759,7 +759,7 @@ Success:
 Failure:
 : 4.04 "Not Found". The topic-data does not exist.
 
-If the 'max-subscribers' parameter has been reached, the broker must treat that as specified in {{Section 4.1 of RFC7641}}. The response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
+If the 'max-subscribers' topic property value has been reached, the broker must treat that as specified in {{Section 4.1 of RFC7641}}. The response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
 
 
 Example of a successful subscription followed by one update:
@@ -808,7 +808,7 @@ A CoAP client can unsubscribe simply by canceling the observation as described i
 
 As per {{RFC7641}} a server that transmits notifications mostly in non-confirmable messages, but it MUST send a notification in a confirmable message instead of a non-confirmable message at least every 24 hours.
 
-This value can be modified at the broker by the administrator of a topic by modifying the parameter "observer-check" on {{topic-resource-representation}}. This would allow changing the rate at which different implementations verify that a subscriber is still interested in observing a topic-data resource.
+This value can be modified at the broker by the administrator of a topic by modifying the topic property "observer-check" on {{topic-resource-representation}}. This would allow changing the rate at which different implementations verify that a subscriber is still interested in observing a topic-data resource.
 
 
 ### Delete topic-data {#delete-topic-data}
@@ -817,7 +817,7 @@ A publisher MAY delete a topic by making a CoAP DELETE request on the topic-data
 
 On success, the broker returns a 2.02 (Deleted) response.
 
-When a topic-data resource is deleted, the broker MUST also delete the topic-data parameter in the topic resource, unsubscribe all subscribers by removing them from the list of observers and return a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The topic is then set back to the half created state as per {{topic-lifecycle}}.
+When a topic-data resource is deleted, the broker MUST also delete the 'topic-data' topic property in the topic resource, unsubscribe all subscribers by removing them from the list of observers and return a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The topic is then set back to the half created state as per {{topic-lifecycle}}.
 
 Example of a successful deletion:
 
@@ -837,7 +837,7 @@ Example of a successful deletion:
 
 ## Read the latest data {#read-data}
 
-A client can get the latest published topic-data by making a GET request to the topic-data URI in the broker. Please note that discovery of the topic-data parameter is a required previous step (see {{topic-get-resource}}).
+A client can get the latest published topic-data by making a GET request to the topic-data URI in the broker. Please note that discovery of the 'topic-data' topic property is a required previous step (see {{topic-get-resource}}).
 
 On success, the server MUST return 2.05 (Content) response with the data.
 
@@ -876,11 +876,12 @@ In this situation, if a publisher is sending publications too fast, the server S
 
 When a publisher receives a 4.29 (Too Many Requests) response, it MUST NOT send any new publication requests to the same topic-data resource before the time indicated by the Max-Age option has passed.
 
-# CoAP Pubsub Parameters {#pubsub-parameters}
+# Encoding of PubSub Topic Properties {#pubsub-parameters}
 
-This document defines parameters used in the messages exchanged between a client and the broker during the topic creation and configuration process (see {{topic-resource-representation}}). {{tab-CoAP-Pubsub-Parameters}} summarizes them and specifies the CBOR key to use instead of the full descriptive name.
+This document defines topic properties used in the messages exchanged between a client and the broker, for example during the topic creation and configuration process (see {{topic-resource-representation}}).
+{{tab-CoAP-Pubsub-Parameters}} summarizes them and specifies the CBOR key that MUST be used instead of the full descriptive name.
 
-Note that the media type application/core-pubsub+cbor MUST be used when these parameters are transported in the respective message fields. Reference should always be RFC-XXXX.
+Note that the media type application/core-pubsub+cbor MUST be used when these topic properties are transported in the respective CoAP message payloads. Reference should always be {{&SELF}}.
 
 
 | Name                 | CBOR Key | CBOR Type |
@@ -896,7 +897,7 @@ Note that the media type application/core-pubsub+cbor MUST be used when these pa
 | topic-history        | 8        | uint      |
 | initialize           | 9        | bool      |
 | conf-filter          | 10       | array     |
-{: #tab-CoAP-Pubsub-Parameters title="CoAP Pubsub Parameters"}
+{: #tab-CoAP-Pubsub-Parameters title="CoAP Pubsub Topic Properties and CBOR Encoding"}
 
 # Security Considerations {#seccons}
 
@@ -920,7 +921,7 @@ Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with the RFC n
 
 ## Media Type Registrations {#media-type}
 
-This specification registers the 'application/core-pubsub+cbor' media type for messages of the protocols defined in this document and carrying parameters encoded in CBOR. This registration follows the procedures specified in {{BCP13}}.
+This specification registers the 'application/core-pubsub+cbor' media type for messages of the protocols defined in this document and carrying topic properties encoded in CBOR. This registration follows the procedures specified in {{BCP13}}.
 
 Type name:
 : application
@@ -935,7 +936,7 @@ Optional parameters:
 : N/A
 
 Encoding considerations:
-: Must be encoded as a CBOR map containing the parameters defined in {{&SELF}}.
+: Must be encoded as a CBOR map containing the topic properties defined in {{&SELF}}.
 
 Security considerations:
 : See {{seccons}} of {{&SELF}}.
@@ -988,7 +989,7 @@ Reference:
 
 ## Resource Types {#iana-rt}
 
-IANA is asked to enter the following values from {{tab-CoAP-Pubsub-Resource-Types}} in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group. Reference should always be RFC-XXXX.
+IANA is asked to enter the following values from {{tab-CoAP-Pubsub-Resource-Types}} in the "Resource Type (rt=) Link Target Attribute Values" registry within the "Constrained Restful Environments (CoRE) Parameters" registry group. Reference should always be {{&SELF}}.
 
 | Value          | Description                                    |
 |----------------|------------------------------------------------|
@@ -998,9 +999,9 @@ IANA is asked to enter the following values from {{tab-CoAP-Pubsub-Resource-Type
 | core.ps.data   | Topic-data resource of a broker                |
 {: #tab-CoAP-Pubsub-Resource-Types title="CoAP Pubsub Resource Types"}
 
-## CoAP Pubsub Parameters {#iana-coap-pubsub-parameters}
+## CoAP Pubsub Topic Properties Registry {#iana-coap-pubsub-parameters}
 
-This specification establishes the "CoAP Pubsub topic configuration Parameters" IANA registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
+This specification establishes the "CoAP Pubsub Topic Properties" IANA registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
 The registration policy is either "Private Use", "Standards Action with Expert Review", or "Specification Required" or "Expert Review" per {{BCP26}}. "Expert Review" guidelines are provided in {{review}}.
 
@@ -1026,11 +1027,11 @@ Expert reviewers should take into consideration the following points:
 
 The registration policy for the IANA registry established in  {{iana-coap-pubsub-parameters}} is defined as one of "Standards Action with Expert Review", "Specification Required", and "Expert Review". This section gives some general guidelines for what the experts should be looking for; however, they are being designated as experts for a reason, so they should be given substantial latitude.
 
-These registration policies are designed to accommodate different use cases; “Standards Action with Expert Review” allows for further IETF standards and extensions, maintaining consistency and alignment with established protocols; “Specification Required” allows third-party specifications from Standards Development Organizations (SDOs) to register parameters, enabling interoperability and broader applicability; and “Expert Review” provides a flexible mechanism for exposing new parameters that implementors do not want to keep in a private range.
+These registration policies are designed to accommodate different use cases; “Standards Action with Expert Review” allows for further IETF standards and extensions, maintaining consistency and alignment with established protocols; “Specification Required” allows third-party specifications from Standards Development Organizations (SDOs) to register topic properties, enabling interoperability and broader applicability; and “Expert Review” provides a flexible mechanism for exposing new properties that implementors do not want to keep in a private range.
 
 Expert reviewers should take into consideration the following points:
 
-* Clarity and correctness of registrations. Experts are expected to check the clarity of purpose and use of the requested entries. Experts need to make sure that registered parameters are clearly defined in the corresponding specification. Parameters that do not meet these objectives of clarity and completeness must not be registered.
+* Clarity and correctness of registrations. Experts are expected to check the clarity of purpose and use of the requested entries. Experts need to make sure that registered topic properties are clearly defined in the corresponding specification. Properties that do not meet these objectives of clarity and completeness must not be registered.
 
 * Point squatting should be discouraged. Reviewers are encouraged to get sufficient information for registration requests to ensure that the usage is not going to duplicate one that is already registered and that the point is likely to be used in deployments. The zones tagged as "Private Use" are intended for testing purposes and closed environments. Code points in other ranges should not be assigned for testing.
 
