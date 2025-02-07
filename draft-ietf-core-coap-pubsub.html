@@ -1049,7 +1049,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Jimenez, et al.</td>
-<td class="center">Expires 9 August 2025</td>
+<td class="center">Expires 11 August 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,12 +1062,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-core-coap-pubsub-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-02-05" class="published">5 February 2025</time>
+<time datetime="2025-02-07" class="published">7 February 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-08-09">9 August 2025</time></dd>
+<dd class="expires"><time datetime="2025-08-11">11 August 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1124,7 +1124,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 9 August 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 11 August 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1526,7 +1526,8 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
           </figcaption></figure>
 </div>
 <p id="section-1.3-3">The Broker exports one or more topic collection resources, with resource type "core.ps.coll" defined in <a href="#iana" class="auto internal xref">Section 6</a> of this document. The interfaces for the topic collection resource is defined in <a href="#topic-collection-interactions" class="auto internal xref">Section 2.4</a>.<a href="#section-1.3-3" class="pilcrow">¶</a></p>
-<p id="section-1.3-4">A topic collection resource can have topic resources as its child resources, with resource type "core.ps.conf".<a href="#section-1.3-4" class="pilcrow">¶</a></p>
+<p id="section-1.3-4">A topic collection resource can have topic resources as its child resources, with resource type "core.ps.conf".
+Other child resource types are currently not defined for a topic collection resource.<a href="#section-1.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1695,7 +1696,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
 <p id="section-2.1-1">Each topic is represented as a link, where the link target is the URI of the corresponding topic resource.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
 <p id="section-2.1-2">Publication and subscription to a topic occur at a link, where the link target is the URI of the corresponding topic-data resource. Such a link is specified by the topic-data entry within the topic resource (see <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>).<a href="#section-2.1-2" class="pilcrow">¶</a></p>
 <p id="section-2.1-3">A topic resource with a topic-data link can also be simply called "topic".<a href="#section-2.1-3" class="pilcrow">¶</a></p>
-<p id="section-2.1-4">The list of links to the topic resources can be retrieved from the associated topic collection resource, and represented as a Link Format document <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>where each such link specifies the link target attribute 'rt' (Resource Type), with value "core.ps.conf" defined in this document.<a href="#section-2.1-4" class="pilcrow">¶</a></p>
+<p id="section-2.1-4">The list of links to the topic resources can be retrieved from the associated topic collection resource, represented as a Link Format document <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span> where each link is a topic resource of type "core.ps.conf" as defined in this document.<a href="#section-2.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="topic-resource-representation">
@@ -1753,13 +1754,14 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
         <h3 id="name-discovery">
 <a href="#section-2.3" class="section-number selfRef">2.3. </a><a href="#name-discovery" class="section-name selfRef">Discovery</a>
         </h3>
-<p id="section-2.3-1">A client can perform a discovery of: the broker; the topic collection resources and topic resources hosted by the broker; and the topic-data resources associated with those topic resources.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.3-1">A client can perform a discovery of: the broker; the topic collection resources and topic resources hosted by the broker; and the topic-data resources associated with those topic resources.
+Any server implementing a pubsub broker <span class="bcp14">MUST</span> support CoAP discovery with a query parameter as defined in <span><a href="https://rfc-editor.org/rfc/rfc6690#section-4.1" class="relref">Section 4.1</a> of [<a href="#RFC6690" class="cite xref">RFC6690</a>]</span> and as used in the examples in this section.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
 <div id="broker-discovery">
 <section id="section-2.3.1">
           <h4 id="name-broker-discovery">
 <a href="#section-2.3.1" class="section-number selfRef">2.3.1. </a><a href="#name-broker-discovery" class="section-name selfRef">Broker Discovery</a>
           </h4>
-<p id="section-2.3.1-1">CoAP clients <span class="bcp14">MAY</span> discover brokers by using CoAP Simple Discovery, via multicast, through a Resource Directory (RD) <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span> or by other means specified in extensions to <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>. Brokers <span class="bcp14">MAY</span> register with a RD by following the steps on <span><a href="https://rfc-editor.org/rfc/rfc9176#section-5" class="relref">Section 5</a> of [<a href="#RFC9176" class="cite xref">RFC9176</a>]</span> with the resource type set to "core.ps" as defined in <a href="#iana" class="auto internal xref">Section 6</a> of this document.<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.1-1">CoAP clients <span class="bcp14">MAY</span> discover brokers by using CoAP discovery, via multicast, through a Resource Directory (RD) <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span> or by other means specified in extensions to <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>. Brokers <span class="bcp14">MAY</span> register with a RD by following the steps on <span><a href="https://rfc-editor.org/rfc/rfc9176#section-5" class="relref">Section 5</a> of [<a href="#RFC9176" class="cite xref">RFC9176</a>]</span> with the resource type set to "core.ps" as defined in <a href="#iana" class="auto internal xref">Section 6</a> of this document.<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
 <p id="section-2.3.1-2">The following example shows an endpoint discovering a broker using the "core.ps" resource type over a multicast network. Brokers within the multicast scope will answer the query.<a href="#section-2.3.1-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.3.1-3">
 <pre>
@@ -1804,10 +1806,12 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
    Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
    Payload:
-   &lt;/ps&gt;;rt="core.ps.coll";ct=40,
-   &lt;/other/path&gt;;rt="core.ps.coll";ct=40
+   &lt;/ps&gt;;rt="core.ps.coll",
+   &lt;/other/path&gt;;rt="core.ps.coll"
 </pre><a href="#section-2.3.2-5" class="pilcrow">¶</a>
 </div>
+<p id="section-2.3.2-6">Note that the "ct" attribute is not included for the two collections in the returned link format document.
+This is because the content-format of each topic collection resource is implied by its resource type (rt="core.ps.coll") to be 40 ("application/link-format").<a href="#section-2.3.2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="topic-discovery">
@@ -1816,7 +1820,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
 <a href="#section-2.3.3" class="section-number selfRef">2.3.3. </a><a href="#name-topic-discovery" class="section-name selfRef">Topic Discovery</a>
           </h4>
 <p id="section-2.3.3-1">Each topic collection is associated with a group of topic resources, each detailing the configuration of its respective topic (refer to <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>). Each topic resource is identified by the resource type "core.ps.conf".<a href="#section-2.3.3-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.3-2">Below is an example of discovery via /.well-known/core with rt=core.ps.conf that returns a list of topics, as the list of links to the corresponding topic resources.<a href="#section-2.3.3-2" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-2">Below is an example of discovery via /.well-known/core with query rt=core.ps.conf that returns a list of topics, as the list of links to the corresponding topic resources.<a href="#section-2.3.3-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.3.3-3">
 <pre>
    Request:
@@ -1831,8 +1835,8 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
    Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
    Payload:
-   &lt;/ps/h9392&gt;;rt="core.ps.conf";ct=TBD606,
-   &lt;/other/path/2e3570&gt;;rt="core.ps.conf";ct=TBD606
+   &lt;/ps/h9392&gt;;rt="core.ps.conf",
+   &lt;/other/path/2e3570&gt;;rt="core.ps.conf"
 </pre><a href="#section-2.3.3-3" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1843,8 +1847,9 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
 <a href="#section-2.3.4" class="section-number selfRef">2.3.4. </a><a href="#name-topic-data-discovery" class="section-name selfRef">Topic-Data Discovery</a>
           </h4>
 <p id="section-2.3.4-1">Within a topic, there is the topic-data property containing the URI of the topic-data resource that a CoAP client can subscribe and publish to. Resources exposing resources of the topic-data type are expected to use the resource type 'core.ps.data'.<a href="#section-2.3.4-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.4-2">The topic-data contains the URI of the topic-data resource for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data (see <a href="#topic-get-resource" class="auto internal xref">Section 2.5.1</a>).<a href="#section-2.3.4-2" class="pilcrow">¶</a></p>
-<p id="section-2.3.4-3">It is also possible to discover a list of topic-data resources by sending a request to the collection with rt=core.ps.data resources as shown below.<a href="#section-2.3.4-3" class="pilcrow">¶</a></p>
+<p id="section-2.3.4-2">The topic-data key in the topic resource contains the URI of the topic-data resource for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data (see <a href="#topic-get-resource" class="auto internal xref">Section 2.5.1</a>).<a href="#section-2.3.4-2" class="pilcrow">¶</a></p>
+<p id="section-2.3.4-3">It is also possible to discover a list of topic-data resources by sending a request to the collection with query rt=core.ps.data resources as shown below.
+Any topic collection resource <span class="bcp14">MUST</span> support this query.<a href="#section-2.3.4-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.3.4-4">
 <pre>
    Request:
@@ -1858,9 +1863,11 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
    Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
    Payload:
-   &lt;/ps/data/62e4f8d&gt;;rt="core.ps.data";obs
+   &lt;/ps/data/62e4f8d&gt;
 </pre><a href="#section-2.3.4-4" class="pilcrow">¶</a>
 </div>
+<p id="section-2.3.4-5">Note that the "rt" attribute is not included in the returned link in the example response.
+This is because the query in the request already constrains all links in the response to be only of type "core.ps.data".<a href="#section-2.3.4-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1878,7 +1885,11 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
           </h4>
 <p id="section-2.4.1-1">A client can request a collection of the topics present in the broker by making a GET request to the collection URI.<a href="#section-2.4.1-1" class="pilcrow">¶</a></p>
 <p id="section-2.4.1-2">On success, the broker returns a 2.05 (Content) response, specifying the list of links to topic resources associated with this topic collection (see <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>).<a href="#section-2.4.1-2" class="pilcrow">¶</a></p>
-<p id="section-2.4.1-3">A client <span class="bcp14">MAY</span> retrieve a list of links to topics it is authorized to access, based on its permissions.<a href="#section-2.4.1-3" class="pilcrow">¶</a></p>
+<p id="section-2.4.1-3">A client <span class="bcp14">MAY</span> retrieve a list of links to topics it is authorized to access, based on its permissions.
+The payload content-format 40 ("application/link-format") <span class="bcp14">MUST</span> be at least supported for the collection resource.
+Note that no "rt" or "ct" attributes are returned for the topic resources in the example payload, because
+the resource type (rt="core.ps.conf") is already implied by this specification for the topic collection and
+the content-format (TBD606) is implied by the resource type.<a href="#section-2.4.1-3" class="pilcrow">¶</a></p>
 <p id="section-2.4.1-4">Example:<a href="#section-2.4.1-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.4.1-5">
 <pre>
@@ -1892,8 +1903,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
    Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
    Payload:
-   &lt;/ps/h9392&gt;;rt="core.ps.conf",
-   &lt;/ps/2e3570&gt;;rt="core.ps.conf"
+   &lt;/ps/h9392&gt;,&lt;/ps/2e3570&gt;
 </pre><a href="#section-2.4.1-5" class="pilcrow">¶</a>
 </div>
 </section>
@@ -1929,9 +1939,11 @@ representation of a list of topics in the collection (see
    Header: Content (Code=2.05)
    Content-Format: 40 (application/link-format)
    Payload:
-   &lt;/ps/2e3570&gt;;rt="core.ps.conf"
+   &lt;/ps/2e3570&gt;
 </pre><a href="#section-2.4.2-5" class="pilcrow">¶</a>
 </div>
+<p id="section-2.4.2-6">Note that no "rt" or "ct" attributes are returned in the link format document, since the type of each link
+(topic resource with rt="core.ps.conf") is implied as the default resource type of each topic resource by this specification.<a href="#section-2.4.2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="topic-create">
