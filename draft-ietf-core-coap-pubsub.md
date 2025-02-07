@@ -102,7 +102,10 @@ topic collection:
 : A set of topics. A topic collection is hosted as one collection resource (See {{Section 3.1 of I-D.ietf-core-interfaces}}) at the broker, and its representation is the list of links to the topic resources corresponding to each topic.
 
 topic:
-: A set of information concerning a topic, including its configuration and other metadata. A topic is hosted as one topic resource at the broker, and its representation is the set of configuration information concerning the topic. All the topic resources associated with the same topic collection share a common base URI, i.e., the URI of the collection resource.
+: A set of information concerning a topic, including its configuration and other metadata. A topic is hosted as one topic resource at the broker, and its representation is the set of topic properties concerning the topic. All the topic resources associated with the same topic collection share a common base URI, i.e., the URI of the collection resource.
+
+topic property:
+: A single element of configuration information that is associated to a topic.
 
 topic-data resource:
 : A resource where clients can publish data and/or subscribe to data for a specific topic. The representation of the topic resource corresponding to such a topic also specifies the URI to the present topic-data resource.
@@ -112,7 +115,7 @@ broker:
 
 ## CoAP Publish-Subscribe Architecture
 
-{{fig-arch}} shows a simple Publish/Subscribe architecture over CoAP.
+{{fig-arch}} shows a simple publish-subscribe architecture over CoAP.
 
 Topics are created by the broker, but the initial configuration can be proposed by a client (e.g., a publisher or a dedicated administrator) over the RESTful interface of a corresponding topic resource hosted by the broker.
 
@@ -146,7 +149,7 @@ Topic-data interactions are publish, subscribe, unsubscribe, read, and delete. T
 
 ## Managing Topics {#managing-topics}
 
-{{fig-api}} shows the resources related to a Topic Collection that can be managed at the Broker.
+{{fig-api}} shows the resources related to a topic collection that can be managed at the Broker.
 
 ~~~~ aasvg
              ___
@@ -204,13 +207,13 @@ The list of links to the topic resources can be retrieved from the associated to
 
 A CoAP client can create a new topic by submitting an initial configuration for the topic (see {{topic-create}}). It can also read and update the configuration of existing topics and topic properties as well as delete them when they are no longer needed (see {{topic-configuration-interactions}}).
 
-The configuration of a topic itself consists of a set of properties that can be set by a client or by the broker. The topic is represented as a CBOR map containing the configuration properties of the topic as top-level elements.
+The configuration of a topic itself consists of a set of topic properties that can be set by a client or by the broker. The topic is represented as a CBOR map containing the topic properties as top-level elements.
 
-Unless specified otherwise, these are defined in this document and their CBOR abbreviations are defined in {{pubsub-parameters}}.
+Unless specified otherwise, all topic properties are defined in this document and their CBOR abbreviations are defined in {{pubsub-parameters}}.
 
 ### Topic Properties {#topic-properties}
 
-The CBOR map includes the following configuration parameters, whose CBOR abbreviations are defined in {{pubsub-parameters}} of this document.
+The CBOR map includes the following topic properties, whose CBOR abbreviations are defined in {{pubsub-parameters}}.
 
 * 'topic-name': A required field used as an application identifier. It encodes the topic name as a CBOR text string. Examples of topic names include human-readable strings (e.g., "room2"), UUIDs, or other values.
 
@@ -218,7 +221,7 @@ The CBOR map includes the following configuration parameters, whose CBOR abbrevi
 
 * 'resource-type': A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value should be "core.ps.data".
 
-* 'topic-content-format': This optional field specifies the CoAP Content-Format identifier of the topic-data resource representation, e.g., 60 for the media-type "application/cbor".
+* 'topic-content-format': This optional field specifies the CoAP Content-Format identifier of the topic-data resource representation as an unsigned integer, e.g., 60 for the media-type "application/cbor".
 
 * 'topic-type': An optional field used to indicate the attribute or property of the topic-data resource for the topic. It encodes the attribute as a CBOR text string. Example attributes include "temperature".
 
@@ -313,9 +316,10 @@ Below is an example of discovery via /.well-known/core with rt=core.ps.conf that
 ### Topic-Data Discovery
 
 
-Within a topic, there is the topic-data property containing the URI of the topic-data resource that a CoAP client can subscribe and publish to. Resources exposing resources of the topic-data type are expected to use the resource type 'core.ps.data'.
+Within a topic, there is the 'topic-data' topic property containing the URI of the topic-data resource that a CoAP client can subscribe to and/or publish to.
+Topic-data resources are expected to use the resource type 'core.ps.data'.
 
-The topic-data contains the URI of the topic-data resource for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data (see {{topic-get-resource}}).
+The 'topic-data' property value contains the URI of the topic-data resource for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data (see {{topic-get-resource}}).
 
 It is also possible to discover a list of topic-data resources by sending a request to the collection with rt=core.ps.data resources as shown below.
 
@@ -363,7 +367,7 @@ Example:
    </ps/2e3570>;rt="core.ps.conf"
 ~~~~
 
-### Getting topics by Properties {#topic-get-properties}
+### Getting Topics by Topic Properties {#topic-get-properties}
 
 A client can filter a collection of topics by submitting the
 representation of a topic filter (see {{topic-fetch-resource}}) in a FETCH request to the topic collection URI.
@@ -372,7 +376,7 @@ On success, the broker returns a 2.05 (Content) response with a
 representation of a list of topics in the collection (see
  {{topic-discovery}}) that match the filter in CoRE link format {{RFC6690}}.
 
-Upon success, the broker responds with a 2.05 (Content), providing a list of links to topic resources associated with this topic collection that match the request's filter criteria (refer to {{topic-discovery}}). A positive match happens only when each request parameter is present with the indicated value in the topic resource representation.
+Upon success, the broker responds with a 2.05 (Content), providing a list of links to topic resources associated with this topic collection that match the request's filter criteria (refer to {{topic-discovery}}). A positive match happens only when each topic property in the request payload is present with the indicated value in the topic resource representation.
 
 Example:
 
@@ -400,7 +404,7 @@ Example:
 
 ### Creating a Topic {#topic-create}
 
-A client can add a new topics to a collection of topics by submitting an initial representation of the initial topic resource (see {{topic-resource-representation}}) in a POST request to the topic collection URI. The request MUST specify at least a subset of the properties in {{topic-properties}}, namely: topic-name and resource-type.
+A client can add a new topics to a collection of topics by submitting an initial representation of the initial topic resource (see {{topic-resource-representation}}) in a POST request to the topic collection URI. The request MUST specify at least a subset of the topic properties in {{topic-properties}}, namely: topic-name and resource-type.
 
 Please note that the topic will NOT be fully created until a publisher has published some data to it (See {{topic-lifecycle}}).
 
@@ -408,7 +412,7 @@ To facilitate immediate subscription and allow clients to observe the topic befo
 
 When "initialize" is set to "false" or omitted, the topic will only be fully created after data is published to it.
 
-On success, the broker returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map with key-value pairs. The response MUST include the required topic properties (see {{topic-properties}}), namely: "topic-name", "resource-type" and "topic-data". It MAY also include a number of optional properties too.
+On success, the broker returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map with key-value pairs. The response MUST include the required topic properties (see {{topic-properties}}), namely: "topic-name", "resource-type" and "topic-data". It MAY also include a number of optional topic properties too.
 
 If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST respond with a 4.03 (Forbidden) error. The response MUST have Content-Format set to "application/core-pubsub+cbor".
 
@@ -640,7 +644,7 @@ Example:
 
 # Publish and Subscribe {#pubsub}
 
-The overview of the publish/subscribe mechanism over CoAP is as follows: a publisher publishes to a topic by submitting the data in a PUT request to a topic-data resource and subscribers subscribe to a topic by submitting a GET request with Observe option set to 0 (register) to a topic-data resource. When resource state changes, subscribers observing the resource {{RFC7641}} at that time will receive a notification.
+The overview of the publish-subscribe mechanism over CoAP is as follows: a publisher publishes to a topic by submitting the data in a PUT request to a topic-data resource and subscribers subscribe to a topic by submitting a GET request with Observe option set to 0 (register) to a topic-data resource. When resource state changes, subscribers observing the resource {{RFC7641}} at that time will receive a notification.
 
 A topic-data resource does not exist until some initial data has been published to it. Before initial data publication, a GET request to the topic-data resource URI results in a 4.04 (Not Found) response. If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created" (see {{topic-lifecycle}}).
 
@@ -682,7 +686,8 @@ Interactions with the topic-data resource are covered in this section.
 
 A topic with a topic-data resource must have been created in order to publish data to it (See {{topic-create}}) and be in the half-created or fully-created state in order to the publish operation to work (see {{topic-lifecycle}}).
 
-A client can publish data to a topic by submitting the data in a PUT request to the topic-data URI as indicated in its topic resource property. Please note that the topic-data URI is not the same as the topic URI used for configuring the topic (see {{topic-resource-representation}}).
+A client can publish data to a topic by submitting the data in a PUT request to the topic-data URI.
+This URI is indicated in the 'topic-data' topic property value. Please note that the topic-data URI is not the same as the topic URI used for configuring the topic (see {{topic-resource-representation}}).
 
 On success, the broker returns a 2.04 (Changed) response. However, when data is published to the topic for the first time, the broker instead MUST return a 2.01 (Created) response and set the topic in the fully-created state (see {{topic-lifecycle}}).
 
@@ -987,7 +992,7 @@ IANA is asked to enter the following values from {{tab-CoAP-Pubsub-Resource-Type
 
 | Value          | Description                                    |
 |----------------|------------------------------------------------|
-| core.ps        | publish-subscribe broker                       |
+| core.ps        | Publish-subscribe broker                       |
 | core.ps.coll   | Topic collection resource of a publish-subscribe broker |
 | core.ps.conf   | Topic resource of a publish-subscribe broker   |
 | core.ps.data   | Topic-data resource of a broker                |
