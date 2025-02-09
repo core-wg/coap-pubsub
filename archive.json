@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-06T01:23:28.098583+00:00",
+  "timestamp": "2025-02-09T01:27:15.178927+00:00",
   "repo": "core-wg/coap-pubsub",
   "labels": [
     {
@@ -1919,6 +1919,96 @@
       "mergeCommit": {
         "oid": "11c715410f382480c500b82598daedeff12c6d01"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 61,
+      "id": "PR_kwDOBEc_t86KSK0s",
+      "title": "Optimize use of rt,ct,obs attributes ",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/61",
+      "state": "MERGED",
+      "author": "EskoDijk",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This removes the attributes on the wire where it's not needed because already implied by design (or by rt type).\r\nAlso adds some normative wording to ensure interoperability; and some explanations for the examples why attributes are not shown sometimes.\r\n",
+      "createdAt": "2025-02-06T14:08:49Z",
+      "updatedAt": "2025-02-07T08:35:27Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "main",
+      "baseRefOid": "b5d6d8a32a8cabee7a4d19a96983ed15673763d9",
+      "headRepository": "EskoDijk/coap-pubsub",
+      "headRefName": "pr-optim-attributes",
+      "headRefOid": "92f1f59e03e34893847259d5a71528a95e9395fe",
+      "closedAt": "2025-02-07T08:35:26Z",
+      "mergedAt": "2025-02-07T08:35:26Z",
+      "mergedBy": "jaimejim",
+      "mergeCommit": {
+        "oid": "c3bf77a32cd434847c1f3216bbdbdcd587fce1d1"
+      },
+      "comments": [
+        {
+          "author": "jaimejim",
+          "authorAssociation": "MEMBER",
+          "body": "Thank you for the PR @EskoDijk ",
+          "createdAt": "2025-02-07T08:34:46Z",
+          "updatedAt": "2025-02-07T08:34:46Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 62,
+      "id": "PR_kwDOBEc_t86KY0Rv",
+      "title": "Revert \"Optimize use of rt,ct,obs attributes \"",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/62",
+      "state": "MERGED",
+      "author": "jaimejim",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Reverts core-wg/coap-pubsub#61\r\n\r\nSaw there is an email discussion ongoing and will wait for outcome. \r\nhttps://mailarchive.ietf.org/arch/msg/core/PYgAO7j3JTYDcdNbxlhd9zBHTK8/",
+      "createdAt": "2025-02-07T08:43:40Z",
+      "updatedAt": "2025-02-07T08:44:41Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "main",
+      "baseRefOid": "c3bf77a32cd434847c1f3216bbdbdcd587fce1d1",
+      "headRepository": "core-wg/coap-pubsub",
+      "headRefName": "revert-61-pr-optim-attributes",
+      "headRefOid": "dec5720f30e8af78a71be94312d64465135b8286",
+      "closedAt": "2025-02-07T08:44:41Z",
+      "mergedAt": "2025-02-07T08:44:41Z",
+      "mergedBy": "jaimejim",
+      "mergeCommit": {
+        "oid": "43d7206fbafb414b06c528e61bd5bb1704a5d276"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 63,
+      "id": "PR_kwDOBEc_t86KaoCs",
+      "title": "Introduce term 'topic property' and align terminology; plus minor fixes.",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/63",
+      "state": "OPEN",
+      "author": "EskoDijk",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "There were some different names used for \"topic property\" so this PR defines the term and uses it in the text.\r\nThe term \"topic property value\" is also used to refer to the value of the topic property.\r\n\r\nPlus some minor editorial fixes/simplifications.",
+      "createdAt": "2025-02-07T13:02:20Z",
+      "updatedAt": "2025-02-07T13:27:05Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "main",
+      "baseRefOid": "43d7206fbafb414b06c528e61bd5bb1704a5d276",
+      "headRepository": "EskoDijk/coap-pubsub",
+      "headRefName": "pr-align-terminology",
+      "headRefOid": "72111ade16f31431cf2cc8f43037a26597182bee",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
