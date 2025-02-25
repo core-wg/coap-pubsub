@@ -1,0 +1,3 @@
+# Automatically generated CODEOWNERS
+# Regenerate with `make update-codeowners`
+draft-ietf-core-coap-pubsub.md jaime@iki.fi michaeljohnkoster@gmail.com ari.keranen@ericsson.com
