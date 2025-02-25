@@ -137,6 +137,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
      A.2.  Version -14 to -15  . . . . . . . . . . . . . . . . . . .  38
      A.3.  Version -15 to -16  . . . . . . . . . . . . . . . . . . .  39
      A.4.  Version -16 to -17  . . . . . . . . . . . . . . . . . . .  39
+     A.5.  Version -17 to -18  . . . . . . . . . . . . . . . . . . .  39
    Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  39
    Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  39
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  40
@@ -161,7 +162,6 @@ Internet-Draft                 CoAP pubsub                 February 2025
    themselves.  A publish/subscribe-oriented architecture where nodes
    exchange data via topics through a broker entity might fit these
    nodes better.
-
 
 
 
@@ -2153,6 +2153,12 @@ A.4.  Version -16 to -17
 
    *  Fixing formatting
 
+A.5.  Version -17 to -18
+
+   *  rt, ct, obs attribute elision
+
+   *  Editorial changes
+
 Acknowledgements
 
    The current version of this document contains a substantial
@@ -2171,12 +2177,6 @@ Acknowledgements
 
 Contributors
 
-   Marco Tiloca
-   RISE AB
-   Email: marco.tiloca@ri.se
-
-
-
 
 
 
@@ -2184,6 +2184,11 @@ Contributors
 Jimenez, et al.          Expires 29 August 2025                [Page 39]
 
 Internet-Draft                 CoAP pubsub                 February 2025
+
+
+   Marco Tiloca
+   RISE AB
+   Email: marco.tiloca@ri.se
 
 
    Marco offered comprehensive reviews and insightful guidance on the
@@ -2206,11 +2211,6 @@ Authors' Addresses
    Ari Keranen
    Ericsson
    Email: ari.keranen@ericsson.com
-
-
-
-
-
 
 
 
