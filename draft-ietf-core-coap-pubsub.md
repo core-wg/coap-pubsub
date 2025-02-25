@@ -73,10 +73,7 @@ This document describes a publish-subscribe architecture for the Constrained App
 
 # Introduction {#introduction}
 
-The Constrained Application Protocol (CoAP) {{RFC7252}} supports
-machine-to-machine communication across networks of constrained
-devices and constrained networks. CoAP uses a request/response model where clients make requests to servers in order to request actions on resources. Depending on the situation the same device may act either as a server, a client, or both.
-
+The Constrained Application Protocol (CoAP) {{RFC7252}} supports machine-to-machine communication across networks of constrained devices and constrained networks. CoAP uses a request/response model where clients make requests to servers in order to request actions on resources. Depending on the situation the same device may act either as a server, a client, or both.
 One important class of constrained devices includes devices that are intended to run for years from a small battery, or by scavenging energy from their environment. These devices have limited up-time because they spend most of their time in a sleeping state with no network connectivity. Another important class of nodes are devices with limited reachability due to middle-boxes like Network Address Translators (NATs) and firewalls.
 
 For these nodes, the client/server-oriented architecture of REST can be challenging when interactions are not initiated by the devices themselves. A publish/subscribe-oriented architecture where nodes exchange data via topics through a broker entity might fit these nodes better.
@@ -162,8 +159,7 @@ Topic-data interactions are publish, subscribe, unsubscribe, read, and delete. T
 
 The Broker exports one or more topic collection resources, with resource type "core.ps.coll" defined in {{iana}} of this document. The interfaces for the topic collection resource is defined in {{topic-collection-interactions}}.
 
-A topic collection resource can have topic resources as its child resources, with resource type "core.ps.conf".
-Other child resource types are currently not defined for a topic collection resource.
+A topic collection resource can have topic resources as its child resources, with resource type "core.ps.conf". Other child resource types are currently not defined for a topic collection resource.
 
 # PubSub Topics {#topics}
 
@@ -378,12 +374,8 @@ Example:
 
 ### Getting topics by Properties {#topic-get-properties}
 
-A client can filter a collection of topics by submitting the
-representation of a topic filter (see {{topic-fetch-resource}}) in a FETCH request to the topic collection URI.
-
-On success, the broker returns a 2.05 (Content) response with a
-representation of a list of topics in the collection (see
- {{topic-discovery}}) that match the filter in CoRE link format {{RFC6690}}.
+A client can filter a collection of topics by submitting the representation of a topic filter (see {{topic-fetch-resource}}) in a FETCH request to the topic collection URI.
+On success, the broker returns a 2.05 (Content) response with a representation of a list of topics in the collection (see {{topic-discovery}}) that match the filter in CoRE link format {{RFC6690}}.
 
 Upon success, the broker responds with a 2.05 (Content), providing a list of links to topic resources associated with this topic collection that match the request's filter criteria (refer to {{topic-discovery}}). A positive match happens only when each request parameter is present with the indicated value in the topic resource representation.
 
