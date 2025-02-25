@@ -5,6 +5,7 @@
 *.txt
 *.upload
 *~
+.DS_Store/lib
 .tags
 /*-[0-9][0-9].xml
 /.*.mk
@@ -17,9 +18,8 @@
 /versioned/
 Gemfile.lock
 archive.json
+draft-ietf-core-coap-pubsub.v2v3.xml
 draft-ietf-core-coap-pubsub.xml
 package-lock.json
 report.xml
 !requirements.txt
-draft-ietf-core-coap-pubsub.v2v3.xml
-.DS_Store
