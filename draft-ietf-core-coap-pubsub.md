@@ -1082,6 +1082,11 @@ Expert reviewers should take into consideration the following points:
 * Addressing Esko's and Ari's review.
 * Fixing formatting
 
+## Version -17 to -18
+
+* rt, ct, obs attribute elision
+* Editorial changes
+
 # Acknowledgements
 {: numbered='no'}
 
