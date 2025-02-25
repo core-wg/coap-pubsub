@@ -1,6 +1,6 @@
 # A publish-subscribe architecture for the Constrained Application Protocol (CoAP)
 
-This is the working area for the IETF [CORE Working Group](https://datatracker.ietf.org/wg/core/documents/) Internet-Draft, "A publish-subscribe architecture for the Constrained Application Protocol (CoAP)".
+This is the working area for the IETF [CORE Working Group](https://datatracker.ietf.org/group/core/documents/) Internet-Draft, "A publish-subscribe architecture for the Constrained Application Protocol (CoAP)".
 
 * [Editor's Copy](https://core-wg.github.io/coap-pubsub/#go.draft-ietf-core-coap-pubsub.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-core-coap-pubsub)
