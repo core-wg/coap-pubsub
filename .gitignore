@@ -1,4 +1,11 @@
+
+# Exceptions
+# Ignore backup and temporary files
 # Ignore common temporary files and directories
+# Ignore reference files
+# Ignore specific files
+# Ignore specific patterns and directories
+# Ignore versioned files
 *.html
 *.pdf
 *.redxml
@@ -7,8 +14,6 @@
 *.upload
 *~
 .tags
-
-# Ignore specific patterns and directories
 /*-[0-9][0-9].xml
 /.*.mk
 /.gems/
@@ -18,28 +23,18 @@
 /lib
 /node_modules/
 /versioned/
-
-# Ignore specific files
 Gemfile.lock
+Makefile~
 archive.json
+draft-ietf-core-coap-pubsub.md~
 draft-ietf-core-coap-pubsub.v2v3.xml
 draft-ietf-core-coap-pubsub.xml
 package-lock.json
-report.xml
-
-# Exceptions
-!requirements.txt
-
-# Ignore backup and temporary files
-Makefile~
-draft-ietf-core-coap-pubsub.md~
-
-# Ignore reference files
 reference/draft-ietf-core-coap-pubsub-13-marco-review-1.txt
 reference/external-data-host.txt
 reference/external-topic-data.txt
 reference/slides-116-core-a-publish-subscribe-architecture-for-the-constrained-application-protocol-coap-01.pdf
 reference/topics.txt
-
-# Ignore versioned files
+report.xml
 versioned/draft-ietf-core-coap-pubsub-07.txt
+!requirements.txt
