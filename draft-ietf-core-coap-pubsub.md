@@ -84,7 +84,7 @@ This document applies the idea of broker-based publish-subscribe to Constrained 
 
 {::boilerplate bcp14-tagged-bcp14}
 
-This specification requires readers to be familiar with all the terms and concepts that are discussed in {{RFC8288}} and {{RFC6690}}. Readers should also be familiar with the terms and concepts discussed in {{RFC7252}}, {{RFC9176}} and {{RFC7641}}. The URI template format {{RFC6570}} is used to describe the REST API defined in this specification.
+This specification requires readers to be familiar with all the terms and concepts that are discussed in {{RFC8288}} and {{RFC6690}}. Readers should also be familiar with the terms and concepts discussed in {{RFC7252}}, {{RFC9176}} and {{RFC7641}}. The URI template format {{RFC6570}} is used to describe the REST API defined in this specification. 
 
 This specification makes use of the following terminology:
 
