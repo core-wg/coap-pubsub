@@ -78,7 +78,7 @@ One important class of constrained devices includes devices that are intended to
 
 For these nodes, the client/server-oriented architecture of REST can be challenging when interactions are not initiated by the devices themselves. A publish/subscribe-oriented architecture where nodes exchange data via topics through a broker entity might fit these nodes better.
 
-This document applies the idea of broker-based publish-subscribe to Constrained RESTful Environments using CoAP. It defines a broker that allows to create, discover subscribe and publish on topics.
+This document applies the idea of broker-based publish-subscribe to Constrained RESTful Environments using CoAP. It defines a broker that allows to create, discover, subscribe and publish on topics.
 
 ## Terminology {#terminology}
 
@@ -99,7 +99,7 @@ topic collection:
 : A set of topics. A topic collection is hosted as one collection resource (See {{Section 3.1 of I-D.ietf-core-interfaces}}) at the broker, and its representation is the list of links to the topic resources corresponding to each topic.
 
 topic:
-: A set of information concerning a topic, including its configuration and other metadata. A topic is hosted as one topic resource at the broker, and its representation is the set of topic properties concerning the topic. All the topic resources associated with the same topic collection share a common base URI, i.e., the URI of the collection resource.
+: A set of information concerning a topic, including its configuration and other metadata. A topic is hosted as one topic resource at the broker, and its representation is the set of topic properties concerning the topic. All the topic resources associated with the same topic collection share a common base URI, i.e., the URI of the topic collection resource.
 
 topic property:
 : A single element of configuration information that is associated to a topic.
@@ -146,7 +146,7 @@ Topic-data interactions are publish, subscribe, unsubscribe, read, and delete. T
 
 ## Managing Topics {#managing-topics}
 
-{{fig-api}} shows the resources related to a topic collection that can be managed at the Broker.
+{{fig-api}} shows the resources related to a topic collection that can be managed at the broker.
 
 ~~~~ aasvg
              ___
@@ -160,7 +160,7 @@ Topic-data interactions are publish, subscribe, unsubscribe, read, and delete. T
 ~~~~
 {: #fig-api title="Resources of a Broker" artwork-align="center"}
 
-The Broker exports one or more topic collection resources, with resource type "core.ps.coll" defined in {{iana}} of this document. The interfaces for the topic collection resource is defined in {{topic-collection-interactions}}.
+The broker exports one or more topic collection resources, with resource type "core.ps.coll" defined in {{iana}} of this document. The interfaces for the topic collection resource is defined in {{topic-collection-interactions}}.
 
 A topic collection resource can have topic resources as its child resources, with resource type "core.ps.conf". Other child resource types are currently not defined for a topic collection resource.
 
@@ -194,11 +194,11 @@ The configuration side of a publish and subscribe broker consists of a collectio
 
 Each topic is represented as a link, where the link target is the URI of the corresponding topic resource.
 
-Publication and subscription to a topic occur at a link, where the link target is the URI of the corresponding topic-data resource. Such a link is specified by the topic-data entry within the topic resource (see {{topic-properties}}).
+Publication and subscription to a topic occur at a link, where the link target is the URI of the corresponding topic-data resource. Such a link is specified by the "topic-data" topic property within the topic resource (see {{topic-properties}}).
 
 A topic resource with a topic-data link can also be simply called "topic".
 
-The list of links to the topic resources can be retrieved from the associated topic collection resource, represented as a Link Format document {{RFC6690}} where each link is a topic resource of type "core.ps.conf" as defined in this document.
+The list of links to the topic resources can be retrieved from the associated topic collection resource, represented as a CoRE Link Format document {{RFC6690}} where each link is a topic resource of type "core.ps.conf" as defined in this document.
 
 ## Topic Representation {#topic-resource-representation}
 
@@ -237,9 +237,14 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 A client can perform a discovery of: the broker; the topic collection resources and topic resources hosted by the broker; and the topic-data resources associated with those topic resources.
 Any server implementing a pubsub broker MUST support CoAP discovery with a query parameter as defined in {{Section 4.1 of RFC6690}} and as used in the examples in this section.
 
+The CoRE Link Format discovery responses shown in the examples in this section are illustrative only.
+The normative requirements for this format are defined in {{RFC6690}}.
+The examples make minimal use of CoRE Link Format attributes, in order to reduce the size of discovery responses: this is beneficial for clients connected to constrained networks.
+In general, a broker MAY include any CoRE Link Format attributes in each returned link, for example to meet specific use case requirements.
+
 ### Broker Discovery {#broker-discovery}
 
-CoAP clients MAY discover brokers by using CoAP discovery, via multicast, through a Resource Directory (RD) {{RFC9176}} or by other means specified in extensions to {{RFC7252}}. Brokers MAY register with a RD by following the steps on {{Section 5 of RFC9176}} with the resource type set to "core.ps" as defined in {{iana}} of this document.
+CoAP clients MAY discover brokers by using CoAP discovery {{RFC7252}}, via multicast, through a Resource Directory (RD) {{RFC9176}} or by other means specified in extensions to {{RFC7252}}. Brokers MAY register with a RD by following the steps on {{Section 5 of RFC9176}} with the resource type set to "core.ps" as defined in {{iana}} of this document.
 
 The following example shows an endpoint discovering a broker using the "core.ps" resource type over a multicast network. Brokers within the multicast scope will answer the query.
 
@@ -262,11 +267,11 @@ The following example shows an endpoint discovering a broker using the "core.ps"
 
 ### Topic Collection Discovery
 
-A Broker SHOULD offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point is the topic collection resource collecting the topics for those topics (see {{Section 1.2.2 of RFC6690}}) and is identified by the resource type "core.ps.coll".
+A broker SHOULD offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point is the topic collection resource collecting the topics for those topics (see {{Section 1.2.2 of RFC6690}}) and is identified by the resource type "core.ps.coll".
 
 The specific resource path is left for implementations, examples in this document use the "/ps" path. The interactions with a topic collection are further defined in {{topic-collection-interactions}}.
 
-Since the representation of the topic collection resource includes the links to the associated topic resources, it is not required to locate those links under "/.well-known/core", also in order to limit the size of the Link Format document returned as result of the discovery.
+Since the representation of the topic collection resource includes the links to the associated topic resources, it is not required to locate those links under "/.well-known/core", also in order to limit the size of the CoRE Link Format document returned as result of the discovery.
 
 Example:
 
@@ -287,16 +292,14 @@ Example:
    </other/path>;rt="core.ps.coll"
 ~~~~
 
-Note that the "ct" attribute is not included for the two collections in the returned link format document.
-This is because the content-format of each topic collection resource is implied by its resource type (rt="core.ps.coll") to be 40 ("application/link-format").
-
+Note that in this example the "ct" attribute is not included for the two collections in the returned CoRE Link Format document.
+This is because the "ct" attribute is an optional hint, which is not needed in this case: the content-format of each topic collection resource is implied by its resource type (rt="core.ps.coll") to be 40 ("application/link-format").
 
 ### Topic Discovery {#topic-discovery}
 
 Each topic collection is associated with a group of topic resources, each detailing the configuration of its respective topic (refer to {{topic-properties}}). Each topic resource is identified by the resource type "core.ps.conf".
 
 Below is an example of discovery via /.well-known/core with query rt=core.ps.conf that returns a list of topics, as the list of links to the corresponding topic resources.
-
 
 ~~~~
    Request:
@@ -317,14 +320,12 @@ Below is an example of discovery via /.well-known/core with query rt=core.ps.con
 
 ### Topic-Data Discovery
 
-
 Within a topic, there is the 'topic-data' topic property containing the URI of the topic-data resource that a CoAP client can subscribe to and/or publish to.
-Topic-data resources are expected to use the resource type 'core.ps.data'.
+Topic-data resources use the resource type 'core.ps.data'.
 
+The "topic-data" topic property value contains the URI of the topic-data resource for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data resource (see {{topic-get-resource}}).
 
-The "topic-data" property value contains the URI of the topic-data resource for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data (see {{topic-get-resource}}).
-
-It is also possible to discover a list of topic-data resources by sending a request to the collection with query rt=core.ps.data resources as shown below.
+It is also possible to discover a list of topic-data resources by sending a request to the collection with a query rt=core.ps.data as shown below.
 Any topic collection resource MUST support this query.
 
 ~~~~
@@ -344,22 +345,26 @@ Any topic collection resource MUST support this query.
 
 Note that the "rt" attribute is not included in the returned link in the example response.
 This is because the query in the request already constrains all links in the response to be only of type "core.ps.data".
+Therefore, including the "rt" attribute for each returned link would be unnecessary and would make the response size much larger.
+So the broker, in this example case, was implemented to elide these attributes always, to minimize the size of discovery response payloads.
 
 ## Topic Collection Interactions {#topic-collection-interactions}
 
-These are the interactions that can happen directly with a specific topic collection.
+Topic collection interactions are the interactions that can happen directly with a specific topic collection.
+
+The CoRE Link Format responses shown in the examples in this section are illustrative only.
+The normative requirements for this format are defined in {{RFC6690}}.
+The examples make minimal use of CoRE Link Format attributes, in order to reduce the size of responses: this is beneficial for clients connected to constrained networks.
+In general, a broker MAY include any CoRE Link Format attributes in each returned link, for example to meet specific use case requirements.
 
 ### Retrieving all topics {#topic-get-all}
 
-A client can request a collection of the topics present in the broker by making a GET request to the collection URI.
+A client can request a collection of the topics present in the broker by making a GET request to the topic collection URI.
 
 On success, the broker returns a 2.05 (Content) response, specifying the list of links to topic resources associated with this topic collection (see {{topic-resource-representation}}).
 
 A client MAY retrieve a list of links to topics it is authorized to access, based on its permissions.
-The payload content-format 40 ("application/link-format") MUST be at least supported for the collection resource.
-Note that no "rt" or "ct" attributes are returned for the topic resources in the example payload, because
-the resource type (rt="core.ps.conf") is already implied by this specification for the topic collection and
-the content-format (TBD606) is implied by the resource type.
+The payload content-format 40 ("application/link-format") MUST be at least supported for the topic collection resource.
 
 Example:
 
@@ -377,10 +382,14 @@ Example:
    </ps/h9392>,</ps/2e3570>
 ~~~~
 
+Note that no "rt" or "ct" attributes are returned for the topic resources in the example payload, because
+the resource type (rt="core.ps.conf") is already implied by this specification for the topic collection and
+the content-format (TBD606) is implied by the resource type.
+
 ### Getting Topics by Topic Properties {#topic-get-properties}
 
 A client can filter a collection of topics by submitting the representation of a topic filter (see {{topic-fetch-resource}}) in a FETCH request to the topic collection URI.
-On success, the broker returns a 2.05 (Content) response with a representation of a list of topics in the collection (see {{topic-discovery}}) that match the filter in CoRE link format {{RFC6690}}.
+On success, the broker returns a 2.05 (Content) response with a representation of a list of topics in the collection (see {{topic-discovery}}) that match the filter in CoRE Link Format {{RFC6690}}.
 
 Upon success, the broker responds with a 2.05 (Content), providing a list of links to topic resources associated with this topic collection that match the request's filter criteria (refer to {{topic-discovery}}). A positive match happens only when each topic property in the request payload is present with the indicated value in the topic resource representation.
 
@@ -407,8 +416,9 @@ Example:
    </ps/2e3570>
 ~~~~
 
-Note that no "rt" or "ct" attributes are returned in the link format document, since the type of each link
+Note that in this example no "rt" or "ct" attributes are returned in the response payload, since the type of each link
 (topic resource with rt="core.ps.conf") is implied as the default resource type of each topic resource by this specification.
+Eliding these attributes helps to minimize the size of the response payload.
 
 ### Creating a Topic {#topic-create}
 
@@ -449,7 +459,6 @@ The broker MUST issue a 4.00 (Bad Request) error if a received parameter is inva
       / topic-name /         0: "living-room-sensor",
       / topic-data /         1: "ps/data/1bd0d6d",
       / resource-type /      2: "core.ps.data"
-
    }
 ~~~~
 
@@ -467,7 +476,7 @@ If requirements are defined for the client to read the topic as requested and th
 
 The response payload is a CBOR map, whose possible entries are specified in {{topic-resource-representation}} and use the same abbreviations defined in {{pubsub-parameters}}.
 
-For example, below is a request on the topic "ps/h9392":
+For example, below is a request on the topic "/ps/h9392":
 
 ~~~~
    Request:
@@ -909,7 +918,7 @@ Note that the media type application/core-pubsub+cbor MUST be used when these to
 
 # Security Considerations {#seccons}
 
-The architecture presented in this document inherits the security considerations from CoAP {{RFC7252}} and Observe {{RFC7641}}, as well as from Web Linking {{RFC8288}}, Link-Format {{RFC6690}}, and the CoRE Resource Directory {{RFC9176}}.
+The architecture presented in this document inherits the security considerations from CoAP {{RFC7252}} and Observe {{RFC7641}}, as well as from Web Linking {{RFC8288}}, CoRE Link Format {{RFC6690}}, and the CoRE Resource Directory {{RFC9176}}.
 
 Communications between each client and the broker are RECOMMENDED to be secured, e.g., by using OSCORE {{RFC8613}} or DTLS {{RFC9147}}. Security considerations for the used secure communication protocols apply too.
 
