@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-25T01:26:17.031076+00:00",
+  "timestamp": "2025-02-27T01:25:57.320960+00:00",
   "repo": "core-wg/coap-pubsub",
   "labels": [
     {
@@ -492,15 +492,15 @@
       "id": "MDU6SXNzdWUzOTUzODk2OTI=",
       "title": "Add implementation status section",
       "url": "https://github.com/core-wg/coap-pubsub/issues/31",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "akeranen",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "https://tools.ietf.org/html/rfc7942\r\n\r\nAt least:\r\n\r\n* https://github.com/Com-AugustCellars/PubSub\r\n* https://github.com/aldwinhermanudin/coap-broker\r\n* https://github.com/gotthardp/rabbitmq-coap-pubsub\r\n* https://github.com/PethrusG/CoAP-PubSub-Broker\r\n* https://github.com/herjulf/coap\r\n* https://github.com/kkdai/coapmq",
       "createdAt": "2019-01-02T21:40:57Z",
-      "updatedAt": "2019-01-02T21:40:57Z",
-      "closedAt": null,
+      "updatedAt": "2025-02-25T13:37:55Z",
+      "closedAt": "2025-02-25T13:37:55Z",
       "comments": []
     },
     {
@@ -1991,24 +1991,26 @@
       "id": "PR_kwDOBEc_t86KaoCs",
       "title": "Introduce term 'topic property' and align terminology; plus minor fixes.",
       "url": "https://github.com/core-wg/coap-pubsub/pull/63",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "EskoDijk",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "There were some different names used for \"topic property\" so this PR defines the term and uses it in the text.\r\nThe term \"topic property value\" is also used to refer to the value of the topic property.\r\n\r\nPlus some minor editorial fixes/simplifications.",
       "createdAt": "2025-02-07T13:02:20Z",
-      "updatedAt": "2025-02-07T13:27:05Z",
+      "updatedAt": "2025-02-25T13:37:38Z",
       "baseRepository": "core-wg/coap-pubsub",
       "baseRefName": "main",
-      "baseRefOid": "43d7206fbafb414b06c528e61bd5bb1704a5d276",
+      "baseRefOid": "f27283caab1f278066a62326c282cadfc919944f",
       "headRepository": "EskoDijk/coap-pubsub",
       "headRefName": "pr-align-terminology",
-      "headRefOid": "72111ade16f31431cf2cc8f43037a26597182bee",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "c93341ceba0f5971b707d16a2c3433e8804bef23",
+      "closedAt": "2025-02-25T13:37:38Z",
+      "mergedAt": "2025-02-25T13:37:38Z",
+      "mergedBy": "jaimejim",
+      "mergeCommit": {
+        "oid": "e57cf9af82c91fb7e823de92daad02b4d571953f"
+      },
       "comments": [],
       "reviews": []
     }
