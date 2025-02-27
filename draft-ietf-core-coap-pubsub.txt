@@ -5,10 +5,10 @@
 CoRE Working Group                                            J. Jimenez
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                               M. Koster
-Expires: 29 August 2025                                    Dogtiger Labs
+Expires: 31 August 2025                                    Dogtiger Labs
                                                               A. Keranen
                                                                 Ericsson
-                                                        25 February 2025
+                                                        27 February 2025
 
 
     A publish-subscribe architecture for the Constrained Application
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Jimenez, et al.          Expires 29 August 2025                 [Page 1]
+Jimenez, et al.          Expires 31 August 2025                 [Page 1]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -63,7 +63,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 August 2025.
+   This Internet-Draft will expire on 31 August 2025.
 
 Copyright Notice
 
@@ -92,55 +92,55 @@ Table of Contents
      2.3.  Discovery . . . . . . . . . . . . . . . . . . . . . . . .  10
        2.3.1.  Broker Discovery  . . . . . . . . . . . . . . . . . .  10
        2.3.2.  Topic Collection Discovery  . . . . . . . . . . . . .  11
-       2.3.3.  Topic Discovery . . . . . . . . . . . . . . . . . . .  11
-       2.3.4.  Topic-Data Discovery  . . . . . . . . . . . . . . . .  12
+       2.3.3.  Topic Discovery . . . . . . . . . . . . . . . . . . .  12
+       2.3.4.  Topic-Data Discovery  . . . . . . . . . . . . . . . .  13
      2.4.  Topic Collection Interactions . . . . . . . . . . . . . .  13
-       2.4.1.  Retrieving all topics . . . . . . . . . . . . . . . .  13
-       2.4.2.  Getting Topics by Topic Properties  . . . . . . . . .  14
-       2.4.3.  Creating a Topic  . . . . . . . . . . . . . . . . . .  15
-     2.5.  Topic Interactions  . . . . . . . . . . . . . . . . . . .  16
-       2.5.1.  Getting a topic . . . . . . . . . . . . . . . . . . .  16
-       2.5.2.  Getting part of a topic . . . . . . . . . . . . . . .  17
-       2.5.3.  Updating the topic  . . . . . . . . . . . . . . . . .  18
-       2.5.4.  Updating the topic with iPATCH  . . . . . . . . . . .  20
-       2.5.5.  Deleting a topic  . . . . . . . . . . . . . . . . . .  21
-   3.  Publish and Subscribe . . . . . . . . . . . . . . . . . . . .  22
-     3.1.  Topic Lifecycle . . . . . . . . . . . . . . . . . . . . .  22
+       2.4.1.  Retrieving all topics . . . . . . . . . . . . . . . .  14
+       2.4.2.  Getting Topics by Topic Properties  . . . . . . . . .  15
+       2.4.3.  Creating a Topic  . . . . . . . . . . . . . . . . . .  16
+     2.5.  Topic Interactions  . . . . . . . . . . . . . . . . . . .  17
+       2.5.1.  Getting a topic . . . . . . . . . . . . . . . . . . .  17
+       2.5.2.  Getting part of a topic . . . . . . . . . . . . . . .  18
+       2.5.3.  Updating the topic  . . . . . . . . . . . . . . . . .  19
+       2.5.4.  Updating the topic with iPATCH  . . . . . . . . . . .  21
+       2.5.5.  Deleting a topic  . . . . . . . . . . . . . . . . . .  22
+   3.  Publish and Subscribe . . . . . . . . . . . . . . . . . . . .  23
+     3.1.  Topic Lifecycle . . . . . . . . . . . . . . . . . . . . .  23
 
 
 
-Jimenez, et al.          Expires 29 August 2025                 [Page 2]
+Jimenez, et al.          Expires 31 August 2025                 [Page 2]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
 
-     3.2.  Topic-Data Interactions . . . . . . . . . . . . . . . . .  23
-       3.2.1.  Publish . . . . . . . . . . . . . . . . . . . . . . .  23
-       3.2.2.  Subscribe . . . . . . . . . . . . . . . . . . . . . .  25
-       3.2.3.  Unsubscribe . . . . . . . . . . . . . . . . . . . . .  26
-       3.2.4.  Delete topic-data . . . . . . . . . . . . . . . . . .  27
-     3.3.  Read the latest data  . . . . . . . . . . . . . . . . . .  27
-     3.4.  Rate Limiting . . . . . . . . . . . . . . . . . . . . . .  28
-   4.  Encoding of PubSub Topic Properties . . . . . . . . . . . . .  29
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  29
-   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  30
-     6.1.  Media Type Registrations  . . . . . . . . . . . . . . . .  31
-     6.2.  CoAP Content-Formats  . . . . . . . . . . . . . . . . . .  31
-     6.3.  Resource Types  . . . . . . . . . . . . . . . . . . . . .  32
-     6.4.  CoAP Pubsub Topic Properties Registry . . . . . . . . . .  32
-     6.5.  Expert Review Instructions  . . . . . . . . . . . . . . .  33
-   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  34
-     7.1.  Normative References  . . . . . . . . . . . . . . . . . .  34
-     7.2.  Informative References  . . . . . . . . . . . . . . . . .  36
-   Appendix A.  Document Updates . . . . . . . . . . . . . . . . . .  38
-     A.1.  Version -13 to -14  . . . . . . . . . . . . . . . . . . .  38
-     A.2.  Version -14 to -15  . . . . . . . . . . . . . . . . . . .  38
-     A.3.  Version -15 to -16  . . . . . . . . . . . . . . . . . . .  39
-     A.4.  Version -16 to -17  . . . . . . . . . . . . . . . . . . .  39
-     A.5.  Version -17 to -18  . . . . . . . . . . . . . . . . . . .  39
-   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  39
-   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  39
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  40
+     3.2.  Topic-Data Interactions . . . . . . . . . . . . . . . . .  24
+       3.2.1.  Publish . . . . . . . . . . . . . . . . . . . . . . .  24
+       3.2.2.  Subscribe . . . . . . . . . . . . . . . . . . . . . .  26
+       3.2.3.  Unsubscribe . . . . . . . . . . . . . . . . . . . . .  27
+       3.2.4.  Delete topic-data . . . . . . . . . . . . . . . . . .  28
+     3.3.  Read the latest data  . . . . . . . . . . . . . . . . . .  28
+     3.4.  Rate Limiting . . . . . . . . . . . . . . . . . . . . . .  29
+   4.  Encoding of PubSub Topic Properties . . . . . . . . . . . . .  30
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  30
+   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  31
+     6.1.  Media Type Registrations  . . . . . . . . . . . . . . . .  32
+     6.2.  CoAP Content-Formats  . . . . . . . . . . . . . . . . . .  32
+     6.3.  Resource Types  . . . . . . . . . . . . . . . . . . . . .  33
+     6.4.  CoAP Pubsub Topic Properties Registry . . . . . . . . . .  33
+     6.5.  Expert Review Instructions  . . . . . . . . . . . . . . .  34
+   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  35
+     7.1.  Normative References  . . . . . . . . . . . . . . . . . .  35
+     7.2.  Informative References  . . . . . . . . . . . . . . . . .  37
+   Appendix A.  Document Updates . . . . . . . . . . . . . . . . . .  39
+     A.1.  Version -13 to -14  . . . . . . . . . . . . . . . . . . .  39
+     A.2.  Version -14 to -15  . . . . . . . . . . . . . . . . . . .  39
+     A.3.  Version -15 to -16  . . . . . . . . . . . . . . . . . . .  40
+     A.4.  Version -16 to -17  . . . . . . . . . . . . . . . . . . .  40
+     A.5.  Version -17 to -18  . . . . . . . . . . . . . . . . . . .  40
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  40
+   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  40
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  41
 
 1.  Introduction
 
@@ -165,14 +165,14 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                 [Page 3]
+Jimenez, et al.          Expires 31 August 2025                 [Page 3]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
 
    This document applies the idea of broker-based publish-subscribe to
    Constrained RESTful Environments using CoAP.  It defines a broker
-   that allows to create, discover subscribe and publish on topics.
+   that allows to create, discover, subscribe and publish on topics.
 
 1.1.  Terminology
 
@@ -221,7 +221,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                 [Page 4]
+Jimenez, et al.          Expires 31 August 2025                 [Page 4]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -231,7 +231,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
       resource at the broker, and its representation is the set of topic
       properties concerning the topic.  All the topic resources
       associated with the same topic collection share a common base URI,
-      i.e., the URI of the collection resource.
+      i.e., the URI of the topic collection resource.
 
    topic property:
       A single element of configuration information that is associated
@@ -277,7 +277,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                 [Page 5]
+Jimenez, et al.          Expires 31 August 2025                 [Page 5]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -314,7 +314,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 1.3.  Managing Topics
 
    Figure 2 shows the resources related to a topic collection that can
-   be managed at the Broker.
+   be managed at the broker.
 
                    ___
          topic    /   \
@@ -333,12 +333,12 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                 [Page 6]
+Jimenez, et al.          Expires 31 August 2025                 [Page 6]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
 
-   The Broker exports one or more topic collection resources, with
+   The broker exports one or more topic collection resources, with
    resource type "core.ps.coll" defined in Section 6 of this document.
    The interfaces for the topic collection resource is defined in
    Section 2.4.
@@ -389,22 +389,22 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                 [Page 7]
+Jimenez, et al.          Expires 31 August 2025                 [Page 7]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
 
    Publication and subscription to a topic occur at a link, where the
    link target is the URI of the corresponding topic-data resource.
-   Such a link is specified by the topic-data entry within the topic
-   resource (see Section 2.2.1).
+   Such a link is specified by the "topic-data" topic property within
+   the topic resource (see Section 2.2.1).
 
    A topic resource with a topic-data link can also be simply called
    "topic".
 
    The list of links to the topic resources can be retrieved from the
-   associated topic collection resource, represented as a Link Format
-   document [RFC6690] where each link is a topic resource of type
+   associated topic collection resource, represented as a CoRE Link
+   Format document [RFC6690] where each link is a topic resource of type
    "core.ps.conf" as defined in this document.
 
 2.2.  Topic Representation
@@ -445,7 +445,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                 [Page 8]
+Jimenez, et al.          Expires 31 August 2025                 [Page 8]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -501,7 +501,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                 [Page 9]
+Jimenez, et al.          Expires 31 August 2025                 [Page 9]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -520,18 +520,47 @@ Internet-Draft                 CoAP pubsub                 February 2025
    parameter as defined in Section 4.1 of [RFC6690] and as used in the
    examples in this section.
 
+   The CoRE Link Format discovery responses shown in the examples in
+   this section are illustrative only.  The normative requirements for
+   this format are defined in [RFC6690].  The examples make minimal use
+   of CoRE Link Format attributes, in order to reduce the size of
+   discovery responses: this is beneficial for clients connected to
+   constrained networks.  In general, a broker MAY include any CoRE Link
+   Format attributes in each returned link, for example to meet specific
+   use case requirements.
+
 2.3.1.  Broker Discovery
 
-   CoAP clients MAY discover brokers by using CoAP discovery, via
-   multicast, through a Resource Directory (RD) [RFC9176] or by other
-   means specified in extensions to [RFC7252].  Brokers MAY register
-   with a RD by following the steps on Section 5 of [RFC9176] with the
-   resource type set to "core.ps" as defined in Section 6 of this
-   document.
+   CoAP clients MAY discover brokers by using CoAP discovery [RFC7252],
+   via multicast, through a Resource Directory (RD) [RFC9176] or by
+   other means specified in extensions to [RFC7252].  Brokers MAY
+   register with a RD by following the steps on Section 5 of [RFC9176]
+   with the resource type set to "core.ps" as defined in Section 6 of
+   this document.
 
    The following example shows an endpoint discovering a broker using
    the "core.ps" resource type over a multicast network.  Brokers within
    the multicast scope will answer the query.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.          Expires 31 August 2025                [Page 10]
+
+Internet-Draft                 CoAP pubsub                 February 2025
+
 
       Request:
 
@@ -548,23 +577,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
       Payload:
       <coaps://mythinguri.com/broker/v1>;rt="core.ps"
 
-
-
-
-
-
-
-
-
-
-Jimenez, et al.          Expires 29 August 2025                [Page 10]
-
-Internet-Draft                 CoAP pubsub                 February 2025
-
-
 2.3.2.  Topic Collection Discovery
 
-   A Broker SHOULD offer a topic discovery entry point to enable clients
+   A broker SHOULD offer a topic discovery entry point to enable clients
    to find topics of interest.  The resource entry point is the topic
    collection resource collecting the topics for those topics (see
    Section 1.2.2 of [RFC6690]) and is identified by the resource type
@@ -577,10 +592,31 @@ Internet-Draft                 CoAP pubsub                 February 2025
    Since the representation of the topic collection resource includes
    the links to the associated topic resources, it is not required to
    locate those links under "/.well-known/core", also in order to limit
-   the size of the Link Format document returned as result of the
+   the size of the CoRE Link Format document returned as result of the
    discovery.
 
    Example:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.          Expires 31 August 2025                [Page 11]
+
+Internet-Draft                 CoAP pubsub                 February 2025
+
 
       Request:
 
@@ -597,10 +633,12 @@ Internet-Draft                 CoAP pubsub                 February 2025
       </ps>;rt="core.ps.coll",
       </other/path>;rt="core.ps.coll"
 
-   Note that the "ct" attribute is not included for the two collections
-   in the returned link format document.  This is because the content-
-   format of each topic collection resource is implied by its resource
-   type (rt="core.ps.coll") to be 40 ("application/link-format").
+   Note that in this example the "ct" attribute is not included for the
+   two collections in the returned CoRE Link Format document.  This is
+   because the "ct" attribute is an optional hint, which is not needed
+   in this case: the content-format of each topic collection resource is
+   implied by its resource type (rt="core.ps.coll") to be 40
+   ("application/link-format").
 
 2.3.3.  Topic Discovery
 
@@ -608,15 +646,6 @@ Internet-Draft                 CoAP pubsub                 February 2025
    each detailing the configuration of its respective topic (refer to
    Section 2.2.1).  Each topic resource is identified by the resource
    type "core.ps.conf".
-
-
-
-
-
-Jimenez, et al.          Expires 29 August 2025                [Page 11]
-
-Internet-Draft                 CoAP pubsub                 February 2025
-
 
    Below is an example of discovery via /.well-known/core with query
    rt=core.ps.conf that returns a list of topics, as the list of links
@@ -637,21 +666,29 @@ Internet-Draft                 CoAP pubsub                 February 2025
       </ps/h9392>;rt="core.ps.conf",
       </other/path/2e3570>;rt="core.ps.conf"
 
+
+
+
+Jimenez, et al.          Expires 31 August 2025                [Page 12]
+
+Internet-Draft                 CoAP pubsub                 February 2025
+
+
 2.3.4.  Topic-Data Discovery
 
    Within a topic, there is the 'topic-data' topic property containing
    the URI of the topic-data resource that a CoAP client can subscribe
-   to and/or publish to.  Topic-data resources are expected to use the
-   resource type 'core.ps.data'.
+   to and/or publish to.  Topic-data resources use the resource type
+   'core.ps.data'.
 
-   The "topic-data" property value contains the URI of the topic-data
-   resource for publishing and subscribing.  So retrieving the topic
-   will also provide the URL of the topic-data (see Section 2.5.1).
+   The "topic-data" topic property value contains the URI of the topic-
+   data resource for publishing and subscribing.  So retrieving the
+   topic will also provide the URL of the topic-data resource (see
+   Section 2.5.1).
 
    It is also possible to discover a list of topic-data resources by
-   sending a request to the collection with query rt=core.ps.data
-   resources as shown below.  Any topic collection resource MUST support
-   this query.
+   sending a request to the collection with a query rt=core.ps.data as
+   shown below.  Any topic collection resource MUST support this query.
 
       Request:
 
@@ -666,28 +703,45 @@ Internet-Draft                 CoAP pubsub                 February 2025
       Payload:
       </ps/data/62e4f8d>
 
+   Note that the "rt" attribute is not included in the returned link in
+   the example response.  This is because the query in the request
+   already constrains all links in the response to be only of type
+   "core.ps.data".  Therefore, including the "rt" attribute for each
+   returned link would be unnecessary and would make the response size
+   much larger.  So the broker, in this example case, was implemented to
+   elide these attributes always, to minimize the size of discovery
+   response payloads.
+
+2.4.  Topic Collection Interactions
+
+   Topic collection interactions are the interactions that can happen
+   directly with a specific topic collection.
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 12]
+
+
+
+
+
+
+Jimenez, et al.          Expires 31 August 2025                [Page 13]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
 
-   Note that the "rt" attribute is not included in the returned link in
-   the example response.  This is because the query in the request
-   already constrains all links in the response to be only of type
-   "core.ps.data".
-
-2.4.  Topic Collection Interactions
-
-   These are the interactions that can happen directly with a specific
-   topic collection.
+   The CoRE Link Format responses shown in the examples in this section
+   are illustrative only.  The normative requirements for this format
+   are defined in [RFC6690].  The examples make minimal use of CoRE Link
+   Format attributes, in order to reduce the size of responses: this is
+   beneficial for clients connected to constrained networks.  In
+   general, a broker MAY include any CoRE Link Format attributes in each
+   returned link, for example to meet specific use case requirements.
 
 2.4.1.  Retrieving all topics
 
    A client can request a collection of the topics present in the broker
-   by making a GET request to the collection URI.
+   by making a GET request to the topic collection URI.
 
    On success, the broker returns a 2.05 (Content) response, specifying
    the list of links to topic resources associated with this topic
@@ -695,12 +749,8 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
    A client MAY retrieve a list of links to topics it is authorized to
    access, based on its permissions.  The payload content-format 40
-   ("application/link-format") MUST be at least supported for the
-   collection resource.  Note that no "rt" or "ct" attributes are
-   returned for the topic resources in the example payload, because the
-   resource type (rt="core.ps.conf") is already implied by this
-   specification for the topic collection and the content-format
-   (TBD606) is implied by the resource type.
+   ("application/link-format") MUST be at least supported for the topic
+   collection resource.
 
    Example:
 
@@ -716,6 +766,11 @@ Internet-Draft                 CoAP pubsub                 February 2025
       Payload:
       </ps/h9392>,</ps/2e3570>
 
+   Note that no "rt" or "ct" attributes are returned for the topic
+   resources in the example payload, because the resource type
+   (rt="core.ps.conf") is already implied by this specification for the
+   topic collection and the content-format (TBD606) is implied by the
+   resource type.
 
 
 
@@ -725,7 +780,8 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 13]
+
+Jimenez, et al.          Expires 31 August 2025                [Page 14]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -737,7 +793,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
    request to the topic collection URI.  On success, the broker returns
    a 2.05 (Content) response with a representation of a list of topics
    in the collection (see Section 2.3.3) that match the filter in CoRE
-   link format [RFC6690].
+   Link Format [RFC6690].
 
    Upon success, the broker responds with a 2.05 (Content), providing a
    list of links to topic resources associated with this topic
@@ -767,10 +823,11 @@ Internet-Draft                 CoAP pubsub                 February 2025
       Payload:
       </ps/2e3570>
 
-   Note that no "rt" or "ct" attributes are returned in the link format
-   document, since the type of each link (topic resource with
-   rt="core.ps.conf") is implied as the default resource type of each
-   topic resource by this specification.
+   Note that in this example no "rt" or "ct" attributes are returned in
+   the response payload, since the type of each link (topic resource
+   with rt="core.ps.conf") is implied as the default resource type of
+   each topic resource by this specification.  Eliding these attributes
+   helps to minimize the size of the response payload.
 
 
 
@@ -780,8 +837,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-
-Jimenez, et al.          Expires 29 August 2025                [Page 14]
+Jimenez, et al.          Expires 31 August 2025                [Page 15]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -837,7 +893,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 15]
+Jimenez, et al.          Expires 31 August 2025                [Page 16]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -863,7 +919,6 @@ Internet-Draft                 CoAP pubsub                 February 2025
          / topic-name /         0: "living-room-sensor",
          / topic-data /         1: "ps/data/1bd0d6d",
          / resource-type /      2: "core.ps.data"
-
       }
 
 2.5.  Topic Interactions
@@ -888,12 +943,13 @@ Internet-Draft                 CoAP pubsub                 February 2025
    specified in Section 2.2 and use the same abbreviations defined in
    Section 4.
 
-   For example, below is a request on the topic "ps/h9392":
+   For example, below is a request on the topic "/ps/h9392":
 
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 16]
+
+Jimenez, et al.          Expires 31 August 2025                [Page 17]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -949,7 +1005,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 17]
+Jimenez, et al.          Expires 31 August 2025                [Page 18]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1005,7 +1061,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 18]
+Jimenez, et al.          Expires 31 August 2025                [Page 19]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1061,7 +1117,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 19]
+Jimenez, et al.          Expires 31 August 2025                [Page 20]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1117,7 +1173,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 20]
+Jimenez, et al.          Expires 31 August 2025                [Page 21]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1173,7 +1229,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 21]
+Jimenez, et al.          Expires 31 August 2025                [Page 22]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1229,7 +1285,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 22]
+Jimenez, et al.          Expires 31 August 2025                [Page 23]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1285,7 +1341,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 23]
+Jimenez, et al.          Expires 31 August 2025                [Page 24]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1341,7 +1397,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 24]
+Jimenez, et al.          Expires 31 August 2025                [Page 25]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1397,7 +1453,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 25]
+Jimenez, et al.          Expires 31 August 2025                [Page 26]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1453,7 +1509,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 26]
+Jimenez, et al.          Expires 31 August 2025                [Page 27]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1509,7 +1565,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 27]
+Jimenez, et al.          Expires 31 August 2025                [Page 28]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1565,7 +1621,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 28]
+Jimenez, et al.          Expires 31 August 2025                [Page 29]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1615,13 +1671,13 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
    The architecture presented in this document inherits the security
    considerations from CoAP [RFC7252] and Observe [RFC7641], as well as
-   from Web Linking [RFC8288], Link-Format [RFC6690], and the CoRE
+   from Web Linking [RFC8288], CoRE Link Format [RFC6690], and the CoRE
    Resource Directory [RFC9176].
 
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 29]
+Jimenez, et al.          Expires 31 August 2025                [Page 30]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1677,7 +1733,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 30]
+Jimenez, et al.          Expires 31 August 2025                [Page 31]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1733,7 +1789,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 31]
+Jimenez, et al.          Expires 31 August 2025                [Page 32]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1789,7 +1845,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 32]
+Jimenez, et al.          Expires 31 August 2025                [Page 33]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1845,7 +1901,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 33]
+Jimenez, et al.          Expires 31 August 2025                [Page 34]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1901,7 +1957,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 34]
+Jimenez, et al.          Expires 31 August 2025                [Page 35]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1957,7 +2013,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 35]
+Jimenez, et al.          Expires 31 August 2025                [Page 36]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -2013,7 +2069,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 36]
+Jimenez, et al.          Expires 31 August 2025                [Page 37]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -2069,7 +2125,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 37]
+Jimenez, et al.          Expires 31 August 2025                [Page 38]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -2125,7 +2181,7 @@ A.2.  Version -14 to -15
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 38]
+Jimenez, et al.          Expires 31 August 2025                [Page 39]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -2181,7 +2237,7 @@ Contributors
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 39]
+Jimenez, et al.          Expires 31 August 2025                [Page 40]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -2237,4 +2293,4 @@ Authors' Addresses
 
 
 
-Jimenez, et al.          Expires 29 August 2025                [Page 40]
+Jimenez, et al.          Expires 31 August 2025                [Page 41]

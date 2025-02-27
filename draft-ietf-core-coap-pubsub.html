@@ -1049,7 +1049,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Jimenez, et al.</td>
-<td class="center">Expires 29 August 2025</td>
+<td class="center">Expires 31 August 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,12 +1062,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-core-coap-pubsub-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-02-25" class="published">25 February 2025</time>
+<time datetime="2025-02-27" class="published">27 February 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-08-29">29 August 2025</time></dd>
+<dd class="expires"><time datetime="2025-08-31">31 August 2025</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1124,7 +1124,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 29 August 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 31 August 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1343,7 +1343,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <p id="section-1-1">The Constrained Application Protocol (CoAP) <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span> supports machine-to-machine communication across networks of constrained devices and constrained networks. CoAP uses a request/response model where clients make requests to servers in order to request actions on resources. Depending on the situation the same device may act either as a server, a client, or both.
 One important class of constrained devices includes devices that are intended to run for years from a small battery, or by scavenging energy from their environment. These devices have limited up-time because they spend most of their time in a sleeping state with no network connectivity. Another important class of nodes are devices with limited reachability due to middle-boxes like Network Address Translators (NATs) and firewalls.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">For these nodes, the client/server-oriented architecture of REST can be challenging when interactions are not initiated by the devices themselves. A publish/subscribe-oriented architecture where nodes exchange data via topics through a broker entity might fit these nodes better.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">This document applies the idea of broker-based publish-subscribe to Constrained RESTful Environments using CoAP. It defines a broker that allows to create, discover subscribe and publish on topics.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-3">This document applies the idea of broker-based publish-subscribe to Constrained RESTful Environments using CoAP. It defines a broker that allows to create, discover, subscribe and publish on topics.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <div id="terminology">
 <section id="section-1.1">
         <h3 id="name-terminology">
@@ -1373,7 +1373,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
           <dd class="break"></dd>
 <dt id="section-1.1-4.7">topic:</dt>
           <dd style="margin-left: 1.5em" id="section-1.1-4.8">
-            <p id="section-1.1-4.8.1">A set of information concerning a topic, including its configuration and other metadata. A topic is hosted as one topic resource at the broker, and its representation is the set of topic properties concerning the topic. All the topic resources associated with the same topic collection share a common base URI, i.e., the URI of the collection resource.<a href="#section-1.1-4.8.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-4.8.1">A set of information concerning a topic, including its configuration and other metadata. A topic is hosted as one topic resource at the broker, and its representation is the set of topic properties concerning the topic. All the topic resources associated with the same topic collection share a common base URI, i.e., the URI of the topic collection resource.<a href="#section-1.1-4.8.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-4.9">topic property:</dt>
@@ -1482,7 +1482,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
         <h3 id="name-managing-topics">
 <a href="#section-1.3" class="section-number selfRef">1.3. </a><a href="#name-managing-topics" class="section-name selfRef">Managing Topics</a>
         </h3>
-<p id="section-1.3-1"><a href="#fig-api" class="auto internal xref">Figure 2</a> shows the resources related to a topic collection that can be managed at the Broker.<a href="#section-1.3-1" class="pilcrow">¶</a></p>
+<p id="section-1.3-1"><a href="#fig-api" class="auto internal xref">Figure 2</a> shows the resources related to a topic collection that can be managed at the broker.<a href="#section-1.3-1" class="pilcrow">¶</a></p>
 <span id="name-resources-of-a-broker"></span><div id="fig-api">
 <figure id="figure-2">
           <div id="section-1.3-2.1">
@@ -1531,7 +1531,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
 <a href="#name-resources-of-a-broker" class="selfRef">Resources of a Broker</a>
           </figcaption></figure>
 </div>
-<p id="section-1.3-3">The Broker exports one or more topic collection resources, with resource type "core.ps.coll" defined in <a href="#iana" class="auto internal xref">Section 6</a> of this document. The interfaces for the topic collection resource is defined in <a href="#topic-collection-interactions" class="auto internal xref">Section 2.4</a>.<a href="#section-1.3-3" class="pilcrow">¶</a></p>
+<p id="section-1.3-3">The broker exports one or more topic collection resources, with resource type "core.ps.coll" defined in <a href="#iana" class="auto internal xref">Section 6</a> of this document. The interfaces for the topic collection resource is defined in <a href="#topic-collection-interactions" class="auto internal xref">Section 2.4</a>.<a href="#section-1.3-3" class="pilcrow">¶</a></p>
 <p id="section-1.3-4">A topic collection resource can have topic resources as its child resources, with resource type "core.ps.conf". Other child resource types are currently not defined for a topic collection resource.<a href="#section-1.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1699,9 +1699,9 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
 <a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-collection-representation" class="section-name selfRef">Collection Representation</a>
         </h3>
 <p id="section-2.1-1">Each topic is represented as a link, where the link target is the URI of the corresponding topic resource.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
-<p id="section-2.1-2">Publication and subscription to a topic occur at a link, where the link target is the URI of the corresponding topic-data resource. Such a link is specified by the topic-data entry within the topic resource (see <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>).<a href="#section-2.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.1-2">Publication and subscription to a topic occur at a link, where the link target is the URI of the corresponding topic-data resource. Such a link is specified by the "topic-data" topic property within the topic resource (see <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>).<a href="#section-2.1-2" class="pilcrow">¶</a></p>
 <p id="section-2.1-3">A topic resource with a topic-data link can also be simply called "topic".<a href="#section-2.1-3" class="pilcrow">¶</a></p>
-<p id="section-2.1-4">The list of links to the topic resources can be retrieved from the associated topic collection resource, represented as a Link Format document <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span> where each link is a topic resource of type "core.ps.conf" as defined in this document.<a href="#section-2.1-4" class="pilcrow">¶</a></p>
+<p id="section-2.1-4">The list of links to the topic resources can be retrieved from the associated topic collection resource, represented as a CoRE Link Format document <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span> where each link is a topic resource of type "core.ps.conf" as defined in this document.<a href="#section-2.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="topic-resource-representation">
@@ -1761,12 +1761,16 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
         </h3>
 <p id="section-2.3-1">A client can perform a discovery of: the broker; the topic collection resources and topic resources hosted by the broker; and the topic-data resources associated with those topic resources.
 Any server implementing a pubsub broker <span class="bcp14">MUST</span> support CoAP discovery with a query parameter as defined in <span><a href="https://rfc-editor.org/rfc/rfc6690#section-4.1" class="relref">Section 4.1</a> of [<a href="#RFC6690" class="cite xref">RFC6690</a>]</span> and as used in the examples in this section.<a href="#section-2.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.3-2">The CoRE Link Format discovery responses shown in the examples in this section are illustrative only.
+The normative requirements for this format are defined in <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>.
+The examples make minimal use of CoRE Link Format attributes, in order to reduce the size of discovery responses: this is beneficial for clients connected to constrained networks.
+In general, a broker <span class="bcp14">MAY</span> include any CoRE Link Format attributes in each returned link, for example to meet specific use case requirements.<a href="#section-2.3-2" class="pilcrow">¶</a></p>
 <div id="broker-discovery">
 <section id="section-2.3.1">
           <h4 id="name-broker-discovery">
 <a href="#section-2.3.1" class="section-number selfRef">2.3.1. </a><a href="#name-broker-discovery" class="section-name selfRef">Broker Discovery</a>
           </h4>
-<p id="section-2.3.1-1">CoAP clients <span class="bcp14">MAY</span> discover brokers by using CoAP discovery, via multicast, through a Resource Directory (RD) <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span> or by other means specified in extensions to <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>. Brokers <span class="bcp14">MAY</span> register with a RD by following the steps on <span><a href="https://rfc-editor.org/rfc/rfc9176#section-5" class="relref">Section 5</a> of [<a href="#RFC9176" class="cite xref">RFC9176</a>]</span> with the resource type set to "core.ps" as defined in <a href="#iana" class="auto internal xref">Section 6</a> of this document.<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.1-1">CoAP clients <span class="bcp14">MAY</span> discover brokers by using CoAP discovery <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>, via multicast, through a Resource Directory (RD) <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span> or by other means specified in extensions to <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>. Brokers <span class="bcp14">MAY</span> register with a RD by following the steps on <span><a href="https://rfc-editor.org/rfc/rfc9176#section-5" class="relref">Section 5</a> of [<a href="#RFC9176" class="cite xref">RFC9176</a>]</span> with the resource type set to "core.ps" as defined in <a href="#iana" class="auto internal xref">Section 6</a> of this document.<a href="#section-2.3.1-1" class="pilcrow">¶</a></p>
 <p id="section-2.3.1-2">The following example shows an endpoint discovering a broker using the "core.ps" resource type over a multicast network. Brokers within the multicast scope will answer the query.<a href="#section-2.3.1-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.3.1-3">
 <pre>
@@ -1793,9 +1797,9 @@ Any server implementing a pubsub broker <span class="bcp14">MUST</span> support 
           <h4 id="name-topic-collection-discovery">
 <a href="#section-2.3.2" class="section-number selfRef">2.3.2. </a><a href="#name-topic-collection-discovery" class="section-name selfRef">Topic Collection Discovery</a>
           </h4>
-<p id="section-2.3.2-1">A Broker <span class="bcp14">SHOULD</span> offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point is the topic collection resource collecting the topics for those topics (see <span><a href="https://rfc-editor.org/rfc/rfc6690#section-1.2.2" class="relref">Section 1.2.2</a> of [<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>) and is identified by the resource type "core.ps.coll".<a href="#section-2.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-1">A broker <span class="bcp14">SHOULD</span> offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point is the topic collection resource collecting the topics for those topics (see <span><a href="https://rfc-editor.org/rfc/rfc6690#section-1.2.2" class="relref">Section 1.2.2</a> of [<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>) and is identified by the resource type "core.ps.coll".<a href="#section-2.3.2-1" class="pilcrow">¶</a></p>
 <p id="section-2.3.2-2">The specific resource path is left for implementations, examples in this document use the "/ps" path. The interactions with a topic collection are further defined in <a href="#topic-collection-interactions" class="auto internal xref">Section 2.4</a>.<a href="#section-2.3.2-2" class="pilcrow">¶</a></p>
-<p id="section-2.3.2-3">Since the representation of the topic collection resource includes the links to the associated topic resources, it is not required to locate those links under "/.well-known/core", also in order to limit the size of the Link Format document returned as result of the discovery.<a href="#section-2.3.2-3" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-3">Since the representation of the topic collection resource includes the links to the associated topic resources, it is not required to locate those links under "/.well-known/core", also in order to limit the size of the CoRE Link Format document returned as result of the discovery.<a href="#section-2.3.2-3" class="pilcrow">¶</a></p>
 <p id="section-2.3.2-4">Example:<a href="#section-2.3.2-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.3.2-5">
 <pre>
@@ -1815,8 +1819,8 @@ Any server implementing a pubsub broker <span class="bcp14">MUST</span> support 
    &lt;/other/path&gt;;rt="core.ps.coll"
 </pre><a href="#section-2.3.2-5" class="pilcrow">¶</a>
 </div>
-<p id="section-2.3.2-6">Note that the "ct" attribute is not included for the two collections in the returned link format document.
-This is because the content-format of each topic collection resource is implied by its resource type (rt="core.ps.coll") to be 40 ("application/link-format").<a href="#section-2.3.2-6" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-6">Note that in this example the "ct" attribute is not included for the two collections in the returned CoRE Link Format document.
+This is because the "ct" attribute is an optional hint, which is not needed in this case: the content-format of each topic collection resource is implied by its resource type (rt="core.ps.coll") to be 40 ("application/link-format").<a href="#section-2.3.2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="topic-discovery">
@@ -1852,9 +1856,9 @@ This is because the content-format of each topic collection resource is implied 
 <a href="#section-2.3.4" class="section-number selfRef">2.3.4. </a><a href="#name-topic-data-discovery" class="section-name selfRef">Topic-Data Discovery</a>
           </h4>
 <p id="section-2.3.4-1">Within a topic, there is the 'topic-data' topic property containing the URI of the topic-data resource that a CoAP client can subscribe to and/or publish to.
-Topic-data resources are expected to use the resource type 'core.ps.data'.<a href="#section-2.3.4-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.4-2">The "topic-data" property value contains the URI of the topic-data resource for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data (see <a href="#topic-get-resource" class="auto internal xref">Section 2.5.1</a>).<a href="#section-2.3.4-2" class="pilcrow">¶</a></p>
-<p id="section-2.3.4-3">It is also possible to discover a list of topic-data resources by sending a request to the collection with query rt=core.ps.data resources as shown below.
+Topic-data resources use the resource type 'core.ps.data'.<a href="#section-2.3.4-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.4-2">The "topic-data" topic property value contains the URI of the topic-data resource for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data resource (see <a href="#topic-get-resource" class="auto internal xref">Section 2.5.1</a>).<a href="#section-2.3.4-2" class="pilcrow">¶</a></p>
+<p id="section-2.3.4-3">It is also possible to discover a list of topic-data resources by sending a request to the collection with a query rt=core.ps.data as shown below.
 Any topic collection resource <span class="bcp14">MUST</span> support this query.<a href="#section-2.3.4-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.3.4-4">
 <pre>
@@ -1873,7 +1877,9 @@ Any topic collection resource <span class="bcp14">MUST</span> support this query
 </pre><a href="#section-2.3.4-4" class="pilcrow">¶</a>
 </div>
 <p id="section-2.3.4-5">Note that the "rt" attribute is not included in the returned link in the example response.
-This is because the query in the request already constrains all links in the response to be only of type "core.ps.data".<a href="#section-2.3.4-5" class="pilcrow">¶</a></p>
+This is because the query in the request already constrains all links in the response to be only of type "core.ps.data".
+Therefore, including the "rt" attribute for each returned link would be unnecessary and would make the response size much larger.
+So the broker, in this example case, was implemented to elide these attributes always, to minimize the size of discovery response payloads.<a href="#section-2.3.4-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1883,19 +1889,20 @@ This is because the query in the request already constrains all links in the res
         <h3 id="name-topic-collection-interactio">
 <a href="#section-2.4" class="section-number selfRef">2.4. </a><a href="#name-topic-collection-interactio" class="section-name selfRef">Topic Collection Interactions</a>
         </h3>
-<p id="section-2.4-1">These are the interactions that can happen directly with a specific topic collection.<a href="#section-2.4-1" class="pilcrow">¶</a></p>
+<p id="section-2.4-1">Topic collection interactions are the interactions that can happen directly with a specific topic collection.<a href="#section-2.4-1" class="pilcrow">¶</a></p>
+<p id="section-2.4-2">The CoRE Link Format responses shown in the examples in this section are illustrative only.
+The normative requirements for this format are defined in <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>.
+The examples make minimal use of CoRE Link Format attributes, in order to reduce the size of responses: this is beneficial for clients connected to constrained networks.
+In general, a broker <span class="bcp14">MAY</span> include any CoRE Link Format attributes in each returned link, for example to meet specific use case requirements.<a href="#section-2.4-2" class="pilcrow">¶</a></p>
 <div id="topic-get-all">
 <section id="section-2.4.1">
           <h4 id="name-retrieving-all-topics">
 <a href="#section-2.4.1" class="section-number selfRef">2.4.1. </a><a href="#name-retrieving-all-topics" class="section-name selfRef">Retrieving all topics</a>
           </h4>
-<p id="section-2.4.1-1">A client can request a collection of the topics present in the broker by making a GET request to the collection URI.<a href="#section-2.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.4.1-1">A client can request a collection of the topics present in the broker by making a GET request to the topic collection URI.<a href="#section-2.4.1-1" class="pilcrow">¶</a></p>
 <p id="section-2.4.1-2">On success, the broker returns a 2.05 (Content) response, specifying the list of links to topic resources associated with this topic collection (see <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>).<a href="#section-2.4.1-2" class="pilcrow">¶</a></p>
 <p id="section-2.4.1-3">A client <span class="bcp14">MAY</span> retrieve a list of links to topics it is authorized to access, based on its permissions.
-The payload content-format 40 ("application/link-format") <span class="bcp14">MUST</span> be at least supported for the collection resource.
-Note that no "rt" or "ct" attributes are returned for the topic resources in the example payload, because
-the resource type (rt="core.ps.conf") is already implied by this specification for the topic collection and
-the content-format (TBD606) is implied by the resource type.<a href="#section-2.4.1-3" class="pilcrow">¶</a></p>
+The payload content-format 40 ("application/link-format") <span class="bcp14">MUST</span> be at least supported for the topic collection resource.<a href="#section-2.4.1-3" class="pilcrow">¶</a></p>
 <p id="section-2.4.1-4">Example:<a href="#section-2.4.1-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.4.1-5">
 <pre>
@@ -1912,6 +1919,9 @@ the content-format (TBD606) is implied by the resource type.<a href="#section-2.
    &lt;/ps/h9392&gt;,&lt;/ps/2e3570&gt;
 </pre><a href="#section-2.4.1-5" class="pilcrow">¶</a>
 </div>
+<p id="section-2.4.1-6">Note that no "rt" or "ct" attributes are returned for the topic resources in the example payload, because
+the resource type (rt="core.ps.conf") is already implied by this specification for the topic collection and
+the content-format (TBD606) is implied by the resource type.<a href="#section-2.4.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="topic-get-properties">
@@ -1920,7 +1930,7 @@ the content-format (TBD606) is implied by the resource type.<a href="#section-2.
 <a href="#section-2.4.2" class="section-number selfRef">2.4.2. </a><a href="#name-getting-topics-by-topic-pro" class="section-name selfRef">Getting Topics by Topic Properties</a>
           </h4>
 <p id="section-2.4.2-1">A client can filter a collection of topics by submitting the representation of a topic filter (see <a href="#topic-fetch-resource" class="auto internal xref">Section 2.5.2</a>) in a FETCH request to the topic collection URI.
-On success, the broker returns a 2.05 (Content) response with a representation of a list of topics in the collection (see <a href="#topic-discovery" class="auto internal xref">Section 2.3.3</a>) that match the filter in CoRE link format <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>.<a href="#section-2.4.2-1" class="pilcrow">¶</a></p>
+On success, the broker returns a 2.05 (Content) response with a representation of a list of topics in the collection (see <a href="#topic-discovery" class="auto internal xref">Section 2.3.3</a>) that match the filter in CoRE Link Format <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>.<a href="#section-2.4.2-1" class="pilcrow">¶</a></p>
 <p id="section-2.4.2-2">Upon success, the broker responds with a 2.05 (Content), providing a list of links to topic resources associated with this topic collection that match the request's filter criteria (refer to <a href="#topic-discovery" class="auto internal xref">Section 2.3.3</a>). A positive match happens only when each topic property in the request payload is present with the indicated value in the topic resource representation.<a href="#section-2.4.2-2" class="pilcrow">¶</a></p>
 <p id="section-2.4.2-3">Example:<a href="#section-2.4.2-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.4.2-4">
@@ -1945,8 +1955,9 @@ On success, the broker returns a 2.05 (Content) response with a representation o
    &lt;/ps/2e3570&gt;
 </pre><a href="#section-2.4.2-4" class="pilcrow">¶</a>
 </div>
-<p id="section-2.4.2-5">Note that no "rt" or "ct" attributes are returned in the link format document, since the type of each link
-(topic resource with rt="core.ps.conf") is implied as the default resource type of each topic resource by this specification.<a href="#section-2.4.2-5" class="pilcrow">¶</a></p>
+<p id="section-2.4.2-5">Note that in this example no "rt" or "ct" attributes are returned in the response payload, since the type of each link
+(topic resource with rt="core.ps.conf") is implied as the default resource type of each topic resource by this specification.
+Eliding these attributes helps to minimize the size of the response payload.<a href="#section-2.4.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="topic-create">
@@ -1984,7 +1995,6 @@ On success, the broker returns a 2.05 (Content) response with a representation o
       / topic-name /         0: "living-room-sensor",
       / topic-data /         1: "ps/data/1bd0d6d",
       / resource-type /      2: "core.ps.data"
-
    }
 </pre><a href="#section-2.4.3-8" class="pilcrow">¶</a>
 </div>
@@ -2007,7 +2017,7 @@ On success, the broker returns a 2.05 (Content) response with a representation o
 <p id="section-2.5.1-2">On success, the broker returns a 2.05 (Content) response with a representation of the topic resource, as specified in <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>.<a href="#section-2.5.1-2" class="pilcrow">¶</a></p>
 <p id="section-2.5.1-3">If requirements are defined for the client to read the topic as requested and the broker does not successfully assess that those requirements are met, then the broker <span class="bcp14">MUST</span> respond with a 4.03 (Forbidden) error.<a href="#section-2.5.1-3" class="pilcrow">¶</a></p>
 <p id="section-2.5.1-4">The response payload is a CBOR map, whose possible entries are specified in <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a> and use the same abbreviations defined in <a href="#pubsub-parameters" class="auto internal xref">Section 4</a>.<a href="#section-2.5.1-4" class="pilcrow">¶</a></p>
-<p id="section-2.5.1-5">For example, below is a request on the topic "ps/h9392":<a href="#section-2.5.1-5" class="pilcrow">¶</a></p>
+<p id="section-2.5.1-5">For example, below is a request on the topic "/ps/h9392":<a href="#section-2.5.1-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.5.1-6">
 <pre>
    Request:
@@ -2597,7 +2607,7 @@ This URI is indicated in the 'topic-data' topic property value. Please note that
       <h2 id="name-security-considerations">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-5-1">The architecture presented in this document inherits the security considerations from CoAP <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span> and Observe <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, as well as from Web Linking <span>[<a href="#RFC8288" class="cite xref">RFC8288</a>]</span>, Link-Format <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>, and the CoRE Resource Directory <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span>.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-1">The architecture presented in this document inherits the security considerations from CoAP <span>[<a href="#RFC7252" class="cite xref">RFC7252</a>]</span> and Observe <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, as well as from Web Linking <span>[<a href="#RFC8288" class="cite xref">RFC8288</a>]</span>, CoRE Link Format <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>, and the CoRE Resource Directory <span>[<a href="#RFC9176" class="cite xref">RFC9176</a>]</span>.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <p id="section-5-2">Communications between each client and the broker are <span class="bcp14">RECOMMENDED</span> to be secured, e.g., by using OSCORE <span>[<a href="#RFC8613" class="cite xref">RFC8613</a>]</span> or DTLS <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>. Security considerations for the used secure communication protocols apply too.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <p id="section-5-3">The content published on a topic by a publisher client <span class="bcp14">SHOULD</span> be protected end-to-end between the publisher and all the subscribers to that topic. In such a case, it <span class="bcp14">MUST</span> be possible to assert source authentication of the published data. This can be achieved at the application layer, e.g., by using COSE <span>[<a href="#STD96" class="cite xref">STD96</a>]</span>, <span>[<a href="#RFC9053" class="cite xref">RFC9053</a>]</span>.<a href="#section-5-3" class="pilcrow">¶</a></p>
 <p id="section-5-4">Access control of clients at the broker <span class="bcp14">MAY</span> be enforced for performing discovery operation, and <span class="bcp14">SHOULD</span> be enforced in a fine-grained fashion for operations related to the creation, update, and deletion of topic resources, as well as for operations on topic-data resources such as publication on and subscription to topics. This prevents rogue clients to, among other things, repeatedly create topics at the broker or publish (large) contents, which may result in Denial of Service against the broker and the active subscribers.<a href="#section-5-4" class="pilcrow">¶</a></p>
