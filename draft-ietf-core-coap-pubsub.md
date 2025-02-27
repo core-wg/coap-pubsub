@@ -537,7 +537,7 @@ Example:
    Payload (in CBOR diagnostic notation):
    {
       / topic-data /            1: "ps/data/1bd0d6d",
-      / topic-content-format /  3: 112,
+      / topic-content-format /  3: 112
    }
 ~~~~
 
