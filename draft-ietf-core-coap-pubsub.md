@@ -297,7 +297,7 @@ This is because the "ct" attribute is an optional hint, which is not needed in t
 
 ### Topic Discovery {#topic-discovery}
 
-Each topic collection is associated with a group of topic resources, each detailing the configuration of its respective topic (refer to {{topic-properties}}). Each topic resource is identified by the resource type "core.ps.conf".
+A broker MAY offer topic resources via /.well-known/core. Each topic collection is associated with a group of topic resources, each detailing the configuration of its respective topic (refer to {{topic-properties}}). Each topic resource is identified by the resource type "core.ps.conf".
 
 Below is an example of discovery via /.well-known/core with query rt=core.ps.conf that returns a list of topics, as the list of links to the corresponding topic resources.
 
@@ -318,14 +318,15 @@ Below is an example of discovery via /.well-known/core with query rt=core.ps.con
    </other/path/2e3570>;rt="core.ps.conf"
 ~~~~
 
+In certain scenarios, the method described herein may not be applicable, particularly when the server restricts topic availability to authenticated clients only. In such cases, it is recommended to utilize the procedure outlined in {{topic-get-all}} for topic discovery.
+
 ### Topic-Data Discovery
 
 Within a topic, there is the "topic-data" topic property containing the URI of the topic-data resource that a CoAP client can subscribe to and/or publish to. The topic-data resources use the resource type 'core.ps.data'.
 
 The "topic-data" topic property value contains the URI of the topic-data resource for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data resource (see {{topic-get-resource}}).
 
-It is also possible to discover a list of topic-data resources by sending a request to the collection with a query rt=core.ps.data as shown below.
-Any topic collection resource MUST support this query.
+It is also possible to discover a list of topic-data resources by sending a request to the collection with a query rt=core.ps.data as shown below. Any topic collection resource MUST support this query.
 
 ~~~~
    Request:
@@ -362,7 +363,8 @@ A client can request a collection of the topics present in the broker by making 
 
 On success, the broker returns a 2.05 (Content) response, specifying the list of links to topic resources associated with this topic collection (see {{topic-resource-representation}}).
 
-A client MAY retrieve a list of links to topics it is authorized to access, based on its permissions.
+A client MAY retrieve a list of links to topics it is authorized to access, based on its permissions. A server MUST implement topic collection discvoery.
+
 The payload content-format 40 ("application/link-format") MUST be at least supported for the topic collection resource.
 
 Example:
