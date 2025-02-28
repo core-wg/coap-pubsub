@@ -5,10 +5,10 @@
 CoRE Working Group                                            J. Jimenez
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                               M. Koster
-Expires: 31 August 2025                                    Dogtiger Labs
+Expires: 1 September 2025                                  Dogtiger Labs
                                                               A. Keranen
                                                                 Ericsson
-                                                        27 February 2025
+                                                        28 February 2025
 
 
     A publish-subscribe architecture for the Constrained Application
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Jimenez, et al.          Expires 31 August 2025                 [Page 1]
+Jimenez, et al.         Expires 1 September 2025                [Page 1]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -63,7 +63,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 31 August 2025.
+   This Internet-Draft will expire on 1 September 2025.
 
 Copyright Notice
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Jimenez, et al.          Expires 31 August 2025                 [Page 2]
+Jimenez, et al.         Expires 1 September 2025                [Page 2]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -165,7 +165,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                 [Page 3]
+Jimenez, et al.         Expires 1 September 2025                [Page 3]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -221,7 +221,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                 [Page 4]
+Jimenez, et al.         Expires 1 September 2025                [Page 4]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -241,17 +241,16 @@ Internet-Draft                 CoAP pubsub                 February 2025
       A resource where clients can publish data and/or subscribe to data
       for a specific topic.  The representation of the topic resource
       corresponding to such a topic also specifies the URI to the
-      present "topic-data" resource.
+      present topic-data resource.
 
    broker:
       A CoAP server that hosts one or more topic collections with their
-      topics, and also "topic-data" resources.  The broker is
-      responsible for the store-and-forward of state update
-      representations, for the topics for which it hosts the
-      corresponding "topic-data" resources.  The broker is also
-      responsible for handling the topic lifecycle as defined in
-      Section 3.1.  The creation, configuration, and discovery of topics
-      at a broker is specified in Section 2.
+      topics, and also topic-data resources.  The broker is responsible
+      for the store-and-forward of state update representations, for the
+      topics for which it hosts the corresponding topic-data resources.
+      The broker is also responsible for handling the topic lifecycle as
+      defined in Section 3.1.  The creation, configuration, and
+      discovery of topics at a broker is specified in Section 2.
 
 1.2.  CoAP Publish-Subscribe Architecture
 
@@ -262,10 +261,10 @@ Internet-Draft                 CoAP pubsub                 February 2025
    administrator) over the RESTful interface of a corresponding topic
    resource hosted by the broker.
 
-   Publishers submit their data over the RESTful interface of a "topic-
-   data" resource corresponding to the topic, which may be hosted by the
+   Publishers submit their data over the RESTful interface of a topic-
+   data resource corresponding to the topic, which may be hosted by the
    broker.  Subscribers to a topic are notified of new publications by
-   using Observe [RFC7641] on the corresponding "topic-data" resource.
+   using Observe [RFC7641] on the corresponding topic-data resource.
 
    The broker is responsible for the store-and-forward of state update
    representations between CoAP clients.  Subscribers observing a
@@ -277,7 +276,8 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                 [Page 5]
+
+Jimenez, et al.         Expires 1 September 2025                [Page 5]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -301,13 +301,13 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
    This document describes two sets of interactions; interactions to
    configure topics and their lifecycle (see Section 2.5) and
-   interactions about the "topic-data" (see Section 3.2).
+   interactions about the topic-data (see Section 3.2).
 
    Topic interactions are discovery, create, read configuration, update
    configuration, and delete configuration.  These operations handle the
    management of the topics.
 
-   The "topic-data" interactions are publish, subscribe, unsubscribe,
+   The topic-data interactions are publish, subscribe, unsubscribe,
    read, and delete.  These operations are oriented on how data is
    transferred from a publisher to a subscriber.
 
@@ -333,7 +333,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                 [Page 6]
+Jimenez, et al.         Expires 1 September 2025                [Page 6]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -352,9 +352,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
    The configuration side of a publish and subscribe broker consists of
    a collection of topics.  These topics as well as the collection
    itself are exposed by a CoAP server as resources (see Figure 3).
-   Each topic is associated with a topic resource and a "topic-data"
+   Each topic is associated with a topic resource and a topic-data
    resource.  The topic resource is used by a client creating or
-   administering a topic.  The "topic-data" resource is used by the
+   administering a topic.  The topic-data resource is used by the
    publishers and the subscribers to a topic.
 
                        ___
@@ -389,18 +389,18 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                 [Page 7]
+Jimenez, et al.         Expires 1 September 2025                [Page 7]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
 
    Publication and subscription to a topic occur at a link, where the
-   link target is the URI of the corresponding "topic-data" resource.
+   link target is the URI of the corresponding topic-data resource.
    Such a link is specified by the "topic-data" topic property within
    the topic resource (see Section 2.2.1).
 
-   A topic resource with a "topic-data" link can also be simply called
-   "topic".
+   A topic resource with a link to a topic-data resource can also be
+   simply called "topic".
 
    The list of links to the topic resources can be retrieved from the
    associated topic collection resource, represented as a CoRE Link
@@ -434,30 +434,30 @@ Internet-Draft                 CoAP pubsub                 February 2025
       or other values.
 
    *  "topic-data": A required field (optional during creation)
-      containing the URI of the "topic-data" resource for publishing/
+      containing the URI of the topic-data resource for publishing/
       subscribing to this topic.  It encodes the URI as a CBOR text
       string.
 
    *  "resource-type": A required field used to indicate the resource
-      type of the "topic-data" resource for the topic.  It encodes the
+      type of the topic-data resource for the topic.  It encodes the
       resource type as a CBOR text string.  The value should be
       "core.ps.data".
 
 
 
-Jimenez, et al.          Expires 31 August 2025                 [Page 8]
+Jimenez, et al.         Expires 1 September 2025                [Page 8]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
 
    *  "topic-content-format": This optional field specifies the CoAP
-      Content-Format identifier of the "topic-data" resource
+      Content-Format identifier of the topic-data resource
       representation as an unsigned integer, e.g., 60 for the media-type
       "application/cbor".
 
    *  "topic-type": An optional field used to indicate the attribute or
-      property of the "topic-data" resource for the topic.  It encodes
-      the attribute as a CBOR text string.  Example attributes include
+      property of the topic-data resource for the topic.  It encodes the
+      attribute as a CBOR text string.  Example attributes include
       "temperature".
 
    *  "expiration-date": An optional field used to indicate the
@@ -481,8 +481,8 @@ Internet-Draft                 CoAP pubsub                 February 2025
       Section 3.2.3).  Encoded as a CBOR unsigned integer greater than
       0, it ensures subscribers who have lost interest and silently
       forgotten the observation do not remain indefinitely on the
-      server's observer list.  If another CoAP server hosts the "topic-
-      data" resource, that server is responsible for applying the
+      server's observer list.  If another CoAP server hosts the topic-
+      data resource, that server is responsible for applying the
       "observer-check" value.  The default value for this field is
       86400, as defined in [RFC7641], which corresponds to 24 hours.
 
@@ -496,26 +496,27 @@ Internet-Draft                 CoAP pubsub                 February 2025
       this field is not present, no historical data will be stored.
 
    *  "initialize": An optional boolean field that, when set to true,
-      allows the "topic-data" path to be pre-populated with a zero-
+      allows the topic-data resource to be pre-populated with a zero-
       length (empty) payload without an explicit Content-Format.  This
 
 
 
-Jimenez, et al.          Expires 31 August 2025                 [Page 9]
+Jimenez, et al.         Expires 1 September 2025                [Page 9]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
 
       behavior facilitates one-shot publication and topic creation,
       enabling CoAP clients to subscribe by default without encountering
-      a 4.04 Not Found error.  If this field is not present, the broker
-      behaves as usual, and the "topic-data" path is not initialized.
+      a 4.04 Not Found error.  If this field is not present or set to
+      'false', the broker behaves as usual, and the topic-data resource
+      is not initialized.
 
 2.3.  Discovery
 
    A client can perform a discovery of: the broker; the topic collection
-   resources and topic resources hosted by the broker; and the "topic-
-   data" resources associated with those topic resources.  Any server
+   resources and topic resources hosted by the broker; and the topic-
+   data resources associated with those topic resources.  Any server
    implementing a pubsub broker MUST support CoAP discovery with a query
    parameter as defined in Section 4.1 of [RFC6690] and as used in the
    examples in this section.
@@ -556,8 +557,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-
-Jimenez, et al.          Expires 31 August 2025                [Page 10]
+Jimenez, et al.         Expires 1 September 2025               [Page 10]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -613,7 +613,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 11]
+Jimenez, et al.         Expires 1 September 2025               [Page 11]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -669,7 +669,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 12]
+Jimenez, et al.         Expires 1 September 2025               [Page 12]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -677,16 +677,16 @@ Internet-Draft                 CoAP pubsub                 February 2025
 2.3.4.  Topic-Data Discovery
 
    Within a topic, there is the "topic-data" topic property containing
-   the URI of the "topic-data" resource that a CoAP client can subscribe
-   to and/or publish to.  The "topic-data" resources use the resource
-   type 'core.ps.data'.
+   the URI of the topic-data resource that a CoAP client can subscribe
+   to and/or publish to.  The topic-data resources use the resource type
+   'core.ps.data'.
 
-   The "topic-data" topic property value contains the URI of the "topic-
-   data" resource for publishing and subscribing.  So retrieving the
-   topic will also provide the URL of the "topic-data" resource (see
+   The "topic-data" topic property value contains the URI of the topic-
+   data resource for publishing and subscribing.  So retrieving the
+   topic will also provide the URL of the topic-data resource (see
    Section 2.5.1).
 
-   It is also possible to discover a list of "topic-data" resources by
+   It is also possible to discover a list of topic-data resources by
    sending a request to the collection with a query rt=core.ps.data as
    shown below.  Any topic collection resource MUST support this query.
 
@@ -725,7 +725,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 13]
+Jimenez, et al.         Expires 1 September 2025               [Page 13]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -781,7 +781,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 14]
+Jimenez, et al.         Expires 1 September 2025               [Page 14]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -837,7 +837,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 15]
+Jimenez, et al.         Expires 1 September 2025               [Page 15]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -855,7 +855,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
    To facilitate immediate subscription and allow clients to observe the
    topic before data has been published, the client can include the
-   "initialize" set to "true".  When supported, the broker will create
+   "initialize" set to "true".  When included, the broker will create
    the topic and pre-populate the "topic-data" field with a zero-length
    (empty) payload without an explicit Content-Format.  That is, a
    subscribing client would get this zero-length representation without
@@ -893,7 +893,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 16]
+Jimenez, et al.         Expires 1 September 2025               [Page 16]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -949,7 +949,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 17]
+Jimenez, et al.         Expires 1 September 2025               [Page 17]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1005,7 +1005,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 18]
+Jimenez, et al.         Expires 1 September 2025               [Page 18]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1051,7 +1051,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
    Note that updating the "topic-data" path will automatically cancel
    all existing observations on it and thus will unsubscribe all
-   subscribers.  Updating the "topic-data" may happen also after it
+   subscribers.  Updating the "topic-data" path may happen also after it
    being deleted, as described on Section 3.2.4, this will in turn
    create a new "topic-data" path for that topic.
 
@@ -1061,7 +1061,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 19]
+Jimenez, et al.         Expires 1 September 2025               [Page 19]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1117,7 +1117,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 20]
+Jimenez, et al.         Expires 1 September 2025               [Page 20]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1173,7 +1173,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 21]
+Jimenez, et al.         Expires 1 September 2025               [Page 21]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1219,7 +1219,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
    On success, the broker returns a 2.02 (Deleted) response.
 
    When a topic resource is deleted, the broker MUST also delete the
-   "topic-data" resource, unsubscribe all subscribers by removing them
+   topic-data resource, unsubscribe all subscribers by removing them
    from the list of observers and returning a final 4.04 (Not Found)
    response as per Section 3.2 of [RFC7641].
 
@@ -1229,7 +1229,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 22]
+Jimenez, et al.         Expires 1 September 2025               [Page 22]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1248,30 +1248,30 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
    The overview of the publish-subscribe mechanism over CoAP is as
    follows: a publisher publishes to a topic by submitting the data in a
-   PUT request to a "topic-data" resource and subscribers subscribe to a
+   PUT request to a topic-data resource and subscribers subscribe to a
    topic by submitting a GET request with Observe option set to 0
-   (register) to a "topic-data" resource.  When resource state changes,
+   (register) to a topic-data resource.  When resource state changes,
    subscribers observing the resource [RFC7641] at that time will
    receive a notification.
 
-   A "topic-data" resource does not exist until some initial data has
-   been published to it.  Before initial data publication, a GET request
-   to the "topic-data" resource URI results in a 4.04 (Not Found)
-   response.  If such a "half created" topic is undesired, the creator
-   of the topic can simply immediately publish some initial placeholder
-   data to make the topic "fully created" (see Section 3.1).
+   A topic-data resource does not exist until some initial data has been
+   published to it.  Before initial data publication, a GET request to
+   the topic-data resource URI results in a 4.04 (Not Found) response.
+   If such a "half created" topic is undesired, the creator of the topic
+   can simply immediately publish some initial placeholder data to make
+   the topic "fully created" (see Section 3.1).
 
    URIs for topic resources are broker-generated (see Section 2.4.3).
    There is no necessary URI pattern dependence between the URI where
-   the "topic-data" exists and the URI of the topic resource.
+   the topic-data resource exists and the URI of the topic resource.
 
 3.1.  Topic Lifecycle
 
    When a topic is newly created, it is first placed by the broker into
    the HALF CREATED state (see Figure 4).  In this state, a client can
    read and update the configuration of the topic and delete the topic.
-   A publisher can publish to the "topic-data" resource.  However, a
-   subscriber cannot yet subscribe to the "topic-data" resource nor read
+   A publisher can publish to the topic-data resource.  However, a
+   subscriber cannot yet subscribe to the topic-data resource nor read
    the latest data.
 
 
@@ -1285,7 +1285,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 23]
+Jimenez, et al.         Expires 1 September 2025               [Page 23]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1305,43 +1305,43 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
                        Figure 4: Lifecycle of a Topic
 
-   After a publisher publishes to the "topic-data" for the first time,
-   the topic is placed into the FULLY CREATED state.  In this state, a
-   client can read data by means of a GET request without observe.  A
-   publisher can publish to the "topic-data" resource and a subscriber
-   can observe the "topic-data" resource.
+   After a publisher publishes to the topic-data resource for the first
+   time, the topic is placed into the FULLY CREATED state.  In this
+   state, a client can read data by means of a GET request without
+   observe.  A publisher can publish to the topic-data resource and a
+   subscriber can observe the topic-data resource.
 
    When a client deletes a topic resource, the topic is placed into the
    DELETED state and shortly after removed from the server.  In this
    state, all subscribers are removed from the list of observers of the
-   "topic-data" resource and no further interactions with the topic are
+   topic-data resource and no further interactions with the topic are
    possible.
 
-   When a client deletes a "topic-data", the topic is placed into the
-   HALF CREATED state, where clients can read, update and delete the
-   topic and await for a publisher to begin publication.
+   When a client deletes a topic-data resource, the associated topic is
+   placed into the HALF CREATED state, where clients can read, update
+   and delete the topic and await for a publisher to begin publication.
 
 3.2.  Topic-Data Interactions
 
-   Interactions with the "topic-data" resource are covered in this
+   Interactions with the topic-data resource are covered in this
    section.
 
 3.2.1.  Publish
 
-   A topic with a "topic-data" resource must have been created in order
-   to publish data to it (See Section 2.4.3) and be in the half-created
-   or fully-created state in order to the publish operation to work (see
+   A topic with a topic-data resource must have been created in order to
+   publish data to it (See Section 2.4.3) and be in the half-created or
+   fully-created state in order to the publish operation to work (see
    Section 3.1).
 
    A client can publish data to a topic by submitting the data in a PUT
-   request to the "topic-data" URI.  This URI is indicated in the
-   "topic-data" topic property value.  Please note that the "topic-data"
-   URI is not the same as the topic URI used for configuring the topic
-   (see Section 2.2).
+   request to the topic-data resource.  The URI for this resource is
+   indicated in the "topic-data" topic property value.  Please note that
+   this URI is not the same as the topic URI used for configuring the
+   topic (see Section 2.2).
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 24]
+Jimenez, et al.         Expires 1 September 2025               [Page 24]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1397,7 +1397,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 25]
+Jimenez, et al.         Expires 1 September 2025               [Page 25]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1423,11 +1423,11 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 3.2.2.  Subscribe
 
-   A client can subscribe to a "topic-data" by sending a CoAP GET
+   A client can subscribe to a topic-data resource by sending a CoAP GET
    request with the CoAP Observe Option set to 0 to subscribe to
    resource updates [RFC7641].
 
-   On success, the server hosting the "topic-data" resource MUST return
+   On success, the server hosting the topic-data resource MUST return
    2.05 (Content) notifications with the data and the Observe Option.
    Otherwise, if no Observe Option is present the client should assume
    that the subscription was not successful.
@@ -1440,7 +1440,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
    Success:  2.05 "Content".  Successful subscribe with observe
       response, current value included in the response.
 
-   Failure:  4.04 "Not Found".  The "topic-data" does not exist.
+   Failure:  4.04 "Not Found".  The topic-data resource does not exist.
 
    If the "max-subscribers" topic property value has been reached, the
    broker must treat that as specified in Section 4.1 of [RFC7641].  The
@@ -1453,7 +1453,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 26]
+Jimenez, et al.         Expires 1 September 2025               [Page 26]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1509,7 +1509,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 27]
+Jimenez, et al.         Expires 1 September 2025               [Page 27]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1523,16 +1523,16 @@ Internet-Draft                 CoAP pubsub                 February 2025
    topic by modifying the topic property "observer-check" on
    Section 2.2.  This would allow changing the rate at which different
    implementations verify that a subscriber is still interested in
-   observing a "topic-data" resource.
+   observing a topic-data resource.
 
 3.2.4.  Delete topic-data
 
    A publisher MAY delete a topic by making a CoAP DELETE request on the
-   "topic-data" URI.
+   topic-data resource (which is hosted at the "topic-data" URI).
 
    On success, the broker returns a 2.02 (Deleted) response.
 
-   When a "topic-data" resource is deleted, the broker MUST also delete
+   When a topic-data resource is deleted, the broker MUST also delete
    the "topic-data" topic property in the topic resource, unsubscribe
    all subscribers by removing them from the list of observers and
    return a final 4.04 (Not Found) response as per Section 3.2 of
@@ -1554,8 +1554,8 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 3.3.  Read the latest data
 
-   A client can get the latest published "topic-data" by making a GET
-   request to the "topic-data" URI in the broker.  Please note that
+   A client can get the latest published topic-data resource by making a
+   GET request to the "topic-data" URI in the broker.  Please note that
    discovery of the "topic-data" topic property is a required previous
    step (see Section 2.5.1).
 
@@ -1565,7 +1565,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 28]
+Jimenez, et al.         Expires 1 September 2025               [Page 28]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1598,9 +1598,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 3.4.  Rate Limiting
 
-   The server hosting the "topic-data" may have to handle a potentially
-   large number of publishers and subscribers at the same time.  This
-   means it could become overwhelmed if it receives too many
+   The server hosting the topic-data resource may have to handle a
+   potentially large number of publishers and subscribers at the same
+   time.  This means it could become overwhelmed if it receives too many
    publications in a short period of time.
 
    In this situation, if a publisher is sending publications too fast,
@@ -1611,7 +1611,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
    that publisher for the indicated time.
 
    When a publisher receives a 4.29 (Too Many Requests) response, it
-   MUST NOT send any new publication requests to the same "topic-data"
+   MUST NOT send any new publication requests to the same topic-data
    resource before the time indicated by the Max-Age option has passed.
 
 
@@ -1621,7 +1621,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 29]
+Jimenez, et al.         Expires 1 September 2025               [Page 29]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1677,7 +1677,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 30]
+Jimenez, et al.         Expires 1 September 2025               [Page 30]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1696,9 +1696,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
    Access control of clients at the broker MAY be enforced for
    performing discovery operation, and SHOULD be enforced in a fine-
    grained fashion for operations related to the creation, update, and
-   deletion of topic resources, as well as for operations on "topic-
-   data" resources such as publication on and subscription to topics.
-   This prevents rogue clients to, among other things, repeatedly create
+   deletion of topic resources, as well as for operations on topic-data
+   resources such as publication on and subscription to topics.  This
+   prevents rogue clients to, among other things, repeatedly create
    topics at the broker or publish (large) contents, which may result in
    Denial of Service against the broker and the active subscribers.
 
@@ -1733,7 +1733,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 31]
+Jimenez, et al.         Expires 1 September 2025               [Page 31]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1789,7 +1789,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 32]
+Jimenez, et al.         Expires 1 September 2025               [Page 32]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1845,7 +1845,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 33]
+Jimenez, et al.         Expires 1 September 2025               [Page 33]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1901,7 +1901,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 34]
+Jimenez, et al.         Expires 1 September 2025               [Page 34]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -1957,7 +1957,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 35]
+Jimenez, et al.         Expires 1 September 2025               [Page 35]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -2013,7 +2013,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 36]
+Jimenez, et al.         Expires 1 September 2025               [Page 36]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -2069,7 +2069,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 37]
+Jimenez, et al.         Expires 1 September 2025               [Page 37]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -2125,7 +2125,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 38]
+Jimenez, et al.         Expires 1 September 2025               [Page 38]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -2181,7 +2181,7 @@ A.2.  Version -14 to -15
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 39]
+Jimenez, et al.         Expires 1 September 2025               [Page 39]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -2237,7 +2237,7 @@ Contributors
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 40]
+Jimenez, et al.         Expires 1 September 2025               [Page 40]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
@@ -2293,4 +2293,4 @@ Authors' Addresses
 
 
 
-Jimenez, et al.          Expires 31 August 2025                [Page 41]
+Jimenez, et al.         Expires 1 September 2025               [Page 41]
