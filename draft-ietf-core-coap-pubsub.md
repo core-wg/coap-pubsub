@@ -363,7 +363,7 @@ A client can request a collection of the topics present in the broker by making 
 
 On success, the broker returns a 2.05 (Content) response, specifying the list of links to topic resources associated with this topic collection (see {{topic-resource-representation}}).
 
-A client MAY retrieve a list of links to topics it is authorized to access, based on its permissions. A server MUST implement topic collection discvoery.
+A client MAY retrieve a list of links to topics it is authorized to access, based on its permissions. A server MUST implement topic collection discovery.
 
 The payload content-format 40 ("application/link-format") MUST be at least supported for the topic collection resource.
 
@@ -1093,6 +1093,7 @@ Expert reviewers should take into consideration the following points:
 
 ## Version -17 to -18
 
+* Addressed issues \#64, \#65, \#66, \#67.
 * rt, ct, obs attribute elision
 * Editorial changes
 
