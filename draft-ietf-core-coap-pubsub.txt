@@ -642,8 +642,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 2.3.3.  Topic Discovery
 
-   Each topic collection is associated with a group of topic resources,
-   each detailing the configuration of its respective topic (refer to
+   A broker MAY offer topic resources via /.well-known/core.  Each topic
+   collection is associated with a group of topic resources, each
+   detailing the configuration of its respective topic (refer to
    Section 2.2.1).  Each topic resource is identified by the resource
    type "core.ps.conf".
 
@@ -668,11 +669,15 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-
 Jimenez, et al.         Expires 1 September 2025               [Page 12]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
+
+   In certain scenarios, the method described herein may not be
+   applicable, particularly when the server restricts topic availability
+   to authenticated clients only.  In such cases, it is recommended to
+   utilize the procedure outlined in Section 2.4.1 for topic discovery.
 
 2.3.4.  Topic-Data Discovery
 
@@ -720,11 +725,6 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-
-
-
-
-
 Jimenez, et al.         Expires 1 September 2025               [Page 13]
 
 Internet-Draft                 CoAP pubsub                 February 2025
@@ -748,9 +748,11 @@ Internet-Draft                 CoAP pubsub                 February 2025
    collection (see Section 2.2).
 
    A client MAY retrieve a list of links to topics it is authorized to
-   access, based on its permissions.  The payload content-format 40
-   ("application/link-format") MUST be at least supported for the topic
-   collection resource.
+   access, based on its permissions.  A server MUST implement topic
+   collection discvoery.
+
+   The payload content-format 40 ("application/link-format") MUST be at
+   least supported for the topic collection resource.
 
    Example:
 
@@ -771,8 +773,6 @@ Internet-Draft                 CoAP pubsub                 February 2025
    (rt="core.ps.conf") is already implied by this specification for the
    topic collection and the content-format (TBD606) is implied by the
    resource type.
-
-
 
 
 

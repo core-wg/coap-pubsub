@@ -1828,7 +1828,7 @@ This is because the "ct" attribute is an optional hint, which is not needed in t
           <h4 id="name-topic-discovery">
 <a href="#section-2.3.3" class="section-number selfRef">2.3.3. </a><a href="#name-topic-discovery" class="section-name selfRef">Topic Discovery</a>
           </h4>
-<p id="section-2.3.3-1">Each topic collection is associated with a group of topic resources, each detailing the configuration of its respective topic (refer to <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>). Each topic resource is identified by the resource type "core.ps.conf".<a href="#section-2.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-1">A broker <span class="bcp14">MAY</span> offer topic resources via /.well-known/core. Each topic collection is associated with a group of topic resources, each detailing the configuration of its respective topic (refer to <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>). Each topic resource is identified by the resource type "core.ps.conf".<a href="#section-2.3.3-1" class="pilcrow">¶</a></p>
 <p id="section-2.3.3-2">Below is an example of discovery via /.well-known/core with query rt=core.ps.conf that returns a list of topics, as the list of links to the corresponding topic resources.<a href="#section-2.3.3-2" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.3.3-3">
 <pre>
@@ -1848,6 +1848,7 @@ This is because the "ct" attribute is an optional hint, which is not needed in t
    &lt;/other/path/2e3570&gt;;rt="core.ps.conf"
 </pre><a href="#section-2.3.3-3" class="pilcrow">¶</a>
 </div>
+<p id="section-2.3.3-4">In certain scenarios, the method described herein may not be applicable, particularly when the server restricts topic availability to authenticated clients only. In such cases, it is recommended to utilize the procedure outlined in <a href="#topic-get-all" class="auto internal xref">Section 2.4.1</a> for topic discovery.<a href="#section-2.3.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="topic-data-discovery">
@@ -1857,8 +1858,7 @@ This is because the "ct" attribute is an optional hint, which is not needed in t
           </h4>
 <p id="section-2.3.4-1">Within a topic, there is the "topic-data" topic property containing the URI of the topic-data resource that a CoAP client can subscribe to and/or publish to. The topic-data resources use the resource type 'core.ps.data'.<a href="#section-2.3.4-1" class="pilcrow">¶</a></p>
 <p id="section-2.3.4-2">The "topic-data" topic property value contains the URI of the topic-data resource for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data resource (see <a href="#topic-get-resource" class="auto internal xref">Section 2.5.1</a>).<a href="#section-2.3.4-2" class="pilcrow">¶</a></p>
-<p id="section-2.3.4-3">It is also possible to discover a list of topic-data resources by sending a request to the collection with a query rt=core.ps.data as shown below.
-Any topic collection resource <span class="bcp14">MUST</span> support this query.<a href="#section-2.3.4-3" class="pilcrow">¶</a></p>
+<p id="section-2.3.4-3">It is also possible to discover a list of topic-data resources by sending a request to the collection with a query rt=core.ps.data as shown below. Any topic collection resource <span class="bcp14">MUST</span> support this query.<a href="#section-2.3.4-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.3.4-4">
 <pre>
    Request:
@@ -1900,10 +1900,10 @@ In general, a broker <span class="bcp14">MAY</span> include any CoRE Link Format
           </h4>
 <p id="section-2.4.1-1">A client can request a collection of the topics present in the broker by making a GET request to the topic collection URI.<a href="#section-2.4.1-1" class="pilcrow">¶</a></p>
 <p id="section-2.4.1-2">On success, the broker returns a 2.05 (Content) response, specifying the list of links to topic resources associated with this topic collection (see <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>).<a href="#section-2.4.1-2" class="pilcrow">¶</a></p>
-<p id="section-2.4.1-3">A client <span class="bcp14">MAY</span> retrieve a list of links to topics it is authorized to access, based on its permissions.
-The payload content-format 40 ("application/link-format") <span class="bcp14">MUST</span> be at least supported for the topic collection resource.<a href="#section-2.4.1-3" class="pilcrow">¶</a></p>
-<p id="section-2.4.1-4">Example:<a href="#section-2.4.1-4" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.4.1-5">
+<p id="section-2.4.1-3">A client <span class="bcp14">MAY</span> retrieve a list of links to topics it is authorized to access, based on its permissions. A server <span class="bcp14">MUST</span> implement topic collection discvoery.<a href="#section-2.4.1-3" class="pilcrow">¶</a></p>
+<p id="section-2.4.1-4">The payload content-format 40 ("application/link-format") <span class="bcp14">MUST</span> be at least supported for the topic collection resource.<a href="#section-2.4.1-4" class="pilcrow">¶</a></p>
+<p id="section-2.4.1-5">Example:<a href="#section-2.4.1-5" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.4.1-6">
 <pre>
    Request:
 
@@ -1916,11 +1916,11 @@ The payload content-format 40 ("application/link-format") <span class="bcp14">MU
    Content-Format: 40 (application/link-format)
    Payload:
    &lt;/ps/h9392&gt;,&lt;/ps/2e3570&gt;
-</pre><a href="#section-2.4.1-5" class="pilcrow">¶</a>
+</pre><a href="#section-2.4.1-6" class="pilcrow">¶</a>
 </div>
-<p id="section-2.4.1-6">Note that no "rt" or "ct" attributes are returned for the topic resources in the example payload, because
+<p id="section-2.4.1-7">Note that no "rt" or "ct" attributes are returned for the topic resources in the example payload, because
 the resource type (rt="core.ps.conf") is already implied by this specification for the topic collection and
-the content-format (TBD606) is implied by the resource type.<a href="#section-2.4.1-6" class="pilcrow">¶</a></p>
+the content-format (TBD606) is implied by the resource type.<a href="#section-2.4.1-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="topic-get-properties">
