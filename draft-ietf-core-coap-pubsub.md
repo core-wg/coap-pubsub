@@ -456,7 +456,7 @@ The broker MUST issue a 4.00 (Bad Request) error if a received parameter is inva
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /         0: "living-room-sensor",
-      / topic-data /         1: "ps/data/1bd0d6d",
+      / topic-data /         1: "/ps/data/1bd0d6d",
       / resource-type /      2: "core.ps.data"
    }
 ~~~~
@@ -491,7 +491,7 @@ For example, below is a request on the topic "/ps/h9392":
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /            0: "living-room-sensor",
-      / topic-data /            1: "ps/data/1bd0d6d",
+      / topic-data /            1: "/ps/data/1bd0d6d",
       / resource-type /         2: "core.ps.data",
       / topic-content-format /  3: 112,
       / topic-type /            4: "temperature",
@@ -535,7 +535,7 @@ Example:
    Content-Format: TBD606 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
-      / topic-data /            1: "ps/data/1bd0d6d",
+      / topic-data /            1: "/ps/data/1bd0d6d",
       / topic-content-format /  3: 112
    }
 ~~~~
@@ -564,7 +564,7 @@ Example:
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /            0: "living-room-sensor",
-      / topic-data /            1: "ps/data/1bd0d6d",
+      / topic-data /            1: "/ps/data/1bd0d6d",
       / resource-type /         2: "core.ps.data",
       / topic-content-format /  3: 112,
       / topic-type /            4: "temperature",
@@ -578,7 +578,7 @@ Example:
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /            0: "living-room-sensor",
-      / topic-data /            1: "ps/data/1bd0d6d",
+      / topic-data /            1: "/ps/data/1bd0d6d",
       / resource-type /         2: "core.ps.data",
       / topic-content-format /  3: 112,
       / topic-type /            4: "temperature",
@@ -624,7 +624,7 @@ Contrary to PUT, iPATCH operations will explicitly update some topic properties,
    Payload (in CBOR diagnostic notation):
    {
       / topic-name /            0: "living-room-sensor",
-      / topic-data /            1: "ps/data/1bd0d6d",
+      / topic-data /            1: "/ps/data/1bd0d6d",
       / resource-type /         2: "core.ps.data",
       / topic-content-format /  3: 112,
       / topic-type /            4: "temperature",
