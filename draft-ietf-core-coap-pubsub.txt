@@ -139,7 +139,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
      A.4.  Version -16 to -17  . . . . . . . . . . . . . . . . . . .  40
      A.5.  Version -17 to -18  . . . . . . . . . . . . . . . . . . .  40
    Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  40
-   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  40
+   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  41
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  41
 
 1.  Introduction
@@ -749,7 +749,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
    A client MAY retrieve a list of links to topics it is authorized to
    access, based on its permissions.  A server MUST implement topic
-   collection discvoery.
+   collection discovery.
 
    The payload content-format 40 ("application/link-format") MUST be at
    least supported for the topic collection resource.
@@ -2211,6 +2211,8 @@ A.4.  Version -16 to -17
 
 A.5.  Version -17 to -18
 
+   *  Addressed issues #64, #65, #66, #67.
+
    *  rt, ct, obs attribute elision
 
    *  Editorial changes
@@ -2231,8 +2233,6 @@ Acknowledgements
    Navarro, Oscar Novo and Lorenzo Corneo for their valuable
    contributions and reviews.
 
-Contributors
-
 
 
 
@@ -2241,6 +2241,8 @@ Jimenez, et al.         Expires 1 September 2025               [Page 40]
 
 Internet-Draft                 CoAP pubsub                 February 2025
 
+
+Contributors
 
    Marco Tiloca
    RISE AB
@@ -2267,8 +2269,6 @@ Authors' Addresses
    Ari Keranen
    Ericsson
    Email: ari.keranen@ericsson.com
-
-
 
 
 
