@@ -917,7 +917,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
       Payload (in CBOR diagnostic notation):
       {
          / topic-name /         0: "living-room-sensor",
-         / topic-data /         1: "ps/data/1bd0d6d",
+         / topic-data /         1: "/ps/data/1bd0d6d",
          / resource-type /      2: "core.ps.data"
       }
 
@@ -967,7 +967,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
       Payload (in CBOR diagnostic notation):
       {
          / topic-name /            0: "living-room-sensor",
-         / topic-data /            1: "ps/data/1bd0d6d",
+         / topic-data /            1: "/ps/data/1bd0d6d",
          / resource-type /         2: "core.ps.data",
          / topic-content-format /  3: 112,
          / topic-type /            4: "temperature",
@@ -1032,7 +1032,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
       Content-Format: TBD606 (application/core-pubsub+cbor)
       Payload (in CBOR diagnostic notation):
       {
-         / topic-data /            1: "ps/data/1bd0d6d",
+         / topic-data /            1: "/ps/data/1bd0d6d",
          / topic-content-format /  3: 112
       }
 
@@ -1087,7 +1087,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
       Payload (in CBOR diagnostic notation):
       {
          / topic-name /            0: "living-room-sensor",
-         / topic-data /            1: "ps/data/1bd0d6d",
+         / topic-data /            1: "/ps/data/1bd0d6d",
          / resource-type /         2: "core.ps.data",
          / topic-content-format /  3: 112,
          / topic-type /            4: "temperature",
@@ -1101,7 +1101,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
       Payload (in CBOR diagnostic notation):
       {
          / topic-name /            0: "living-room-sensor",
-         / topic-data /            1: "ps/data/1bd0d6d",
+         / topic-data /            1: "/ps/data/1bd0d6d",
          / resource-type /         2: "core.ps.data",
          / topic-content-format /  3: 112,
          / topic-type /            4: "temperature",
@@ -1197,7 +1197,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
       Payload (in CBOR diagnostic notation):
       {
          / topic-name /            0: "living-room-sensor",
-         / topic-data /            1: "ps/data/1bd0d6d",
+         / topic-data /            1: "/ps/data/1bd0d6d",
          / resource-type /         2: "core.ps.data",
          / topic-content-format /  3: 112,
          / topic-type /            4: "temperature",
