@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-02-27T01:25:57.320960+00:00",
+  "timestamp": "2025-03-02T01:37:55.237516+00:00",
   "repo": "core-wg/coap-pubsub",
   "labels": [
     {
@@ -671,6 +671,158 @@
           "body": "Added on v15",
           "createdAt": "2024-10-20T12:05:04Z",
           "updatedAt": "2024-10-20T12:05:04Z"
+        }
+      ]
+    },
+    {
+      "number": 64,
+      "id": "I_kwDOBEc_t86r4m3t",
+      "title": "Single-quotes / double-quotes / no-quotes around the topic property names",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/64",
+      "state": "CLOSED",
+      "author": "EskoDijk",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "There are (probably) 3 different styles used for topic property names. E.g.:\n\n* 'topic-data'\n* \"topic-data\"\n* topic-data\n\nThis issue is to remind to make this consistent. Using some form of quotes is preferred to avoid confusion with regular words.\nDouble quotes is used most at this moment.\n\nCan be done before or after WGLC start!\nFYI @jaimejim ",
+      "createdAt": "2025-02-27T08:06:01Z",
+      "updatedAt": "2025-02-27T13:16:16Z",
+      "closedAt": "2025-02-27T12:54:52Z",
+      "comments": [
+        {
+          "author": "jaimejim",
+          "authorAssociation": "MEMBER",
+          "body": "We choose double quotes.",
+          "createdAt": "2025-02-27T12:39:50Z",
+          "updatedAt": "2025-02-27T12:39:50Z"
+        },
+        {
+          "author": "EskoDijk",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "@jaimejim The commit has a (some?) errors. The term \"topic-data resource\" is a valid term and replacing this with `\"topic-data\" resource` isn't correct.",
+          "createdAt": "2025-02-27T13:16:16Z",
+          "updatedAt": "2025-02-27T13:16:16Z"
+        }
+      ]
+    },
+    {
+      "number": 65,
+      "id": "I_kwDOBEc_t86r48nn",
+      "title": "Section 2.3.3 \"Topic Discovery\" uses well-known/core, but 2.3.2 says this is not mandatory to support",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/65",
+      "state": "CLOSED",
+      "author": "EskoDijk",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This looks inconsistent:\n\n* 2.3.2 says topics don't need to go under \"well-known/core\"\n* 2.3.3 says you use \"well-known/core\" to discovery topics \n\nThis looks inconsistent. If topics are not under \"well-known/core\" an implementation that uses this only to discover topics will fail. (Or do I miss something?)\n\nMaybe to resolve during WGLC ...?\nFYI @jaimejim ",
+      "createdAt": "2025-02-27T08:44:58Z",
+      "updatedAt": "2025-02-28T21:19:25Z",
+      "closedAt": "2025-02-28T21:19:24Z",
+      "comments": [
+        {
+          "author": "jaimejim",
+          "authorAssociation": "MEMBER",
+          "body": "I thought of not making it mandatory for every broker to offer\"well-known/core\" topic discovery, you may have other mechanisms for discovery. \n\nSo a broker **SHOULD** offer a topic discovery entry point to enable clients to find topics of interest and if you choose to do topic discovery with \"well-known/core\" to discover topics, then 2.3.3 explains how.\n\nI could add a **MAY** in 2.3.3 to make it more clear. That is unless the group wants it to be mandatory to store topics under \"well-known/core\", in which case we should change **SHOULD** with **MUST**. ",
+          "createdAt": "2025-02-27T11:51:12Z",
+          "updatedAt": "2025-02-27T12:38:39Z"
+        },
+        {
+          "author": "EskoDijk",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Agree, we can make it optional (MAY) to offer topic resources via well-known/core. One example where the server does not offer in this way is when the topics are only available to certain authenticated clients.  (I.e. via the 2.4.1 method.)\n\nThen 2.3.3 should be clear that this approach might fail and say it's much better to use the 2.4.1 method! (to achieve the same)\nThe 2.4.1 is a MUST for a server to implement.\n\nSome text is needed to make this clear.",
+          "createdAt": "2025-02-27T13:13:39Z",
+          "updatedAt": "2025-02-27T13:13:39Z"
+        },
+        {
+          "author": "jaimejim",
+          "authorAssociation": "MEMBER",
+          "body": "Closing based on PR",
+          "createdAt": "2025-02-28T21:19:24Z",
+          "updatedAt": "2025-02-28T21:19:24Z"
+        }
+      ]
+    },
+    {
+      "number": 66,
+      "id": "I_kwDOBEc_t86r5DCw",
+      "title": "Use of relative URIs in the \"topic-data\" URI field",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/66",
+      "state": "CLOSED",
+      "author": "EskoDijk",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "All examples use a relative URI in the \"topic-data\" topic property, e.g.:\n\n```\n/ topic-data /         1: \"ps/data/1bd0d6d\",\n```\n\nIt's not fully clear here what the base URI (RFC 3986) is against which the relative reference is resolved.\nSection 1.1 says the base URI is the URI of the topic collection resource. In that case, given that /ps is the topic collection resource used as example in the document, the topic-data resource should be rather:\n\n```\n/ topic-data /         1: \"data/1bd0d6d\",\n```\n\nif a relative URI is used.\n\nOr, if absolute URI is used it would be:\n\n```\n/ topic-data /         1: \"/ps/data/1bd0d6d\",\n```\n\nFYI @jaimejim \n",
+      "createdAt": "2025-02-27T08:56:53Z",
+      "updatedAt": "2025-02-28T21:19:14Z",
+      "closedAt": "2025-02-28T21:19:13Z",
+      "comments": [
+        {
+          "author": "jaimejim",
+          "authorAssociation": "MEMBER",
+          "body": "\nActually my example was terrible.  Relative path with `ps/data...` is plain wrong, it would resolve to `/ps/ps/data/...` \n\nIs it even allowed to use absolute paths if we indicate a base URI? ",
+          "createdAt": "2025-02-27T12:36:36Z",
+          "updatedAt": "2025-02-27T12:36:36Z"
+        },
+        {
+          "author": "EskoDijk",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Both absolute or relative URIs could be used (since we don't forbid the one or the other). Relative seems to have the benefit of compactness, but it does need a clearly defined base URI to resolve against. So the base URI can always be defined and is only used to resolve the relative URI reference.\n\nAlthough Section 1.1 defines a base URI, it's a bit hidden in the terminology section and also it says it's only the base URI for all topic resources. This is not the same as a base URI for all **topic-data** resources.",
+          "createdAt": "2025-02-27T22:03:52Z",
+          "updatedAt": "2025-02-27T22:03:52Z"
+        },
+        {
+          "author": "jaimejim",
+          "authorAssociation": "MEMBER",
+          "body": "Let's use absolute URI to accommodate the general case where the topic-data resource might not be hosted at the broker.",
+          "createdAt": "2025-02-28T20:59:36Z",
+          "updatedAt": "2025-02-28T20:59:36Z"
+        },
+        {
+          "author": "jaimejim",
+          "authorAssociation": "MEMBER",
+          "body": "Closing based on PR",
+          "createdAt": "2025-02-28T21:19:13Z",
+          "updatedAt": "2025-02-28T21:19:13Z"
+        }
+      ]
+    },
+    {
+      "number": 67,
+      "id": "I_kwDOBEc_t86r5Nif",
+      "title": "CBOR diag notation is sometimes using final comma at last item in map",
+      "url": "https://github.com/core-wg/coap-pubsub/issues/67",
+      "state": "CLOSED",
+      "author": "EskoDijk",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "For example this one:\n\n```\n~~~~\n   Request:\n\n   Header: FETCH (Code=0.05)\n   Uri-Path: \"ps\"\n   Uri-Path: \"h9392\"\n   Content-Format: TBD606 (application/core-pubsub+cbor)\n   Payload (in CBOR diagnostic notation):\n   {\n      / conf-filter / 10: [\"topic-data\", \"media-type\"]\n   }\n\n   Response:\n\n   Header: Content (Code=2.05)\n   Content-Format: TBD606 (application/core-pubsub+cbor)\n   Payload (in CBOR diagnostic notation):\n   {\n      / topic-data /            1: \"ps/data/1bd0d6d\",\n      / topic-content-format /  3: 112,\n   }\n~~~~\n```\n\nShould we make that comma usage consistent?",
+      "createdAt": "2025-02-27T09:13:57Z",
+      "updatedAt": "2025-02-27T11:41:03Z",
+      "closedAt": "2025-02-27T11:36:57Z",
+      "comments": [
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "Yes, you should check the examples with an old tool like those in cbor-diag.\n\nThe new syntax, which allows these commas, is currently stuck in the CBOR WG because of an unrelated issue  around implementation preferences.",
+          "createdAt": "2025-02-27T10:18:17Z",
+          "updatedAt": "2025-02-27T10:18:17Z"
+        },
+        {
+          "author": "jaimejim",
+          "authorAssociation": "MEMBER",
+          "body": "I will remove the last comma to fix the example.",
+          "createdAt": "2025-02-27T11:32:08Z",
+          "updatedAt": "2025-02-27T11:32:08Z"
+        },
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "There really should be a small test suite to check the examples.\nE.g., kramdown-rfc-extract-sourcecode \u2794 a little shim that removes everything before the payload \u2794 diag2diag.rb\n",
+          "createdAt": "2025-02-27T11:41:01Z",
+          "updatedAt": "2025-02-27T11:41:01Z"
         }
       ]
     }
@@ -2012,6 +2164,78 @@
         "oid": "e57cf9af82c91fb7e823de92daad02b4d571953f"
       },
       "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 68,
+      "id": "PR_kwDOBEc_t86MxA4o",
+      "title": "Explain better optimization of attributes; broker MAY include any attribute",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/68",
+      "state": "MERGED",
+      "author": "EskoDijk",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Explain better the optimization of attributes and that broker MAY include any attributes, per CoRE interim discussion of 2025-02-26.\r\n\r\nAlso some terminology fixes (nits).",
+      "createdAt": "2025-02-27T09:17:42Z",
+      "updatedAt": "2025-02-27T11:26:27Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "main",
+      "baseRefOid": "792c643b475a0be6dda6d857e26e84ae96cafc59",
+      "headRepository": "EskoDijk/coap-pubsub",
+      "headRefName": "pr-optim-attributes-2",
+      "headRefOid": "0f395ab4ba21fe5f4883a93e2f41f2dca2ba3a16",
+      "closedAt": "2025-02-27T11:26:27Z",
+      "mergedAt": "2025-02-27T11:26:27Z",
+      "mergedBy": "jaimejim",
+      "mergeCommit": {
+        "oid": "d1ff90e77a387d520907d6495cb92b5f8770550d"
+      },
+      "comments": [
+        {
+          "author": "EskoDijk",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "FYI @jaimejim  here the PR as (approximately) discussed in the CoRE interim.",
+          "createdAt": "2025-02-27T09:18:14Z",
+          "updatedAt": "2025-02-27T09:18:14Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 69,
+      "id": "PR_kwDOBEc_t86M9V3p",
+      "title": "Fix terminology for topic-data resource by removing double quotes / Minor editorial fixes",
+      "url": "https://github.com/core-wg/coap-pubsub/pull/69",
+      "state": "MERGED",
+      "author": "EskoDijk",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Doing this change distinguishes better between the concepts\r\n\r\n* topic-data resource , as defined in Terminology\r\n* \"topic-data\" topic property, one of the fields of configuration which is inside the topic resource.\r\n\r\nThe latter is also sometimes abbreviated as \"topic-data\" path or \"topic-data\" URI to point to the value of this property while keeping the sentences short. (This was already used.)",
+      "createdAt": "2025-02-28T15:49:49Z",
+      "updatedAt": "2025-02-28T20:57:52Z",
+      "baseRepository": "core-wg/coap-pubsub",
+      "baseRefName": "main",
+      "baseRefOid": "a326254d10e02adab0dd859ecc6a6af63b4945fc",
+      "headRepository": "EskoDijk/coap-pubsub",
+      "headRefName": "pr-fix-double-quotes",
+      "headRefOid": "fc6a953809c12e5ab62d1f42be72f4e44da57d0c",
+      "closedAt": "2025-02-28T20:57:52Z",
+      "mergedAt": "2025-02-28T20:57:52Z",
+      "mergedBy": "jaimejim",
+      "mergeCommit": {
+        "oid": "075d4519dc10c21dd5725bbe5fda82bafa240d03"
+      },
+      "comments": [
+        {
+          "author": "EskoDijk",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "FYI @jaimejim ",
+          "createdAt": "2025-02-28T15:50:14Z",
+          "updatedAt": "2025-02-28T15:50:14Z"
+        }
+      ],
       "reviews": []
     }
   ]
