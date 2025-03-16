@@ -227,8 +227,6 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 
 * "observer-check": An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber (see {{unsubscribe}}). Encoded as a CBOR unsigned integer greater than 0, it ensures subscribers who have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. If another CoAP server hosts the topic-data resource, that server is responsible for applying the "observer-check" value. The default value for this field is 86400, as defined in {{RFC7641}}, which corresponds to 24 hours.
 
-* "topic-history": An optional field used to indicate how many previous resource representations the broker shall store for a topic. Encoded as a CBOR unsigned integer, it defines a counter representing the number of historical resource states the broker retains. This enables subscribers to retrieve past states of the topic data when necessary, useful in scenarios where historical context is required (e.g., for data analytics or auditing). If this field is not present, no historical data will be stored.
-
 * "initialize": An optional boolean field that, when set to `true`, allows the topic-data resource to be pre-populated with a zero-length (empty) representation without an explicit Content-Format. This behavior facilitates one-shot publication and topic creation, enabling CoAP clients to subscribe by default without encountering a `4.04 Not Found` error. If this field is not present or set to 'false', the broker behaves as usual, and the topic-data resource is not initialized.
 
 ## Discovery
@@ -495,8 +493,7 @@ For example, below is a request on the topic "/ps/h9392":
       / topic-content-format /  3: 112,
       / topic-type /            4: "temperature",
       / expiration-date /       5: "2023-04-00T23:59:59Z",
-      / max-subscribers /       6: 100,
-      / topic-history /         8: 10
+      / max-subscribers /       6: 100
    }
 ~~~~
 
@@ -881,6 +878,7 @@ Example:
    }
 ~~~~
 
+As defined in this document, subscribers can retrieve the latest topic-data resource representation. Future specifications can enable subscribers to additionally retrieve old representations of the topic-data resource. The storing of those old representations can be affected, for example, by an additional topic property at the broker that specifies the maximum number of stored old representations of the topic-data. Further details are out of the scope of this document.
 
 ## Rate Limiting {#rate-limit}
 
@@ -908,9 +906,8 @@ Note that the media type application/core-pubsub+cbor MUST be used when these to
 | expiration-date      | 5        | tstr      |
 | max-subscribers      | 6        | uint      |
 | observer-check       | 7        | uint      |
-| topic-history        | 8        | uint      |
-| initialize           | 9        | bool      |
-| conf-filter          | 10       | array     |
+| initialize           | 8        | bool      |
+| conf-filter          | 9       | array     |
 {: #tab-CoAP-Pubsub-Parameters title="CoAP Pubsub Topic Properties and CBOR Encoding"}
 
 # Security Considerations {#seccons}
