@@ -5,10 +5,10 @@
 CoRE Working Group                                            J. Jimenez
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                               M. Koster
-Expires: 1 September 2025                                  Dogtiger Labs
+Expires: 17 September 2025                                 Dogtiger Labs
                                                               A. Keranen
                                                                 Ericsson
-                                                        28 February 2025
+                                                           16 March 2025
 
 
     A publish-subscribe architecture for the Constrained Application
@@ -53,9 +53,9 @@ Status of This Memo
 
 
 
-Jimenez, et al.         Expires 1 September 2025                [Page 1]
+Jimenez, et al.         Expires 17 September 2025               [Page 1]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    Internet-Drafts are draft documents valid for a maximum of six months
@@ -63,7 +63,7 @@ Internet-Draft                 CoAP pubsub                 February 2025
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 September 2025.
+   This Internet-Draft will expire on 17 September 2025.
 
 Copyright Notice
 
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Jimenez, et al.         Expires 1 September 2025                [Page 2]
+Jimenez, et al.         Expires 17 September 2025               [Page 2]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
      3.2.  Topic-Data Interactions . . . . . . . . . . . . . . . . .  24
@@ -165,9 +165,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025                [Page 3]
+Jimenez, et al.         Expires 17 September 2025               [Page 3]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    This document applies the idea of broker-based publish-subscribe to
@@ -196,21 +196,21 @@ Internet-Draft                 CoAP pubsub                 February 2025
       specific topics are sent to a broker.  Interested parties, i.e.
       subscribers, receive these topic-based messages from the broker
       without the original sender knowing the recipients.  The broker
-      handles matching and delivering these messages to the appropriate
+      handlesthe dispatching of these messages to the appropriate
       subscribers.
 
    publishers and subscribers:
       CoAP clients can act as publishers or as subscribers.  Publishers
       send CoAP messages (publications) to the broker on specific
-      topics.  Subscribers have an ongoing observation relation
-      (subscription) to a topic.  Both roles operate without any mutual
-      knowledge, guided by their respective topic interests.
+      topics.  Subscribers have an ongoing relation (subscription) to a
+      topic via CoAP Observe [RFC7641].  Both roles operate without any
+      mutual knowledge, guided by their respective topic interests.
 
    topic collection:
       A set of topics.  A topic collection is hosted as one collection
       resource (See Section 3.1 of [I-D.ietf-core-interfaces]) at the
       broker, and its representation is the list of links to the topic
-      resources corresponding to each topic.
+      resources each corresponding to a topic.
 
    topic:
 
@@ -221,17 +221,18 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025                [Page 4]
+Jimenez, et al.         Expires 17 September 2025               [Page 4]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
-      A set of information concerning a topic, including its
-      configuration and other metadata.  A topic is hosted as one topic
-      resource at the broker, and its representation is the set of topic
-      properties concerning the topic.  All the topic resources
-      associated with the same topic collection share a common base URI,
-      i.e., the URI of the topic collection resource.
+      A resource used for configuration of the subcription and
+      publication properties, which can be set by a client or by the
+      broker.  A topic is represented as a CBOR map containing the topic
+      properties as top-level elements.  A topics is hosted as a
+      resource at the broker.  All topic resources associated with the
+      same topic collection share a common base URI, i.e., the URI of
+      the topic collection resource.
 
    topic property:
       A single element of configuration information that is associated
@@ -245,31 +246,30 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
    broker:
       A CoAP server that hosts one or more topic collections with their
-      topics, and also topic-data resources.  The broker is responsible
-      for the store-and-forward of state update representations, for the
-      topics for which it hosts the corresponding topic-data resources.
-      The broker is also responsible for handling the topic lifecycle as
-      defined in Section 3.1.  The creation, configuration, and
-      discovery of topics at a broker is specified in Section 2.
+      topics, and typically, also topic-data resources.  The broker is
+      responsible for the store-and-forward of state update
+      representations, for the topics for which it hosts the
+      corresponding topic-data resources.  The broker is also
+      responsible for handling the topic lifecycle as defined in
+      Section 3.1.  The creation, configuration, and discovery of topics
+      at a broker is specified in Section 2.
 
 1.2.  CoAP Publish-Subscribe Architecture
 
    Figure 1 shows a simple publish-subscribe architecture over CoAP.
 
-   Topics are created by the broker, but the initial configuration can
-   be proposed by a client (e.g., a publisher or a dedicated
-   administrator) over the RESTful interface of a corresponding topic
-   resource hosted by the broker.
-
-   Publishers submit their data over the RESTful interface of a topic-
-   data resource corresponding to the topic, which may be hosted by the
-   broker.  Subscribers to a topic are notified of new publications by
-   using Observe [RFC7641] on the corresponding topic-data resource.
+   The broker can create its hosted topics and set their initial
+   configurations.  Alternatively, topics can be created together with
+   their initial configuration by a client (e.g., a publisher or a
+   dedicated administrator), over the RESTful interface of the topic
+   collection resource hosted by the broker.
 
    The broker is responsible for the store-and-forward of state update
-   representations between CoAP clients.  Subscribers observing a
-   resource will receive notifications, the delivery of which is done on
-   a best-effort basis.
+   representations between CoAP clients.  Publishers submit their data
+   over the RESTful interface of a topic-data resource corresponding to
+   the topic, which may be hosted by the broker.  Subscribers to a topic
+   are notified of new publications by using Observe [RFC7641] on the
+   corresponding topic-data resource.
 
 
 
@@ -277,9 +277,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025                [Page 5]
+Jimenez, et al.         Expires 17 September 2025               [Page 5]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
            CoAP                      CoAP                 CoAP
@@ -333,13 +333,13 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025                [Page 6]
+Jimenez, et al.         Expires 17 September 2025               [Page 6]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    The broker exports one or more topic collection resources, with
-   resource type "core.ps.coll" defined in Section 6 of this document.
+   resource type "core.ps.coll" defined in Section 6.3 of this document.
    The interfaces for the topic collection resource is defined in
    Section 2.4.
 
@@ -389,9 +389,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025                [Page 7]
+Jimenez, et al.         Expires 17 September 2025               [Page 7]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    Publication and subscription to a topic occur at a link, where the
@@ -445,9 +445,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025                [Page 8]
+Jimenez, et al.         Expires 17 September 2025               [Page 8]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    *  "topic-content-format": This optional field specifies the CoAP
@@ -501,9 +501,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025                [Page 9]
+Jimenez, et al.         Expires 17 September 2025               [Page 9]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
       behavior facilitates one-shot publication and topic creation,
@@ -557,9 +557,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 10]
+Jimenez, et al.         Expires 17 September 2025              [Page 10]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
       Request:
@@ -613,9 +613,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 11]
+Jimenez, et al.         Expires 17 September 2025              [Page 11]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
       Request:
@@ -669,9 +669,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 12]
+Jimenez, et al.         Expires 17 September 2025              [Page 12]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    In certain scenarios, the method described herein may not be
@@ -725,9 +725,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 13]
+Jimenez, et al.         Expires 17 September 2025              [Page 13]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    The CoRE Link Format responses shown in the examples in this section
@@ -781,9 +781,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 14]
+Jimenez, et al.         Expires 17 September 2025              [Page 14]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
 2.4.2.  Getting Topics by Topic Properties
@@ -837,9 +837,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 15]
+Jimenez, et al.         Expires 17 September 2025              [Page 15]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
 2.4.3.  Creating a Topic
@@ -893,9 +893,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 16]
+Jimenez, et al.         Expires 17 September 2025              [Page 16]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
       Request:
@@ -949,9 +949,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 17]
+Jimenez, et al.         Expires 17 September 2025              [Page 17]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
       Request:
@@ -1005,9 +1005,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 18]
+Jimenez, et al.         Expires 17 September 2025              [Page 18]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    Both request and response MUST have Content-Format set to
@@ -1061,9 +1061,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 19]
+Jimenez, et al.         Expires 17 September 2025              [Page 19]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    Similarly, decreasing "max-subscribers" will also cause that some
@@ -1117,9 +1117,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 20]
+Jimenez, et al.         Expires 17 September 2025              [Page 20]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    *  Limiting the number of subscribers will cause cancellation of
@@ -1173,9 +1173,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 21]
+Jimenez, et al.         Expires 17 September 2025              [Page 21]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
       Request:
@@ -1229,9 +1229,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 22]
+Jimenez, et al.         Expires 17 September 2025              [Page 22]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
       Request:
@@ -1285,9 +1285,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 23]
+Jimenez, et al.         Expires 17 September 2025              [Page 23]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
                     HALF                          FULLY
@@ -1341,9 +1341,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 24]
+Jimenez, et al.         Expires 17 September 2025              [Page 24]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    On success, the broker returns a 2.04 (Changed) response.  However,
@@ -1397,9 +1397,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 25]
+Jimenez, et al.         Expires 17 September 2025              [Page 25]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
       Request:
@@ -1453,9 +1453,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 26]
+Jimenez, et al.         Expires 17 September 2025              [Page 26]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
       Request:
@@ -1509,9 +1509,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 27]
+Jimenez, et al.         Expires 17 September 2025              [Page 27]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    As per [RFC7641] a server that transmits notifications mostly in non-
@@ -1565,9 +1565,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 28]
+Jimenez, et al.         Expires 17 September 2025              [Page 28]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    If the target URI does not match an existing resource or the topic is
@@ -1621,9 +1621,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 29]
+Jimenez, et al.         Expires 17 September 2025              [Page 29]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
 4.  Encoding of PubSub Topic Properties
@@ -1677,9 +1677,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 30]
+Jimenez, et al.         Expires 17 September 2025              [Page 30]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    Communications between each client and the broker are RECOMMENDED to
@@ -1733,9 +1733,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 31]
+Jimenez, et al.         Expires 17 September 2025              [Page 31]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
 6.1.  Media Type Registrations
@@ -1789,9 +1789,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 32]
+Jimenez, et al.         Expires 17 September 2025              [Page 32]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    Content Type:  application/core-pubsub+cbor
@@ -1845,9 +1845,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 33]
+Jimenez, et al.         Expires 17 September 2025              [Page 33]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    approve the early allocation before registration.  In addition,
@@ -1901,9 +1901,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 34]
+Jimenez, et al.         Expires 17 September 2025              [Page 34]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    These registration policies are designed to accommodate different use
@@ -1957,9 +1957,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 35]
+Jimenez, et al.         Expires 17 September 2025              [Page 35]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    [BCP100]   Best Current Practice 100,
@@ -2013,9 +2013,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 36]
+Jimenez, et al.         Expires 17 September 2025              [Page 36]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    [RFC6690]  Shelby, Z., "Constrained RESTful Environments (CoRE) Link
@@ -2069,9 +2069,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 37]
+Jimenez, et al.         Expires 17 September 2025              [Page 37]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    [I-D.ietf-ace-oscore-gm-admin]
@@ -2125,9 +2125,9 @@ Internet-Draft                 CoAP pubsub                 February 2025
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 38]
+Jimenez, et al.         Expires 17 September 2025              [Page 38]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    [RFC9594]  Palombini, F. and M. Tiloca, "Key Provisioning for Group
@@ -2181,9 +2181,9 @@ A.2.  Version -14 to -15
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 39]
+Jimenez, et al.         Expires 17 September 2025              [Page 39]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
    *  Modified all examples to conform to RFC9594.
@@ -2237,9 +2237,9 @@ Acknowledgements
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 40]
+Jimenez, et al.         Expires 17 September 2025              [Page 40]
 
-Internet-Draft                 CoAP pubsub                 February 2025
+Internet-Draft                 CoAP pubsub                    March 2025
 
 
 Contributors
@@ -2293,4 +2293,4 @@ Authors' Addresses
 
 
 
-Jimenez, et al.         Expires 1 September 2025               [Page 41]
+Jimenez, et al.         Expires 17 September 2025              [Page 41]
