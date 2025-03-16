@@ -90,16 +90,16 @@ This specification makes use of the following terminology:
 
 {:vspace}
 publish-subscribe (pubsub):
-: A message communication model where messages associated with specific topics are sent to a broker. Interested parties, i.e. subscribers, receive these topic-based messages from the broker without the original sender knowing the recipients. The broker handles matching and delivering these messages to the appropriate subscribers.
+: A message communication model where messages associated with specific topics are sent to a broker. Interested parties, i.e. subscribers, receive these topic-based messages from the broker without the original sender knowing the recipients. The broker handlesthe dispatching of these messages to the appropriate subscribers.
 
 publishers and subscribers:
-: CoAP clients can act as publishers or as subscribers. Publishers send CoAP messages (publications) to the broker on specific topics. Subscribers have an ongoing observation relation (subscription) to a topic. Both roles operate without any mutual knowledge, guided by their respective topic interests.
+: CoAP clients can act as publishers or as subscribers. Publishers send CoAP messages (publications) to the broker on specific topics. Subscribers have an ongoing relation (subscription) to a topic via CoAP Observe {{RFC7641}}. Both roles operate without any mutual knowledge, guided by their respective topic interests.
 
 topic collection:
-: A set of topics. A topic collection is hosted as one collection resource (See {{Section 3.1 of I-D.ietf-core-interfaces}}) at the broker, and its representation is the list of links to the topic resources corresponding to each topic.
+: A set of topics. A topic collection is hosted as one collection resource (See {{Section 3.1 of I-D.ietf-core-interfaces}}) at the broker, and its representation is the list of links to the topic resources each corresponding to a topic.
 
 topic:
-: A set of information concerning a topic, including its configuration and other metadata. A topic is hosted as one topic resource at the broker, and its representation is the set of topic properties concerning the topic. All the topic resources associated with the same topic collection share a common base URI, i.e., the URI of the topic collection resource.
+: A resource used for configuration of the subcription and publication properties, which can be set by a client or by the broker. A topic is represented as a CBOR map containing the topic properties as top-level elements. A topics is hosted as a resource at the broker. All topic resources associated with the same topic collection share a common base URI, i.e., the URI of the topic collection resource.
 
 topic property:
 : A single element of configuration information that is associated to a topic.
@@ -108,17 +108,16 @@ topic-data resource:
 : A resource where clients can publish data and/or subscribe to data for a specific topic. The representation of the topic resource corresponding to such a topic also specifies the URI to the present topic-data resource.
 
 broker:
-: A CoAP server that hosts one or more topic collections with their topics, and also topic-data resources. The broker is responsible for the store-and-forward of state update representations, for the topics for which it hosts the corresponding topic-data resources. The broker is also responsible for handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
+: A CoAP server that hosts one or more topic collections with their topics, and typically, also topic-data resources. The broker is responsible for the store-and-forward of state update representations, for the topics for which it hosts the corresponding topic-data resources. The broker is also responsible for handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
 
 ## CoAP Publish-Subscribe Architecture
 
 {{fig-arch}} shows a simple publish-subscribe architecture over CoAP.
 
-Topics are created by the broker, but the initial configuration can be proposed by a client (e.g., a publisher or a dedicated administrator) over the RESTful interface of a corresponding topic resource hosted by the broker.
+The broker can create its hosted topics and set their initial configurations. Alternatively, topics can be created together with their initial configuration by a client (e.g., a publisher or a dedicated administrator), over the RESTful interface of the topic collection resource hosted by the broker.
 
-Publishers submit their data over the RESTful interface of a topic-data resource corresponding to the topic, which may be hosted by the broker. Subscribers to a topic are notified of new publications by using Observe {{RFC7641}} on the corresponding topic-data resource.
+The broker is responsible for the store-and-forward of state update representations between CoAP clients. Publishers submit their data over the RESTful interface of a topic-data resource corresponding to the topic, which may be hosted by the broker. Subscribers to a topic are notified of new publications by using Observe {{RFC7641}} on the corresponding topic-data resource.
 
-The broker is responsible for the store-and-forward of state update representations between CoAP clients. Subscribers observing a resource will receive notifications, the delivery of which is done on a best-effort basis.
 
 ~~~~ aasvg
      CoAP                      CoAP                 CoAP
@@ -160,7 +159,7 @@ The topic-data interactions are publish, subscribe, unsubscribe, read, and delet
 ~~~~
 {: #fig-api title="Resources of a Broker" artwork-align="center"}
 
-The broker exports one or more topic collection resources, with resource type "core.ps.coll" defined in {{iana}} of this document. The interfaces for the topic collection resource is defined in {{topic-collection-interactions}}.
+The broker exports one or more topic collection resources, with resource type "core.ps.coll" defined in {{iana-rt}} of this document. The interfaces for the topic collection resource is defined in {{topic-collection-interactions}}.
 
 A topic collection resource can have topic resources as its child resources, with resource type "core.ps.conf". Other child resource types are currently not defined for a topic collection resource.
 
