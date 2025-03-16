@@ -165,7 +165,7 @@ A topic collection resource can have topic resources as its child resources, wit
 
 # PubSub Topics {#topics}
 
-The configuration side of a publish and subscribe broker consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}). Each topic is associated with a topic resource and a topic-data resource. The topic resource is used by a client creating or administering a topic. The topic-data resource is used by the publishers and the subscribers to a topic.
+The broker consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}). Each topic contains a set of properties for configuration, one of which is the topic-data resource. The topic resource is used by a client creating or administering a topic. The topic-data resource is used by the publishers and the subscribers to share the data values.
 
 ~~~~ aasvg
               ___
@@ -195,9 +195,9 @@ Each topic is represented as a link, where the link target is the URI of the cor
 
 Publication and subscription to a topic occur at a link, where the link target is the URI of the corresponding topic-data resource. Such a link is specified by the "topic-data" topic property within the topic resource (see {{topic-properties}}).
 
-A topic resource with a link to a topic-data resource can also be simply called "topic".
+A topic resource can also be simply called "topic".
 
-The list of links to the topic resources can be retrieved from the associated topic collection resource, represented as a CoRE Link Format document {{RFC6690}} where each link is a topic resource of type "core.ps.conf" as defined in this document.
+The list of links to the topic resources can be retrieved from the associated topic collection resource, represented as a CoRE Link Format document {{RFC6690}} where each link targets a topic resource of type "core.ps.conf" as defined in this document.
 
 ## Topic Representation {#topic-resource-representation}
 
@@ -215,7 +215,7 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 
 * "topic-data": A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI as a CBOR text string.
 
-* "resource-type": A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value should be "core.ps.data".
+* "resource-type": A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value is typically "core.ps.data", i.e., when using the topic-data resource defined in this document.
 
 * "topic-content-format": This optional field specifies the CoAP Content-Format identifier of the topic-data resource representation as an unsigned integer, e.g., 60 for the media-type "application/cbor".
 
@@ -223,13 +223,13 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 
 * "expiration-date": An optional field used to indicate the expiration date of the topic. It encodes the expiration date as a CBOR text string. The value should be a date string as defined in {{Section 3.4.1 of RFC8949@STD94}} (e.g., the CBOR encoded version of "2023-03-31T23:59:59Z"). If this field is not present, the topic will not expire automatically.
 
-* "max-subscribers": An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as an unsigned CBOR integer. If this field is not present or if the field is empty, then there is no limit to the number of simultaneous subscribers allowed. The broker can use this field to limit the number of subscribers for the topic.
+* "max-subscribers": An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as a CBOR unsigned integer. If this field is not present, then there is no limit to the number of simultaneous subscribers allowed.
 
 * "observer-check": An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber (see {{unsubscribe}}). Encoded as a CBOR unsigned integer greater than 0, it ensures subscribers who have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. If another CoAP server hosts the topic-data resource, that server is responsible for applying the "observer-check" value. The default value for this field is 86400, as defined in {{RFC7641}}, which corresponds to 24 hours.
 
-* "topic-history": An optional field used to indicate how many previous resource representations the broker shall store for a topic. Encoded as an unsigned CBOR integer, it defines a counter representing the number of historical resource states the broker retains. This enables subscribers to retrieve past states of the topic data when necessary, useful in scenarios where historical context is required (e.g., for data analytics or auditing). If this field is not present, no historical data will be stored.
+* "topic-history": An optional field used to indicate how many previous resource representations the broker shall store for a topic. Encoded as a CBOR unsigned integer, it defines a counter representing the number of historical resource states the broker retains. This enables subscribers to retrieve past states of the topic data when necessary, useful in scenarios where historical context is required (e.g., for data analytics or auditing). If this field is not present, no historical data will be stored.
 
-* "initialize": An optional boolean field that, when set to `true`, allows the topic-data resource to be pre-populated with a zero-length (empty) payload without an explicit Content-Format. This behavior facilitates one-shot publication and topic creation, enabling CoAP clients to subscribe by default without encountering a `4.04 Not Found` error. If this field is not present or set to 'false', the broker behaves as usual, and the topic-data resource is not initialized.
+* "initialize": An optional boolean field that, when set to `true`, allows the topic-data resource to be pre-populated with a zero-length (empty) representation without an explicit Content-Format. This behavior facilitates one-shot publication and topic creation, enabling CoAP clients to subscribe by default without encountering a `4.04 Not Found` error. If this field is not present or set to 'false', the broker behaves as usual, and the topic-data resource is not initialized.
 
 ## Discovery
 
@@ -266,7 +266,7 @@ The following example shows an endpoint discovering a broker using the "core.ps"
 
 ### Topic Collection Discovery
 
-A broker SHOULD offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point is the topic collection resource collecting the topics for those topics (see {{Section 1.2.2 of RFC6690}}) and is identified by the resource type "core.ps.coll".
+A broker SHOULD offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point is the topic collection resource (see {{Section 1.2.2 of RFC6690}}) and is identified by the resource type "core.ps.coll".
 
 The specific resource path is left for implementations, examples in this document use the "/ps" path. The interactions with a topic collection are further defined in {{topic-collection-interactions}}.
 
@@ -317,15 +317,13 @@ Below is an example of discovery via /.well-known/core with query rt=core.ps.con
    </other/path/2e3570>;rt="core.ps.conf"
 ~~~~
 
-In certain scenarios, the method described herein may not be applicable, particularly when the server restricts topic availability to authenticated clients only. In such cases, it is recommended to utilize the procedure outlined in {{topic-get-all}} for topic discovery.
+In certain scenarios, the method described herein may not be applicable, particularly when the server restricts topic availability to authenticated clients only. In such cases, it is recommended to utilize the procedure outlined in {{topic-get-all}} and {{topic-get-properties}} for topic discovery.
 
 ### Topic-Data Discovery
 
-Within a topic, there is the "topic-data" topic property containing the URI of the topic-data resource that a CoAP client can subscribe to and/or publish to. The topic-data resources use the resource type 'core.ps.data'.
+Within a topic, there is the "topic-data" topic property. The "topic-data" contains the URI of the resource used for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data resource (see {{topic-get-resource}}).
 
-The "topic-data" topic property value contains the URI of the topic-data resource for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data resource (see {{topic-get-resource}}).
-
-It is also possible to discover a list of topic-data resources by sending a request to the collection with a query rt=core.ps.data as shown below. Any topic collection resource MUST support this query.
+The topic-data resources use the resource type 'core.ps.data'. It is also possible to discover a list of topic-data resources by sending a request to the collection resource with a query parameter rt=core.ps.data as shown below. Any topic collection resource MUST support this query.
 
 ~~~~
    Request:
@@ -362,7 +360,7 @@ A client can request a collection of the topics present in the broker by making 
 
 On success, the broker returns a 2.05 (Content) response, specifying the list of links to topic resources associated with this topic collection (see {{topic-resource-representation}}).
 
-A client MAY retrieve a list of links to topics it is authorized to access, based on its permissions. A server MUST implement topic collection discovery.
+A client MAY retrieve a list of links to topics it is authorized to access, based on its permissions. A broker MUST implement topic collection discovery.
 
 The payload content-format 40 ("application/link-format") MUST be at least supported for the topic collection resource.
 
