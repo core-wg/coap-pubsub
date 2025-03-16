@@ -1541,7 +1541,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
       <h2 id="name-pubsub-topics">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-pubsub-topics" class="section-name selfRef">PubSub Topics</a>
       </h2>
-<p id="section-2-1">The configuration side of a publish and subscribe broker consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see <a href="#fig-topic" class="auto internal xref">Figure 3</a>). Each topic is associated with a topic resource and a topic-data resource. The topic resource is used by a client creating or administering a topic. The topic-data resource is used by the publishers and the subscribers to a topic.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-1">The broker consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see <a href="#fig-topic" class="auto internal xref">Figure 3</a>). Each topic contains a set of properties for configuration, one of which is the topic-data resource. The topic resource is used by a client creating or administering a topic. The topic-data resource is used by the publishers and the subscribers to share the data values.<a href="#section-2-1" class="pilcrow">¶</a></p>
 <span id="name-topic-and-topic-data-resour"></span><div id="fig-topic">
 <figure id="figure-3">
         <div id="section-2-2.1">
@@ -1699,8 +1699,8 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
         </h3>
 <p id="section-2.1-1">Each topic is represented as a link, where the link target is the URI of the corresponding topic resource.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
 <p id="section-2.1-2">Publication and subscription to a topic occur at a link, where the link target is the URI of the corresponding topic-data resource. Such a link is specified by the "topic-data" topic property within the topic resource (see <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>).<a href="#section-2.1-2" class="pilcrow">¶</a></p>
-<p id="section-2.1-3">A topic resource with a link to a topic-data resource can also be simply called "topic".<a href="#section-2.1-3" class="pilcrow">¶</a></p>
-<p id="section-2.1-4">The list of links to the topic resources can be retrieved from the associated topic collection resource, represented as a CoRE Link Format document <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span> where each link is a topic resource of type "core.ps.conf" as defined in this document.<a href="#section-2.1-4" class="pilcrow">¶</a></p>
+<p id="section-2.1-3">A topic resource can also be simply called "topic".<a href="#section-2.1-3" class="pilcrow">¶</a></p>
+<p id="section-2.1-4">The list of links to the topic resources can be retrieved from the associated topic collection resource, represented as a CoRE Link Format document <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span> where each link targets a topic resource of type "core.ps.conf" as defined in this document.<a href="#section-2.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="topic-resource-representation">
@@ -1725,7 +1725,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
               <p id="section-2.2.1-2.2.1">"topic-data": A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI as a CBOR text string.<a href="#section-2.2.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.3">
-              <p id="section-2.2.1-2.3.1">"resource-type": A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value should be "core.ps.data".<a href="#section-2.2.1-2.3.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.1-2.3.1">"resource-type": A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value is typically "core.ps.data", i.e., when using the topic-data resource defined in this document.<a href="#section-2.2.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.4">
               <p id="section-2.2.1-2.4.1">"topic-content-format": This optional field specifies the CoAP Content-Format identifier of the topic-data resource representation as an unsigned integer, e.g., 60 for the media-type "application/cbor".<a href="#section-2.2.1-2.4.1" class="pilcrow">¶</a></p>
@@ -1737,16 +1737,16 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
               <p id="section-2.2.1-2.6.1">"expiration-date": An optional field used to indicate the expiration date of the topic. It encodes the expiration date as a CBOR text string. The value should be a date string as defined in Section <a href="https://rfc-editor.org/rfc/rfc8949#section-3.4.1" class="relref">3.4.1</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span> (e.g., the CBOR encoded version of "2023-03-31T23:59:59Z"). If this field is not present, the topic will not expire automatically.<a href="#section-2.2.1-2.6.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.7">
-              <p id="section-2.2.1-2.7.1">"max-subscribers": An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as an unsigned CBOR integer. If this field is not present or if the field is empty, then there is no limit to the number of simultaneous subscribers allowed. The broker can use this field to limit the number of subscribers for the topic.<a href="#section-2.2.1-2.7.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.1-2.7.1">"max-subscribers": An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as a CBOR unsigned integer. If this field is not present, then there is no limit to the number of simultaneous subscribers allowed.<a href="#section-2.2.1-2.7.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.8">
               <p id="section-2.2.1-2.8.1">"observer-check": An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber (see <a href="#unsubscribe" class="auto internal xref">Section 3.2.3</a>). Encoded as a CBOR unsigned integer greater than 0, it ensures subscribers who have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. If another CoAP server hosts the topic-data resource, that server is responsible for applying the "observer-check" value. The default value for this field is 86400, as defined in <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, which corresponds to 24 hours.<a href="#section-2.2.1-2.8.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.9">
-              <p id="section-2.2.1-2.9.1">"topic-history": An optional field used to indicate how many previous resource representations the broker shall store for a topic. Encoded as an unsigned CBOR integer, it defines a counter representing the number of historical resource states the broker retains. This enables subscribers to retrieve past states of the topic data when necessary, useful in scenarios where historical context is required (e.g., for data analytics or auditing). If this field is not present, no historical data will be stored.<a href="#section-2.2.1-2.9.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.1-2.9.1">"topic-history": An optional field used to indicate how many previous resource representations the broker shall store for a topic. Encoded as a CBOR unsigned integer, it defines a counter representing the number of historical resource states the broker retains. This enables subscribers to retrieve past states of the topic data when necessary, useful in scenarios where historical context is required (e.g., for data analytics or auditing). If this field is not present, no historical data will be stored.<a href="#section-2.2.1-2.9.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.10">
-              <p id="section-2.2.1-2.10.1">"initialize": An optional boolean field that, when set to <code>true</code>, allows the topic-data resource to be pre-populated with a zero-length (empty) payload without an explicit Content-Format. This behavior facilitates one-shot publication and topic creation, enabling CoAP clients to subscribe by default without encountering a <code>4.04 Not Found</code> error. If this field is not present or set to 'false', the broker behaves as usual, and the topic-data resource is not initialized.<a href="#section-2.2.1-2.10.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.1-2.10.1">"initialize": An optional boolean field that, when set to <code>true</code>, allows the topic-data resource to be pre-populated with a zero-length (empty) representation without an explicit Content-Format. This behavior facilitates one-shot publication and topic creation, enabling CoAP clients to subscribe by default without encountering a <code>4.04 Not Found</code> error. If this field is not present or set to 'false', the broker behaves as usual, and the topic-data resource is not initialized.<a href="#section-2.2.1-2.10.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -1796,7 +1796,7 @@ In general, a broker <span class="bcp14">MAY</span> include any CoRE Link Format
           <h4 id="name-topic-collection-discovery">
 <a href="#section-2.3.2" class="section-number selfRef">2.3.2. </a><a href="#name-topic-collection-discovery" class="section-name selfRef">Topic Collection Discovery</a>
           </h4>
-<p id="section-2.3.2-1">A broker <span class="bcp14">SHOULD</span> offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point is the topic collection resource collecting the topics for those topics (see <span><a href="https://rfc-editor.org/rfc/rfc6690#section-1.2.2" class="relref">Section 1.2.2</a> of [<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>) and is identified by the resource type "core.ps.coll".<a href="#section-2.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.2-1">A broker <span class="bcp14">SHOULD</span> offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point is the topic collection resource (see <span><a href="https://rfc-editor.org/rfc/rfc6690#section-1.2.2" class="relref">Section 1.2.2</a> of [<a href="#RFC6690" class="cite xref">RFC6690</a>]</span>) and is identified by the resource type "core.ps.coll".<a href="#section-2.3.2-1" class="pilcrow">¶</a></p>
 <p id="section-2.3.2-2">The specific resource path is left for implementations, examples in this document use the "/ps" path. The interactions with a topic collection are further defined in <a href="#topic-collection-interactions" class="auto internal xref">Section 2.4</a>.<a href="#section-2.3.2-2" class="pilcrow">¶</a></p>
 <p id="section-2.3.2-3">Since the representation of the topic collection resource includes the links to the associated topic resources, it is not required to locate those links under "/.well-known/core", also in order to limit the size of the CoRE Link Format document returned as result of the discovery.<a href="#section-2.3.2-3" class="pilcrow">¶</a></p>
 <p id="section-2.3.2-4">Example:<a href="#section-2.3.2-4" class="pilcrow">¶</a></p>
@@ -1847,7 +1847,7 @@ This is because the "ct" attribute is an optional hint, which is not needed in t
    &lt;/other/path/2e3570&gt;;rt="core.ps.conf"
 </pre><a href="#section-2.3.3-3" class="pilcrow">¶</a>
 </div>
-<p id="section-2.3.3-4">In certain scenarios, the method described herein may not be applicable, particularly when the server restricts topic availability to authenticated clients only. In such cases, it is recommended to utilize the procedure outlined in <a href="#topic-get-all" class="auto internal xref">Section 2.4.1</a> for topic discovery.<a href="#section-2.3.3-4" class="pilcrow">¶</a></p>
+<p id="section-2.3.3-4">In certain scenarios, the method described herein may not be applicable, particularly when the server restricts topic availability to authenticated clients only. In such cases, it is recommended to utilize the procedure outlined in <a href="#topic-get-all" class="auto internal xref">Section 2.4.1</a> and <a href="#topic-get-properties" class="auto internal xref">Section 2.4.2</a> for topic discovery.<a href="#section-2.3.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="topic-data-discovery">
@@ -1855,10 +1855,9 @@ This is because the "ct" attribute is an optional hint, which is not needed in t
           <h4 id="name-topic-data-discovery">
 <a href="#section-2.3.4" class="section-number selfRef">2.3.4. </a><a href="#name-topic-data-discovery" class="section-name selfRef">Topic-Data Discovery</a>
           </h4>
-<p id="section-2.3.4-1">Within a topic, there is the "topic-data" topic property containing the URI of the topic-data resource that a CoAP client can subscribe to and/or publish to. The topic-data resources use the resource type 'core.ps.data'.<a href="#section-2.3.4-1" class="pilcrow">¶</a></p>
-<p id="section-2.3.4-2">The "topic-data" topic property value contains the URI of the topic-data resource for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data resource (see <a href="#topic-get-resource" class="auto internal xref">Section 2.5.1</a>).<a href="#section-2.3.4-2" class="pilcrow">¶</a></p>
-<p id="section-2.3.4-3">It is also possible to discover a list of topic-data resources by sending a request to the collection with a query rt=core.ps.data as shown below. Any topic collection resource <span class="bcp14">MUST</span> support this query.<a href="#section-2.3.4-3" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-2.3.4-4">
+<p id="section-2.3.4-1">Within a topic, there is the "topic-data" topic property. The "topic-data" contains the URI of the resource used for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data resource (see <a href="#topic-get-resource" class="auto internal xref">Section 2.5.1</a>).<a href="#section-2.3.4-1" class="pilcrow">¶</a></p>
+<p id="section-2.3.4-2">The topic-data resources use the resource type 'core.ps.data'. It is also possible to discover a list of topic-data resources by sending a request to the collection resource with a query parameter rt=core.ps.data as shown below. Any topic collection resource <span class="bcp14">MUST</span> support this query.<a href="#section-2.3.4-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-2.3.4-3">
 <pre>
    Request:
 
@@ -1872,12 +1871,12 @@ This is because the "ct" attribute is an optional hint, which is not needed in t
    Content-Format: 40 (application/link-format)
    Payload:
    &lt;/ps/data/62e4f8d&gt;
-</pre><a href="#section-2.3.4-4" class="pilcrow">¶</a>
+</pre><a href="#section-2.3.4-3" class="pilcrow">¶</a>
 </div>
-<p id="section-2.3.4-5">Note that the "rt" attribute is not included in the returned link in the example response.
+<p id="section-2.3.4-4">Note that the "rt" attribute is not included in the returned link in the example response.
 This is because the query in the request already constrains all links in the response to be only of type "core.ps.data".
 Therefore, including the "rt" attribute for each returned link would be unnecessary and would make the response size much larger.
-So the broker, in this example case, was implemented to elide these attributes always, to minimize the size of discovery response payloads.<a href="#section-2.3.4-5" class="pilcrow">¶</a></p>
+So the broker, in this example case, was implemented to elide these attributes always, to minimize the size of discovery response payloads.<a href="#section-2.3.4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1899,7 +1898,7 @@ In general, a broker <span class="bcp14">MAY</span> include any CoRE Link Format
           </h4>
 <p id="section-2.4.1-1">A client can request a collection of the topics present in the broker by making a GET request to the topic collection URI.<a href="#section-2.4.1-1" class="pilcrow">¶</a></p>
 <p id="section-2.4.1-2">On success, the broker returns a 2.05 (Content) response, specifying the list of links to topic resources associated with this topic collection (see <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>).<a href="#section-2.4.1-2" class="pilcrow">¶</a></p>
-<p id="section-2.4.1-3">A client <span class="bcp14">MAY</span> retrieve a list of links to topics it is authorized to access, based on its permissions. A server <span class="bcp14">MUST</span> implement topic collection discovery.<a href="#section-2.4.1-3" class="pilcrow">¶</a></p>
+<p id="section-2.4.1-3">A client <span class="bcp14">MAY</span> retrieve a list of links to topics it is authorized to access, based on its permissions. A broker <span class="bcp14">MUST</span> implement topic collection discovery.<a href="#section-2.4.1-3" class="pilcrow">¶</a></p>
 <p id="section-2.4.1-4">The payload content-format 40 ("application/link-format") <span class="bcp14">MUST</span> be at least supported for the topic collection resource.<a href="#section-2.4.1-4" class="pilcrow">¶</a></p>
 <p id="section-2.4.1-5">Example:<a href="#section-2.4.1-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.4.1-6">
