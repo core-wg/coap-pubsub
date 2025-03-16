@@ -1743,10 +1743,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
               <p id="section-2.2.1-2.8.1">"observer-check": An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber (see <a href="#unsubscribe" class="auto internal xref">Section 3.2.3</a>). Encoded as a CBOR unsigned integer greater than 0, it ensures subscribers who have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. If another CoAP server hosts the topic-data resource, that server is responsible for applying the "observer-check" value. The default value for this field is 86400, as defined in <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, which corresponds to 24 hours.<a href="#section-2.2.1-2.8.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.9">
-              <p id="section-2.2.1-2.9.1">"topic-history": An optional field used to indicate how many previous resource representations the broker shall store for a topic. Encoded as a CBOR unsigned integer, it defines a counter representing the number of historical resource states the broker retains. This enables subscribers to retrieve past states of the topic data when necessary, useful in scenarios where historical context is required (e.g., for data analytics or auditing). If this field is not present, no historical data will be stored.<a href="#section-2.2.1-2.9.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-2.2.1-2.10">
-              <p id="section-2.2.1-2.10.1">"initialize": An optional boolean field that, when set to <code>true</code>, allows the topic-data resource to be pre-populated with a zero-length (empty) representation without an explicit Content-Format. This behavior facilitates one-shot publication and topic creation, enabling CoAP clients to subscribe by default without encountering a <code>4.04 Not Found</code> error. If this field is not present or set to 'false', the broker behaves as usual, and the topic-data resource is not initialized.<a href="#section-2.2.1-2.10.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.1-2.9.1">"initialize": An optional boolean field that, when set to <code>true</code>, allows the topic-data resource to be pre-populated with a zero-length (empty) representation without an explicit Content-Format. This behavior facilitates one-shot publication and topic creation, enabling CoAP clients to subscribe by default without encountering a <code>4.04 Not Found</code> error. If this field is not present or set to 'false', the broker behaves as usual, and the topic-data resource is not initialized.<a href="#section-2.2.1-2.9.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -2035,8 +2032,7 @@ Eliding these attributes helps to minimize the size of the response payload.<a h
       / topic-content-format /  3: 112,
       / topic-type /            4: "temperature",
       / expiration-date /       5: "2023-04-00T23:59:59Z",
-      / max-subscribers /       6: 100,
-      / topic-history /         8: 10
+      / max-subscribers /       6: 100
    }
 </pre><a href="#section-2.5.1-6" class="pilcrow">¶</a>
 </div>
@@ -2502,6 +2498,7 @@ The URI for this resource is indicated in the "topic-data" topic property value.
    }
 </pre><a href="#section-3.3-5" class="pilcrow">¶</a>
 </div>
+<p id="section-3.3-6">As defined in this document, subscribers can retrieve the latest topic-data resource representation. Future specifications can enable subscribers to additionally retrieve old representations of the topic-data resource. The storing of those old representations can be affected, for example, by an additional topic property at the broker that specifies the maximum number of stored old representations of the topic-data. Further details are out of the scope of this document.<a href="#section-3.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="rate-limit">
@@ -2579,18 +2576,13 @@ The URI for this resource is indicated in the "topic-data" topic property value.
             <td class="text-left" rowspan="1" colspan="1">uint</td>
           </tr>
           <tr>
-            <td class="text-left" rowspan="1" colspan="1">topic-history</td>
-            <td class="text-left" rowspan="1" colspan="1">8</td>
-            <td class="text-left" rowspan="1" colspan="1">uint</td>
-          </tr>
-          <tr>
             <td class="text-left" rowspan="1" colspan="1">initialize</td>
-            <td class="text-left" rowspan="1" colspan="1">9</td>
+            <td class="text-left" rowspan="1" colspan="1">8</td>
             <td class="text-left" rowspan="1" colspan="1">bool</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">conf-filter</td>
-            <td class="text-left" rowspan="1" colspan="1">10</td>
+            <td class="text-left" rowspan="1" colspan="1">9</td>
             <td class="text-left" rowspan="1" colspan="1">array</td>
           </tr>
         </tbody>
