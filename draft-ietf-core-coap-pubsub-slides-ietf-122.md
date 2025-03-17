@@ -4,7 +4,7 @@ autoscale: true
 theme: Next, 9
 slide-dividers: #
 
-# [fit] A pubsub architecture for CoAP 
+# [fit] A pubsub architecture for CoAP
 ## [fit] draft-ietf-core-coap-pubsub
 
 Jaime Jiménez, IETF121, 2024-11-05
@@ -56,5 +56,5 @@ Jaime Jiménez, IETF121, 2024-11-05
 
 # Next Steps
 
-- Interop 
+- Interop
 - **WGLC?**
