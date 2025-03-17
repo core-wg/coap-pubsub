@@ -31,7 +31,7 @@ contributor:
   org: RISE AB
   street: Isafjordsgatan 22
   city: Kista
-  code: SE-16440 Stockholm
+  code: SE-16440
   country: Sweden
   email: marco.tiloca@ri.se
 
@@ -96,7 +96,7 @@ This specification makes use of the following terminology:
 
 {:vspace}
 publish-subscribe (pubsub):
-: A message communication model where messages associated with specific topics are sent to a broker. Interested parties, i.e., subscribers, receive these topic-based messages from the broker without the original sender knowing the recipients. The broker handlesthe dispatching of these messages to the appropriate subscribers.
+: A message communication model where messages associated with specific topics are sent to a broker. Interested parties, i.e., subscribers, receive these topic-based messages from the broker without the original sender knowing the recipients. The broker handles the dispatching of these messages to the appropriate subscribers.
 
 publishers and subscribers:
 : CoAP clients can act as publishers or as subscribers. Publishers send CoAP messages (publications) to the broker on specific topics. Subscribers have an ongoing relation (subscription) to a topic via CoAP Observe {{RFC7641}}. Both roles operate without any mutual knowledge, guided by their respective topic interests.
@@ -105,7 +105,7 @@ topic collection:
 : A set of topics. A topic collection is hosted as one collection resource (See {{Section 3.1 of I-D.ietf-core-interfaces}}) at the broker, and its representation is the list of links to the topic resources each corresponding to a topic.
 
 topic:
-: A resource used for configuration of the subcription and publication properties, which can be set by a client or by the broker. A topic is represented as a CBOR map containing the topic properties as top-level elements. A topics is hosted as a resource at the broker. All topic resources associated with the same topic collection share a common base URI, i.e., the URI of the topic collection resource.
+: A resource used for configuration of the subcription and publication properties, which can be set by a client or by the broker. A topic is represented as a CBOR map containing the topic properties as top-level elements. A topic is hosted as a resource at the broker. All topic resources associated with the same topic collection share a common base URI, i.e., the URI of the topic collection resource.
 
 topic property:
 : A single element of configuration information that is associated with a topic.
@@ -114,7 +114,7 @@ topic-data resource:
 : A resource where clients can publish data and/or subscribe to data for a specific topic. The representation of the topic resource corresponding to such a topic also specifies the URI to the present topic-data resource.
 
 broker:
-: A CoAP server that hosts one or more topic collections with their topics, and typically, also topic-data resources. The broker is responsible for the store-and-forward of state update representations, for the topics for which it hosts the corresponding topic-data resources. The broker is also responsible for handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
+: A CoAP server that hosts one or more topic collections with their topics, and typically also topic-data resources. The broker is responsible for the store-and-forward of state update representations, for the topics for which it hosts the corresponding topic-data resources. The broker is also responsible for handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
 
 ## CoAP Publish-Subscribe Architecture
 
@@ -171,7 +171,7 @@ A topic collection resource can have topic resources as its child resources, wit
 
 # PubSub Topics {#topics}
 
-The broker consists of a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}). Each topic contains a set of properties for configuration, one of which is the topic-data resource. The topic resource is used by a client creating or administering a topic. The topic-data resource is used by the publishers and the subscribers to share the data values.
+The broker hosts a collection of topics. These topics as well as the collection itself are exposed by a CoAP server as resources (see {{fig-topic}}).  Each topic contains a set of properties for configuration, one of which is the URI of the topic-data resource. The topic resource is used by a client for creating or administering a topic. The topic-data resource is used by the publishers and the subscribers to share the data values.
 
 ~~~~ aasvg
               ___
@@ -325,7 +325,7 @@ In certain scenarios, the method described herein may not be applicable, particu
 
 ### Topic-Data Discovery
 
-Within a topic, there is the "topic-data" topic property. The "topic-data" contains the URI of the resource used for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data resource (see {{topic-get-resource}}).
+Within a topic, there is the "topic-data" topic property that contains the URI of the topic-data resource used for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data resource (see {{topic-get-resource}}).
 
 The topic-data resources use the resource type 'core.ps.data'. It is also possible to discover a list of topic-data resources, by sending a request to the collection resource with a query parameter rt=core.ps.data as shown below. Every topic collection resource MUST support this query.
 
@@ -366,7 +366,7 @@ On success, the broker returns a 2.05 (Content) response, specifying the list of
 
 A client MAY retrieve a list of links to topics it is authorized to access, based on its permissions. A broker MUST implement topic collection discovery.
 
-The payload content-format 40 ("application/link-format")  MUST be supported for the topic collection resource.
+The content-format 40 ("application/link-format")  MUST be supported for the topic collection resource.
 
 Example:
 
@@ -428,11 +428,11 @@ A client can add a new topic to a collection of topics by submitting an initial 
 
 Please note that the topic will _not_ be fully created until a publisher has published some data to it (See {{topic-lifecycle}}).
 
-To facilitate immediate subscription and allow subscribers to subscribe to the topic before data has been published, the client can include the "initialize" property set to `true` (0xf5). When included, the broker MUST create the topic and pre-populate the topic-data resource with a zero-length (empty) representation, without an explicit "topic-content-format" property specified. That is, if a subscriber client attempts to access the topic-data resource, the client gets this zero-length representation without an associated Content-Format Option in the CoAP response. This means “indeterminate” per {{Section 5.10.3 of RFC7252}}.
+To facilitate immediate subscription and allow subscribers to subscribe to the topic before data has been published, the client can include the "initialize" property set to `true` (0xf5). When included, the broker MUST create the topic and pre-populate the topic-data resource with a zero-length (empty) representation, with the "topic-content-format" property not specified. That is, if a subscriber client attempts to access the topic-data resource, the client gets this zero-length representation without an associated Content-Format Option in the CoAP response. This means “indeterminate” per {{Section 5.10.3 of RFC7252}}.
 
 When "initialize" is set to "false" or omitted, the topic will only be fully created after data is published to it.
 
-On success, the broker returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map. The response MUST include the required topic properties (see {{topic-properties}}), namely: "topic-name", "resource-type", and "topic-data". It MAY also include a number of optional topic properties too. The response MUST have Content-Format set to TBD606 ("application/core-pubsub+cbor)".
+On success, the broker returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map. The response MUST include the required topic properties (see {{topic-properties}}), namely: "topic-name", "resource-type", and "topic-data". It MAY also include a number of optional topic properties too. The response MUST have Content-Format set to TBD606 ("application/core-pubsub+cbor").
 
 If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST reply with a 4.03 (Forbidden) error response.
 
@@ -518,7 +518,7 @@ The response payload is a CBOR map, whose possible entries are specified in {{to
 
 Both request and response MUST have Content-Format set to TBD606 ("application/core-pubsub+cbor").
 
-The response CBOR map includes entries for each topic property specified in the request and available in the broker's topic resource representation.
+The CBOR map in the response payload includes entries for each topic property specified in the request and available in the topic resource representation.
 
 Example:
 
@@ -598,7 +598,7 @@ Note that, when a topic changes, it may result in disruptions for the subscriber
 
 ### Updating the topic with iPATCH {#topic-update-resource-patch}
 
-A client can partially update a topic's configuration by submitting a partial topic representation in an iPATCH request to the topic URI. The iPATCH request allows for updating only specific fields of the topic while leaving the others unchanged. As with the PUT method, the topic properties "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.
+A client can partially update a topic's configuration by submitting a partial topic representation in an iPATCH request to the topic URI. The iPATCH request allows for updating only specific fields of the topic while leaving the others unchanged. As with the POST method, the topic properties "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.
 
 On success, the broker returns a 2.04 (Changed) response and the current full resource representation. The broker only updates topic properties that are explicitly mentioned in the request.
 
@@ -708,7 +708,7 @@ The URI for this resource is indicated in the "topic-data" topic property value.
 
 On success, the broker returns a 2.04 (Changed) response. However, when data is published to the topic for the first time, the broker instead MUST return a 2.01 (Created) response and set the topic in the fully-created state (see {{topic-lifecycle}}).
 
-If the request does not have an acceptable Content-format, as specified by the "topic-content-format" property in the topic configuration, the broker returns a 4.15 (Unsupported Content-Format) response.
+If the request does not have an acceptable Content-format, e.g., as specified by the "topic-content-format" property in the topic configuration, the broker returns a 4.15 (Unsupported Content-Format) response.
 
 If the client is sending publications too fast, the broker returns a 4.29 (Too Many Requests) response {{RFC8516}}.
 
@@ -764,7 +764,7 @@ A client can subscribe to a topic-data resource by sending a CoAP GET request wi
 
 On success, the server hosting the topic-data resource MUST return 2.05 (Content) notifications with the data and the Observe Option. Otherwise, if no Observe Option is present, the client should assume that the subscription was not successful.
 
-If the topic is not yet in the fully created state (see {{topic-lifecycle}}), the broker MUST return a response code 4.04 (Not Found).
+If the topic is not yet in the fully created state (see {{topic-lifecycle}}), the broker MUST return a 4.04 (Not Found) error response.
 
 The following response codes are defined for the Subscribe operation:
 
