@@ -1308,8 +1308,10 @@ Internet-Draft                 CoAP pubsub                    March 2025
    instead MUST return a 2.01 (Created) response and set the topic in
    the fully-created state (see Section 3.1).
 
-   If the request does not have an acceptable content-format, the broker
-   returns a 4.15 (Unsupported Content-Format) response.
+   If the request does not have an acceptable content-format, as
+   specified by the "topic-content-format" property in the topic
+   configuration, the broker returns a 4.15 (Unsupported Content-Format)
+   response.
 
    If the client is sending publications too fast, the broker returns a
    4.29 (Too Many Requests) response [RFC8516].
@@ -1336,8 +1338,6 @@ Internet-Draft                 CoAP pubsub                    March 2025
       Header: Created (Code=2.01)
 
    Example of subsequent publication:
-
-
 
 
 
@@ -1388,11 +1388,11 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
    If the "max-subscribers" topic property value has been reached, the
    broker must treat that as specified in Section 4.1 of [RFC7641].  The
-   response MUST NOT include an Observe Option, the absence of which
-   signals to the subscriber that the subscription failed.
+   2.05 (Content) response MUST NOT include an Observe Option, the
+   absence of which signals to the subscriber that the subscription
+   failed.
 
    Example of a successful subscription followed by one update:
-
 
 
 
@@ -1444,10 +1444,10 @@ Internet-Draft                 CoAP pubsub                    March 2025
    described in Section 3.6 of [RFC7641].  The client MUST either use
    CoAP GET with the Observe Option set to 1 or send a CoAP Reset
    message in response to a notification.  Also on Section 3.6 of
-   [RFC7641] the client can simply "forget" the observation and the
-   broker will remove it from the list of observers after the next
-   notification.
-
+   [RFC7641], the client can simply "forget" the observation.
+   Consequently, upon receiving the next notification, the client
+   replies with a CoAP Reset message, which results in the broker
+   removing the client from the list of observers.
 
 
 
@@ -1458,10 +1458,9 @@ Jimenez, et al.         Expires 18 September 2025              [Page 26]
 Internet-Draft                 CoAP pubsub                    March 2025
 
 
-   As per [RFC7641] a server that transmits notifications mostly in non-
-   confirmable messages, but it MUST send a notification in a
-   confirmable message instead of a non-confirmable message at least
-   every 24 hours.
+   As per [RFC7641], a server transmits notifications mostly as non-
+   confirmable messages, but it sends a notification as a confirmable
+   message instead of a non-confirmable message at least every 24 hours.
 
    This value can be modified at the broker by the administrator of a
    topic by modifying the topic property "observer-check" on
@@ -1471,17 +1470,16 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 3.2.4.  Delete topic-data
 
-   A publisher MAY delete a topic by making a CoAP DELETE request on the
-   topic-data resource (which is hosted at the "topic-data" URI).
+   A publisher can delete a topic-data resource by making a CoAP DELETE
+   request on the topic-data resource (which is hosted at the "topic-
+   data" URI).
 
    On success, the broker returns a 2.02 (Deleted) response.
 
-   When a topic-data resource is deleted, the broker MUST also delete
-   the "topic-data" topic property in the topic resource, unsubscribe
-   all subscribers by removing them from the list of observers and
-   return a final 4.04 (Not Found) response as per Section 3.2 of
-   [RFC7641].  The topic is then set back to the half created state as
-   per Section 3.1.
+   When a topic-data resource is deleted, the topic is then set back to
+   the half created state as per Section 3.1 awaiting for a publisher to
+   publish and set the topic to FULLY-CREATED state where clients can
+   subscribe and read the topic-data.
 
    Example of a successful deletion:
 
@@ -1509,6 +1507,8 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
+
+
 Jimenez, et al.         Expires 18 September 2025              [Page 27]
 
 Internet-Draft                 CoAP pubsub                    March 2025
@@ -1516,7 +1516,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
    If the target URI does not match an existing resource or the topic is
    not in the fully created state (see Section 3.1), the broker MUST
-   return a response code 4.04 (Not Found).
+   return a 4.04 (Not Found) error respons.
 
    Example:
 
@@ -1560,7 +1560,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
    the server SHOULD return a 4.29 (Too Many Requests) response
    [RFC8516].  As described in [RFC8516], the Max-Age option [RFC7252]
    in this response indicates the number of seconds after which the
-   client may retry.  The broker MAY also stop publishing messages from
+   client may retry.  The broker MAY also stop dispatching messages from
    that publisher for the indicated time.
 
 
@@ -2192,15 +2192,14 @@ Acknowledgements
    contribution by Klaus Hartke's proposal
    [I-D.hartke-t2trg-coral-pubsub], which defines the topic resource
    model and structure as well as the topic lifecycle and interactions.
-   It also follows a similar architectural design as that provided by
-   Marco Tiloca's [I-D.ietf-ace-oscore-gm-admin].
+   The document follows a similar architectural design as that provided
+   by Marco Tiloca's [I-D.ietf-ace-oscore-gm-admin].
 
-   The authors would like to also thank Marco Tiloca, Francesca
-   Palombini, Carsten Bormann, Esko Dijk, Hannes Tschofenig, Zach
-   Shelby, Mohit Sethi, Peter van der Stok, Tim Kellogg, Anders
-   Eriksson, Goran Selander, Mikko Majanen, Olaf Bergmann, David
-   Navarro, Oscar Novo and Lorenzo Corneo for their valuable
-   contributions and reviews.
+   The authors would like to thank Marco Tiloca, Esko Dijk,Francesca
+   Palombini, Carsten Bormann, Hannes Tschofenig, Zach Shelby, Mohit
+   Sethi, Peter van der Stok, Tim Kellogg, Anders Eriksson, Goran
+   Selander, Mikko Majanen, Olaf Bergmann, David Navarro, Oscar Novo and
+   Lorenzo Corneo for their valuable contributions and reviews.
 
 Contributors
 
@@ -2229,6 +2228,7 @@ Authors' Addresses
    Ari Keranen
    Ericsson
    Email: ari.keranen@ericsson.com
+
 
 
 
