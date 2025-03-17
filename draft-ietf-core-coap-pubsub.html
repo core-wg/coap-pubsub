@@ -2518,7 +2518,7 @@ The URI for this resource is indicated in the "topic-data" topic property value.
       </h2>
 <p id="section-4-1">This document defines topic properties used in the messages exchanged between a client and the broker, for example during the topic creation and configuration process (see <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>).
 <a href="#tab-CoAP-Pubsub-Parameters" class="auto internal xref">Table 1</a> summarizes them and specifies the CBOR key that <span class="bcp14">MUST</span> be used instead of the full descriptive name.<a href="#section-4-1" class="pilcrow">¶</a></p>
-<p id="section-4-2">Note that the media type application/core-pubsub+cbor <span class="bcp14">MUST</span> be used when these topic properties are transported in the respective CoAP message payloads. Reference should always be [RFC-XXXX].<a href="#section-4-2" class="pilcrow">¶</a></p>
+<p id="section-4-2">Note that the media type application/core-pubsub+cbor <span class="bcp14">MUST</span> be used when these topic properties are transported in the respective CoAP message payloads.<a href="#section-4-2" class="pilcrow">¶</a></p>
 <span id="name-coap-pubsub-topic-propertie"></span><div id="tab-CoAP-Pubsub-Parameters">
 <table class="center" id="table-1">
         <caption>
@@ -2703,7 +2703,7 @@ The URI for this resource is indicated in the "topic-data" topic property value.
         <h3 id="name-coap-content-formats">
 <a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-coap-content-formats" class="section-name selfRef">CoAP Content-Formats</a>
         </h3>
-<p id="section-6.2-1">IANA is asked to register the following entry to the "CoAP Content-Formats" registry within the "CoRE Parameters" registry group.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2-1">IANA is asked to register the following entry to the "CoAP Content-Formats" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-6.2-2">
           <dt id="section-6.2-2.1">Content Type:</dt>
           <dd style="margin-left: 1.5em" id="section-6.2-2.2">
@@ -2761,7 +2761,7 @@ The URI for this resource is indicated in the "topic-data" topic property value.
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">core.ps.data</td>
-              <td class="text-left" rowspan="1" colspan="1">Topic-data resource of a broker</td>
+              <td class="text-left" rowspan="1" colspan="1">Topic-data resource of a publish-subscribe server</td>
             </tr>
           </tbody>
         </table>
@@ -2791,7 +2791,7 @@ The URI for this resource is indicated in the "topic-data" topic property value.
             <p id="section-6.4-5.4.1">Reference: This contains a pointer to the public specification for the item.<a href="#section-6.4-5.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-6.4-6">This registry has been initially populated with the values in <a href="#tab-CoAP-Pubsub-Parameters" class="auto internal xref">Table 1</a>.<a href="#section-6.4-6" class="pilcrow">¶</a></p>
+<p id="section-6.4-6">This registry has been initially populated with the values in <a href="#tab-CoAP-Pubsub-Parameters" class="auto internal xref">Table 1</a>. Reference should always be [RFC-XXXX].<a href="#section-6.4-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="review">
@@ -3098,12 +3098,16 @@ The URI for this resource is indicated in the "topic-data" topic property value.
 <address class="vcard">
         <div dir="auto" class="left"><span class="fn nameRole">Marco Tiloca</span></div>
 <div dir="auto" class="left"><span class="org">RISE AB</span></div>
+<div dir="auto" class="left"><span class="street-address">Isafjordsgatan 22</span></div>
+<div dir="auto" class="left">SE-<span class="postal-code">16440 Stockholm</span> <span class="locality">Kista</span>
+</div>
+<div dir="auto" class="left"><span class="country-name">Sweden</span></div>
 <div class="email">
 <span>Email:</span>
 <a href="mailto:marco.tiloca@ri.se" class="email">marco.tiloca@ri.se</a>
 </div>
 </address>
-<p id="appendix-C-1">Marco offered comprehensive reviews and insightful guidance on the recent iterations of this document. His contributions were particularly notable in the Security Considerations section, among others.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
+<p id="appendix-C-1">Marco offered comprehensive reviews and insightful guidance on the recent iterations of this document. His contributions were valuable un multiple parts of the document but particularly notable in the Security Considerations section.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
