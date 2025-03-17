@@ -360,7 +360,7 @@ On success, the broker returns a 2.05 (Content) response, specifying the list of
 
 A client MAY retrieve a list of links to topics it is authorized to access, based on its permissions. A broker MUST implement topic collection discovery.
 
-The payload content-format 40 ("application/link-format") MUST be at least supported for the topic collection resource.
+The payload content-format 40 ("application/link-format")  MUST be supported for the topic collection resource.
 
 Example:
 
@@ -399,8 +399,8 @@ Example:
    Content-Format: TBD606 (application/core-pubsub+cbor)
    Payload:
    {
-      "resource-type": "core.ps.data",
-      "topic-type": "temperature"
+      / topic-name /         0: "temperature",
+      / resource-type /      2: "core.ps.data"
    }
 
 
@@ -418,19 +418,19 @@ Eliding these attributes helps to minimize the size of the response payload.
 
 ### Creating a Topic {#topic-create}
 
-A client can add a new topics to a collection of topics by submitting an initial representation of the initial topic resource (see {{topic-resource-representation}}) in a POST request to the topic collection URI. The request MUST specify at least a subset of the topic properties in {{topic-properties}}, namely: "topic-name" and resource-type.
+A client can add a new topics to a collection of topics by submitting an initial representation of the topic resource (see {{topic-resource-representation}}) in a POST request to the topic collection URI. The request MUST specify at least a subset of the topic properties in {{topic-properties}}, namely: "topic-name" and "resource-type".
 
-Please note that the topic will NOT be fully created until a publisher has published some data to it (See {{topic-lifecycle}}).
+Please note that the topic will _not_ be fully created until a publisher has published some data to it (See {{topic-lifecycle}}).
 
-To facilitate immediate subscription and allow clients to observe the topic before data has been published, the client can include the "initialize" set to "true". When included, the broker will create the topic and pre-populate the "topic-data" field with a zero-length (empty) payload without an explicit Content-Format. That is, a subscribing client would get this zero-length representation without an associated Content-Format Option in the CoAP resonse. This means “indeterminate” per {{Section 5.10.3 of RFC7252}}.
+To facilitate immediate subscription and allow subscribers to subscribe to the topic before data has been published, the client can include the "initialize" property set to `true` (0xf5). When included, the broker MUST create the topic and pre-populate the topic-data resource with a zero-length (empty) representation, without an explicit "topic-content-format" property specified. That is, if a subscriber client attempts to access the topic-data resource, the client gets this zero-length representation without an associated Content-Format Option in the CoAP response. This means “indeterminate” per {{Section 5.10.3 of RFC7252}}.
 
 When "initialize" is set to "false" or omitted, the topic will only be fully created after data is published to it.
 
-On success, the broker returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map with key-value pairs. The response MUST include the required topic properties (see {{topic-properties}}), namely: "topic-name", "resource-type" and "topic-data". It MAY also include a number of optional topic properties too.
+On success, the broker returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map. The response MUST include the required topic properties (see {{topic-properties}}), namely: "topic-name", "resource-type" and "topic-data". It MAY also include a number of optional topic properties too. The response MUST have Content-Format set to TBD606 ("application/core-pubsub+cbor)".
 
-If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST respond with a 4.03 (Forbidden) error. The response MUST have Content-Format set to "application/core-pubsub+cbor".
+If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST reply with a 4.03 (Forbidden) error response.
 
-The broker MUST issue a 4.00 (Bad Request) error if a received parameter is invalid, unrecognized, or if the "topic-name" is already in use or otherwise invalid.
+The broker MUST reply with a 4.00 (Bad Request) error response if a received parameter is invalid, unrecognized, or if the "topic-name" is already in use or otherwise invalid.
 
 
 ~~~~
@@ -448,7 +448,8 @@ The broker MUST issue a 4.00 (Bad Request) error if a received parameter is inva
    Response:
 
    Header: Created (Code=2.01)
-   Location-Path: "ps/h9392"
+   Location-Path: "ps"
+   Location-Path: "h9392"
    Content-Format: TBD606 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
@@ -468,7 +469,7 @@ A client can read the configuration of a topic by making a GET request to the to
 
 On success, the broker returns a 2.05 (Content) response with a representation of the topic resource, as specified in {{topic-resource-representation}}.
 
-If requirements are defined for the client to read the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST respond with a 4.03 (Forbidden) error.
+If requirements are defined for the client to read the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST reply with a 4.03 (Forbidden) error response.
 
 The response payload is a CBOR map, whose possible entries are specified in {{topic-resource-representation}} and use the same abbreviations defined in {{pubsub-parameters}}.
 
@@ -501,15 +502,17 @@ For example, below is a request on the topic "/ps/h9392":
 
 A client can read the configuration of a topic by making a FETCH request to the topic resource URI with a filter for specific topic properties. This is done in order to retrieve part of the current topic resource.
 
-The request contains a CBOR map with a configuration filter or 'conf-filter', a CBOR array of topic properties, as defined in {{pubsub-parameters}}. Each element of the array specifies one requested topic property of the current topic resource (see {{topic-resource-representation}}).
+The request contains a CBOR map with a configuration filter or 'conf-filter', a CBOR array of topic properties, using the same abbreviations defined in {{pubsub-parameters}}. Each element of the array specifies one requested topic property of the current topic resource (see {{topic-resource-representation}}).
 
 On success, the broker returns a 2.05 (Content) response with a representation of the topic resource. The response has as payload the partial representation of the topic resource as specified in {{topic-resource-representation}}.
 
-If requirements are defined for the client to read the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST respond with a 4.03 (Forbidden) error.
+If requirements are defined for the client to read the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST reply with a 4.03 (Forbidden) error response.
 
 The response payload is a CBOR map, whose possible entries are specified in {{topic-resource-representation}} and use the same abbreviations defined in {{pubsub-parameters}}.
 
-Both request and response MUST have Content-Format set to "application/core-pubsub+cbor".
+Both request and response MUST have Content-Format set to TBD606 ("application/core-pubsub+cbor").
+
+The response CBOR map includes entries for each topic property specified in the request and available in the broker's topic resource representation.
 
 Example:
 
@@ -522,7 +525,7 @@ Example:
    Content-Format: TBD606 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
-      / conf-filter / 10: ["topic-data", "media-type"]
+      / conf-filter / 10: [1, 3]
    }
 
    Response:
@@ -538,22 +541,20 @@ Example:
 
 ### Updating the topic {#topic-update-resource}
 
-A client can update a topic's configuration by submitting the updated topic representation in a PUT request to the topic URI. However, the topic properties "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.
+A client can update a topic's configuration by submitting the updated topic representation in a POST request to the topic URI. However, the topic properties "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.
 
-On success, the topic is overwritten and broker returns a 2.04 (Changed) response and the current full resource representation. The broker may choose not to overwrite topic properties that are not explicitly modified in the request.
-
-Note that updating the "topic-data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Updating the "topic-data" path may happen also after it being deleted, as described on {{delete-topic-data}}, this will in turn create a new "topic-data" path for that topic.
+On success, the topic is overwritten and broker returns a 2.04 (Changed) response and the current full resource representation. The broker MAY choose not to overwrite topic properties that are not explicitly modified in the request.
 
 Similarly, decreasing "max-subscribers" will also cause that some subscribers get unsubscribed. Unsubscribed endpoints receive a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The specific queue management for unsubscribing is left for implementors.
 
-Please note that when using PUT the topic is being overwritten, thus some of the optional topic properties (e.g., "max-subscribers", "observer-check") not included in the PUT message will be reset to their default values.
+Please note that when using POST the topic is being overwritten, thus some of the optional topic properties (e.g., "max-subscribers", "observer-check") not included in the POST message will be reset to their default values.
 
 Example:
 
 ~~~~
    Request:
 
-   Header: PUT (Code=0.03)
+   Header: POST (Code=0.03)
    Uri-Path: "ps"
    Uri-Path: "h9392"
    Content-Format: TBD606 (application/core-pubsub+cbor)
@@ -587,7 +588,6 @@ Example:
 Note that when a topic changes, it may result in disruptions for the subscribers. Some potential issues that may arise include:
 
 * Limiting the number of subscribers will cause cancellation of ongoing subscriptions until "max-subscribers" has been reached.
-* Changing the "topic-data" value will cancel all ongoing subscriptions.
 * Changing of the "expiration-date" may cause cancellation of ongoing subscriptions if the topic expires at an earlier data.
 
 ### Updating the topic with iPATCH {#topic-update-resource-patch}
@@ -596,9 +596,9 @@ A client can partially update a topic's configuration by submitting a partial to
 
 On success, the broker returns a 2.04 (Changed) response and the current full resource representation. The broker only updates topic properties that are explicitly mentioned in the request.
 
-As with the PUT method, updating the "topic-data" path will automatically cancel all existing observations on it and thus will unsubscribe all subscribers. Decreasing "max-subscribers" will also cause some subscribers to get unsubscribed. Unsubscribed endpoints receive a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}.
+Decreasing "max-subscribers" will also cause some subscribers to get unsubscribed. Unsubscribed endpoints receive a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}.
 
-Contrary to PUT, iPATCH operations will explicitly update some topic properties, leaving others unmodified.
+Contrary to POST, iPATCH operations will explicitly update some topic properties, leaving others unmodified.
 
 ~~~~
    Request:
@@ -638,7 +638,7 @@ A client can delete a topic by making a CoAP DELETE request on the topic resourc
 
 On success, the broker returns a 2.02 (Deleted) response.
 
-When a topic resource is deleted, the broker MUST also delete the topic-data resource, unsubscribe all subscribers by removing them from the list of observers and returning a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}.
+When a topic resource is deleted, the broker MUST also delete the topic-data resource. As a result, the broker unsubscribes all subscribers by removing them from the list of observers and returning a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}.
 
 Example:
 
@@ -684,7 +684,6 @@ When a topic is newly created, it is first placed by the broker into the HALF CR
 {: #fig-life title='Lifecycle of a Topic' artwork-align="center"}
 
 After a publisher publishes to the topic-data resource for the first time, the topic is placed into the FULLY CREATED state. In this state, a client can read data by means of a GET request without observe. A publisher can publish to the topic-data resource and a subscriber can observe the topic-data resource.
-
 
 When a client deletes a topic resource, the topic is placed into the DELETED state and shortly after removed from the server. In this state, all subscribers are removed from the list of observers of the topic-data resource and no further interactions with the topic are possible.
 
