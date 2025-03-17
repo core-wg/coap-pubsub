@@ -26,10 +26,16 @@ author:
   email: ari.keranen@ericsson.com
 
 contributor:
-- name: Marco Tiloca
-  organization: RISE AB
+- ins: M. Tiloca
+  name: Marco Tiloca
+  org: RISE AB
+  street: Isafjordsgatan 22
+  city: Kista
+  code: SE-16440 Stockholm
+  country: Sweden
   email: marco.tiloca@ri.se
-  contribution: Marco offered comprehensive reviews and insightful guidance on the recent iterations of this document. His contributions were particularly notable in the Security Considerations section, among others.
+
+  contribution: Marco offered comprehensive reviews and insightful guidance on the recent iterations of this document. His contributions were valuable un multiple parts of the document but particularly notable in the Security Considerations section.
 
 normative:
   RFC6570:
@@ -890,7 +896,7 @@ When a publisher receives a 4.29 (Too Many Requests) response, it MUST NOT send 
 This document defines topic properties used in the messages exchanged between a client and the broker, for example during the topic creation and configuration process (see {{topic-resource-representation}}).
 {{tab-CoAP-Pubsub-Parameters}} summarizes them and specifies the CBOR key that MUST be used instead of the full descriptive name.
 
-Note that the media type application/core-pubsub+cbor MUST be used when these topic properties are transported in the respective CoAP message payloads. Reference should always be {{&SELF}}.
+Note that the media type application/core-pubsub+cbor MUST be used when these topic properties are transported in the respective CoAP message payloads.
 
 
 | Name                 | CBOR Key | CBOR Type |
@@ -981,7 +987,7 @@ Provisional registration:
 
 ## CoAP Content-Formats {#content-type}
 
-IANA is asked to register the following entry to the "CoAP Content-Formats" registry within the "CoRE Parameters" registry group.
+IANA is asked to register the following entry to the "CoAP Content-Formats" registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
 Content Type:
 : application/core-pubsub+cbor
@@ -1004,7 +1010,7 @@ IANA is asked to enter the following values from {{tab-CoAP-Pubsub-Resource-Type
 | core.ps        | Publish-subscribe broker                       |
 | core.ps.coll   | Topic collection resource of a publish-subscribe broker |
 | core.ps.conf   | Topic resource of a publish-subscribe broker   |
-| core.ps.data   | Topic-data resource of a broker                |
+| core.ps.data   | Topic-data resource of a publish-subscribe server                |
 {: #tab-CoAP-Pubsub-Resource-Types title="CoAP Pubsub Resource Types"}
 
 ## CoAP Pubsub Topic Properties Registry {#iana-coap-pubsub-parameters}
@@ -1025,7 +1031,7 @@ The columns of this registry are:
 
 * Reference: This contains a pointer to the public specification for the item.
 
-This registry has been initially populated with the values in {{tab-CoAP-Pubsub-Parameters}}.
+This registry has been initially populated with the values in {{tab-CoAP-Pubsub-Parameters}}. Reference should always be {{&SELF}}.
 
 ## Expert Review Instructions {#review}
 
