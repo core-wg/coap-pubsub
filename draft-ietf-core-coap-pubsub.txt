@@ -202,7 +202,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
       specific topics are sent to a broker.  Interested parties, i.e.,
       subscribers, receive these topic-based messages from the broker
       without the original sender knowing the recipients.  The broker
-      handlesthe dispatching of these messages to the appropriate
+      handles the dispatching of these messages to the appropriate
       subscribers.
 
    publishers and subscribers:
@@ -230,10 +230,10 @@ Internet-Draft                 CoAP pubsub                    March 2025
       A resource used for configuration of the subcription and
       publication properties, which can be set by a client or by the
       broker.  A topic is represented as a CBOR map containing the topic
-      properties as top-level elements.  A topics is hosted as a
-      resource at the broker.  All topic resources associated with the
-      same topic collection share a common base URI, i.e., the URI of
-      the topic collection resource.
+      properties as top-level elements.  A topic is hosted as a resource
+      at the broker.  All topic resources associated with the same topic
+      collection share a common base URI, i.e., the URI of the topic
+      collection resource.
 
    topic property:
       A single element of configuration information that is associated
@@ -247,7 +247,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
    broker:
       A CoAP server that hosts one or more topic collections with their
-      topics, and typically, also topic-data resources.  The broker is
+      topics, and typically also topic-data resources.  The broker is
       responsible for the store-and-forward of state update
       representations, for the topics for which it hosts the
       corresponding topic-data resources.  The broker is also
@@ -349,13 +349,13 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 2.  PubSub Topics
 
-   The broker consists of a collection of topics.  These topics as well
-   as the collection itself are exposed by a CoAP server as resources
-   (see Figure 3).  Each topic contains a set of properties for
-   configuration, one of which is the topic-data resource.  The topic
-   resource is used by a client creating or administering a topic.  The
-   topic-data resource is used by the publishers and the subscribers to
-   share the data values.
+   The broker hosts a collection of topics.  These topics as well as the
+   collection itself are exposed by a CoAP server as resources (see
+   Figure 3).  Each topic contains a set of properties for
+   configuration, one of which is the URI of the topic-data resource.
+   The topic resource is used by a client for creating or administering
+   a topic.  The topic-data resource is used by the publishers and the
+   subscribers to share the data values.
 
                        ___
              topic    /   \
@@ -645,8 +645,8 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 2.3.4.  Topic-Data Discovery
 
-   Within a topic, there is the "topic-data" topic property.  The
-   "topic-data" contains the URI of the resource used for publishing and
+   Within a topic, there is the "topic-data" topic property that
+   contains the URI of the topic-data resource used for publishing and
    subscribing.  So retrieving the topic will also provide the URL of
    the topic-data resource (see Section 2.5.1).
 
@@ -730,8 +730,8 @@ Jimenez, et al.         Expires 18 September 2025              [Page 13]
 Internet-Draft                 CoAP pubsub                    March 2025
 
 
-   The payload content-format 40 ("application/link-format") MUST be
-   supported for the topic collection resource.
+   The content-format 40 ("application/link-format") MUST be supported
+   for the topic collection resource.
 
    Example:
 
@@ -826,12 +826,12 @@ Internet-Draft                 CoAP pubsub                    March 2025
    subscribe to the topic before data has been published, the client can
    include the "initialize" property set to true (0xf5).  When included,
    the broker MUST create the topic and pre-populate the topic-data
-   resource with a zero-length (empty) representation, without an
-   explicit "topic-content-format" property specified.  That is, if a
-   subscriber client attempts to access the topic-data resource, the
-   client gets this zero-length representation without an associated
-   Content-Format Option in the CoAP response.  This means
-   “indeterminate” per Section 5.10.3 of [RFC7252].
+   resource with a zero-length (empty) representation, with the "topic-
+   content-format" property not specified.  That is, if a subscriber
+   client attempts to access the topic-data resource, the client gets
+   this zero-length representation without an associated Content-Format
+   Option in the CoAP response.  This means “indeterminate” per
+   Section 5.10.3 of [RFC7252].
 
 
 
@@ -852,7 +852,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
    Section 2.2.1), namely: "topic-name", "resource-type", and "topic-
    data".  It MAY also include a number of optional topic properties
    too.  The response MUST have Content-Format set to TBD606
-   ("application/core-pubsub+cbor)".
+   ("application/core-pubsub+cbor").
 
    If requirements are defined for the client to create the topic as
    requested and the broker does not successfully assess that those
@@ -984,8 +984,8 @@ Internet-Draft                 CoAP pubsub                    March 2025
    Both request and response MUST have Content-Format set to TBD606
    ("application/core-pubsub+cbor").
 
-   The response CBOR map includes entries for each topic property
-   specified in the request and available in the broker's topic resource
+   The CBOR map in the response payload includes entries for each topic
+   property specified in the request and available in the topic resource
    representation.
 
    Example:
@@ -1127,7 +1127,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
    A client can partially update a topic's configuration by submitting a
    partial topic representation in an iPATCH request to the topic URI.
    The iPATCH request allows for updating only specific fields of the
-   topic while leaving the others unchanged.  As with the PUT method,
+   topic while leaving the others unchanged.  As with the POST method,
    the topic properties "topic-name", "topic-data", and "resource-type"
    are immutable post-creation, and any request attempting to change
    them will be deemed invalid by the broker.
@@ -1308,7 +1308,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
    instead MUST return a 2.01 (Created) response and set the topic in
    the fully-created state (see Section 3.1).
 
-   If the request does not have an acceptable Content-format, as
+   If the request does not have an acceptable Content-format, e.g., as
    specified by the "topic-content-format" property in the topic
    configuration, the broker returns a 4.15 (Unsupported Content-Format)
    response.
@@ -1377,7 +1377,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
    that the subscription was not successful.
 
    If the topic is not yet in the fully created state (see Section 3.1),
-   the broker MUST return a response code 4.04 (Not Found).
+   the broker MUST return a 4.04 (Not Found) error response.
 
    The following response codes are defined for the Subscribe operation:
 
@@ -2206,7 +2206,7 @@ Contributors
    Marco Tiloca
    RISE AB
    Isafjordsgatan 22
-   SE-16440 Stockholm Kista
+   SE-16440 Kista
    Sweden
    Email: marco.tiloca@ri.se
 
