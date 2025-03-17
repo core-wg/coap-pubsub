@@ -1090,6 +1090,12 @@ Expert reviewers should take into consideration the following points:
 * rt, ct, obs attribute elision
 * Editorial changes
 
+## Version -18 to 19
+
+- IANA early review
+- Addressed issues \#68, \#69
+- Addressed Marco's review
+
 # Acknowledgements
 {: numbered='no'}
 
