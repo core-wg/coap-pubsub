@@ -5,10 +5,10 @@
 CoRE Working Group                                            J. Jimenez
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                               M. Koster
-Expires: 17 September 2025                                 Dogtiger Labs
+Expires: 18 September 2025                                 Dogtiger Labs
                                                               A. Keranen
                                                                 Ericsson
-                                                           16 March 2025
+                                                           17 March 2025
 
 
     A publish-subscribe architecture for the Constrained Application
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Jimenez, et al.         Expires 17 September 2025               [Page 1]
+Jimenez, et al.         Expires 18 September 2025               [Page 1]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -63,7 +63,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 September 2025.
+   This Internet-Draft will expire on 18 September 2025.
 
 Copyright Notice
 
@@ -98,49 +98,49 @@ Table of Contents
        2.4.1.  Retrieving all topics . . . . . . . . . . . . . . . .  13
        2.4.2.  Getting Topics by Topic Properties  . . . . . . . . .  14
        2.4.3.  Creating a Topic  . . . . . . . . . . . . . . . . . .  15
-     2.5.  Topic Interactions  . . . . . . . . . . . . . . . . . . .  16
+     2.5.  Topic Interactions  . . . . . . . . . . . . . . . . . . .  17
        2.5.1.  Getting a topic . . . . . . . . . . . . . . . . . . .  17
-       2.5.2.  Getting part of a topic . . . . . . . . . . . . . . .  17
+       2.5.2.  Getting part of a topic . . . . . . . . . . . . . . .  18
        2.5.3.  Updating the topic  . . . . . . . . . . . . . . . . .  19
        2.5.4.  Updating the topic with iPATCH  . . . . . . . . . . .  21
        2.5.5.  Deleting a topic  . . . . . . . . . . . . . . . . . .  22
-   3.  Publish and Subscribe . . . . . . . . . . . . . . . . . . . .  23
+   3.  Publish and Subscribe . . . . . . . . . . . . . . . . . . . .  22
      3.1.  Topic Lifecycle . . . . . . . . . . . . . . . . . . . . .  23
 
 
 
-Jimenez, et al.         Expires 17 September 2025               [Page 2]
+Jimenez, et al.         Expires 18 September 2025               [Page 2]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
 
-     3.2.  Topic-Data Interactions . . . . . . . . . . . . . . . . .  24
+     3.2.  Topic-Data Interactions . . . . . . . . . . . . . . . . .  23
        3.2.1.  Publish . . . . . . . . . . . . . . . . . . . . . . .  24
-       3.2.2.  Subscribe . . . . . . . . . . . . . . . . . . . . . .  26
-       3.2.3.  Unsubscribe . . . . . . . . . . . . . . . . . . . . .  27
-       3.2.4.  Delete topic-data . . . . . . . . . . . . . . . . . .  28
-     3.3.  Read the latest data  . . . . . . . . . . . . . . . . . .  28
-     3.4.  Rate Limiting . . . . . . . . . . . . . . . . . . . . . .  29
-   4.  Encoding of PubSub Topic Properties . . . . . . . . . . . . .  30
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  31
-   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  32
-     6.1.  Media Type Registrations  . . . . . . . . . . . . . . . .  32
-     6.2.  CoAP Content-Formats  . . . . . . . . . . . . . . . . . .  33
-     6.3.  Resource Types  . . . . . . . . . . . . . . . . . . . . .  33
-     6.4.  CoAP Pubsub Topic Properties Registry . . . . . . . . . .  33
-     6.5.  Expert Review Instructions  . . . . . . . . . . . . . . .  34
-   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  36
-     7.1.  Normative References  . . . . . . . . . . . . . . . . . .  36
-     7.2.  Informative References  . . . . . . . . . . . . . . . . .  38
-   Appendix A.  Document Updates . . . . . . . . . . . . . . . . . .  39
-     A.1.  Version -13 to -14  . . . . . . . . . . . . . . . . . . .  39
-     A.2.  Version -14 to -15  . . . . . . . . . . . . . . . . . . .  40
-     A.3.  Version -15 to -16  . . . . . . . . . . . . . . . . . . .  40
-     A.4.  Version -16 to -17  . . . . . . . . . . . . . . . . . . .  40
-     A.5.  Version -17 to -18  . . . . . . . . . . . . . . . . . . .  40
-   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  41
-   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  41
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  41
+       3.2.2.  Subscribe . . . . . . . . . . . . . . . . . . . . . .  25
+       3.2.3.  Unsubscribe . . . . . . . . . . . . . . . . . . . . .  26
+       3.2.4.  Delete topic-data . . . . . . . . . . . . . . . . . .  27
+     3.3.  Read the latest data  . . . . . . . . . . . . . . . . . .  27
+     3.4.  Rate Limiting . . . . . . . . . . . . . . . . . . . . . .  28
+   4.  Encoding of PubSub Topic Properties . . . . . . . . . . . . .  29
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  30
+   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  31
+     6.1.  Media Type Registrations  . . . . . . . . . . . . . . . .  31
+     6.2.  CoAP Content-Formats  . . . . . . . . . . . . . . . . . .  32
+     6.3.  Resource Types  . . . . . . . . . . . . . . . . . . . . .  32
+     6.4.  CoAP Pubsub Topic Properties Registry . . . . . . . . . .  32
+     6.5.  Expert Review Instructions  . . . . . . . . . . . . . . .  33
+   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  35
+     7.1.  Normative References  . . . . . . . . . . . . . . . . . .  35
+     7.2.  Informative References  . . . . . . . . . . . . . . . . .  37
+   Appendix A.  Document Updates . . . . . . . . . . . . . . . . . .  38
+     A.1.  Version -13 to -14  . . . . . . . . . . . . . . . . . . .  38
+     A.2.  Version -14 to -15  . . . . . . . . . . . . . . . . . . .  39
+     A.3.  Version -15 to -16  . . . . . . . . . . . . . . . . . . .  39
+     A.4.  Version -16 to -17  . . . . . . . . . . . . . . . . . . .  39
+     A.5.  Version -17 to -18  . . . . . . . . . . . . . . . . . . .  39
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  40
+   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  40
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  40
 
 1.  Introduction
 
@@ -165,7 +165,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025               [Page 3]
+Jimenez, et al.         Expires 18 September 2025               [Page 3]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -221,7 +221,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025               [Page 4]
+Jimenez, et al.         Expires 18 September 2025               [Page 4]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -277,7 +277,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025               [Page 5]
+Jimenez, et al.         Expires 18 September 2025               [Page 5]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -333,7 +333,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025               [Page 6]
+Jimenez, et al.         Expires 18 September 2025               [Page 6]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -389,7 +389,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025               [Page 7]
+Jimenez, et al.         Expires 18 September 2025               [Page 7]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -445,7 +445,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025               [Page 8]
+Jimenez, et al.         Expires 18 September 2025               [Page 8]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -501,7 +501,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025               [Page 9]
+Jimenez, et al.         Expires 18 September 2025               [Page 9]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -557,7 +557,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 10]
+Jimenez, et al.         Expires 18 September 2025              [Page 10]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -613,7 +613,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 11]
+Jimenez, et al.         Expires 18 September 2025              [Page 11]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -669,7 +669,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 12]
+Jimenez, et al.         Expires 18 September 2025              [Page 12]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -725,13 +725,13 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 13]
+Jimenez, et al.         Expires 18 September 2025              [Page 13]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
 
-   The payload content-format 40 ("application/link-format") MUST be at
-   least supported for the topic collection resource.
+   The payload content-format 40 ("application/link-format") MUST be
+   supported for the topic collection resource.
 
    Example:
 
@@ -781,7 +781,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 14]
+Jimenez, et al.         Expires 18 September 2025              [Page 14]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -793,8 +793,8 @@ Internet-Draft                 CoAP pubsub                    March 2025
       Content-Format: TBD606 (application/core-pubsub+cbor)
       Payload:
       {
-         "resource-type": "core.ps.data",
-         "topic-type": "temperature"
+         / topic-name /         0: "temperature",
+         / resource-type /      2: "core.ps.data"
       }
 
 
@@ -814,51 +814,54 @@ Internet-Draft                 CoAP pubsub                    March 2025
 2.4.3.  Creating a Topic
 
    A client can add a new topics to a collection of topics by submitting
-   an initial representation of the initial topic resource (see
-   Section 2.2) in a POST request to the topic collection URI.  The
-   request MUST specify at least a subset of the topic properties in
-   Section 2.2.1, namely: "topic-name" and resource-type.
+   an initial representation of the topic resource (see Section 2.2) in
+   a POST request to the topic collection URI.  The request MUST specify
+   at least a subset of the topic properties in Section 2.2.1, namely:
+   "topic-name" and "resource-type".
 
-   Please note that the topic will NOT be fully created until a
+   Please note that the topic will _not_ be fully created until a
    publisher has published some data to it (See Section 3.1).
 
-   To facilitate immediate subscription and allow clients to observe the
-   topic before data has been published, the client can include the
-   "initialize" set to "true".  When included, the broker will create
-   the topic and pre-populate the "topic-data" field with a zero-length
-   (empty) payload without an explicit Content-Format.  That is, a
-   subscribing client would get this zero-length representation without
-   an associated Content-Format Option in the CoAP resonse.  This means
+   To facilitate immediate subscription and allow subscribers to
+   subscribe to the topic before data has been published, the client can
+   include the "initialize" property set to true (0xf5).  When included,
+   the broker MUST create the topic and pre-populate the topic-data
+   resource with a zero-length (empty) representation, without an
+   explicit "topic-content-format" property specified.  That is, if a
+   subscriber client attempts to access the topic-data resource, the
+   client gets this zero-length representation without an associated
+   Content-Format Option in the CoAP response.  This means
    “indeterminate” per Section 5.10.3 of [RFC7252].
 
-   When "initialize" is set to "false" or omitted, the topic will only
-   be fully created after data is published to it.
 
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 15]
+Jimenez, et al.         Expires 18 September 2025              [Page 15]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
 
+   When "initialize" is set to "false" or omitted, the topic will only
+   be fully created after data is published to it.
+
    On success, the broker returns a 2.01 (Created) response, indicating
    the Location-Path of the new topic and the current representation of
-   the topic resource.  The response payload includes a CBOR map with
-   key-value pairs.  The response MUST include the required topic
-   properties (see Section 2.2.1), namely: "topic-name", "resource-type"
-   and "topic-data".  It MAY also include a number of optional topic
-   properties too.
+   the topic resource.  The response payload includes a CBOR map.  The
+   response MUST include the required topic properties (see
+   Section 2.2.1), namely: "topic-name", "resource-type" and "topic-
+   data".  It MAY also include a number of optional topic properties
+   too.  The response MUST have Content-Format set to TBD606
+   ("application/core-pubsub+cbor)".
 
    If requirements are defined for the client to create the topic as
    requested and the broker does not successfully assess that those
-   requirements are met, then the broker MUST respond with a 4.03
-   (Forbidden) error.  The response MUST have Content-Format set to
-   "application/core-pubsub+cbor".
+   requirements are met, then the broker MUST reply with a 4.03
+   (Forbidden) error response.
 
-   The broker MUST issue a 4.00 (Bad Request) error if a received
-   parameter is invalid, unrecognized, or if the "topic-name" is already
-   in use or otherwise invalid.
+   The broker MUST reply with a 4.00 (Bad Request) error response if a
+   received parameter is invalid, unrecognized, or if the "topic-name"
+   is already in use or otherwise invalid.
 
       Request:
 
@@ -874,7 +877,8 @@ Internet-Draft                 CoAP pubsub                    March 2025
       Response:
 
       Header: Created (Code=2.01)
-      Location-Path: "ps/h9392"
+      Location-Path: "ps"
+      Location-Path: "h9392"
       Content-Format: TBD606 (application/core-pubsub+cbor)
       Payload (in CBOR diagnostic notation):
       {
@@ -883,20 +887,21 @@ Internet-Draft                 CoAP pubsub                    March 2025
          / resource-type /      2: "core.ps.data"
       }
 
+
+
+
+
+
+
+Jimenez, et al.         Expires 18 September 2025              [Page 16]
+
+Internet-Draft                 CoAP pubsub                    March 2025
+
+
 2.5.  Topic Interactions
 
    These are the interactions that can happen at the topic resource
    level.
-
-
-
-
-
-
-Jimenez, et al.         Expires 17 September 2025              [Page 16]
-
-Internet-Draft                 CoAP pubsub                    March 2025
-
 
 2.5.1.  Getting a topic
 
@@ -908,8 +913,8 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
    If requirements are defined for the client to read the topic as
    requested and the broker does not successfully assess that those
-   requirements are met, then the broker MUST respond with a 4.03
-   (Forbidden) error.
+   requirements are met, then the broker MUST reply with a 4.03
+   (Forbidden) error response.
 
    The response payload is a CBOR map, whose possible entries are
    specified in Section 2.2 and use the same abbreviations defined in
@@ -938,6 +943,17 @@ Internet-Draft                 CoAP pubsub                    March 2025
          / max-subscribers /       6: 100
       }
 
+
+
+
+
+
+
+Jimenez, et al.         Expires 18 September 2025              [Page 17]
+
+Internet-Draft                 CoAP pubsub                    March 2025
+
+
 2.5.2.  Getting part of a topic
 
    A client can read the configuration of a topic by making a FETCH
@@ -945,19 +961,11 @@ Internet-Draft                 CoAP pubsub                    March 2025
    properties.  This is done in order to retrieve part of the current
    topic resource.
 
-
-
-
-
-Jimenez, et al.         Expires 17 September 2025              [Page 17]
-
-Internet-Draft                 CoAP pubsub                    March 2025
-
-
    The request contains a CBOR map with a configuration filter or 'conf-
-   filter', a CBOR array of topic properties, as defined in Section 4.
-   Each element of the array specifies one requested topic property of
-   the current topic resource (see Section 2.2).
+   filter', a CBOR array of topic properties, using the same
+   abbreviations defined in Section 4.  Each element of the array
+   specifies one requested topic property of the current topic resource
+   (see Section 2.2).
 
    On success, the broker returns a 2.05 (Content) response with a
    representation of the topic resource.  The response has as payload
@@ -966,17 +974,41 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
    If requirements are defined for the client to read the topic as
    requested and the broker does not successfully assess that those
-   requirements are met, then the broker MUST respond with a 4.03
-   (Forbidden) error.
+   requirements are met, then the broker MUST reply with a 4.03
+   (Forbidden) error response.
 
    The response payload is a CBOR map, whose possible entries are
    specified in Section 2.2 and use the same abbreviations defined in
    Section 4.
 
-   Both request and response MUST have Content-Format set to
-   "application/core-pubsub+cbor".
+   Both request and response MUST have Content-Format set to TBD606
+   ("application/core-pubsub+cbor").
+
+   The response CBOR map includes entries for each topic property
+   specified in the request and available in the broker's topic resource
+   representation.
 
    Example:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.         Expires 18 September 2025              [Page 18]
+
+Internet-Draft                 CoAP pubsub                    March 2025
+
 
       Request:
 
@@ -986,7 +1018,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
       Content-Format: TBD606 (application/core-pubsub+cbor)
       Payload (in CBOR diagnostic notation):
       {
-         / conf-filter / 10: ["topic-data", "media-type"]
+         / conf-filter / 10: [1, 3]
       }
 
       Response:
@@ -999,44 +1031,27 @@ Internet-Draft                 CoAP pubsub                    March 2025
          / topic-content-format /  3: 112
       }
 
-
-
-
-
-
-
-Jimenez, et al.         Expires 17 September 2025              [Page 18]
-
-Internet-Draft                 CoAP pubsub                    March 2025
-
-
 2.5.3.  Updating the topic
 
    A client can update a topic's configuration by submitting the updated
-   topic representation in a PUT request to the topic URI.  However, the
-   topic properties "topic-name", "topic-data", and "resource-type" are
-   immutable post-creation, and any request attempting to change them
-   will be deemed invalid by the broker.
+   topic representation in a POST request to the topic URI.  However,
+   the topic properties "topic-name", "topic-data", and "resource-type"
+   are immutable post-creation, and any request attempting to change
+   them will be deemed invalid by the broker.
 
    On success, the topic is overwritten and broker returns a 2.04
    (Changed) response and the current full resource representation.  The
-   broker may choose not to overwrite topic properties that are not
+   broker MAY choose not to overwrite topic properties that are not
    explicitly modified in the request.
-
-   Note that updating the "topic-data" path will automatically cancel
-   all existing observations on it and thus will unsubscribe all
-   subscribers.  Updating the "topic-data" path may happen also after it
-   being deleted, as described on Section 3.2.4, this will in turn
-   create a new "topic-data" path for that topic.
 
    Similarly, decreasing "max-subscribers" will also cause that some
    subscribers get unsubscribed.  Unsubscribed endpoints receive a final
    4.04 (Not Found) response as per Section 3.2 of [RFC7641].  The
    specific queue management for unsubscribing is left for implementors.
 
-   Please note that when using PUT the topic is being overwritten, thus
+   Please note that when using POST the topic is being overwritten, thus
    some of the optional topic properties (e.g., "max-subscribers",
-   "observer-check") not included in the PUT message will be reset to
+   "observer-check") not included in the POST message will be reset to
    their default values.
 
    Example:
@@ -1046,29 +1061,14 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Jimenez, et al.         Expires 17 September 2025              [Page 19]
+Jimenez, et al.         Expires 18 September 2025              [Page 19]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
 
       Request:
 
-      Header: PUT (Code=0.03)
+      Header: POST (Code=0.03)
       Uri-Path: "ps"
       Uri-Path: "h9392"
       Content-Format: TBD606 (application/core-pubsub+cbor)
@@ -1104,9 +1104,6 @@ Internet-Draft                 CoAP pubsub                    March 2025
    *  Limiting the number of subscribers will cause cancellation of
       ongoing subscriptions until "max-subscribers" has been reached.
 
-   *  Changing the "topic-data" value will cancel all ongoing
-      subscriptions.
-
    *  Changing of the "expiration-date" may cause cancellation of
       ongoing subscriptions if the topic expires at an earlier data.
 
@@ -1117,7 +1114,10 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 20]
+
+
+
+Jimenez, et al.         Expires 18 September 2025              [Page 20]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1136,47 +1136,12 @@ Internet-Draft                 CoAP pubsub                    March 2025
    current full resource representation.  The broker only updates topic
    properties that are explicitly mentioned in the request.
 
-   As with the PUT method, updating the "topic-data" path will
-   automatically cancel all existing observations on it and thus will
-   unsubscribe all subscribers.  Decreasing "max-subscribers" will also
-   cause some subscribers to get unsubscribed.  Unsubscribed endpoints
-   receive a final 4.04 (Not Found) response as per Section 3.2 of
-   [RFC7641].
+   Decreasing "max-subscribers" will also cause some subscribers to get
+   unsubscribed.  Unsubscribed endpoints receive a final 4.04 (Not
+   Found) response as per Section 3.2 of [RFC7641].
 
-   Contrary to PUT, iPATCH operations will explicitly update some topic
+   Contrary to POST, iPATCH operations will explicitly update some topic
    properties, leaving others unmodified.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Jimenez, et al.         Expires 17 September 2025              [Page 21]
-
-Internet-Draft                 CoAP pubsub                    March 2025
-
 
       Request:
 
@@ -1206,6 +1171,13 @@ Internet-Draft                 CoAP pubsub                    March 2025
          / observer-check /        7: 86400
       }
 
+
+
+Jimenez, et al.         Expires 18 September 2025              [Page 21]
+
+Internet-Draft                 CoAP pubsub                    March 2025
+
+
    Note that when a topic changes through an iPATCH request, it may
    result in disruptions for the subscribers.  For example, limiting the
    number of subscribers will cause cancellation of ongoing
@@ -1219,20 +1191,11 @@ Internet-Draft                 CoAP pubsub                    March 2025
    On success, the broker returns a 2.02 (Deleted) response.
 
    When a topic resource is deleted, the broker MUST also delete the
-   topic-data resource, unsubscribe all subscribers by removing them
-   from the list of observers and returning a final 4.04 (Not Found)
-   response as per Section 3.2 of [RFC7641].
+   topic-data resource.  As a result, the broker unsubscribes all
+   subscribers by removing them from the list of observers and returning
+   a final 4.04 (Not Found) response as per Section 3.2 of [RFC7641].
 
    Example:
-
-
-
-
-
-Jimenez, et al.         Expires 17 September 2025              [Page 22]
-
-Internet-Draft                 CoAP pubsub                    March 2025
-
 
       Request:
 
@@ -1261,6 +1224,16 @@ Internet-Draft                 CoAP pubsub                    March 2025
    can simply immediately publish some initial placeholder data to make
    the topic "fully created" (see Section 3.1).
 
+
+
+
+
+
+Jimenez, et al.         Expires 18 September 2025              [Page 22]
+
+Internet-Draft                 CoAP pubsub                    March 2025
+
+
    URIs for topic resources are broker-generated (see Section 2.4.3).
    There is no necessary URI pattern dependence between the URI where
    the topic-data resource exists and the URI of the topic resource.
@@ -1273,22 +1246,6 @@ Internet-Draft                 CoAP pubsub                    March 2025
    A publisher can publish to the topic-data resource.  However, a
    subscriber cannot yet subscribe to the topic-data resource nor read
    the latest data.
-
-
-
-
-
-
-
-
-
-
-
-
-Jimenez, et al.         Expires 17 September 2025              [Page 23]
-
-Internet-Draft                 CoAP pubsub                    March 2025
-
 
                     HALF                          FULLY
                    CREATED       Delete          CREATED
@@ -1326,6 +1283,13 @@ Internet-Draft                 CoAP pubsub                    March 2025
    Interactions with the topic-data resource are covered in this
    section.
 
+
+
+Jimenez, et al.         Expires 18 September 2025              [Page 23]
+
+Internet-Draft                 CoAP pubsub                    March 2025
+
+
 3.2.1.  Publish
 
    A topic with a topic-data resource must have been created in order to
@@ -1338,13 +1302,6 @@ Internet-Draft                 CoAP pubsub                    March 2025
    indicated in the "topic-data" topic property value.  Please note that
    this URI is not the same as the topic URI used for configuring the
    topic (see Section 2.2).
-
-
-
-Jimenez, et al.         Expires 17 September 2025              [Page 24]
-
-Internet-Draft                 CoAP pubsub                    March 2025
-
 
    On success, the broker returns a 2.04 (Changed) response.  However,
    when data is published to the topic for the first time, the broker
@@ -1384,20 +1341,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-Jimenez, et al.         Expires 17 September 2025              [Page 25]
+Jimenez, et al.         Expires 18 September 2025              [Page 24]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1453,7 +1397,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 26]
+Jimenez, et al.         Expires 18 September 2025              [Page 25]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1509,7 +1453,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 27]
+Jimenez, et al.         Expires 18 September 2025              [Page 26]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1565,7 +1509,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 28]
+Jimenez, et al.         Expires 18 September 2025              [Page 27]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1621,7 +1565,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 29]
+Jimenez, et al.         Expires 18 September 2025              [Page 28]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1677,7 +1621,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 30]
+Jimenez, et al.         Expires 18 September 2025              [Page 29]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1733,7 +1677,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 31]
+Jimenez, et al.         Expires 18 September 2025              [Page 30]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1789,7 +1733,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 32]
+Jimenez, et al.         Expires 18 September 2025              [Page 31]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1845,7 +1789,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 33]
+Jimenez, et al.         Expires 18 September 2025              [Page 32]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1901,7 +1845,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 34]
+Jimenez, et al.         Expires 18 September 2025              [Page 33]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1957,7 +1901,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 35]
+Jimenez, et al.         Expires 18 September 2025              [Page 34]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -2013,7 +1957,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 36]
+Jimenez, et al.         Expires 18 September 2025              [Page 35]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -2069,7 +2013,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 37]
+Jimenez, et al.         Expires 18 September 2025              [Page 36]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -2125,7 +2069,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 38]
+Jimenez, et al.         Expires 18 September 2025              [Page 37]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -2181,7 +2125,7 @@ A.1.  Version -13 to -14
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 39]
+Jimenez, et al.         Expires 18 September 2025              [Page 38]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -2237,7 +2181,7 @@ A.5.  Version -17 to -18
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 40]
+Jimenez, et al.         Expires 18 September 2025              [Page 39]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -2293,4 +2237,4 @@ Authors' Addresses
 
 
 
-Jimenez, et al.         Expires 17 September 2025              [Page 41]
+Jimenez, et al.         Expires 18 September 2025              [Page 40]
