@@ -92,7 +92,7 @@ Table of Contents
      2.3.  Discovery . . . . . . . . . . . . . . . . . . . . . . . .  10
        2.3.1.  Broker Discovery  . . . . . . . . . . . . . . . . . .  10
        2.3.2.  Topic Collection Discovery  . . . . . . . . . . . . .  11
-       2.3.3.  Topic Discovery . . . . . . . . . . . . . . . . . . .  11
+       2.3.3.  Topic Discovery . . . . . . . . . . . . . . . . . . .  12
        2.3.4.  Topic-Data Discovery  . . . . . . . . . . . . . . . .  12
      2.4.  Topic Collection Interactions . . . . . . . . . . . . . .  13
        2.4.1.  Retrieving all topics . . . . . . . . . . . . . . . .  13
@@ -114,33 +114,33 @@ Jimenez, et al.         Expires 18 September 2025               [Page 2]
 Internet-Draft                 CoAP pubsub                    March 2025
 
 
-     3.2.  Topic-Data Interactions . . . . . . . . . . . . . . . . .  23
+     3.2.  Topic-Data Interactions . . . . . . . . . . . . . . . . .  24
        3.2.1.  Publish . . . . . . . . . . . . . . . . . . . . . . .  24
        3.2.2.  Subscribe . . . . . . . . . . . . . . . . . . . . . .  25
-       3.2.3.  Unsubscribe . . . . . . . . . . . . . . . . . . . . .  26
-       3.2.4.  Delete topic-data . . . . . . . . . . . . . . . . . .  27
-     3.3.  Read the latest data  . . . . . . . . . . . . . . . . . .  27
-     3.4.  Rate Limiting . . . . . . . . . . . . . . . . . . . . . .  28
-   4.  Encoding of PubSub Topic Properties . . . . . . . . . . . . .  29
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  30
-   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  31
-     6.1.  Media Type Registrations  . . . . . . . . . . . . . . . .  31
-     6.2.  CoAP Content-Formats  . . . . . . . . . . . . . . . . . .  32
-     6.3.  Resource Types  . . . . . . . . . . . . . . . . . . . . .  32
-     6.4.  CoAP Pubsub Topic Properties Registry . . . . . . . . . .  32
-     6.5.  Expert Review Instructions  . . . . . . . . . . . . . . .  34
+       3.2.3.  Unsubscribe . . . . . . . . . . . . . . . . . . . . .  27
+       3.2.4.  Delete topic-data . . . . . . . . . . . . . . . . . .  28
+     3.3.  Read the latest data  . . . . . . . . . . . . . . . . . .  28
+     3.4.  Rate Limiting . . . . . . . . . . . . . . . . . . . . . .  29
+   4.  Encoding of PubSub Topic Properties . . . . . . . . . . . . .  30
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  31
+   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  32
+     6.1.  Media Type Registrations  . . . . . . . . . . . . . . . .  32
+     6.2.  CoAP Content-Formats  . . . . . . . . . . . . . . . . . .  33
+     6.3.  Resource Types  . . . . . . . . . . . . . . . . . . . . .  33
+     6.4.  CoAP Pubsub Topic Properties Registry . . . . . . . . . .  33
+     6.5.  Expert Review Instructions  . . . . . . . . . . . . . . .  35
    7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  35
      7.1.  Normative References  . . . . . . . . . . . . . . . . . .  35
      7.2.  Informative References  . . . . . . . . . . . . . . . . .  37
-   Appendix A.  Document Updates . . . . . . . . . . . . . . . . . .  38
-     A.1.  Version -13 to -14  . . . . . . . . . . . . . . . . . . .  38
+   Appendix A.  Document Updates . . . . . . . . . . . . . . . . . .  39
+     A.1.  Version -13 to -14  . . . . . . . . . . . . . . . . . . .  39
      A.2.  Version -14 to -15  . . . . . . . . . . . . . . . . . . .  39
-     A.3.  Version -15 to -16  . . . . . . . . . . . . . . . . . . .  39
-     A.4.  Version -16 to -17  . . . . . . . . . . . . . . . . . . .  39
-     A.5.  Version -17 to -18  . . . . . . . . . . . . . . . . . . .  39
+     A.3.  Version -15 to -16  . . . . . . . . . . . . . . . . . . .  40
+     A.4.  Version -16 to -17  . . . . . . . . . . . . . . . . . . .  40
+     A.5.  Version -17 to -18  . . . . . . . . . . . . . . . . . . .  40
    Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  40
    Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  40
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  40
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  41
 
 1.  Introduction
 
@@ -300,8 +300,8 @@ Internet-Draft                 CoAP pubsub                    March 2025
            Figure 1: Publish-subscribe architecture based on CoAP
 
    This document describes two sets of interactions; interactions to
-   configure topics and their lifecycle (see Section 2.5) and
-   interactions about the topic-data (see Section 3.2).
+   configure topics and their lifecycle (see Section 2.4.3 and
+   Section 2.5) and interactions about the topic-data (see Section 3.2).
 
    Topic interactions are: discovery, create, read configuration, update
    configuration, and delete configuration.  These operations concern
@@ -435,13 +435,13 @@ Internet-Draft                 CoAP pubsub                    March 2025
    *  "topic-data": A required field (optional during creation)
       containing the URI of the topic-data resource for publishing/
       subscribing to this topic.  It encodes the URI as a CBOR text
-      string.
+      string.  If a URI is not provided when creating the topic, the
+      choice of the URI for the topic-data resource is left to the
+      broker.
 
-   *  "resource-type": A required field used to indicate the resource
-      type of the topic-data resource for the topic.  It encodes the
-      resource type as a CBOR text string.  The value is typically
-      "core.ps.data", i.e., when using the topic-data resource defined
-      in this document.
+
+
+
 
 
 
@@ -449,6 +449,12 @@ Jimenez, et al.         Expires 18 September 2025               [Page 8]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
+
+   *  "resource-type": A required field used to indicate the resource
+      type of the topic-data resource for the topic.  It encodes the
+      resource type as a CBOR text string.  The value is typically
+      "core.ps.data", i.e., when using the topic-data resource defined
+      in this document.
 
    *  "topic-content-format": This optional field specifies the CoAP
       Content-Format identifier of the topic-data resource
@@ -465,7 +471,9 @@ Internet-Draft                 CoAP pubsub                    March 2025
       CBOR text string.  The value should be a date string as defined in
       Section 3.4.1 of RFC 8949 [STD94] (e.g., the CBOR encoded version
       of "2023-03-31T23:59:59Z").  If this field is not present, the
-      topic will not expire automatically.
+      topic will not expire automatically.  When "expiration-date" is
+      reached, the topic resource is deleted as described in
+      Section 2.5.5.
 
    *  "max-subscribers": An optional field used to indicate the maximum
       number of simultaneous subscribers allowed for the topic.  It
@@ -484,14 +492,6 @@ Internet-Draft                 CoAP pubsub                    March 2025
       "observer-check" value.  The default value for this field is
       86400, as defined in [RFC7641], which corresponds to 24 hours.
 
-   *  "initialize": An optional boolean field that, when set to true,
-      allows the topic-data resource to be pre-populated with a zero-
-      length (empty) representation without an explicit Content-Format.
-      This behavior facilitates one-shot publication and topic creation,
-      enabling CoAP clients to subscribe by default without encountering
-      a 4.04 Not Found error.  If this field is not present or set to
-      'false', the broker behaves as usual, and the topic-data resource
-      is not initialized.
 
 
 
@@ -505,6 +505,15 @@ Jimenez, et al.         Expires 18 September 2025               [Page 9]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
+
+   *  "initialize": An optional boolean field that, when set to true,
+      allows the topic-data resource to be pre-populated with a zero-
+      length (empty) representation without an explicit Content-Format.
+      This behavior facilitates one-shot publication and topic creation,
+      enabling CoAP clients to subscribe by default without encountering
+      a 4.04 Not Found error.  If this field is not present or set to
+      'false', the broker behaves as usual, and the topic-data resource
+      is not initialized.
 
 2.3.  Discovery
 
@@ -537,6 +546,22 @@ Internet-Draft                 CoAP pubsub                    March 2025
    the "core.ps" resource type over a multicast network.  Brokers within
    the multicast scope will answer the query.
 
+
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.         Expires 18 September 2025              [Page 10]
+
+Internet-Draft                 CoAP pubsub                    March 2025
+
+
       Request:
 
       Header: GET (Code=0.01)
@@ -551,16 +576,6 @@ Internet-Draft                 CoAP pubsub                    March 2025
       Content-Format: 40 (application/link-format)
       Payload:
       <coaps://mythinguri.com/broker/v1>;rt="core.ps"
-
-
-
-
-
-
-Jimenez, et al.         Expires 18 September 2025              [Page 10]
-
-Internet-Draft                 CoAP pubsub                    March 2025
-
 
 2.3.2.  Topic Collection Discovery
 
@@ -596,6 +611,13 @@ Internet-Draft                 CoAP pubsub                    March 2025
       </ps>;rt="core.ps.coll",
       </other/path>;rt="core.ps.coll"
 
+
+
+Jimenez, et al.         Expires 18 September 2025              [Page 11]
+
+Internet-Draft                 CoAP pubsub                    March 2025
+
+
    Note that in this example the "ct" attribute is not included for the
    two collections in the returned CoRE Link Format document.  This is
    because the "ct" attribute is an optional hint, which is not needed
@@ -610,13 +632,6 @@ Internet-Draft                 CoAP pubsub                    March 2025
    detailing the configuration of its respective topic (refer to
    Section 2.2.1).  Each topic resource is identified by the resource
    type "core.ps.conf".
-
-
-
-Jimenez, et al.         Expires 18 September 2025              [Page 11]
-
-Internet-Draft                 CoAP pubsub                    March 2025
-
 
    Below is an example of discovery via /.well-known/core with query
    rt=core.ps.conf that returns a list of topics, as the list of links
@@ -650,21 +665,6 @@ Internet-Draft                 CoAP pubsub                    March 2025
    subscribing.  So retrieving the topic will also provide the URL of
    the topic-data resource (see Section 2.5.1).
 
-   The topic-data resources use the resource type 'core.ps.data'.  It is
-   also possible to discover a list of topic-data resources, by sending
-   a request to the collection resource with a query parameter
-   rt=core.ps.data as shown below.  Every topic collection resource MUST
-   support this query.
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -673,6 +673,12 @@ Jimenez, et al.         Expires 18 September 2025              [Page 12]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
+
+   The topic-data resources use the resource type 'core.ps.data'.  It is
+   also possible to discover a list of topic-data resources, by sending
+   a request to the collection resource with a query parameter
+   rt=core.ps.data as shown below.  Every topic collection resource MUST
+   support this query.
 
       Request:
 
@@ -714,13 +720,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
    A client can request a collection of the topics present in the broker
    by making a GET request to the topic collection URI.
 
-   On success, the broker returns a 2.05 (Content) response, specifying
-   the list of links to topic resources associated with this topic
-   collection (see Section 2.2).
 
-   A client MAY retrieve a list of links to topics it is authorized to
-   access, based on its permissions.  A broker MUST implement topic
-   collection discovery.
 
 
 
@@ -729,6 +729,14 @@ Jimenez, et al.         Expires 18 September 2025              [Page 13]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
+
+   On success, the broker returns a 2.05 (Content) response, specifying
+   the list of links to topic resources associated with this topic
+   collection (see Section 2.2).
+
+   A client MAY retrieve a list of links to topics it is authorized to
+   access, based on its permissions.  A broker MUST implement topic
+   collection discovery.
 
    The content-format 40 ("application/link-format") MUST be supported
    for the topic collection resource.
@@ -770,14 +778,6 @@ Internet-Draft                 CoAP pubsub                    March 2025
    in the topic resource representation.
 
    Example:
-
-
-
-
-
-
-
-
 
 
 
@@ -1257,7 +1257,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
                    |   ^   \       ___       /   |   ^
              Read/ |   |    '-->  |   |  <--'    |   | Read/
             Update |   |  Delete  |___|  Delete  |   | Update
-             Topic  '-'   Topic          Topic    '-'  topic-data
+             Topic  '-'   Topic          Topic    '-'  Topic
                                  DELETED
 
                        Figure 4: Lifecycle of a Topic
@@ -1272,16 +1272,16 @@ Internet-Draft                 CoAP pubsub                    March 2025
    DELETED state and shortly after removed from the server.  In this
    state, all subscribers are removed from the list of observers of the
    topic-data resource and no further interactions with the topic are
-   possible.
+   possible.  Both the topic resource and the topic-data resource are
+   deleted.
 
    When a client deletes a topic-data resource, the associated topic is
    placed into the HALF CREATED state, where clients can read, update
    and delete the topic and await for a publisher to begin publication.
+   the "topic-data" property in the topic configuration remains
+   unchanged but no subscription to topic-data nor reading of data is
+   allowed.
 
-3.2.  Topic-Data Interactions
-
-   Interactions with the topic-data resource are covered in this
-   section.
 
 
 
@@ -1289,6 +1289,11 @@ Jimenez, et al.         Expires 18 September 2025              [Page 23]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
+
+3.2.  Topic-Data Interactions
+
+   Interactions with the topic-data resource are covered in this
+   section.
 
 3.2.1.  Publish
 
@@ -1308,6 +1313,10 @@ Internet-Draft                 CoAP pubsub                    March 2025
    instead MUST return a 2.01 (Created) response and set the topic in
    the fully-created state (see Section 3.1).
 
+   Setting "initialize" to "true" is equivalent to having had a first
+   publication with empty content.  A follow-up publication from a
+   publisher should result in a 2.04 response from the broker.
+
    If the request does not have an acceptable Content-format, e.g., as
    specified by the "topic-content-format" property in the topic
    configuration, the broker returns a 4.15 (Unsupported Content-Format)
@@ -1317,6 +1326,25 @@ Internet-Draft                 CoAP pubsub                    March 2025
    4.29 (Too Many Requests) response [RFC8516].
 
    Example of first publication:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.         Expires 18 September 2025              [Page 24]
+
+Internet-Draft                 CoAP pubsub                    March 2025
+
 
       Request:
 
@@ -1338,13 +1366,6 @@ Internet-Draft                 CoAP pubsub                    March 2025
       Header: Created (Code=2.01)
 
    Example of subsequent publication:
-
-
-
-Jimenez, et al.         Expires 18 September 2025              [Page 24]
-
-Internet-Draft                 CoAP pubsub                    March 2025
-
 
       Request:
 
@@ -1370,6 +1391,16 @@ Internet-Draft                 CoAP pubsub                    March 2025
    A client can subscribe to a topic-data resource by sending a CoAP GET
    request with the CoAP Observe Option set to 0 to subscribe to
    resource updates [RFC7641].
+
+
+
+
+
+
+Jimenez, et al.         Expires 18 September 2025              [Page 25]
+
+Internet-Draft                 CoAP pubsub                    March 2025
+
 
    On success, the server hosting the topic-data resource MUST return
    2.05 (Content) notifications with the data and the Observe Option.
@@ -1397,7 +1428,32 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 25]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.         Expires 18 September 2025              [Page 26]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1453,7 +1509,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 26]
+Jimenez, et al.         Expires 18 September 2025              [Page 27]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1509,7 +1565,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 27]
+Jimenez, et al.         Expires 18 September 2025              [Page 28]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1565,7 +1621,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 28]
+Jimenez, et al.         Expires 18 September 2025              [Page 29]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1586,34 +1642,32 @@ Internet-Draft                 CoAP pubsub                    March 2025
    when these topic properties are transported in the respective CoAP
    message payloads.
 
-              +======================+==========+===========+
-              | Name                 | CBOR Key | CBOR Type |
-              +======================+==========+===========+
-              | topic-name           | 0        | tstr      |
-              +----------------------+----------+-----------+
-              | topic-data           | 1        | tstr      |
-              +----------------------+----------+-----------+
-              | resource-type        | 2        | tstr      |
-              +----------------------+----------+-----------+
-              | topic-content-format | 3        | uint      |
-              +----------------------+----------+-----------+
-              | topic-type           | 4        | tstr      |
-              +----------------------+----------+-----------+
-              | expiration-date      | 5        | tstr      |
-              +----------------------+----------+-----------+
-              | max-subscribers      | 6        | uint      |
-              +----------------------+----------+-----------+
-              | observer-check       | 7        | uint      |
-              +----------------------+----------+-----------+
-              | initialize           | 8        | bool      |
-              +----------------------+----------+-----------+
-              | conf-filter          | 9        | array     |
-              +----------------------+----------+-----------+
+            +======================+==========+===============+
+            | Name                 | CBOR Key | CBOR Type     |
+            +======================+==========+===============+
+            | topic-name           | 0        | tstr          |
+            +----------------------+----------+---------------+
+            | topic-data           | 1        | tstr          |
+            +----------------------+----------+---------------+
+            | resource-type        | 2        | tstr          |
+            +----------------------+----------+---------------+
+            | topic-content-format | 3        | uint          |
+            +----------------------+----------+---------------+
+            | topic-type           | 4        | tstr          |
+            +----------------------+----------+---------------+
+            | expiration-date      | 5        | tstr          |
+            +----------------------+----------+---------------+
+            | max-subscribers      | 6        | uint          |
+            +----------------------+----------+---------------+
+            | observer-check       | 7        | uint          |
+            +----------------------+----------+---------------+
+            | initialize           | 8        | True or False |
+            +----------------------+----------+---------------+
+            | conf-filter          | 9        | array         |
+            +----------------------+----------+---------------+
 
-                 Table 1: CoAP Pubsub Topic Properties and
-                               CBOR Encoding
-
-
+               Table 1: CoAP Pubsub Topic Properties and CBOR
+                                  Encoding
 
 
 
@@ -1621,7 +1675,9 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 29]
+
+
+Jimenez, et al.         Expires 18 September 2025              [Page 30]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1677,7 +1733,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 30]
+Jimenez, et al.         Expires 18 September 2025              [Page 31]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1733,7 +1789,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 31]
+Jimenez, et al.         Expires 18 September 2025              [Page 32]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1789,7 +1845,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 32]
+Jimenez, et al.         Expires 18 September 2025              [Page 33]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1845,7 +1901,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 33]
+Jimenez, et al.         Expires 18 September 2025              [Page 34]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1857,25 +1913,6 @@ Internet-Draft                 CoAP pubsub                    March 2025
    general guidelines for what the experts should be looking for;
    however, they are being designated as experts for a reason, so they
    should be given substantial latitude.
-
-   Expert reviewers should take into consideration the following points:
-
-   The registration policy for the IANA registry established in
-   Section 6.4 is defined as one of "Standards Action with Expert
-   Review", "Specification Required", and "Expert Review".  This section
-   gives some general guidelines for what the experts should be looking
-   for; however, they are being designated as experts for a reason, so
-   they should be given substantial latitude.
-
-   These registration policies are designed to accommodate different use
-   cases; “Standards Action with Expert Review” allows for further IETF
-   standards and extensions, maintaining consistency and alignment with
-   established protocols; “Specification Required” allows third-party
-   specifications from Standards Development Organizations (SDOs) to
-   register topic properties, enabling interoperability and broader
-   applicability; and “Expert Review” provides a flexible mechanism for
-   exposing new properties that implementors do not want to keep in a
-   private range.
 
    Expert reviewers should take into consideration the following points:
 
@@ -1898,14 +1935,6 @@ Internet-Draft                 CoAP pubsub                    March 2025
       Review" range of point assignment.  Specifications should exist
       for "Specification Required" ranges, but early assignment before a
       specification is available is considered to be permissible.  When
-
-
-
-Jimenez, et al.         Expires 18 September 2025              [Page 34]
-
-Internet-Draft                 CoAP pubsub                    March 2025
-
-
       specifications are not provided, the description provided needs to
       have sufficient information to identify what the point is being
       used for.
@@ -1925,6 +1954,13 @@ Internet-Draft                 CoAP pubsub                    March 2025
    [BCP100]   Best Current Practice 100,
               <https://www.rfc-editor.org/info/bcp100>.
               At the time of writing, this BCP comprises the following:
+
+
+
+Jimenez, et al.         Expires 18 September 2025              [Page 35]
+
+Internet-Draft                 CoAP pubsub                    March 2025
+
 
               Cotton, M., "Early IANA Allocation of Standards Track Code
               Points", BCP 100, RFC 7120, DOI 10.17487/RFC7120, January
@@ -1953,15 +1989,6 @@ Internet-Draft                 CoAP pubsub                    March 2025
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
 
-
-
-
-
-Jimenez, et al.         Expires 18 September 2025              [Page 35]
-
-Internet-Draft                 CoAP pubsub                    March 2025
-
-
               Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
@@ -1983,6 +2010,13 @@ Internet-Draft                 CoAP pubsub                    March 2025
    [RFC6690]  Shelby, Z., "Constrained RESTful Environments (CoRE) Link
               Format", RFC 6690, DOI 10.17487/RFC6690, August 2012,
               <https://www.rfc-editor.org/rfc/rfc6690>.
+
+
+
+Jimenez, et al.         Expires 18 September 2025              [Page 36]
+
+Internet-Draft                 CoAP pubsub                    March 2025
+
 
    [RFC7252]  Shelby, Z., Hartke, K., and C. Bormann, "The Constrained
               Application Protocol (CoAP)", RFC 7252,
@@ -2010,14 +2044,6 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
    [STD94]    Internet Standard 94,
               <https://www.rfc-editor.org/info/std94>.
-
-
-
-Jimenez, et al.         Expires 18 September 2025              [Page 36]
-
-Internet-Draft                 CoAP pubsub                    March 2025
-
-
               At the time of writing, this STD comprises the following:
 
               Bormann, C. and P. Hoffman, "Concise Binary Object
@@ -2034,6 +2060,19 @@ Internet-Draft                 CoAP pubsub                    March 2025
               Draft, draft-hartke-t2trg-coral-pubsub-01, 9 May 2020,
               <https://datatracker.ietf.org/doc/html/draft-hartke-t2trg-
               coral-pubsub-01>.
+
+
+
+
+
+
+
+
+
+Jimenez, et al.         Expires 18 September 2025              [Page 37]
+
+Internet-Draft                 CoAP pubsub                    March 2025
+
 
    [I-D.ietf-ace-oscore-gm-admin]
               Tiloca, M., Höglund, R., Van der Stok, P., and F.
@@ -2064,16 +2103,6 @@ Internet-Draft                 CoAP pubsub                    March 2025
               (OSCORE)", RFC 8613, DOI 10.17487/RFC8613, July 2019,
               <https://www.rfc-editor.org/rfc/rfc8613>.
 
-
-
-
-
-
-Jimenez, et al.         Expires 18 September 2025              [Page 37]
-
-Internet-Draft                 CoAP pubsub                    March 2025
-
-
    [RFC9053]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
               Initial Algorithms", RFC 9053, DOI 10.17487/RFC9053,
               August 2022, <https://www.rfc-editor.org/rfc/rfc9053>.
@@ -2088,6 +2117,18 @@ Internet-Draft                 CoAP pubsub                    March 2025
               Constrained Environments Using the OAuth 2.0 Framework
               (ACE-OAuth)", RFC 9200, DOI 10.17487/RFC9200, August 2022,
               <https://www.rfc-editor.org/rfc/rfc9200>.
+
+
+
+
+
+
+
+
+Jimenez, et al.         Expires 18 September 2025              [Page 38]
+
+Internet-Draft                 CoAP pubsub                    March 2025
+
 
    [RFC9594]  Palombini, F. and M. Tiloca, "Key Provisioning for Group
               Communication Using Authentication and Authorization for
@@ -2123,13 +2164,6 @@ A.1.  Version -13 to -14
 
    *  Various clarifications of default values for parameters.
 
-
-
-Jimenez, et al.         Expires 18 September 2025              [Page 38]
-
-Internet-Draft                 CoAP pubsub                    March 2025
-
-
    *  New examples for several interactions.
 
    *  Updated topic discovery section.
@@ -2143,6 +2177,14 @@ A.2.  Version -14 to -15
 
    *  Added two new optional topic configuration parameters;
       "initialize" and "topic-history".
+
+
+
+
+Jimenez, et al.         Expires 18 September 2025              [Page 39]
+
+Internet-Draft                 CoAP pubsub                    March 2025
+
 
    *  Modified all examples to conform to RFC9594.
 
@@ -2175,17 +2217,6 @@ A.5.  Version -17 to -18
 
    *  Editorial changes
 
-
-
-
-
-
-
-Jimenez, et al.         Expires 18 September 2025              [Page 39]
-
-Internet-Draft                 CoAP pubsub                    March 2025
-
-
 Acknowledgements
 
    The current version of this document contains a substantial
@@ -2202,6 +2233,14 @@ Acknowledgements
    Lorenzo Corneo for their valuable contributions and reviews.
 
 Contributors
+
+
+
+
+Jimenez, et al.         Expires 18 September 2025              [Page 40]
+
+Internet-Draft                 CoAP pubsub                    March 2025
+
 
    Marco Tiloca
    RISE AB
@@ -2237,4 +2276,21 @@ Authors' Addresses
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 40]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.         Expires 18 September 2025              [Page 41]
