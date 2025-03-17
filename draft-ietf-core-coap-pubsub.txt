@@ -138,8 +138,9 @@ Internet-Draft                 CoAP pubsub                    March 2025
      A.3.  Version -15 to -16  . . . . . . . . . . . . . . . . . . .  40
      A.4.  Version -16 to -17  . . . . . . . . . . . . . . . . . . .  40
      A.5.  Version -17 to -18  . . . . . . . . . . . . . . . . . . .  40
+     A.6.  Version -18 to 19 . . . . . . . . . . . . . . . . . . . .  40
    Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  40
-   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  40
+   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  41
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  41
 
 1.  Introduction
@@ -157,7 +158,6 @@ Internet-Draft                 CoAP pubsub                    March 2025
    Another important class of nodes are devices with limited
    reachability due to middle-boxes like Network Address Translators
    (NATs) and firewalls.
-
 
 
 
@@ -2217,6 +2217,14 @@ A.5.  Version -17 to -18
 
    *  Editorial changes
 
+A.6.  Version -18 to 19
+
+   *  IANA early review
+
+   *  Addressed issues #68, #69
+
+   *  Addressed Marco's review
+
 Acknowledgements
 
    The current version of this document contains a substantial
@@ -2226,14 +2234,6 @@ Acknowledgements
    The document follows a similar architectural design as that provided
    by Marco Tiloca's [I-D.ietf-ace-oscore-gm-admin].
 
-   The authors would like to thank Marco Tiloca, Esko Dijk,Francesca
-   Palombini, Carsten Bormann, Hannes Tschofenig, Zach Shelby, Mohit
-   Sethi, Peter van der Stok, Tim Kellogg, Anders Eriksson, Goran
-   Selander, Mikko Majanen, Olaf Bergmann, David Navarro, Oscar Novo and
-   Lorenzo Corneo for their valuable contributions and reviews.
-
-Contributors
-
 
 
 
@@ -2241,6 +2241,14 @@ Jimenez, et al.         Expires 18 September 2025              [Page 40]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
+
+   The authors would like to thank Marco Tiloca, Esko Dijk,Francesca
+   Palombini, Carsten Bormann, Hannes Tschofenig, Zach Shelby, Mohit
+   Sethi, Peter van der Stok, Tim Kellogg, Anders Eriksson, Goran
+   Selander, Mikko Majanen, Olaf Bergmann, David Navarro, Oscar Novo and
+   Lorenzo Corneo for their valuable contributions and reviews.
+
+Contributors
 
    Marco Tiloca
    RISE AB
@@ -2270,14 +2278,6 @@ Authors' Addresses
    Ari Keranen
    Ericsson
    Email: ari.keranen@ericsson.com
-
-
-
-
-
-
-
-
 
 
 
