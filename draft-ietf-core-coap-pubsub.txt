@@ -148,20 +148,20 @@ Internet-Draft                 CoAP pubsub                    March 2025
    machine-to-machine communication across networks of constrained
    devices and constrained networks.  CoAP uses a request/response model
    where clients make requests to servers in order to request actions on
-   resources.  Depending on the situation the same device may act either
-   as a server, a client, or both.  One important class of constrained
-   devices includes devices that are intended to run for years from a
-   small battery, or by scavenging energy from their environment.  These
-   devices have limited up-time because they spend most of their time in
-   a sleeping state with no network connectivity.  Another important
-   class of nodes are devices with limited reachability due to middle-
-   boxes like Network Address Translators (NATs) and firewalls.
+   resources.  Depending on the situation, the same device may act
+   either as a server, a client, or both.  One important class of
+   constrained devices includes devices that are intended to run for
+   years from a small battery, or by scavenging energy from their
+   environment.  These devices have limited up-time because they spend
+   most of their time in a sleeping state with no network connectivity.
+   Another important class of nodes are devices with limited
+   reachability due to middle-boxes like Network Address Translators
+   (NATs) and firewalls.
 
-   For these nodes, the client/server-oriented architecture of REST can
-   be challenging when interactions are not initiated by the devices
-   themselves.  A publish/subscribe-oriented architecture where nodes
-   exchange data via topics through a broker entity might fit these
-   nodes better.
+
+
+
+
 
 
 
@@ -170,9 +170,15 @@ Jimenez, et al.         Expires 18 September 2025               [Page 3]
 Internet-Draft                 CoAP pubsub                    March 2025
 
 
+   For these nodes, the client/server-oriented architecture of REST can
+   be challenging when interactions are not initiated by the devices
+   themselves.  A publish/subscribe-oriented architecture where nodes
+   exchange data via topics through a broker entity might fit these
+   nodes better.
+
    This document applies the idea of broker-based publish-subscribe to
    Constrained RESTful Environments using CoAP.  It defines a broker
-   that allows to create, discover, subscribe and publish on topics.
+   that allows to create, discover, subscribe, and publish on topics.
 
 1.1.  Terminology
 
@@ -185,7 +191,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
    This specification requires readers to be familiar with all the terms
    and concepts that are discussed in [RFC8288] and [RFC6690].  Readers
    should also be familiar with the terms and concepts discussed in
-   [RFC7252], [RFC9176] and [RFC7641].  The URI template format
+   [RFC7252], [RFC9176], and [RFC7641].  The URI template format
    [RFC6570] is used to describe the REST API defined in this
    specification.
 
@@ -193,7 +199,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
    publish-subscribe (pubsub):
       A message communication model where messages associated with
-      specific topics are sent to a broker.  Interested parties, i.e.
+      specific topics are sent to a broker.  Interested parties, i.e.,
       subscribers, receive these topic-based messages from the broker
       without the original sender knowing the recipients.  The broker
       handlesthe dispatching of these messages to the appropriate
@@ -212,12 +218,6 @@ Internet-Draft                 CoAP pubsub                    March 2025
       broker, and its representation is the list of links to the topic
       resources each corresponding to a topic.
 
-   topic:
-
-
-
-
-
 
 
 
@@ -226,6 +226,7 @@ Jimenez, et al.         Expires 18 September 2025               [Page 4]
 Internet-Draft                 CoAP pubsub                    March 2025
 
 
+   topic:
       A resource used for configuration of the subcription and
       publication properties, which can be set by a client or by the
       broker.  A topic is represented as a CBOR map containing the topic
@@ -236,7 +237,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
    topic property:
       A single element of configuration information that is associated
-      to a topic.
+      with a topic.
 
    topic-data resource:
       A resource where clients can publish data and/or subscribe to data
@@ -256,7 +257,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 1.2.  CoAP Publish-Subscribe Architecture
 
-   Figure 1 shows a simple publish-subscribe architecture over CoAP.
+   Figure 1 shows a simple publish-subscribe architecture based on CoAP.
 
    The broker can create its hosted topics and set their initial
    configurations.  Alternatively, topics can be created together with
@@ -267,10 +268,9 @@ Internet-Draft                 CoAP pubsub                    March 2025
    The broker is responsible for the store-and-forward of state update
    representations between CoAP clients.  Publishers submit their data
    over the RESTful interface of a topic-data resource corresponding to
-   the topic, which may be hosted by the broker.  Subscribers to a topic
+   the topic, which can be hosted at the broker.  Subscribers to a topic
    are notified of new publications by using Observe [RFC7641] on the
    corresponding topic-data resource.
-
 
 
 
@@ -297,17 +297,17 @@ Internet-Draft                 CoAP pubsub                    March 2025
          |           |          |          +---------->|            |
          '-----------'          '----------'           '------------'
 
-             Figure 1: Publish-subscribe architecture over CoAP
+           Figure 1: Publish-subscribe architecture based on CoAP
 
    This document describes two sets of interactions; interactions to
    configure topics and their lifecycle (see Section 2.5) and
    interactions about the topic-data (see Section 3.2).
 
-   Topic interactions are discovery, create, read configuration, update
-   configuration, and delete configuration.  These operations handle the
-   management of the topics.
+   Topic interactions are: discovery, create, read configuration, update
+   configuration, and delete configuration.  These operations concern
+   the management of the topics.
 
-   The topic-data interactions are publish, subscribe, unsubscribe,
+   The topic-data interactions are: publish, subscribe, unsubscribe,
    read, and delete.  These operations are oriented on how data is
    transferred from a publisher to a subscriber.
 
@@ -340,7 +340,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
    The broker exports one or more topic collection resources, with
    resource type "core.ps.coll" defined in Section 6.3 of this document.
-   The interfaces for the topic collection resource is defined in
+   The interface for the topic collection resource is defined in
    Section 2.4.
 
    A topic collection resource can have topic resources as its child
@@ -477,10 +477,10 @@ Internet-Draft                 CoAP pubsub                    March 2025
       number of seconds between two consecutive Observe notifications
       sent as Confirmable messages to each topic subscriber (see
       Section 3.2.3).  Encoded as a CBOR unsigned integer greater than
-      0, it ensures subscribers who have lost interest and silently
-      forgotten the observation do not remain indefinitely on the
-      server's observer list.  If another CoAP server hosts the topic-
-      data resource, that server is responsible for applying the
+      0, it ensures that subscribers that have lost interest and
+      silently forgotten the observation do not remain indefinitely on
+      the server's observer list.  If another CoAP server hosts the
+      topic-data resource, that server is responsible for applying the
       "observer-check" value.  The default value for this field is
       86400, as defined in [RFC7641], which corresponds to 24 hours.
 
@@ -529,7 +529,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
    CoAP clients MAY discover brokers by using CoAP discovery [RFC7252],
    via multicast, through a Resource Directory (RD) [RFC9176] or by
    other means specified in extensions to [RFC7252].  Brokers MAY
-   register with a RD by following the steps on Section 5 of [RFC9176]
+   register with an RD by following the steps on Section 5 of [RFC9176]
    with the resource type set to "core.ps" as defined in Section 6 of
    this document.
 
@@ -569,7 +569,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
    collection resource (see Section 1.2.2 of [RFC6690]) and is
    identified by the resource type "core.ps.coll".
 
-   The specific resource path is left for implementations, examples in
+   The specific resource path is left for implementations.  Examples in
    this document use the "/ps" path.  The interactions with a topic
    collection are further defined in Section 2.4.
 
@@ -599,7 +599,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
    Note that in this example the "ct" attribute is not included for the
    two collections in the returned CoRE Link Format document.  This is
    because the "ct" attribute is an optional hint, which is not needed
-   in this case: the content-format of each topic collection resource is
+   in this case: the Content-format of each topic collection resource is
    implied by its resource type (rt="core.ps.coll") to be 40
    ("application/link-format").
 
@@ -651,9 +651,9 @@ Internet-Draft                 CoAP pubsub                    March 2025
    the topic-data resource (see Section 2.5.1).
 
    The topic-data resources use the resource type 'core.ps.data'.  It is
-   also possible to discover a list of topic-data resources by sending a
-   request to the collection resource with a query parameter
-   rt=core.ps.data as shown below.  Any topic collection resource MUST
+   also possible to discover a list of topic-data resources, by sending
+   a request to the collection resource with a query parameter
+   rt=core.ps.data as shown below.  Every topic collection resource MUST
    support this query.
 
 
@@ -813,7 +813,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 2.4.3.  Creating a Topic
 
-   A client can add a new topics to a collection of topics by submitting
+   A client can add a new topic to a collection of topics by submitting
    an initial representation of the topic resource (see Section 2.2) in
    a POST request to the topic collection URI.  The request MUST specify
    at least a subset of the topic properties in Section 2.2.1, namely:
@@ -849,7 +849,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
    the Location-Path of the new topic and the current representation of
    the topic resource.  The response payload includes a CBOR map.  The
    response MUST include the required topic properties (see
-   Section 2.2.1), namely: "topic-name", "resource-type" and "topic-
+   Section 2.2.1), namely: "topic-name", "resource-type", and "topic-
    data".  It MAY also include a number of optional topic properties
    too.  The response MUST have Content-Format set to TBD606
    ("application/core-pubsub+cbor)".
@@ -1039,7 +1039,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
    are immutable post-creation, and any request attempting to change
    them will be deemed invalid by the broker.
 
-   On success, the topic is overwritten and broker returns a 2.04
+   On success, the topic is overwritten and the broker returns a 2.04
    (Changed) response and the current full resource representation.  The
    broker MAY choose not to overwrite topic properties that are not
    explicitly modified in the request.
@@ -1098,7 +1098,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
          / observer-check /        7: 86400
       }
 
-   Note that when a topic changes, it may result in disruptions for the
+   Note that, when a topic changes, it may result in disruptions for the
    subscribers.  Some potential issues that may arise include:
 
    *  Limiting the number of subscribers will cause cancellation of
@@ -1209,10 +1209,10 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 3.  Publish and Subscribe
 
-   The overview of the publish-subscribe mechanism over CoAP is as
+   The overview of the publish-subscribe mechanism based on CoAP is as
    follows: a publisher publishes to a topic by submitting the data in a
    PUT request to a topic-data resource and subscribers subscribe to a
-   topic by submitting a GET request with Observe option set to 0
+   topic by submitting a GET request with the Observe option set to 0
    (register) to a topic-data resource.  When resource state changes,
    subscribers observing the resource [RFC7641] at that time will
    receive a notification.
@@ -1294,7 +1294,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
    A topic with a topic-data resource must have been created in order to
    publish data to it (See Section 2.4.3) and be in the half-created or
-   fully-created state in order to the publish operation to work (see
+   fully-created state in order for the publish operation to work (see
    Section 3.1).
 
    A client can publish data to a topic by submitting the data in a PUT
@@ -1308,7 +1308,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
    instead MUST return a 2.01 (Created) response and set the topic in
    the fully-created state (see Section 3.1).
 
-   If the request does not have an acceptable content-format, as
+   If the request does not have an acceptable Content-format, as
    specified by the "topic-content-format" property in the topic
    configuration, the broker returns a 4.15 (Unsupported Content-Format)
    response.
@@ -1373,15 +1373,15 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
    On success, the server hosting the topic-data resource MUST return
    2.05 (Content) notifications with the data and the Observe Option.
-   Otherwise, if no Observe Option is present the client should assume
+   Otherwise, if no Observe Option is present, the client should assume
    that the subscription was not successful.
 
-   If the topic is not yet in the fully created state (see Section 3.1)
+   If the topic is not yet in the fully created state (see Section 3.1),
    the broker MUST return a response code 4.04 (Not Found).
 
    The following response codes are defined for the Subscribe operation:
 
-   Success:  2.05 "Content".  Successful subscribe with observe
+   Success:  2.05 "Content".  Successful subscription with Observe
       response, current value included in the response.
 
    Failure:  4.04 "Not Found".  The topic-data resource does not exist.
@@ -1463,8 +1463,8 @@ Internet-Draft                 CoAP pubsub                    March 2025
    message instead of a non-confirmable message at least every 24 hours.
 
    This value can be modified at the broker by the administrator of a
-   topic by modifying the topic property "observer-check" on
-   Section 2.2.  This would allow changing the rate at which different
+   topic by modifying the topic property "observer-check" (see
+   Section 2.2).  This would allow changing the rate at which different
    implementations verify that a subscriber is still interested in
    observing a topic-data resource.
 
@@ -1501,7 +1501,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
    discovery of the "topic-data" topic property is a required previous
    step (see Section 2.5.1).
 
-   On success, the server MUST return 2.05 (Content) response with the
+   On success, the server MUST return a 2.05 (Content) response with the
    data.
 
 
@@ -1642,10 +1642,10 @@ Internet-Draft                 CoAP pubsub                    March 2025
    protected end-to-end between the publisher and all the subscribers to
    that topic.  In such a case, it MUST be possible to assert source
    authentication of the published data.  This can be achieved at the
-   application layer, e.g., by using COSE [STD96], [RFC9053].
+   application layer, e.g., by using COSE [STD96] [RFC9053].
 
    Access control of clients at the broker MAY be enforced for
-   performing discovery operation, and SHOULD be enforced in a fine-
+   performing discovery operations, and SHOULD be enforced in a fine-
    grained fashion for operations related to the creation, update, and
    deletion of topic resources, as well as for operations on topic-data
    resources such as publication on and subscription to topics.  This
@@ -1666,8 +1666,8 @@ Internet-Draft                 CoAP pubsub                    March 2025
    publishers and subscribers to perform operations at the broker, with
    fine-grained access control; authorize publishers and subscribers to
    obtain the keying material required to take part to a topic managed
-   by the broker; protect published data end-to-end between its
-   publisher and all the subscribers to the targeted topic, ensuring
+   by the broker; protect published data end-to-end between a publisher
+   and all the subscribers to the targeted topic, ensuring
    confidentiality, integrity, and source authentication of the
    published content end-to-end.  That approach can be extended to
    enforce authorization and fine-grained access control for
@@ -1795,7 +1795,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
    The registration policy is either "Private Use", "Standards Action
-   with Expert Review", or "Specification Required" or "Expert Review"
+   with Expert Review", or "Specification Required", or "Expert Review"
    per [BCP26].  "Expert Review" guidelines are provided in Section 6.5.
 
    All assignments according to "Standards Action with Expert Review"
