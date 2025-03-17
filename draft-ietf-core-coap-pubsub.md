@@ -702,7 +702,7 @@ The URI for this resource is indicated in the "topic-data" topic property value.
 
 On success, the broker returns a 2.04 (Changed) response. However, when data is published to the topic for the first time, the broker instead MUST return a 2.01 (Created) response and set the topic in the fully-created state (see {{topic-lifecycle}}).
 
-If the request does not have an acceptable content-format, the broker returns a 4.15 (Unsupported Content-Format) response.
+If the request does not have an acceptable content-format, as specified by the "topic-content-format" property in the topic configuration, the broker returns a 4.15 (Unsupported Content-Format) response.
 
 If the client is sending publications too fast, the broker returns a 4.29 (Too Many Requests) response {{RFC8516}}.
 
@@ -760,7 +760,6 @@ On success, the server hosting the topic-data resource MUST return 2.05 (Content
 
 If the topic is not yet in the fully created state (see {{topic-lifecycle}}) the broker MUST return a response code 4.04 (Not Found).
 
-
 The following response codes are defined for the Subscribe operation:
 
 Success:
@@ -769,7 +768,7 @@ Success:
 Failure:
 : 4.04 "Not Found". The topic-data resource does not exist.
 
-If the "max-subscribers" topic property value has been reached, the broker must treat that as specified in {{Section 4.1 of RFC7641}}. The response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
+If the "max-subscribers" topic property value has been reached, the broker must treat that as specified in {{Section 4.1 of RFC7641}}. The 2.05 (Content) response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
 
 
 Example of a successful subscription followed by one update:
@@ -814,20 +813,19 @@ Example of a successful subscription followed by one update:
 
 ### Unsubscribe {#unsubscribe}
 
-A CoAP client can unsubscribe simply by canceling the observation as described in {{Section 3.6 of RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification. Also on {{Section 3.6 of RFC7641}} the client can simply "forget" the observation and the broker will remove it from the list of observers after the next notification.
+A CoAP client can unsubscribe simply by canceling the observation as described in {{Section 3.6 of RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification. Also on {{Section 3.6 of RFC7641}}, the client can simply "forget" the observation. Consequently, upon receiving the next notification, the client replies with a CoAP Reset message, which results in the broker removing the client from the list of observers.
 
-As per {{RFC7641}} a server that transmits notifications mostly in non-confirmable messages, but it MUST send a notification in a confirmable message instead of a non-confirmable message at least every 24 hours.
+As per {{RFC7641}}, a server transmits notifications mostly as non-confirmable messages, but it sends a notification as a confirmable message instead of a non-confirmable message at least every 24 hours.
 
 This value can be modified at the broker by the administrator of a topic by modifying the topic property "observer-check" on {{topic-resource-representation}}. This would allow changing the rate at which different implementations verify that a subscriber is still interested in observing a topic-data resource.
 
-
 ### Delete topic-data {#delete-topic-data}
 
-A publisher MAY delete a topic by making a CoAP DELETE request on the topic-data resource (which is hosted at the "topic-data" URI).
+A publisher can delete a topic-data resource by making a CoAP DELETE request on the topic-data resource (which is hosted at the "topic-data" URI).
 
 On success, the broker returns a 2.02 (Deleted) response.
 
-When a topic-data resource is deleted, the broker MUST also delete the "topic-data" topic property in the topic resource, unsubscribe all subscribers by removing them from the list of observers and return a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The topic is then set back to the half created state as per {{topic-lifecycle}}.
+When a topic-data resource is deleted, the topic is then set back to the half created state as per {{topic-lifecycle}} awaiting for a publisher to publish and set the topic to FULLY-CREATED state where clients can subscribe and read the topic-data.
 
 Example of a successful deletion:
 
@@ -851,7 +849,7 @@ A client can get the latest published topic-data resource by making a GET reques
 
 On success, the server MUST return 2.05 (Content) response with the data.
 
-If the target URI does not match an existing resource or the topic is not in the fully created state (see {{topic-lifecycle}}), the broker MUST return a response code 4.04 (Not Found).
+If the target URI does not match an existing resource or the topic is not in the fully created state (see {{topic-lifecycle}}), the broker MUST return a 4.04 (Not Found) error respons.
 
 Example:
 
@@ -883,7 +881,7 @@ As defined in this document, subscribers can retrieve the latest topic-data reso
 
 The server hosting the topic-data resource may have to handle a potentially large number of publishers and subscribers at the same time. This means it could become overwhelmed if it receives too many publications in a short period of time.
 
-In this situation, if a publisher is sending publications too fast, the server SHOULD return a 4.29 (Too Many Requests) response {{RFC8516}}.  As described in {{RFC8516}}, the Max-Age option {{RFC7252}} in this response indicates the number of seconds after which the client may retry. The broker MAY also stop publishing messages from that publisher for the indicated time.
+In this situation, if a publisher is sending publications too fast, the server SHOULD return a 4.29 (Too Many Requests) response {{RFC8516}}.  As described in {{RFC8516}}, the Max-Age option {{RFC7252}} in this response indicates the number of seconds after which the client may retry. The broker MAY also stop dispatching messages from that publisher for the indicated time.
 
 When a publisher receives a 4.29 (Too Many Requests) response, it MUST NOT send any new publication requests to the same topic-data resource before the time indicated by the Max-Age option has passed.
 
@@ -1093,6 +1091,6 @@ Expert reviewers should take into consideration the following points:
 # Acknowledgements
 {: numbered='no'}
 
-The current version of this document contains a substantial contribution by Klaus Hartke's proposal {{I-D.hartke-t2trg-coral-pubsub}}, which defines the topic resource model and structure as well as the topic lifecycle and interactions. It also follows a similar architectural design as that provided by Marco Tiloca's {{I-D.ietf-ace-oscore-gm-admin}}.
+The current version of this document contains a substantial contribution by Klaus Hartke's proposal {{I-D.hartke-t2trg-coral-pubsub}}, which defines the topic resource model and structure as well as the topic lifecycle and interactions. The document follows a similar architectural design as that provided by Marco Tiloca's {{I-D.ietf-ace-oscore-gm-admin}}.
 
-The authors would like to also thank {{{Marco Tiloca}}}, {{{Francesca Palombini}}}, {{{Carsten Bormann}}}, {{{Esko Dijk}}}, {{{Hannes Tschofenig}}}, {{{Zach Shelby}}}, {{{Mohit Sethi}}}, Peter van der Stok, Tim Kellogg, Anders Eriksson, {{{Goran Selander}}}, Mikko Majanen, {{{Olaf Bergmann}}}, {{{David Navarro}}}, Oscar Novo and Lorenzo Corneo for their valuable contributions and reviews.
+The authors would like to thank {{{Marco Tiloca}}}, {{{Esko Dijk}}},{{{Francesca Palombini}}}, {{{Carsten Bormann}}}, {{{Hannes Tschofenig}}}, {{{Zach Shelby}}}, {{{Mohit Sethi}}}, Peter van der Stok, Tim Kellogg, Anders Eriksson, {{{Goran Selander}}}, Mikko Majanen, {{{Olaf Bergmann}}}, {{{David Navarro}}}, Oscar Novo and Lorenzo Corneo for their valuable contributions and reviews.
