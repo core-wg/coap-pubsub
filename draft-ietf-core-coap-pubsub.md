@@ -143,7 +143,7 @@ The broker is responsible for the store-and-forward of state update representati
 ~~~~
 {: #fig-arch title='Publish-subscribe architecture based on CoAP' artwork-align="center"}
 
-This document describes two sets of interactions; interactions to configure topics and their lifecycle (see {{topic-configuration-interactions}}) and interactions about the topic-data (see {{topic-data-interactions}}).
+This document describes two sets of interactions; interactions to configure topics and their lifecycle (see {{topic-create}} and {{topic-configuration-interactions}}) and interactions about the topic-data (see {{topic-data-interactions}}).
 
 Topic interactions are: discovery, create, read configuration, update configuration, and delete configuration. These operations concern the management of the topics.
 
@@ -219,7 +219,7 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 
 * "topic-name": A required field used as an application identifier. It encodes the topic name as a CBOR text string. Examples of topic names include human-readable strings (e.g., "room2"), UUIDs, or other values.
 
-* "topic-data": A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI as a CBOR text string.
+* "topic-data": A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI as a CBOR text string. If a URI is not provided when creating the topic, the choice of the URI for the topic-data resource is left to the broker.
 
 * "resource-type": A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value is typically "core.ps.data", i.e., when using the topic-data resource defined in this document.
 
@@ -227,7 +227,7 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 
 * "topic-type": An optional field used to indicate the attribute or property of the topic-data resource for the topic. It encodes the attribute as a CBOR text string. Example attributes include "temperature".
 
-* "expiration-date": An optional field used to indicate the expiration date of the topic. It encodes the expiration date as a CBOR text string. The value should be a date string as defined in {{Section 3.4.1 of RFC8949@STD94}} (e.g., the CBOR encoded version of "2023-03-31T23:59:59Z"). If this field is not present, the topic will not expire automatically.
+* "expiration-date": An optional field used to indicate the expiration date of the topic. It encodes the expiration date as a CBOR text string. The value should be a date string as defined in {{Section 3.4.1 of RFC8949@STD94}} (e.g., the CBOR encoded version of "2023-03-31T23:59:59Z"). If this field is not present, the topic will not expire automatically. When "expiration-date" is reached, the topic resource is deleted as described in {{topic-delete}}.
 
 * "max-subscribers": An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as a CBOR unsigned integer. If this field is not present, then there is no limit to the number of simultaneous subscribers allowed.
 
@@ -684,16 +684,16 @@ When a topic is newly created, it is first placed by the broker into the HALF CR
                |   ^   \       ___       /   |   ^
          Read/ |   |    '-->  |   |  <--'    |   | Read/
         Update |   |  Delete  |___|  Delete  |   | Update
-         Topic  '-'   Topic          Topic    '-'  topic-data
+         Topic  '-'   Topic          Topic    '-'  Topic
                              DELETED
 ~~~~
 {: #fig-life title='Lifecycle of a Topic' artwork-align="center"}
 
 After a publisher publishes to the topic-data resource for the first time, the topic is placed into the FULLY CREATED state. In this state, a client can read data by means of a GET request without observe. A publisher can publish to the topic-data resource and a subscriber can observe the topic-data resource.
 
-When a client deletes a topic resource, the topic is placed into the DELETED state and shortly after removed from the server. In this state, all subscribers are removed from the list of observers of the topic-data resource and no further interactions with the topic are possible.
+When a client deletes a topic resource, the topic is placed into the DELETED state and shortly after removed from the server. In this state, all subscribers are removed from the list of observers of the topic-data resource and no further interactions with the topic are possible. Both the topic resource and the topic-data resource are deleted.
 
-When a client deletes a topic-data resource, the associated topic is placed into the HALF CREATED state, where clients can read, update and delete the topic and await for a publisher to begin publication.
+When a client deletes a topic-data resource, the associated topic is placed into the HALF CREATED state, where clients can read, update and delete the topic and await for a publisher to begin publication. the "topic-data" property in the topic configuration remains unchanged but no subscription to topic-data nor reading of data is allowed.
 
 ## Topic-Data Interactions {#topic-data-interactions}
 
@@ -707,6 +707,8 @@ A client can publish data to a topic by submitting the data in a PUT request to 
 The URI for this resource is indicated in the "topic-data" topic property value. Please note that this URI is not the same as the topic URI used for configuring the topic (see {{topic-resource-representation}}).
 
 On success, the broker returns a 2.04 (Changed) response. However, when data is published to the topic for the first time, the broker instead MUST return a 2.01 (Created) response and set the topic in the fully-created state (see {{topic-lifecycle}}).
+
+Setting "initialize" to "true" is equivalent to having had a first publication with empty content. A follow-up publication from a publisher should result in a 2.04 response from the broker.
 
 If the request does not have an acceptable Content-format, e.g., as specified by the "topic-content-format" property in the topic configuration, the broker returns a 4.15 (Unsupported Content-Format) response.
 
@@ -909,7 +911,7 @@ Note that the media type application/core-pubsub+cbor MUST be used when these to
 | expiration-date      | 5        | tstr      |
 | max-subscribers      | 6        | uint      |
 | observer-check       | 7        | uint      |
-| initialize           | 8        | bool      |
+| initialize           | 8        | True or False      |
 | conf-filter          | 9       | array     |
 {: #tab-CoAP-Pubsub-Parameters title="CoAP Pubsub Topic Properties and CBOR Encoding"}
 
@@ -1036,12 +1038,6 @@ This registry has been initially populated with the values in {{tab-CoAP-Pubsub-
 ## Expert Review Instructions {#review}
 
 The registration policy for the IANA registry established in  {{iana-coap-pubsub-parameters}} is defined as "Expert Review". This section gives some general guidelines for what the experts should be looking for; however, they are being designated as experts for a reason, so they should be given substantial latitude.
-
-Expert reviewers should take into consideration the following points:
-
-The registration policy for the IANA registry established in  {{iana-coap-pubsub-parameters}} is defined as one of "Standards Action with Expert Review", "Specification Required", and "Expert Review". This section gives some general guidelines for what the experts should be looking for; however, they are being designated as experts for a reason, so they should be given substantial latitude.
-
-These registration policies are designed to accommodate different use cases; “Standards Action with Expert Review” allows for further IETF standards and extensions, maintaining consistency and alignment with established protocols; “Specification Required” allows third-party specifications from Standards Development Organizations (SDOs) to register topic properties, enabling interoperability and broader applicability; and “Expert Review” provides a flexible mechanism for exposing new properties that implementors do not want to keep in a private range.
 
 Expert reviewers should take into consideration the following points:
 
