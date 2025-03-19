@@ -5,10 +5,10 @@
 CoRE Working Group                                            J. Jimenez
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                               M. Koster
-Expires: 18 September 2025                                 Dogtiger Labs
+Expires: 20 September 2025                                 Dogtiger Labs
                                                               A. Keranen
                                                                 Ericsson
-                                                           17 March 2025
+                                                           19 March 2025
 
 
     A publish-subscribe architecture for the Constrained Application
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Jimenez, et al.         Expires 18 September 2025               [Page 1]
+Jimenez, et al.         Expires 20 September 2025               [Page 1]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -63,7 +63,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 September 2025.
+   This Internet-Draft will expire on 20 September 2025.
 
 Copyright Notice
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Jimenez, et al.         Expires 18 September 2025               [Page 2]
+Jimenez, et al.         Expires 20 September 2025               [Page 2]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -165,7 +165,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025               [Page 3]
+Jimenez, et al.         Expires 20 September 2025               [Page 3]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -221,7 +221,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025               [Page 4]
+Jimenez, et al.         Expires 20 September 2025               [Page 4]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -277,7 +277,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025               [Page 5]
+Jimenez, et al.         Expires 20 September 2025               [Page 5]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -333,7 +333,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025               [Page 6]
+Jimenez, et al.         Expires 20 September 2025               [Page 6]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -389,7 +389,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025               [Page 7]
+Jimenez, et al.         Expires 20 September 2025               [Page 7]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -445,7 +445,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025               [Page 8]
+Jimenez, et al.         Expires 20 September 2025               [Page 8]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -501,7 +501,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025               [Page 9]
+Jimenez, et al.         Expires 20 September 2025               [Page 9]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -557,7 +557,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 10]
+Jimenez, et al.         Expires 20 September 2025              [Page 10]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -613,7 +613,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 11]
+Jimenez, et al.         Expires 20 September 2025              [Page 11]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -669,7 +669,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 12]
+Jimenez, et al.         Expires 20 September 2025              [Page 12]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -725,7 +725,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 13]
+Jimenez, et al.         Expires 20 September 2025              [Page 13]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -781,7 +781,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 14]
+Jimenez, et al.         Expires 20 September 2025              [Page 14]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -837,7 +837,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 15]
+Jimenez, et al.         Expires 20 September 2025              [Page 15]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -893,7 +893,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 16]
+Jimenez, et al.         Expires 20 September 2025              [Page 16]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -949,7 +949,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 17]
+Jimenez, et al.         Expires 20 September 2025              [Page 17]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1005,7 +1005,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 18]
+Jimenez, et al.         Expires 20 September 2025              [Page 18]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1061,7 +1061,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 19]
+Jimenez, et al.         Expires 20 September 2025              [Page 19]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1117,7 +1117,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 20]
+Jimenez, et al.         Expires 20 September 2025              [Page 20]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1173,7 +1173,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 21]
+Jimenez, et al.         Expires 20 September 2025              [Page 21]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1229,7 +1229,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 22]
+Jimenez, et al.         Expires 20 September 2025              [Page 22]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1285,7 +1285,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 23]
+Jimenez, et al.         Expires 20 September 2025              [Page 23]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1341,7 +1341,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 24]
+Jimenez, et al.         Expires 20 September 2025              [Page 24]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1397,7 +1397,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 25]
+Jimenez, et al.         Expires 20 September 2025              [Page 25]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1453,7 +1453,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 26]
+Jimenez, et al.         Expires 20 September 2025              [Page 26]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1509,7 +1509,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 27]
+Jimenez, et al.         Expires 20 September 2025              [Page 27]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1565,7 +1565,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 28]
+Jimenez, et al.         Expires 20 September 2025              [Page 28]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1621,7 +1621,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 29]
+Jimenez, et al.         Expires 20 September 2025              [Page 29]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1677,7 +1677,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 30]
+Jimenez, et al.         Expires 20 September 2025              [Page 30]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1733,7 +1733,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 31]
+Jimenez, et al.         Expires 20 September 2025              [Page 31]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1789,7 +1789,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 32]
+Jimenez, et al.         Expires 20 September 2025              [Page 32]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1845,7 +1845,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 33]
+Jimenez, et al.         Expires 20 September 2025              [Page 33]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1901,7 +1901,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 34]
+Jimenez, et al.         Expires 20 September 2025              [Page 34]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -1957,7 +1957,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 35]
+Jimenez, et al.         Expires 20 September 2025              [Page 35]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -2013,7 +2013,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 36]
+Jimenez, et al.         Expires 20 September 2025              [Page 36]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -2069,7 +2069,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 37]
+Jimenez, et al.         Expires 20 September 2025              [Page 37]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -2125,7 +2125,7 @@ Internet-Draft                 CoAP pubsub                    March 2025
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 38]
+Jimenez, et al.         Expires 20 September 2025              [Page 38]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -2181,7 +2181,7 @@ A.2.  Version -14 to -15
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 39]
+Jimenez, et al.         Expires 20 September 2025              [Page 39]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -2237,7 +2237,7 @@ Acknowledgements
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 40]
+Jimenez, et al.         Expires 20 September 2025              [Page 40]
 
 Internet-Draft                 CoAP pubsub                    March 2025
 
@@ -2293,4 +2293,4 @@ Authors' Addresses
 
 
 
-Jimenez, et al.         Expires 18 September 2025              [Page 41]
+Jimenez, et al.         Expires 20 September 2025              [Page 41]
