@@ -11,22 +11,21 @@
 <meta content="
        This document describes a publish-subscribe architecture for the Constrained Application Protocol (CoAP), extending the capabilities of CoAP communications for supporting endpoints with long breaks in connectivity and/or up-time. CoAP clients publish on and subscribe to a topic via a corresponding topic resource at a CoAP server acting as broker. 
     " name="description">
-<meta content="xml2rfc 3.28.0" name="generator">
+<meta content="xml2rfc 3.31.0" name="generator">
 <meta content="draft-ietf-core-coap-pubsub-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.28.0
-    Python 3.12.9
+  xml2rfc 3.31.0
+    Python 3.12.12
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
     Jinja2 3.1.6
-    lxml 5.3.0
-    platformdirs 4.3.6
+    lxml 5.3.1
+    platformdirs 4.5.0
     pycountry 24.6.1
     PyYAML 6.0.2
-    requests 2.32.3
-    setuptools 70.3.0
-    wcwidth 0.2.13
+    requests 2.32.5
+    wcwidth 0.2.14
 -->
 <link href="draft-ietf-core-coap-pubsub.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1045,11 +1044,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">CoAP pubsub</td>
-<td class="right">March 2025</td>
+<td class="right">November 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Jimenez, et al.</td>
-<td class="center">Expires 20 September 2025</td>
+<td class="center">Expires 6 May 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1062,12 +1061,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-core-coap-pubsub-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-03-19" class="published">19 March 2025</time>
+<time datetime="2025-11-02" class="published">2 November 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-09-20">20 September 2025</time></dd>
+<dd class="expires"><time datetime="2026-05-06">6 May 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1124,7 +1123,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 20 September 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 6 May 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1371,7 +1370,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
           <dd class="break"></dd>
 <dt id="section-1.1-4.5">topic collection:</dt>
           <dd style="margin-left: 1.5em" id="section-1.1-4.6">
-            <p id="section-1.1-4.6.1">A set of topics. A topic collection is hosted as one collection resource (See <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-interfaces-14#section-3.1" class="relref">Section 3.1</a> of [<a href="#I-D.ietf-core-interfaces" class="cite xref">I-D.ietf-core-interfaces</a>]</span>) at the broker, and its representation is the list of links to the topic resources each corresponding to a topic.<a href="#section-1.1-4.6.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-4.6.1">A topic collection is hosted as one collection resource at the broker. A collection resource is a resource that contains links to other resources that a client can add or remove; that concept is described more generally in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-interfaces-14#section-3.1" class="relref">Section 3.1</a> of [<a href="#I-D.ietf-core-interfaces" class="cite xref">I-D.ietf-core-interfaces</a>]</span>).<a href="#section-1.1-4.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-4.7">topic:</dt>
@@ -1391,7 +1390,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
           <dd class="break"></dd>
 <dt id="section-1.1-4.13">broker:</dt>
           <dd style="margin-left: 1.5em" id="section-1.1-4.14">
-            <p id="section-1.1-4.14.1">A CoAP server that hosts one or more topic collections with their topics, and typically also topic-data resources. The broker is responsible for the store-and-forward of state update representations, for the topics for which it hosts the corresponding topic-data resources. The broker is also responsible for handling the topic lifecycle as defined in <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>. The creation, configuration, and discovery of topics at a broker is specified in <a href="#topics" class="auto internal xref">Section 2</a>.<a href="#section-1.1-4.14.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-4.14.1">A CoAP server component that hosts one or more topic collections with their topics, and typically also topic-data resources. The broker is responsible for the store-and-forward of state update representations, for the topics for which it hosts the corresponding topic-data resources. The broker is also responsible for handling the topic lifecycle as defined in <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>. The creation, configuration, and discovery of topics at a broker is specified in <a href="#topics" class="auto internal xref">Section 2</a>.<a href="#section-1.1-4.14.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -1701,7 +1700,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
 <a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-collection-representation" class="section-name selfRef">Collection Representation</a>
         </h3>
 <p id="section-2.1-1">Each topic is represented as a link, where the link target is the URI of the corresponding topic resource.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
-<p id="section-2.1-2">Publication and subscription to a topic occur at a link, where the link target is the URI of the corresponding topic-data resource. Such a link is specified by the "topic-data" topic property within the topic resource (see <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>).<a href="#section-2.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.1-2">Publication and subscription to a topic occur at the target of a link, which is is the URI of the corresponding topic-data resource. Such a link is specified by the "topic-data" topic property within the topic resource (see <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>).<a href="#section-2.1-2" class="pilcrow">¶</a></p>
 <p id="section-2.1-3">A topic resource can also be simply called "topic".<a href="#section-2.1-3" class="pilcrow">¶</a></p>
 <p id="section-2.1-4">The list of links to the topic resources can be retrieved from the associated topic collection resource, represented as a CoRE Link Format document <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span> where each link targets a topic resource of type "core.ps.conf" as defined in this document.<a href="#section-2.1-4" class="pilcrow">¶</a></p>
 </section>
@@ -1725,7 +1724,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
               <p id="section-2.2.1-2.1.1">"topic-name": A required field used as an application identifier. It encodes the topic name as a CBOR text string. Examples of topic names include human-readable strings (e.g., "room2"), UUIDs, or other values.<a href="#section-2.2.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.2">
-              <p id="section-2.2.1-2.2.1">"topic-data": A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI as a CBOR text string. If a URI is not provided when creating the topic, the choice of the URI for the topic-data resource is left to the broker.<a href="#section-2.2.1-2.2.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.1-2.2.1">"topic-data": A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI as a CBOR text string. The URI can be that of a resource on a different address than that of the broker. If a URI is not provided when creating the topic, the choice of the URI for the topic-data resource is left to the broker.<a href="#section-2.2.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.3">
               <p id="section-2.2.1-2.3.1">"resource-type": A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value is typically "core.ps.data", i.e., when using the topic-data resource defined in this document.<a href="#section-2.2.1-2.3.1" class="pilcrow">¶</a></p>
@@ -1964,7 +1963,7 @@ Eliding these attributes helps to minimize the size of the response payload.<a h
           </h4>
 <p id="section-2.4.3-1">A client can add a new topic to a collection of topics by submitting an initial representation of the topic resource (see <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>) in a POST request to the topic collection URI. The request <span class="bcp14">MUST</span> specify at least a subset of the topic properties in <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>, namely: "topic-name" and "resource-type".<a href="#section-2.4.3-1" class="pilcrow">¶</a></p>
 <p id="section-2.4.3-2">Please note that the topic will <em>not</em> be fully created until a publisher has published some data to it (See <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>).<a href="#section-2.4.3-2" class="pilcrow">¶</a></p>
-<p id="section-2.4.3-3">To facilitate immediate subscription and allow subscribers to subscribe to the topic before data has been published, the client can include the "initialize" property set to <code>true</code> (0xf5). When included, the broker <span class="bcp14">MUST</span> create the topic and pre-populate the topic-data resource with a zero-length (empty) representation, with the "topic-content-format" property not specified. That is, if a subscriber client attempts to access the topic-data resource, the client gets this zero-length representation without an associated Content-Format Option in the CoAP response. This means “indeterminate” per <span><a href="https://rfc-editor.org/rfc/rfc7252#section-5.10.3" class="relref">Section 5.10.3</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>.<a href="#section-2.4.3-3" class="pilcrow">¶</a></p>
+<p id="section-2.4.3-3">To facilitate immediate subscription and allow subscribers to subscribe to the topic before data has been published, the client can include the "initialize" property set to the CBOR value <code>true</code>. When included, the broker <span class="bcp14">MUST</span> create the topic and pre-populate the topic-data resource with a zero-length (empty) representation, with the "topic-content-format" property not specified. That is, if a subscriber client attempts to access the topic-data resource, the client gets this zero-length representation without an associated Content-Format Option in the CoAP response. This means “indeterminate” per <span><a href="https://rfc-editor.org/rfc/rfc7252#section-5.10.3" class="relref">Section 5.10.3</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>.<a href="#section-2.4.3-3" class="pilcrow">¶</a></p>
 <p id="section-2.4.3-4">When "initialize" is set to "false" or omitted, the topic will only be fully created after data is published to it.<a href="#section-2.4.3-4" class="pilcrow">¶</a></p>
 <p id="section-2.4.3-5">On success, the broker returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map. The response <span class="bcp14">MUST</span> include the required topic properties (see <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>), namely: "topic-name", "resource-type", and "topic-data". It <span class="bcp14">MAY</span> also include a number of optional topic properties too. The response <span class="bcp14">MUST</span> have Content-Format set to TBD606 ("application/core-pubsub+cbor").<a href="#section-2.4.3-5" class="pilcrow">¶</a></p>
 <p id="section-2.4.3-6">If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker <span class="bcp14">MUST</span> reply with a 4.03 (Forbidden) error response.<a href="#section-2.4.3-6" class="pilcrow">¶</a></p>
@@ -2449,8 +2448,9 @@ The URI for this resource is indicated in the "topic-data" topic property value.
 <p id="section-3.2.4-1">A publisher can delete a topic-data resource by making a CoAP DELETE request on the topic-data resource (which is hosted at the "topic-data" URI).<a href="#section-3.2.4-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.4-2">On success, the broker returns a 2.02 (Deleted) response.<a href="#section-3.2.4-2" class="pilcrow">¶</a></p>
 <p id="section-3.2.4-3">When a topic-data resource is deleted, the topic is then set back to the half created state as per <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a> awaiting for a publisher to publish and set the topic to FULLY-CREATED state where clients can subscribe and read the topic-data.<a href="#section-3.2.4-3" class="pilcrow">¶</a></p>
-<p id="section-3.2.4-4">Example of a successful deletion:<a href="#section-3.2.4-4" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-3.2.4-5">
+<p id="section-3.2.4-4">Note that this is the case irrespective of the value of the "initialize" topic property (if present) in the topic configuration.<a href="#section-3.2.4-4" class="pilcrow">¶</a></p>
+<p id="section-3.2.4-5">Example of a successful deletion:<a href="#section-3.2.4-5" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.2.4-6">
 <pre>
    Request:
 
@@ -2462,7 +2462,7 @@ The URI for this resource is indicated in the "topic-data" topic property value.
    Response:
 
    Header: Deleted (Code=2.02)
-</pre><a href="#section-3.2.4-5" class="pilcrow">¶</a>
+</pre><a href="#section-3.2.4-6" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
@@ -2803,20 +2803,21 @@ The URI for this resource is indicated in the "topic-data" topic property value.
         <h3 id="name-expert-review-instructions">
 <a href="#section-6.5" class="section-number selfRef">6.5. </a><a href="#name-expert-review-instructions" class="section-name selfRef">Expert Review Instructions</a>
         </h3>
-<p id="section-6.5-1">The registration policy for the IANA registry established in  <a href="#iana-coap-pubsub-parameters" class="auto internal xref">Section 6.4</a> is defined as "Expert Review". This section gives some general guidelines for what the experts should be looking for; however, they are being designated as experts for a reason, so they should be given substantial latitude.<a href="#section-6.5-1" class="pilcrow">¶</a></p>
-<p id="section-6.5-2">Expert reviewers should take into consideration the following points:<a href="#section-6.5-2" class="pilcrow">¶</a></p>
+<p id="section-6.5-1">The registration policy for the IANA registry established in <a href="#iana-coap-pubsub-parameters" class="auto internal xref">Section 6.4</a> is defined as one of "Standards Action with Expert Review", "Specification Required", and "Expert Review". This section gives some general guidelines for what the experts should be looking for; however, they are being designated as experts for a reason, so they should be given substantial latitude.<a href="#section-6.5-1" class="pilcrow">¶</a></p>
+<p id="section-6.5-2">These registration policies are designed to accommodate different use cases; "Standards Action with Expert Review" allows for further IETF standards and extensions, maintaining consistency and alignment with established protocols; "Specification Required" allows third-party specifications from Standards Development Organizations (SDOs) to register topic properties, enabling interoperability and broader applicability; and "Expert Review" provides a flexible mechanism for exposing new properties that implementors do not want to keep in a private range.<a href="#section-6.5-2" class="pilcrow">¶</a></p>
+<p id="section-6.5-3">Expert reviewers should take into consideration the following points:<a href="#section-6.5-3" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-6.5-3.1">
-            <p id="section-6.5-3.1.1">Clarity and correctness of registrations. Experts are expected to check the clarity of purpose and use of the requested entries. Experts need to make sure that registered topic properties are clearly defined in the corresponding specification. Properties that do not meet these objectives of clarity and completeness must not be registered.<a href="#section-6.5-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-6.5-4.1">
+            <p id="section-6.5-4.1.1">Clarity and correctness of registrations. Experts are expected to check the clarity of purpose and use of the requested entries. Experts need to make sure that registered topic properties are clearly defined in the corresponding specification. Properties that do not meet these objectives of clarity and completeness must not be registered.<a href="#section-6.5-4.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.5-3.2">
-            <p id="section-6.5-3.2.1">Point squatting should be discouraged. Reviewers are encouraged to get sufficient information for registration requests to ensure that the usage is not going to duplicate one that is already registered and that the point is likely to be used in deployments. The zones tagged as "Private Use" are intended for testing purposes and closed environments. Code points in other ranges should not be assigned for testing.<a href="#section-6.5-3.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-6.5-4.2">
+            <p id="section-6.5-4.2.1">Point squatting should be discouraged. Reviewers are encouraged to get sufficient information for registration requests to ensure that the usage is not going to duplicate one that is already registered and that the point is likely to be used in deployments. The zones tagged as "Private Use" are intended for testing purposes and closed environments. Code points in other ranges should not be assigned for testing.<a href="#section-6.5-4.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.5-3.3">
-            <p id="section-6.5-3.3.1">Specifications are required for the "Standards Action With Expert Review" range of point assignment. Specifications should exist for "Specification Required" ranges, but early assignment before a specification is available is considered to be permissible. When specifications are not provided, the description provided needs to have sufficient information to identify what the point is being used for.<a href="#section-6.5-3.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-6.5-4.3">
+            <p id="section-6.5-4.3.1">Specifications are required for the "Standards Action With Expert Review" range of point assignment. Specifications should exist for "Specification Required" ranges, but early assignment before a specification is available is considered to be permissible. When specifications are not provided, the description provided needs to have sufficient information to identify what the point is being used for.<a href="#section-6.5-4.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-6.5-3.4">
-            <p id="section-6.5-3.4.1">Experts should take into account the expected usage of fields when approving point assignment. Documents published via Standards Action can also register points outside the Standards Action range. The length of the encoded value should be weighed against how many code points of that length are left, the size of device it will be used on, and the number of code points left that encode to that size.<a href="#section-6.5-3.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-6.5-4.4">
+            <p id="section-6.5-4.4.1">Experts should take into account the expected usage of fields when approving point assignment. Documents published via Standards Action can also register points outside the Standards Action range. The length of the encoded value should be weighed against how many code points of that length are left, the size of device it will be used on, and the number of code points left that encode to that size.<a href="#section-6.5-4.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
@@ -2850,6 +2851,8 @@ The URI for this resource is indicated in the "topic-data" topic property value.
             <span class="refAuthor">Freed, N.</span> and <span class="refAuthor">J. Klensin</span>, <span class="refTitle">"Multipurpose Internet Mail Extensions (MIME) Part Four: Registration Procedures"</span>, <span class="seriesInfo">BCP 13</span>, <span class="seriesInfo">RFC 4289</span>, <span class="seriesInfo">DOI 10.17487/RFC4289</span>, <time datetime="2005-12" class="refDate">December 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc4289">https://www.rfc-editor.org/info/rfc4289</a>&gt;</span>. </div>
 <div class="refInstance" id="RFC6838">
             <span class="refAuthor">Freed, N.</span>, <span class="refAuthor">Klensin, J.</span>, and <span class="refAuthor">T. Hansen</span>, <span class="refTitle">"Media Type Specifications and Registration Procedures"</span>, <span class="seriesInfo">BCP 13</span>, <span class="seriesInfo">RFC 6838</span>, <span class="seriesInfo">DOI 10.17487/RFC6838</span>, <time datetime="2013-01" class="refDate">January 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6838">https://www.rfc-editor.org/info/rfc6838</a>&gt;</span>. </div>
+<div class="refInstance" id="RFC9694">
+            <span class="refAuthor">Dürst, M.J.</span>, <span class="refTitle">"Guidelines for the Definition of New Top-Level Media Types"</span>, <span class="seriesInfo">BCP 13</span>, <span class="seriesInfo">RFC 9694</span>, <span class="seriesInfo">DOI 10.17487/RFC9694</span>, <time datetime="2025-03" class="refDate">March 2025</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9694">https://www.rfc-editor.org/info/rfc9694</a>&gt;</span>. </div>
 </dd>
 <dd class="break"></dd>
 <dt id="BCP14">[BCP14]</dt>
@@ -3106,7 +3109,7 @@ The URI for this resource is indicated in the "topic-data" topic property value.
 <a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
       </h2>
 <p id="appendix-B-1">The current version of this document contains a substantial contribution by Klaus Hartke's proposal <span>[<a href="#I-D.hartke-t2trg-coral-pubsub" class="cite xref">I-D.hartke-t2trg-coral-pubsub</a>]</span>, which defines the topic resource model and structure as well as the topic lifecycle and interactions. The document follows a similar architectural design as that provided by Marco Tiloca's <span>[<a href="#I-D.ietf-ace-oscore-gm-admin" class="cite xref">I-D.ietf-ace-oscore-gm-admin</a>]</span>.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
-<p id="appendix-B-2">The authors would like to thank <span class="contact-name">Marco Tiloca</span>, <span class="contact-name">Esko Dijk</span>,<span class="contact-name">Francesca Palombini</span>, <span class="contact-name">Carsten Bormann</span>, <span class="contact-name">Hannes Tschofenig</span>, <span class="contact-name">Zach Shelby</span>, <span class="contact-name">Mohit Sethi</span>, Peter van der Stok, Tim Kellogg, Anders Eriksson, <span class="contact-name">Goran Selander</span>, Mikko Majanen, <span class="contact-name">Olaf Bergmann</span>, <span class="contact-name">David Navarro</span>, Oscar Novo and Lorenzo Corneo for their valuable contributions and reviews.<a href="#appendix-B-2" class="pilcrow">¶</a></p>
+<p id="appendix-B-2">The authors would like to thank <span class="contact-name">Marco Tiloca</span>, <span class="contact-name">Esko Dijk</span>,<span class="contact-name">Francesca Palombini</span>, <span class="contact-name">Christian Amsüss</span>, <span class="contact-name">Carsten Bormann</span>, <span class="contact-name">Hannes Tschofenig</span>, <span class="contact-name">Zach Shelby</span>, <span class="contact-name">Mohit Sethi</span>, Peter van der Stok, Tim Kellogg, Anders Eriksson, <span class="contact-name">Goran Selander</span>, Mikko Majanen, <span class="contact-name">Olaf Bergmann</span>, <span class="contact-name">David Navarro</span>, Oscar Novo and Lorenzo Corneo for their valuable contributions and reviews.<a href="#appendix-B-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="contributors">
