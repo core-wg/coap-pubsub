@@ -102,10 +102,10 @@ publishers and subscribers:
 : CoAP clients can act as publishers or as subscribers. Publishers send CoAP messages (publications) to the broker on specific topics. Subscribers have an ongoing relation (subscription) to a topic via CoAP Observe {{RFC7641}}. Both roles operate without any mutual knowledge, guided by their respective topic interests.
 
 topic collection:
-: A topic collection is hosted as one collection resource at the broker. A collection resource is a resource that contains links to other resources that a client can add or remove; that concept is described more generally in {{Section 3.1 of I-D.ietf-core-interfaces}}).
+: A topic collection is hosted as one collection resource at the broker. A collection resource is a resource that contains links to other resources that a client can add or remove; that concept is described more generally in {{Section 3.1 of {{?I-D.ietf-core-interfaces}}.
 
 topic:
-: A resource used for configuration of the subcription and publication properties, which can be set by a client or by the broker. A topic is represented as a CBOR map containing the topic properties as top-level elements. A topic is hosted as a resource at the broker. All topic resources associated with the same topic collection share a common base URI, i.e., the URI of the topic collection resource.
+: A resource used for configuration of the subscription and publication properties, which can be set by a client or by the broker. It is represented as a CBOR map containing configuration properties as top-level elements and hosted as a resource at the broker. All such resources associated with the same topic collection share a common base URI, i.e., the URI of the topic collection resource.
 
 topic property:
 : A single element of configuration information that is associated with a topic.
@@ -227,7 +227,7 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 
 * "topic-type": An optional field used to indicate the attribute or property of the topic-data resource for the topic. It encodes the attribute as a CBOR text string. Example attributes include "temperature".
 
-* "expiration-date": An optional field used to indicate the expiration date of the topic. It encodes the expiration date as a CBOR text string. The value should be a date string as defined in {{Section 3.4.1 of RFC8949@STD94}} (e.g., the CBOR encoded version of "2023-03-31T23:59:59Z"). If this field is not present, the topic will not expire automatically. When "expiration-date" is reached, the topic resource is deleted as described in {{topic-delete}}.
+* "expiration-date": An optional field used to indicate the expiration date of the topic. It encodes the expiration date as a CBOR tag 1 (epoch-based date/time) as defined in {{Section 3.4.2 of RFC8949@STD94}}, representing the number of seconds since 1970-01-01T00:00Z in UTC time. If this field is not present, the topic will not expire automatically. When "expiration-date" is reached, the topic resource is deleted as described in {{topic-delete}}.
 
 * "max-subscribers": An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as a CBOR unsigned integer. If this field is not present, then there is no limit to the number of simultaneous subscribers allowed.
 
@@ -434,9 +434,9 @@ When "initialize" is set to "false" or omitted, the topic will only be fully cre
 
 On success, the broker returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map. The response MUST include the required topic properties (see {{topic-properties}}), namely: "topic-name", "resource-type", and "topic-data". It MAY also include a number of optional topic properties too. The response MUST have Content-Format set to TBD606 ("application/core-pubsub+cbor").
 
-If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST reply with a 4.03 (Forbidden) error response.
+If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST reply with a 4.xx client error response (such as 4.03 Forbidden).
 
-The broker MUST reply with a 4.00 (Bad Request) error response if a received parameter is invalid, unrecognized, or if the "topic-name" is already in use or otherwise invalid.
+The broker MUST reply with a 4.xx client error response (such as 4.00 Bad Request) if a received parameter is invalid, unrecognized, or if the "topic-name" is already in use or otherwise invalid.
 
 
 ~~~~
@@ -475,7 +475,7 @@ A client can read the configuration of a topic by making a GET request to the to
 
 On success, the broker returns a 2.05 (Content) response with a representation of the topic resource, as specified in {{topic-resource-representation}}.
 
-If requirements are defined for the client to read the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST reply with a 4.03 (Forbidden) error response.
+If requirements are defined for the client to read the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST reply with a 4.xx client error response (such as 4.03 Forbidden).
 
 The response payload is a CBOR map, whose possible entries are specified in {{topic-resource-representation}} and use the same abbreviations defined in {{pubsub-parameters}}.
 
@@ -499,7 +499,7 @@ For example, below is a request on the topic "/ps/h9392":
       / resource-type /         2: "core.ps.data",
       / topic-content-format /  3: 112,
       / topic-type /            4: "temperature",
-      / expiration-date /       5: "2023-04-00T23:59:59Z",
+      / expiration-date /       5: 1(1680393599),
       / max-subscribers /       6: 100
    }
 ~~~~
@@ -512,7 +512,7 @@ The request contains a CBOR map with a configuration filter or 'conf-filter', a 
 
 On success, the broker returns a 2.05 (Content) response with a representation of the topic resource. The response has as payload the partial representation of the topic resource as specified in {{topic-resource-representation}}.
 
-If requirements are defined for the client to read the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST reply with a 4.03 (Forbidden) error response.
+If requirements are defined for the client to read the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST reply with a 4.xx client error response (such as 4.03 Forbidden).
 
 The response payload is a CBOR map, whose possible entries are specified in {{topic-resource-representation}} and use the same abbreviations defined in {{pubsub-parameters}}.
 
@@ -571,7 +571,7 @@ Example:
       / resource-type /         2: "core.ps.data",
       / topic-content-format /  3: 112,
       / topic-type /            4: "temperature",
-      / expiration-date /       5: "2023-04-28T23:59:59Z"
+      / expiration-date /       5: 1(1682719199)
    }
 
    Response:
@@ -585,7 +585,7 @@ Example:
       / resource-type /         2: "core.ps.data",
       / topic-content-format /  3: 112,
       / topic-type /            4: "temperature",
-      / expiration-date /       5: "2023-04-28T23:59:59Z",
+      / expiration-date /       5: 1(1682719199),
       / max-subscribers /       6: 100,
       / observer-check /        7: 86400
    }
@@ -615,7 +615,7 @@ Contrary to POST, iPATCH operations will explicitly update some topic properties
    Content-Format: TBD606 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
-      / expiration-date /  5: "2024-02-28T23:59:59Z",
+      / expiration-date /  5: 1(1709164799),
       / max-subscribers /  6: 5
    }
 
@@ -630,7 +630,7 @@ Contrary to POST, iPATCH operations will explicitly update some topic properties
       / resource-type /         2: "core.ps.data",
       / topic-content-format /  3: 112,
       / topic-type /            4: "temperature",
-      / expiration-date /       5: "2024-02-28T23:59:59Z",
+      / expiration-date /       5: 1(1709164799),
       / max-subscribers /       6: 5,
       / observer-check /        7: 86400
    }
@@ -764,9 +764,9 @@ Example of subsequent publication:
 
 A client can subscribe to a topic-data resource by sending a CoAP GET request with the CoAP Observe Option set to 0 to subscribe to resource updates {{RFC7641}}.
 
-On success, the server hosting the topic-data resource MUST return 2.05 (Content) notifications with the data and the Observe Option. Otherwise, if no Observe Option is present, the client should assume that the subscription was not successful.
+On success, the server hosting the topic-data resource returns a successful response (typically 2.05 Content) with the data and the Observe Option. If no Observe Option is present in the response, the client should assume that the subscription was not successful.
 
-If the topic is not yet in the fully created state (see {{topic-lifecycle}}), the broker MUST return a 4.04 (Not Found) error response.
+If the topic is not yet in the fully created state (see {{topic-lifecycle}}), the broker returns an error response (typically 4.04 Not Found).
 
 The following response codes are defined for the Subscribe operation:
 
@@ -833,7 +833,7 @@ A publisher can delete a topic-data resource by making a CoAP DELETE request on 
 
 On success, the broker returns a 2.02 (Deleted) response.
 
-When a topic-data resource is deleted, the topic is then set back to the half created state as per {{topic-lifecycle}} awaiting for a publisher to publish and set the topic to FULLY-CREATED state where clients can subscribe and read the topic-data.
+When a topic-data resource is deleted, the topic is then set back to the half created state as per {{topic-lifecycle}} awaiting for a publisher to publish and set the topic to FULLY-CREATED state where clients can subscribe and read the topic-data. The "topic-data" property in the topic configuration remains unchanged, but no subscription to topic-data nor reading of data is allowed.
 
 Note that this is the case irrespective of the value of the "initialize" topic property (if present) in the topic configuration.
 
@@ -857,9 +857,9 @@ Example of a successful deletion:
 
 A client can get the latest published topic-data resource by making a GET request to the "topic-data" URI in the broker. Please note that discovery of the "topic-data" topic property is a required previous step (see {{topic-get-resource}}).
 
-On success, the server MUST return a 2.05 (Content) response with the data.
+On success, the server returns a successful response (typically 2.05 Content) with the data.
 
-If the target URI does not match an existing resource or the topic is not in the fully created state (see {{topic-lifecycle}}), the broker MUST return a 4.04 (Not Found) error respons.
+If the target URI does not match an existing resource or the topic is not in the fully created state (see {{topic-lifecycle}}), the broker returns an error response (typically 4.04 Not Found).
 
 Example:
 
@@ -902,7 +902,6 @@ This document defines topic properties used in the messages exchanged between a 
 
 Note that the media type application/core-pubsub+cbor MUST be used when these topic properties are transported in the respective CoAP message payloads.
 
-
 | Name                 | CBOR Key | CBOR Type |
 |----------------------|----------|-----------|
 | topic-name           | 0        | tstr      |
@@ -910,7 +909,7 @@ Note that the media type application/core-pubsub+cbor MUST be used when these to
 | resource-type        | 2        | tstr      |
 | topic-content-format | 3        | uint      |
 | topic-type           | 4        | tstr      |
-| expiration-date      | 5        | tstr      |
+| expiration-date      | 5        | tag 1     |
 | max-subscribers      | 6        | uint      |
 | observer-check       | 7        | uint      |
 | initialize           | 8        | True or False      |
@@ -1029,7 +1028,7 @@ The columns of this registry are:
 
 * Name: This is a descriptive name that enables easier reference to the item. The name MUST be unique. It is not used in the encoding.
 
-* CBOR Key: This is the value used as the CBOR key of the item. These values MUST be unique. The value can be a positive integer, a negative integer, or a text string. Different ranges of values use different registration policies {{BCP26}}. Integer values from -256 to 255 as well as text strings of length 1 are designated as "Standards Action With Expert Review". Integer values from -65536 to -257 and from 256 to 65535, as well as text strings of length 2 are designated as "Specification Required". Integer values greater than 65535 as well as text strings of length greater than 2 are designated as "Expert Review". Integer values less than -65536 are marked as "Private Use".
+* CBOR Key: This is the value used as the CBOR key of the item. These values MUST be unique. The value is an integer (either positive or negative). Different ranges of values use different registration policies {{BCP26}}. Integer values from -256 to 255 are designated as "Standards Action With Expert Review". Integer values from -65536 to -257 and from 256 to 65535 are designated as "Specification Required". Integer values greater than 65535 are designated as "Expert Review". Integer values less than -65536 are marked as "Private Use".
 
 * CBOR Type: This contains the CBOR type of the item, or a pointer to the registry that defines its type, when that depends on another item.
 
