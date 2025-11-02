@@ -219,7 +219,7 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 
 * "topic-name": A required field used as an application identifier. It encodes the topic name as a CBOR text string. Examples of topic names include human-readable strings (e.g., "room2"), UUIDs, or other values.
 
-* "topic-data": A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI as a CBOR text string. The URI can be that of a resource on a different address than that of the broker. If a URI is not provided when creating the topic, the choice of the URI for the topic-data resource is left to the broker.
+* "topic-data": A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI reference as a CBOR text string. The URI can be that of a resource on a different address than that of the broker. If a URI is not provided when creating the topic, the choice of the URI for the topic-data resource is left to the broker.
 
 * "resource-type": A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value is typically "core.ps.data", i.e., when using the topic-data resource defined in this document.
 
@@ -233,7 +233,7 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 
 * "observer-check": An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber (see {{unsubscribe}}). Encoded as a CBOR unsigned integer greater than 0, it ensures that subscribers that have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. If another CoAP server hosts the topic-data resource, that server is responsible for applying the "observer-check" value. The default value for this field is 86400, as defined in {{RFC7641}}, which corresponds to 24 hours.
 
-* "initialize": An optional boolean field that, when set to `true`, allows the topic-data resource to be pre-populated with a zero-length (empty) representation without an explicit Content-Format. This behavior facilitates one-shot publication and topic creation, enabling CoAP clients to subscribe by default without encountering a `4.04 Not Found` error. If this field is not present or set to 'false', the broker behaves as usual, and the topic-data resource is not initialized.
+* "initialize": An optional field encoded as a CBOR byte string that contains the initial representation to pre-populate the topic-data resource. When present, the broker MUST create the topic and initialize the topic-data resource with this representation using the Content-Format specified in "topic-content-format". This allows the topic to be immediately subscribable without encountering a `4.04 Not Found` error. The representation MUST be valid for the specified Content-Format. For example, for CBOR-based formats, an empty array encoded as `0x80` (CBOR for `[]`) is a valid empty representation. If this field is not present, the broker behaves as usual, and the topic-data resource is not initialized. When this field is present, "topic-content-format" MUST also be specified.
 
 ## Discovery
 
@@ -428,9 +428,9 @@ A client can add a new topic to a collection of topics by submitting an initial 
 
 Please note that the topic will _not_ be fully created until a publisher has published some data to it (See {{topic-lifecycle}}).
 
-To facilitate immediate subscription and allow subscribers to subscribe to the topic before data has been published, the client can include the "initialize" property set to the CBOR value `true`. When included, the broker MUST create the topic and pre-populate the topic-data resource with a zero-length (empty) representation, with the "topic-content-format" property not specified. That is, if a subscriber client attempts to access the topic-data resource, the client gets this zero-length representation without an associated Content-Format Option in the CoAP response. This means “indeterminate” per {{Section 5.10.3 of RFC7252}}.
+To facilitate immediate subscription and allow subscribers to subscribe to the topic before data has been published, the client can include the "initialize" property containing an initial representation (encoded as a CBOR byte string) along with the "topic-content-format" property. When included, the broker MUST create the topic and pre-populate the topic-data resource with the provided representation, using the specified Content-Format. This ensures RFC7641 compliance by maintaining Content-Format consistency across all notifications. For example, for CBOR SenML (Content-Format 60), the initialize value could be `h'80'` (the CBOR encoding of an empty array `[]`).
 
-When "initialize" is set to "false" or omitted, the topic will only be fully created after data is published to it.
+When "initialize" is omitted, the topic will only be fully created after data is published to it.
 
 On success, the broker returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map. The response MUST include the required topic properties (see {{topic-properties}}), namely: "topic-name", "resource-type", and "topic-data". It MAY also include a number of optional topic properties too. The response MUST have Content-Format set to TBD606 ("application/core-pubsub+cbor").
 
@@ -708,7 +708,7 @@ The URI for this resource is indicated in the "topic-data" topic property value.
 
 On success, the broker returns a 2.04 (Changed) response. However, when data is published to the topic for the first time, the broker instead MUST return a 2.01 (Created) response and set the topic in the fully-created state (see {{topic-lifecycle}}).
 
-Setting "initialize" to "true" is equivalent to having had a first publication with empty content. A follow-up publication from a publisher should result in a 2.04 response from the broker.
+Using the "initialize" property is equivalent to having had a first publication with the initial content specified in that property. A follow-up publication from a publisher should result in a 2.04 response from the broker.
 
 If the request does not have an acceptable Content-format, e.g., as specified by the "topic-content-format" property in the topic configuration, the broker returns a 4.15 (Unsupported Content-Format) response.
 
@@ -912,8 +912,8 @@ Note that the media type application/core-pubsub+cbor MUST be used when these to
 | expiration-date      | 5        | tag 1     |
 | max-subscribers      | 6        | uint      |
 | observer-check       | 7        | uint      |
-| initialize           | 8        | True or False      |
-| conf-filter          | 9       | array     |
+| initialize           | 8        | bstr      |
+| conf-filter          | 9        | array     |
 {: #tab-CoAP-Pubsub-Parameters title="CoAP Pubsub Topic Properties and CBOR Encoding"}
 
 # Security Considerations {#seccons}
