@@ -102,7 +102,7 @@ publishers and subscribers:
 : CoAP clients can act as publishers or as subscribers. Publishers send CoAP messages (publications) to the broker on specific topics. Subscribers have an ongoing relation (subscription) to a topic via CoAP Observe {{RFC7641}}. Both roles operate without any mutual knowledge, guided by their respective topic interests.
 
 topic collection:
-: A set of topics. A topic collection is hosted as one collection resource (See {{Section 3.1 of I-D.ietf-core-interfaces}}) at the broker, and its representation is the list of links to the topic resources each corresponding to a topic.
+: A topic collection is hosted as one collection resource at the broker. A collection resource is a resource that contains links to other resources that a client can add or remove; that concept is described more generally in {{Section 3.1 of I-D.ietf-core-interfaces}}).
 
 topic:
 : A resource used for configuration of the subcription and publication properties, which can be set by a client or by the broker. A topic is represented as a CBOR map containing the topic properties as top-level elements. A topic is hosted as a resource at the broker. All topic resources associated with the same topic collection share a common base URI, i.e., the URI of the topic collection resource.
@@ -114,7 +114,7 @@ topic-data resource:
 : A resource where clients can publish data and/or subscribe to data for a specific topic. The representation of the topic resource corresponding to such a topic also specifies the URI to the present topic-data resource.
 
 broker:
-: A CoAP server that hosts one or more topic collections with their topics, and typically also topic-data resources. The broker is responsible for the store-and-forward of state update representations, for the topics for which it hosts the corresponding topic-data resources. The broker is also responsible for handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
+: A CoAP server component that hosts one or more topic collections with their topics, and typically also topic-data resources. The broker is responsible for the store-and-forward of state update representations, for the topics for which it hosts the corresponding topic-data resources. The broker is also responsible for handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
 
 ## CoAP Publish-Subscribe Architecture
 
@@ -199,7 +199,7 @@ The broker hosts a collection of topics. These topics as well as the collection 
 
 Each topic is represented as a link, where the link target is the URI of the corresponding topic resource.
 
-Publication and subscription to a topic occur at a link, where the link target is the URI of the corresponding topic-data resource. Such a link is specified by the "topic-data" topic property within the topic resource (see {{topic-properties}}).
+Publication and subscription to a topic occur at the target of a link, which is is the URI of the corresponding topic-data resource. Such a link is specified by the "topic-data" topic property within the topic resource (see {{topic-properties}}).
 
 A topic resource can also be simply called "topic".
 
@@ -219,7 +219,7 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 
 * "topic-name": A required field used as an application identifier. It encodes the topic name as a CBOR text string. Examples of topic names include human-readable strings (e.g., "room2"), UUIDs, or other values.
 
-* "topic-data": A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI as a CBOR text string. If a URI is not provided when creating the topic, the choice of the URI for the topic-data resource is left to the broker.
+* "topic-data": A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI as a CBOR text string. The URI can be that of a resource on a different address than that of the broker. If a URI is not provided when creating the topic, the choice of the URI for the topic-data resource is left to the broker.
 
 * "resource-type": A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value is typically "core.ps.data", i.e., when using the topic-data resource defined in this document.
 
@@ -428,7 +428,7 @@ A client can add a new topic to a collection of topics by submitting an initial 
 
 Please note that the topic will _not_ be fully created until a publisher has published some data to it (See {{topic-lifecycle}}).
 
-To facilitate immediate subscription and allow subscribers to subscribe to the topic before data has been published, the client can include the "initialize" property set to `true` (0xf5). When included, the broker MUST create the topic and pre-populate the topic-data resource with a zero-length (empty) representation, with the "topic-content-format" property not specified. That is, if a subscriber client attempts to access the topic-data resource, the client gets this zero-length representation without an associated Content-Format Option in the CoAP response. This means “indeterminate” per {{Section 5.10.3 of RFC7252}}.
+To facilitate immediate subscription and allow subscribers to subscribe to the topic before data has been published, the client can include the "initialize" property set to the CBOR value `true`. When included, the broker MUST create the topic and pre-populate the topic-data resource with a zero-length (empty) representation, with the "topic-content-format" property not specified. That is, if a subscriber client attempts to access the topic-data resource, the client gets this zero-length representation without an associated Content-Format Option in the CoAP response. This means “indeterminate” per {{Section 5.10.3 of RFC7252}}.
 
 When "initialize" is set to "false" or omitted, the topic will only be fully created after data is published to it.
 
@@ -835,6 +835,8 @@ On success, the broker returns a 2.02 (Deleted) response.
 
 When a topic-data resource is deleted, the topic is then set back to the half created state as per {{topic-lifecycle}} awaiting for a publisher to publish and set the topic to FULLY-CREATED state where clients can subscribe and read the topic-data.
 
+Note that this is the case irrespective of the value of the "initialize" topic property (if present) in the topic configuration.
+
 Example of a successful deletion:
 
 
@@ -1037,7 +1039,9 @@ This registry has been initially populated with the values in {{tab-CoAP-Pubsub-
 
 ## Expert Review Instructions {#review}
 
-The registration policy for the IANA registry established in  {{iana-coap-pubsub-parameters}} is defined as "Expert Review". This section gives some general guidelines for what the experts should be looking for; however, they are being designated as experts for a reason, so they should be given substantial latitude.
+The registration policy for the IANA registry established in {{iana-coap-pubsub-parameters}} is defined as one of "Standards Action with Expert Review", "Specification Required", and "Expert Review". This section gives some general guidelines for what the experts should be looking for; however, they are being designated as experts for a reason, so they should be given substantial latitude.
+
+These registration policies are designed to accommodate different use cases; "Standards Action with Expert Review" allows for further IETF standards and extensions, maintaining consistency and alignment with established protocols; "Specification Required" allows third-party specifications from Standards Development Organizations (SDOs) to register topic properties, enabling interoperability and broader applicability; and "Expert Review" provides a flexible mechanism for exposing new properties that implementors do not want to keep in a private range.
 
 Expert reviewers should take into consideration the following points:
 
@@ -1101,4 +1105,4 @@ Expert reviewers should take into consideration the following points:
 
 The current version of this document contains a substantial contribution by Klaus Hartke's proposal {{I-D.hartke-t2trg-coral-pubsub}}, which defines the topic resource model and structure as well as the topic lifecycle and interactions. The document follows a similar architectural design as that provided by Marco Tiloca's {{I-D.ietf-ace-oscore-gm-admin}}.
 
-The authors would like to thank {{{Marco Tiloca}}}, {{{Esko Dijk}}},{{{Francesca Palombini}}}, {{{Carsten Bormann}}}, {{{Hannes Tschofenig}}}, {{{Zach Shelby}}}, {{{Mohit Sethi}}}, Peter van der Stok, Tim Kellogg, Anders Eriksson, {{{Goran Selander}}}, Mikko Majanen, {{{Olaf Bergmann}}}, {{{David Navarro}}}, Oscar Novo and Lorenzo Corneo for their valuable contributions and reviews.
+The authors would like to thank {{{Marco Tiloca}}}, {{{Esko Dijk}}},{{{Francesca Palombini}}}, {{{Christian Amsüss}}}, {{{Carsten Bormann}}}, {{{Hannes Tschofenig}}}, {{{Zach Shelby}}}, {{{Mohit Sethi}}}, Peter van der Stok, Tim Kellogg, Anders Eriksson, {{{Goran Selander}}}, Mikko Majanen, {{{Olaf Bergmann}}}, {{{David Navarro}}}, Oscar Novo and Lorenzo Corneo for their valuable contributions and reviews.
