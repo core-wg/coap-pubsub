@@ -18,14 +18,14 @@
     Python 3.12.12
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
-    intervaltree 3.1.0
+    intervaltree 3.2.1
     Jinja2 3.1.6
-    lxml 5.3.1
-    platformdirs 4.5.0
+    lxml 6.0.2
+    platformdirs 4.5.1
     pycountry 24.6.1
-    PyYAML 6.0.2
+    PyYAML 6.0.3
     requests 2.32.5
-    wcwidth 0.2.14
+    wcwidth 0.3.0
 -->
 <link href="draft-ietf-core-coap-pubsub.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -166,7 +166,7 @@
   font-weight: 400;
   font-display: swap;
   src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
-  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
   font-family: 'Oxygen Mono';
@@ -174,7 +174,8 @@
   font-weight: 400;
   font-display: swap;
   src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 }
 
 @font-face {
@@ -566,6 +567,7 @@ aside, blockquote {
 }
 blockquote {
   margin: 1em 0;
+  border-left: 2px var(--pilcrow-strong) solid;
 }
 cite {
   display: block;
@@ -636,7 +638,7 @@ a.pilcrow {
   }
 }
 @media not print {
-  :hover > a.pilcrow {
+  :hover > a.pilcrow, a.pilcrow:focus {
     opacity: 1;
   }
   a.pilcrow[href]:hover {
@@ -1044,11 +1046,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">CoAP pubsub</td>
-<td class="right">November 2025</td>
+<td class="right">February 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Jimenez, et al.</td>
-<td class="center">Expires 6 May 2026</td>
+<td class="center">Expires 27 August 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1061,12 +1063,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-core-coap-pubsub-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-11-02" class="published">2 November 2025</time>
+<time datetime="2026-02-23" class="published">23 February 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-05-06">6 May 2026</time></dd>
+<dd class="expires"><time datetime="2026-08-27">27 August 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1123,7 +1125,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 6 May 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 27 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1132,7 +1134,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2025 IETF Trust and the persons identified as the
+            Copyright (c) 2026 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -1370,12 +1372,12 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
           <dd class="break"></dd>
 <dt id="section-1.1-4.5">topic collection:</dt>
           <dd style="margin-left: 1.5em" id="section-1.1-4.6">
-            <p id="section-1.1-4.6.1">A topic collection is hosted as one collection resource at the broker. A collection resource is a resource that contains links to other resources that a client can add or remove; that concept is described more generally in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-interfaces-14#section-3.1" class="relref">Section 3.1</a> of [<a href="#I-D.ietf-core-interfaces" class="cite xref">I-D.ietf-core-interfaces</a>]</span>).<a href="#section-1.1-4.6.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-4.6.1">A topic collection is hosted as one collection resource at the broker. A collection resource is a resource that contains links to other resources that a client can add or remove; that concept is described more generally in <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-core-interfaces-14#section-3.1" class="relref">Section 3.1</a> of [<a href="#I-D.ietf-core-interfaces" class="cite xref">I-D.ietf-core-interfaces</a>]</span>.<a href="#section-1.1-4.6.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-4.7">topic:</dt>
           <dd style="margin-left: 1.5em" id="section-1.1-4.8">
-            <p id="section-1.1-4.8.1">A resource used for configuration of the subcription and publication properties, which can be set by a client or by the broker. A topic is represented as a CBOR map containing the topic properties as top-level elements. A topic is hosted as a resource at the broker. All topic resources associated with the same topic collection share a common base URI, i.e., the URI of the topic collection resource.<a href="#section-1.1-4.8.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-4.8.1">A resource used for configuration of the subscription and publication properties, which can be set by a client or by the broker. It is represented as a CBOR map containing configuration properties as top-level elements and hosted as a resource at the broker. All such resources associated with the same topic collection share a common base URI, i.e., the URI of the topic collection resource.<a href="#section-1.1-4.8.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-4.9">topic property:</dt>
@@ -1473,9 +1475,10 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
 <a href="#name-publish-subscribe-architect" class="selfRef">Publish-subscribe architecture based on CoAP</a>
           </figcaption></figure>
 </div>
-<p id="section-1.2-5">This document describes two sets of interactions; interactions to configure topics and their lifecycle (see <a href="#topic-create" class="auto internal xref">Section 2.4.3</a> and <a href="#topic-configuration-interactions" class="auto internal xref">Section 2.5</a>) and interactions about the topic-data (see <a href="#topic-data-interactions" class="auto internal xref">Section 3.2</a>).<a href="#section-1.2-5" class="pilcrow">¶</a></p>
-<p id="section-1.2-6">Topic interactions are: discovery, create, read configuration, update configuration, and delete configuration. These operations concern the management of the topics.<a href="#section-1.2-6" class="pilcrow">¶</a></p>
-<p id="section-1.2-7">The topic-data interactions are: publish, subscribe, unsubscribe, read, and delete. These operations are oriented on how data is transferred from a publisher to a subscriber.<a href="#section-1.2-7" class="pilcrow">¶</a></p>
+<p id="section-1.2-5">Note that CoAP clients that merely interact with topic configuration but not with topic data (e.g., a dedicated administrator) are not depicted in <a href="#fig-arch" class="auto internal xref">Figure 1</a>.<a href="#section-1.2-5" class="pilcrow">¶</a></p>
+<p id="section-1.2-6">This document describes two sets of interactions; interactions to configure topics and their lifecycle (see <a href="#topic-create" class="auto internal xref">Section 2.4.3</a> and <a href="#topic-configuration-interactions" class="auto internal xref">Section 2.5</a>) and interactions about the topic-data (see <a href="#topic-data-interactions" class="auto internal xref">Section 3.2</a>).<a href="#section-1.2-6" class="pilcrow">¶</a></p>
+<p id="section-1.2-7">Topic interactions are: discovery, create, read configuration, update configuration, and delete configuration. These operations concern the management of the topics.<a href="#section-1.2-7" class="pilcrow">¶</a></p>
+<p id="section-1.2-8">The topic-data interactions are: publish, subscribe, unsubscribe, read, and delete. These operations are oriented on how data is transferred from a publisher to a subscriber.<a href="#section-1.2-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="managing-topics">
@@ -1700,7 +1703,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
 <a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-collection-representation" class="section-name selfRef">Collection Representation</a>
         </h3>
 <p id="section-2.1-1">Each topic is represented as a link, where the link target is the URI of the corresponding topic resource.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
-<p id="section-2.1-2">Publication and subscription to a topic occur at the target of a link, which is is the URI of the corresponding topic-data resource. Such a link is specified by the "topic-data" topic property within the topic resource (see <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>).<a href="#section-2.1-2" class="pilcrow">¶</a></p>
+<p id="section-2.1-2">Publication and subscription to a topic occur at the target of a link, which is the URI of the corresponding topic-data resource. Such a link is specified by the "topic-data" topic property within the topic resource (see <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>).<a href="#section-2.1-2" class="pilcrow">¶</a></p>
 <p id="section-2.1-3">A topic resource can also be simply called "topic".<a href="#section-2.1-3" class="pilcrow">¶</a></p>
 <p id="section-2.1-4">The list of links to the topic resources can be retrieved from the associated topic collection resource, represented as a CoRE Link Format document <span>[<a href="#RFC6690" class="cite xref">RFC6690</a>]</span> where each link targets a topic resource of type "core.ps.conf" as defined in this document.<a href="#section-2.1-4" class="pilcrow">¶</a></p>
 </section>
@@ -1724,19 +1727,19 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
               <p id="section-2.2.1-2.1.1">"topic-name": A required field used as an application identifier. It encodes the topic name as a CBOR text string. Examples of topic names include human-readable strings (e.g., "room2"), UUIDs, or other values.<a href="#section-2.2.1-2.1.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.2">
-              <p id="section-2.2.1-2.2.1">"topic-data": A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI as a CBOR text string. The URI can be that of a resource on a different address than that of the broker. If a URI is not provided when creating the topic, the choice of the URI for the topic-data resource is left to the broker.<a href="#section-2.2.1-2.2.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.1-2.2.1">"topic-data": A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI reference as a CBOR text string. The URI can be that of a resource on a different address than that of the broker; implementations <span class="bcp14">MUST NOT</span> assume that the topic-data resource is co-located with the broker. If a URI is not provided when creating the topic, the choice of the URI for the topic-data resource is left to the broker.<a href="#section-2.2.1-2.2.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.3">
               <p id="section-2.2.1-2.3.1">"resource-type": A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value is typically "core.ps.data", i.e., when using the topic-data resource defined in this document.<a href="#section-2.2.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.4">
-              <p id="section-2.2.1-2.4.1">"topic-content-format": This optional field specifies the CoAP Content-Format identifier of the topic-data resource representation as an unsigned integer, e.g., 60 for the media-type "application/cbor".<a href="#section-2.2.1-2.4.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.1-2.4.1">"topic-content-format": This optional field specifies the canonical CoAP Content-Format identifier of the topic-data resource representation as an unsigned integer, e.g., 60 for the media-type "application/cbor".<a href="#section-2.2.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.5">
               <p id="section-2.2.1-2.5.1">"topic-type": An optional field used to indicate the attribute or property of the topic-data resource for the topic. It encodes the attribute as a CBOR text string. Example attributes include "temperature".<a href="#section-2.2.1-2.5.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.6">
-              <p id="section-2.2.1-2.6.1">"expiration-date": An optional field used to indicate the expiration date of the topic. It encodes the expiration date as a CBOR text string. The value should be a date string as defined in Section <a href="https://rfc-editor.org/rfc/rfc8949#section-3.4.1" class="relref">3.4.1</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span> (e.g., the CBOR encoded version of "2023-03-31T23:59:59Z"). If this field is not present, the topic will not expire automatically. When "expiration-date" is reached, the topic resource is deleted as described in <a href="#topic-delete" class="auto internal xref">Section 2.5.5</a>.<a href="#section-2.2.1-2.6.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.1-2.6.1">"expiration-date": An optional field used to indicate the expiration date of the topic. It encodes the expiration date as a CBOR tag 1 (epoch-based date/time) as defined in Section <a href="https://rfc-editor.org/rfc/rfc8949#section-3.4.2" class="relref">3.4.2</a> of RFC 8949 <span>[<a href="#STD94" class="cite xref">STD94</a>]</span>, representing the number of seconds since 1970-01-01T00:00Z in UTC time. If this field is not present, the topic will not expire automatically. When "expiration-date" is reached, the topic resource is deleted as described in <a href="#topic-delete" class="auto internal xref">Section 2.5.5</a>.<a href="#section-2.2.1-2.6.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.7">
               <p id="section-2.2.1-2.7.1">"max-subscribers": An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as a CBOR unsigned integer. If this field is not present, then there is no limit to the number of simultaneous subscribers allowed.<a href="#section-2.2.1-2.7.1" class="pilcrow">¶</a></p>
@@ -1745,7 +1748,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
               <p id="section-2.2.1-2.8.1">"observer-check": An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber (see <a href="#unsubscribe" class="auto internal xref">Section 3.2.3</a>). Encoded as a CBOR unsigned integer greater than 0, it ensures that subscribers that have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. If another CoAP server hosts the topic-data resource, that server is responsible for applying the "observer-check" value. The default value for this field is 86400, as defined in <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, which corresponds to 24 hours.<a href="#section-2.2.1-2.8.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-2.2.1-2.9">
-              <p id="section-2.2.1-2.9.1">"initialize": An optional boolean field that, when set to <code>true</code>, allows the topic-data resource to be pre-populated with a zero-length (empty) representation without an explicit Content-Format. This behavior facilitates one-shot publication and topic creation, enabling CoAP clients to subscribe by default without encountering a <code>4.04 Not Found</code> error. If this field is not present or set to 'false', the broker behaves as usual, and the topic-data resource is not initialized.<a href="#section-2.2.1-2.9.1" class="pilcrow">¶</a></p>
+              <p id="section-2.2.1-2.9.1">"initialize": An optional field encoded as a CBOR byte string that contains the initial representation to pre-populate the topic-data resource. When present, the broker <span class="bcp14">MUST</span> create the topic and initialize the topic-data resource with this representation using the Content-Format specified in "topic-content-format". This allows the topic to be immediately subscribable without encountering a <code>4.04 Not Found</code> error. The representation <span class="bcp14">MUST</span> be valid for the specified Content-Format. For example, for CBOR-based formats, an empty array encoded as <code>0x80</code> (CBOR for <code>[]</code>) is a valid empty representation. If this field is not present, the broker behaves as usual, and the topic-data resource is not initialized. When this field is present, "topic-content-format" <span class="bcp14">MUST</span> also be specified.<a href="#section-2.2.1-2.9.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 </section>
@@ -1963,11 +1966,11 @@ Eliding these attributes helps to minimize the size of the response payload.<a h
           </h4>
 <p id="section-2.4.3-1">A client can add a new topic to a collection of topics by submitting an initial representation of the topic resource (see <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>) in a POST request to the topic collection URI. The request <span class="bcp14">MUST</span> specify at least a subset of the topic properties in <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>, namely: "topic-name" and "resource-type".<a href="#section-2.4.3-1" class="pilcrow">¶</a></p>
 <p id="section-2.4.3-2">Please note that the topic will <em>not</em> be fully created until a publisher has published some data to it (See <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>).<a href="#section-2.4.3-2" class="pilcrow">¶</a></p>
-<p id="section-2.4.3-3">To facilitate immediate subscription and allow subscribers to subscribe to the topic before data has been published, the client can include the "initialize" property set to the CBOR value <code>true</code>. When included, the broker <span class="bcp14">MUST</span> create the topic and pre-populate the topic-data resource with a zero-length (empty) representation, with the "topic-content-format" property not specified. That is, if a subscriber client attempts to access the topic-data resource, the client gets this zero-length representation without an associated Content-Format Option in the CoAP response. This means “indeterminate” per <span><a href="https://rfc-editor.org/rfc/rfc7252#section-5.10.3" class="relref">Section 5.10.3</a> of [<a href="#RFC7252" class="cite xref">RFC7252</a>]</span>.<a href="#section-2.4.3-3" class="pilcrow">¶</a></p>
-<p id="section-2.4.3-4">When "initialize" is set to "false" or omitted, the topic will only be fully created after data is published to it.<a href="#section-2.4.3-4" class="pilcrow">¶</a></p>
-<p id="section-2.4.3-5">On success, the broker returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map. The response <span class="bcp14">MUST</span> include the required topic properties (see <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>), namely: "topic-name", "resource-type", and "topic-data". It <span class="bcp14">MAY</span> also include a number of optional topic properties too. The response <span class="bcp14">MUST</span> have Content-Format set to TBD606 ("application/core-pubsub+cbor").<a href="#section-2.4.3-5" class="pilcrow">¶</a></p>
-<p id="section-2.4.3-6">If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker <span class="bcp14">MUST</span> reply with a 4.03 (Forbidden) error response.<a href="#section-2.4.3-6" class="pilcrow">¶</a></p>
-<p id="section-2.4.3-7">The broker <span class="bcp14">MUST</span> reply with a 4.00 (Bad Request) error response if a received parameter is invalid, unrecognized, or if the "topic-name" is already in use or otherwise invalid.<a href="#section-2.4.3-7" class="pilcrow">¶</a></p>
+<p id="section-2.4.3-3">To facilitate immediate subscription and allow subscribers to subscribe to the topic before data has been published, the client can include the "initialize" property containing an initial representation (encoded as a CBOR byte string) along with the "topic-content-format" property. When included, the broker <span class="bcp14">MUST</span> create the topic and pre-populate the topic-data resource with the provided representation, using the specified Content-Format. This ensures RFC7641 compliance by maintaining Content-Format consistency across all notifications. For example, for CBOR SenML (Content-Format 60), the initialize value could be <code>h'80'</code> (the CBOR encoding of an empty array <code>[]</code>).<a href="#section-2.4.3-3" class="pilcrow">¶</a></p>
+<p id="section-2.4.3-4">When "initialize" is omitted, the topic will only be fully created after data is published to it.<a href="#section-2.4.3-4" class="pilcrow">¶</a></p>
+<p id="section-2.4.3-5">On success, the broker returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map. The response <span class="bcp14">MUST</span> include the required topic properties (see <a href="#topic-properties" class="auto internal xref">Section 2.2.1</a>), namely: "topic-name", "resource-type", and "topic-data". It <span class="bcp14">MAY</span> also include a number of optional topic properties too. The response <span class="bcp14">MUST</span> support Content-Format TBD606 ("application/core-pubsub+cbor"), which is the default.<a href="#section-2.4.3-5" class="pilcrow">¶</a></p>
+<p id="section-2.4.3-6">If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker <span class="bcp14">MUST</span> reply with a 4.xx client error response (such as 4.03 Forbidden).<a href="#section-2.4.3-6" class="pilcrow">¶</a></p>
+<p id="section-2.4.3-7">The broker <span class="bcp14">MUST</span> reply with a 4.xx client error response (such as 4.00 Bad Request) if a received parameter is invalid, unrecognized, or if the "topic-name" is already in use or otherwise invalid.<a href="#section-2.4.3-7" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.4.3-8">
 <pre>
    Request:
@@ -2012,7 +2015,7 @@ Eliding these attributes helps to minimize the size of the response payload.<a h
           </h4>
 <p id="section-2.5.1-1">A client can read the configuration of a topic by making a GET request to the topic resource URI.<a href="#section-2.5.1-1" class="pilcrow">¶</a></p>
 <p id="section-2.5.1-2">On success, the broker returns a 2.05 (Content) response with a representation of the topic resource, as specified in <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>.<a href="#section-2.5.1-2" class="pilcrow">¶</a></p>
-<p id="section-2.5.1-3">If requirements are defined for the client to read the topic as requested and the broker does not successfully assess that those requirements are met, then the broker <span class="bcp14">MUST</span> reply with a 4.03 (Forbidden) error response.<a href="#section-2.5.1-3" class="pilcrow">¶</a></p>
+<p id="section-2.5.1-3">If requirements are defined for the client to read the topic as requested and the broker does not successfully assess that those requirements are met, then the broker <span class="bcp14">MUST</span> reply with a 4.xx client error response (such as 4.03 Forbidden).<a href="#section-2.5.1-3" class="pilcrow">¶</a></p>
 <p id="section-2.5.1-4">The response payload is a CBOR map, whose possible entries are specified in <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a> and use the same abbreviations defined in <a href="#pubsub-parameters" class="auto internal xref">Section 4</a>.<a href="#section-2.5.1-4" class="pilcrow">¶</a></p>
 <p id="section-2.5.1-5">For example, below is a request on the topic "/ps/h9392":<a href="#section-2.5.1-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.5.1-6">
@@ -2034,7 +2037,7 @@ Eliding these attributes helps to minimize the size of the response payload.<a h
       / resource-type /         2: "core.ps.data",
       / topic-content-format /  3: 112,
       / topic-type /            4: "temperature",
-      / expiration-date /       5: "2023-04-00T23:59:59Z",
+      / expiration-date /       5: 1(1680393599),
       / max-subscribers /       6: 100
    }
 </pre><a href="#section-2.5.1-6" class="pilcrow">¶</a>
@@ -2049,9 +2052,9 @@ Eliding these attributes helps to minimize the size of the response payload.<a h
 <p id="section-2.5.2-1">A client can read the configuration of a topic by making a FETCH request to the topic resource URI with a filter for specific topic properties. This is done in order to retrieve part of the current topic resource.<a href="#section-2.5.2-1" class="pilcrow">¶</a></p>
 <p id="section-2.5.2-2">The request contains a CBOR map with a configuration filter or 'conf-filter', a CBOR array of topic properties, using the same abbreviations defined in <a href="#pubsub-parameters" class="auto internal xref">Section 4</a>. Each element of the array specifies one requested topic property of the current topic resource (see <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>).<a href="#section-2.5.2-2" class="pilcrow">¶</a></p>
 <p id="section-2.5.2-3">On success, the broker returns a 2.05 (Content) response with a representation of the topic resource. The response has as payload the partial representation of the topic resource as specified in <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>.<a href="#section-2.5.2-3" class="pilcrow">¶</a></p>
-<p id="section-2.5.2-4">If requirements are defined for the client to read the topic as requested and the broker does not successfully assess that those requirements are met, then the broker <span class="bcp14">MUST</span> reply with a 4.03 (Forbidden) error response.<a href="#section-2.5.2-4" class="pilcrow">¶</a></p>
+<p id="section-2.5.2-4">If requirements are defined for the client to read the topic as requested and the broker does not successfully assess that those requirements are met, then the broker <span class="bcp14">MUST</span> reply with a 4.xx client error response (such as 4.03 Forbidden).<a href="#section-2.5.2-4" class="pilcrow">¶</a></p>
 <p id="section-2.5.2-5">The response payload is a CBOR map, whose possible entries are specified in <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a> and use the same abbreviations defined in <a href="#pubsub-parameters" class="auto internal xref">Section 4</a>.<a href="#section-2.5.2-5" class="pilcrow">¶</a></p>
-<p id="section-2.5.2-6">Both request and response <span class="bcp14">MUST</span> have Content-Format set to TBD606 ("application/core-pubsub+cbor").<a href="#section-2.5.2-6" class="pilcrow">¶</a></p>
+<p id="section-2.5.2-6">Content-Format TBD606 ("application/core-pubsub+cbor") is mandatory to support for both request and response.<a href="#section-2.5.2-6" class="pilcrow">¶</a></p>
 <p id="section-2.5.2-7">The CBOR map in the response payload includes entries for each topic property specified in the request and available in the topic resource representation.<a href="#section-2.5.2-7" class="pilcrow">¶</a></p>
 <p id="section-2.5.2-8">Example:<a href="#section-2.5.2-8" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.5.2-9">
@@ -2085,7 +2088,7 @@ Eliding these attributes helps to minimize the size of the response payload.<a h
           <h4 id="name-updating-the-topic">
 <a href="#section-2.5.3" class="section-number selfRef">2.5.3. </a><a href="#name-updating-the-topic" class="section-name selfRef">Updating the topic</a>
           </h4>
-<p id="section-2.5.3-1">A client can update a topic's configuration by submitting the updated topic representation in a POST request to the topic URI. However, the topic properties "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.<a href="#section-2.5.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.5.3-1">A client can update a topic's configuration by submitting the updated topic representation in a POST request to the topic URI. However, the topic properties "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker. Since POST replaces the full resource representation, these immutable properties may be included in the request with their current values.<a href="#section-2.5.3-1" class="pilcrow">¶</a></p>
 <p id="section-2.5.3-2">On success, the topic is overwritten and the broker returns a 2.04 (Changed) response and the current full resource representation. The broker <span class="bcp14">MAY</span> choose not to overwrite topic properties that are not explicitly modified in the request.<a href="#section-2.5.3-2" class="pilcrow">¶</a></p>
 <p id="section-2.5.3-3">Similarly, decreasing "max-subscribers" will also cause that some subscribers get unsubscribed. Unsubscribed endpoints receive a final 4.04 (Not Found) response as per <span><a href="https://rfc-editor.org/rfc/rfc7641#section-3.2" class="relref">Section 3.2</a> of [<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. The specific queue management for unsubscribing is left for implementors.<a href="#section-2.5.3-3" class="pilcrow">¶</a></p>
 <p id="section-2.5.3-4">Please note that when using POST the topic is being overwritten, thus some of the optional topic properties (e.g., "max-subscribers", "observer-check") not included in the POST message will be reset to their default values.<a href="#section-2.5.3-4" class="pilcrow">¶</a></p>
@@ -2105,7 +2108,7 @@ Eliding these attributes helps to minimize the size of the response payload.<a h
       / resource-type /         2: "core.ps.data",
       / topic-content-format /  3: 112,
       / topic-type /            4: "temperature",
-      / expiration-date /       5: "2023-04-28T23:59:59Z"
+      / expiration-date /       5: 1(1682719199)
    }
 
    Response:
@@ -2119,7 +2122,7 @@ Eliding these attributes helps to minimize the size of the response payload.<a h
       / resource-type /         2: "core.ps.data",
       / topic-content-format /  3: 112,
       / topic-type /            4: "temperature",
-      / expiration-date /       5: "2023-04-28T23:59:59Z",
+      / expiration-date /       5: 1(1682719199),
       / max-subscribers /       6: 100,
       / observer-check /        7: 86400
    }
@@ -2155,7 +2158,7 @@ Eliding these attributes helps to minimize the size of the response payload.<a h
    Content-Format: TBD606 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
-      / expiration-date /  5: "2024-02-28T23:59:59Z",
+      / expiration-date /  5: 1(1709164799),
       / max-subscribers /  6: 5
    }
 
@@ -2170,7 +2173,7 @@ Eliding these attributes helps to minimize the size of the response payload.<a h
       / resource-type /         2: "core.ps.data",
       / topic-content-format /  3: 112,
       / topic-type /            4: "temperature",
-      / expiration-date /       5: "2024-02-28T23:59:59Z",
+      / expiration-date /       5: 1(1709164799),
       / max-subscribers /       6: 5,
       / observer-check /        7: 86400
    }
@@ -2314,8 +2317,8 @@ Eliding these attributes helps to minimize the size of the response payload.<a h
 <p id="section-3.2.1-1">A topic with a topic-data resource must have been created in order to publish data to it (See <a href="#topic-create" class="auto internal xref">Section 2.4.3</a>) and be in the half-created or fully-created state in order for the publish operation to work (see <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>).<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.1-2">A client can publish data to a topic by submitting the data in a PUT request to the topic-data resource.
 The URI for this resource is indicated in the "topic-data" topic property value. Please note that this URI is not the same as the topic URI used for configuring the topic (see <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>).<a href="#section-3.2.1-2" class="pilcrow">¶</a></p>
-<p id="section-3.2.1-3">On success, the broker returns a 2.04 (Changed) response. However, when data is published to the topic for the first time, the broker instead <span class="bcp14">MUST</span> return a 2.01 (Created) response and set the topic in the fully-created state (see <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>).<a href="#section-3.2.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.2.1-4">Setting "initialize" to "true" is equivalent to having had a first publication with empty content. A follow-up publication from a publisher should result in a 2.04 response from the broker.<a href="#section-3.2.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-3">On success, the broker returns a successful response. Typically, this is a 2.04 (Changed) response. However, when data is published to the topic for the first time, the broker returns a 2.01 (Created) response and sets the topic in the fully-created state (see <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>).<a href="#section-3.2.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-4">Using the "initialize" property is equivalent to having had a first publication with the initial content specified in that property. A follow-up publication from a publisher should result in a 2.04 response from the broker.<a href="#section-3.2.1-4" class="pilcrow">¶</a></p>
 <p id="section-3.2.1-5">If the request does not have an acceptable Content-format, e.g., as specified by the "topic-content-format" property in the topic configuration, the broker returns a 4.15 (Unsupported Content-Format) response.<a href="#section-3.2.1-5" class="pilcrow">¶</a></p>
 <p id="section-3.2.1-6">If the client is sending publications too fast, the broker returns a 4.29 (Too Many Requests) response <span>[<a href="#RFC8516" class="cite xref">RFC8516</a>]</span>.<a href="#section-3.2.1-6" class="pilcrow">¶</a></p>
 <p id="section-3.2.1-7">Example of first publication:<a href="#section-3.2.1-7" class="pilcrow">¶</a></p>
@@ -2372,8 +2375,8 @@ The URI for this resource is indicated in the "topic-data" topic property value.
 <a href="#section-3.2.2" class="section-number selfRef">3.2.2. </a><a href="#name-subscribe" class="section-name selfRef">Subscribe</a>
           </h4>
 <p id="section-3.2.2-1">A client can subscribe to a topic-data resource by sending a CoAP GET request with the CoAP Observe Option set to 0 to subscribe to resource updates <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>.<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2.2-2">On success, the server hosting the topic-data resource <span class="bcp14">MUST</span> return 2.05 (Content) notifications with the data and the Observe Option. Otherwise, if no Observe Option is present, the client should assume that the subscription was not successful.<a href="#section-3.2.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.2.2-3">If the topic is not yet in the fully created state (see <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>), the broker <span class="bcp14">MUST</span> return a 4.04 (Not Found) error response.<a href="#section-3.2.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-2">On success, the server hosting the topic-data resource returns a successful response (typically 2.05 Content) with the data and the Observe Option. If no Observe Option is present in the response, the client should assume that the subscription was not successful.<a href="#section-3.2.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-3">If the topic is not yet in the fully created state (see <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>), the broker returns an error response (typically 4.04 Not Found).<a href="#section-3.2.2-3" class="pilcrow">¶</a></p>
 <p id="section-3.2.2-4">The following response codes are defined for the Subscribe operation:<a href="#section-3.2.2-4" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-3.2.2-5">
             <dt id="section-3.2.2-5.1">Success:</dt>
@@ -2435,7 +2438,7 @@ The URI for this resource is indicated in the "topic-data" topic property value.
           <h4 id="name-unsubscribe">
 <a href="#section-3.2.3" class="section-number selfRef">3.2.3. </a><a href="#name-unsubscribe" class="section-name selfRef">Unsubscribe</a>
           </h4>
-<p id="section-3.2.3-1">A CoAP client can unsubscribe simply by canceling the observation as described in <span><a href="https://rfc-editor.org/rfc/rfc7641#section-3.6" class="relref">Section 3.6</a> of [<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. The client <span class="bcp14">MUST</span> either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification. Also on <span><a href="https://rfc-editor.org/rfc/rfc7641#section-3.6" class="relref">Section 3.6</a> of [<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, the client can simply "forget" the observation. Consequently, upon receiving the next notification, the client replies with a CoAP Reset message, which results in the broker removing the client from the list of observers.<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.3-1">A CoAP client can unsubscribe by canceling the observation as described in <span><a href="https://rfc-editor.org/rfc/rfc7641#section-3.6" class="relref">Section 3.6</a> of [<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. For example, the client can use CoAP GET with the Observe Option set to 1, or simply "forget" the observation and let the server remove it through its own observation lifetime mechanisms.<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.3-2">As per <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, a server transmits notifications mostly as non-confirmable messages, but it sends a notification as a confirmable message instead of a non-confirmable message at least every 24 hours.<a href="#section-3.2.3-2" class="pilcrow">¶</a></p>
 <p id="section-3.2.3-3">This value can be modified at the broker by the administrator of a topic by modifying the topic property "observer-check" (see <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>). This would allow changing the rate at which different implementations verify that a subscriber is still interested in observing a topic-data resource.<a href="#section-3.2.3-3" class="pilcrow">¶</a></p>
 </section>
@@ -2447,7 +2450,7 @@ The URI for this resource is indicated in the "topic-data" topic property value.
           </h4>
 <p id="section-3.2.4-1">A publisher can delete a topic-data resource by making a CoAP DELETE request on the topic-data resource (which is hosted at the "topic-data" URI).<a href="#section-3.2.4-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.4-2">On success, the broker returns a 2.02 (Deleted) response.<a href="#section-3.2.4-2" class="pilcrow">¶</a></p>
-<p id="section-3.2.4-3">When a topic-data resource is deleted, the topic is then set back to the half created state as per <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a> awaiting for a publisher to publish and set the topic to FULLY-CREATED state where clients can subscribe and read the topic-data.<a href="#section-3.2.4-3" class="pilcrow">¶</a></p>
+<p id="section-3.2.4-3">When a topic-data resource is deleted, the topic is then set back to the half created state as per <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a> awaiting for a publisher to publish and set the topic to FULLY-CREATED state where clients can subscribe and read the topic-data. The "topic-data" property in the topic configuration remains unchanged, but no subscription to topic-data nor reading of data is allowed.<a href="#section-3.2.4-3" class="pilcrow">¶</a></p>
 <p id="section-3.2.4-4">Note that this is the case irrespective of the value of the "initialize" topic property (if present) in the topic configuration.<a href="#section-3.2.4-4" class="pilcrow">¶</a></p>
 <p id="section-3.2.4-5">Example of a successful deletion:<a href="#section-3.2.4-5" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.2.4-6">
@@ -2474,8 +2477,8 @@ The URI for this resource is indicated in the "topic-data" topic property value.
 <a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-read-the-latest-data" class="section-name selfRef">Read the latest data</a>
         </h3>
 <p id="section-3.3-1">A client can get the latest published topic-data resource by making a GET request to the "topic-data" URI in the broker. Please note that discovery of the "topic-data" topic property is a required previous step (see <a href="#topic-get-resource" class="auto internal xref">Section 2.5.1</a>).<a href="#section-3.3-1" class="pilcrow">¶</a></p>
-<p id="section-3.3-2">On success, the server <span class="bcp14">MUST</span> return a 2.05 (Content) response with the data.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
-<p id="section-3.3-3">If the target URI does not match an existing resource or the topic is not in the fully created state (see <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>), the broker <span class="bcp14">MUST</span> return a 4.04 (Not Found) error respons.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
+<p id="section-3.3-2">On success, the server returns a successful response (typically 2.05 Content) with the data.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
+<p id="section-3.3-3">If the target URI does not match an existing resource or the topic is not in the fully created state (see <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>), the broker returns an error response (typically 4.04 Not Found).<a href="#section-3.3-3" class="pilcrow">¶</a></p>
 <p id="section-3.3-4">Example:<a href="#section-3.3-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.3-5">
 <pre>
@@ -2565,7 +2568,7 @@ The URI for this resource is indicated in the "topic-data" topic property value.
           <tr>
             <td class="text-left" rowspan="1" colspan="1">expiration-date</td>
             <td class="text-left" rowspan="1" colspan="1">5</td>
-            <td class="text-left" rowspan="1" colspan="1">tstr</td>
+            <td class="text-left" rowspan="1" colspan="1">tag 1</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">max-subscribers</td>
@@ -2580,7 +2583,7 @@ The URI for this resource is indicated in the "topic-data" topic property value.
           <tr>
             <td class="text-left" rowspan="1" colspan="1">initialize</td>
             <td class="text-left" rowspan="1" colspan="1">8</td>
-            <td class="text-left" rowspan="1" colspan="1">True or False</td>
+            <td class="text-left" rowspan="1" colspan="1">bstr</td>
           </tr>
           <tr>
             <td class="text-left" rowspan="1" colspan="1">conf-filter</td>
@@ -2786,7 +2789,7 @@ The URI for this resource is indicated in the "topic-data" topic property value.
             <p id="section-6.4-5.1.1">Name: This is a descriptive name that enables easier reference to the item. The name <span class="bcp14">MUST</span> be unique. It is not used in the encoding.<a href="#section-6.4-5.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.4-5.2">
-            <p id="section-6.4-5.2.1">CBOR Key: This is the value used as the CBOR key of the item. These values <span class="bcp14">MUST</span> be unique. The value can be a positive integer, a negative integer, or a text string. Different ranges of values use different registration policies <span>[<a href="#BCP26" class="cite xref">BCP26</a>]</span>. Integer values from -256 to 255 as well as text strings of length 1 are designated as "Standards Action With Expert Review". Integer values from -65536 to -257 and from 256 to 65535, as well as text strings of length 2 are designated as "Specification Required". Integer values greater than 65535 as well as text strings of length greater than 2 are designated as "Expert Review". Integer values less than -65536 are marked as "Private Use".<a href="#section-6.4-5.2.1" class="pilcrow">¶</a></p>
+            <p id="section-6.4-5.2.1">CBOR Key: This is the value used as the CBOR key of the item. These values <span class="bcp14">MUST</span> be unique. The value is an integer (either positive or negative). Different ranges of values use different registration policies <span>[<a href="#BCP26" class="cite xref">BCP26</a>]</span>. Integer values from -256 to 255 are designated as "Standards Action With Expert Review". Integer values from -65536 to -257 and from 256 to 65535 are designated as "Specification Required". Integer values greater than 65535 are designated as "Expert Review". Integer values less than -65536 are marked as "Private Use".<a href="#section-6.4-5.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.4-5.3">
             <p id="section-6.4-5.3.1">CBOR Type: This contains the CBOR type of the item, or a pointer to the registry that defines its type, when that depends on another item.<a href="#section-6.4-5.3.1" class="pilcrow">¶</a></p>
@@ -2924,7 +2927,7 @@ The URI for this resource is indicated in the "topic-data" topic property value.
 <dd class="break"></dd>
 <dt id="I-D.ietf-ace-oscore-gm-admin">[I-D.ietf-ace-oscore-gm-admin]</dt>
         <dd>
-<span class="refAuthor">Tiloca, M.</span>, <span class="refAuthor">Höglund, R.</span>, <span class="refAuthor">Van der Stok, P.</span>, and <span class="refAuthor">F. Palombini</span>, <span class="refTitle">"Admin Interface for the OSCORE Group Manager"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-oscore-gm-admin-13</span>, <time datetime="2025-01-08" class="refDate">8 January 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-oscore-gm-admin-13">https://datatracker.ietf.org/doc/html/draft-ietf-ace-oscore-gm-admin-13</a>&gt;</span>. </dd>
+<span class="refAuthor">Tiloca, M.</span>, <span class="refAuthor">Höglund, R.</span>, <span class="refAuthor">Van der Stok, P.</span>, and <span class="refAuthor">F. Palombini</span>, <span class="refTitle">"Admin Interface for the OSCORE Group Manager"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ace-oscore-gm-admin-14</span>, <time datetime="2026-02-01" class="refDate">1 February 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ace-oscore-gm-admin-14">https://datatracker.ietf.org/doc/html/draft-ietf-ace-oscore-gm-admin-14</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-ace-pubsub-profile">[I-D.ietf-ace-pubsub-profile]</dt>
         <dd>
@@ -3097,6 +3100,24 @@ The URI for this resource is indicated in the "topic-data" topic property value.
 </li>
           <li class="normal" id="appendix-A.6-1.3">
             <p id="appendix-A.6-1.3.1">Addressed Marco's review<a href="#appendix-A.6-1.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-A.6-1.4">
+            <p id="appendix-A.6-1.4.1">Addressed Marco's and Christian Amsüss's WGLC reviews<a href="#appendix-A.6-1.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-A.6-1.5">
+            <p id="appendix-A.6-1.5.1">Redesigned "initialize" property for RFC7641 compliance<a href="#appendix-A.6-1.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-A.6-1.6">
+            <p id="appendix-A.6-1.6.1">Changed "expiration-date" to CBOR tag 1, CBOR keys numeric-only<a href="#appendix-A.6-1.6.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-A.6-1.7">
+            <p id="appendix-A.6-1.7.1">Relaxed overly strict response codes<a href="#appendix-A.6-1.7.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-A.6-1.8">
+            <p id="appendix-A.6-1.8.1">Clarified topic-data URI reference, immutable properties, and architecture roles<a href="#appendix-A.6-1.8.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-A.6-1.9">
+            <p id="appendix-A.6-1.9.1">Editorial fixes<a href="#appendix-A.6-1.9.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 </section>
