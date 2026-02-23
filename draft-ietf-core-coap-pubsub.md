@@ -143,6 +143,8 @@ The broker is responsible for the store-and-forward of state update representati
 ~~~~
 {: #fig-arch title='Publish-subscribe architecture based on CoAP' artwork-align="center"}
 
+Note that CoAP clients that merely interact with topic configuration but not with topic data (e.g., a dedicated administrator) are not depicted in {{fig-arch}}.
+
 This document describes two sets of interactions; interactions to configure topics and their lifecycle (see {{topic-create}} and {{topic-configuration-interactions}}) and interactions about the topic-data (see {{topic-data-interactions}}).
 
 Topic interactions are: discovery, create, read configuration, update configuration, and delete configuration. These operations concern the management of the topics.
@@ -199,7 +201,7 @@ The broker hosts a collection of topics. These topics as well as the collection 
 
 Each topic is represented as a link, where the link target is the URI of the corresponding topic resource.
 
-Publication and subscription to a topic occur at the target of a link, which is is the URI of the corresponding topic-data resource. Such a link is specified by the "topic-data" topic property within the topic resource (see {{topic-properties}}).
+Publication and subscription to a topic occur at the target of a link, which is the URI of the corresponding topic-data resource. Such a link is specified by the "topic-data" topic property within the topic resource (see {{topic-properties}}).
 
 A topic resource can also be simply called "topic".
 
@@ -219,11 +221,11 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 
 * "topic-name": A required field used as an application identifier. It encodes the topic name as a CBOR text string. Examples of topic names include human-readable strings (e.g., "room2"), UUIDs, or other values.
 
-* "topic-data": A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI reference as a CBOR text string. The URI can be that of a resource on a different address than that of the broker. If a URI is not provided when creating the topic, the choice of the URI for the topic-data resource is left to the broker.
+* "topic-data": A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI reference as a CBOR text string. The URI can be that of a resource on a different address than that of the broker; implementations MUST NOT assume that the topic-data resource is co-located with the broker. If a URI is not provided when creating the topic, the choice of the URI for the topic-data resource is left to the broker.
 
 * "resource-type": A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value is typically "core.ps.data", i.e., when using the topic-data resource defined in this document.
 
-* "topic-content-format": This optional field specifies the CoAP Content-Format identifier of the topic-data resource representation as an unsigned integer, e.g., 60 for the media-type "application/cbor".
+* "topic-content-format": This optional field specifies the canonical CoAP Content-Format identifier of the topic-data resource representation as an unsigned integer, e.g., 60 for the media-type "application/cbor".
 
 * "topic-type": An optional field used to indicate the attribute or property of the topic-data resource for the topic. It encodes the attribute as a CBOR text string. Example attributes include "temperature".
 
@@ -432,7 +434,7 @@ To facilitate immediate subscription and allow subscribers to subscribe to the t
 
 When "initialize" is omitted, the topic will only be fully created after data is published to it.
 
-On success, the broker returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map. The response MUST include the required topic properties (see {{topic-properties}}), namely: "topic-name", "resource-type", and "topic-data". It MAY also include a number of optional topic properties too. The response MUST have Content-Format set to TBD606 ("application/core-pubsub+cbor").
+On success, the broker returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map. The response MUST include the required topic properties (see {{topic-properties}}), namely: "topic-name", "resource-type", and "topic-data". It MAY also include a number of optional topic properties too. The response MUST support Content-Format TBD606 ("application/core-pubsub+cbor"), which is the default.
 
 If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST reply with a 4.xx client error response (such as 4.03 Forbidden).
 
@@ -516,7 +518,7 @@ If requirements are defined for the client to read the topic as requested and th
 
 The response payload is a CBOR map, whose possible entries are specified in {{topic-resource-representation}} and use the same abbreviations defined in {{pubsub-parameters}}.
 
-Both request and response MUST have Content-Format set to TBD606 ("application/core-pubsub+cbor").
+Content-Format TBD606 ("application/core-pubsub+cbor") is mandatory to support for both request and response.
 
 The CBOR map in the response payload includes entries for each topic property specified in the request and available in the topic resource representation.
 
@@ -547,7 +549,7 @@ Example:
 
 ### Updating the topic {#topic-update-resource}
 
-A client can update a topic's configuration by submitting the updated topic representation in a POST request to the topic URI. However, the topic properties "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.
+A client can update a topic's configuration by submitting the updated topic representation in a POST request to the topic URI. However, the topic properties "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker. Since POST replaces the full resource representation, these immutable properties may be included in the request with their current values.
 
 On success, the topic is overwritten and the broker returns a 2.04 (Changed) response and the current full resource representation. The broker MAY choose not to overwrite topic properties that are not explicitly modified in the request.
 
@@ -706,7 +708,7 @@ A topic with a topic-data resource must have been created in order to publish da
 A client can publish data to a topic by submitting the data in a PUT request to the topic-data resource.
 The URI for this resource is indicated in the "topic-data" topic property value. Please note that this URI is not the same as the topic URI used for configuring the topic (see {{topic-resource-representation}}).
 
-On success, the broker returns a 2.04 (Changed) response. However, when data is published to the topic for the first time, the broker instead MUST return a 2.01 (Created) response and set the topic in the fully-created state (see {{topic-lifecycle}}).
+On success, the broker returns a successful response. Typically, this is a 2.04 (Changed) response. However, when data is published to the topic for the first time, the broker returns a 2.01 (Created) response and sets the topic in the fully-created state (see {{topic-lifecycle}}).
 
 Using the "initialize" property is equivalent to having had a first publication with the initial content specified in that property. A follow-up publication from a publisher should result in a 2.04 response from the broker.
 
@@ -821,7 +823,7 @@ Example of a successful subscription followed by one update:
 
 ### Unsubscribe {#unsubscribe}
 
-A CoAP client can unsubscribe simply by canceling the observation as described in {{Section 3.6 of RFC7641}}. The client MUST either use CoAP GET with the Observe Option set to 1 or send a CoAP Reset message in response to a notification. Also on {{Section 3.6 of RFC7641}}, the client can simply "forget" the observation. Consequently, upon receiving the next notification, the client replies with a CoAP Reset message, which results in the broker removing the client from the list of observers.
+A CoAP client can unsubscribe by canceling the observation as described in {{Section 3.6 of RFC7641}}. For example, the client can use CoAP GET with the Observe Option set to 1, or simply "forget" the observation and let the server remove it through its own observation lifetime mechanisms.
 
 As per {{RFC7641}}, a server transmits notifications mostly as non-confirmable messages, but it sends a notification as a confirmable message instead of a non-confirmable message at least every 24 hours.
 
@@ -1095,9 +1097,15 @@ Expert reviewers should take into consideration the following points:
 
 ## Version -18 to 19
 
-- IANA early review
-- Addressed issues \#68, \#69
-- Addressed Marco's review
+* IANA early review
+* Addressed issues \#68, \#69
+* Addressed Marco's review
+* Addressed Marco's and Christian Amsüss's WGLC reviews
+* Redesigned "initialize" property for RFC7641 compliance
+* Changed "expiration-date" to CBOR tag 1, CBOR keys numeric-only
+* Relaxed overly strict response codes
+* Clarified topic-data URI reference, immutable properties, and architecture roles
+* Editorial fixes
 
 # Acknowledgements
 {: numbered='no'}
