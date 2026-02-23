@@ -102,7 +102,7 @@ publishers and subscribers:
 : CoAP clients can act as publishers or as subscribers. Publishers send CoAP messages (publications) to the broker on specific topics. Subscribers have an ongoing relation (subscription) to a topic via CoAP Observe {{RFC7641}}. Both roles operate without any mutual knowledge, guided by their respective topic interests.
 
 topic collection:
-: A topic collection is hosted as one collection resource at the broker. A collection resource is a resource that contains links to other resources that a client can add or remove; that concept is described more generally in {{Section 3.1 of {{?I-D.ietf-core-interfaces}}.
+: A topic collection is hosted as one collection resource at the broker. A collection resource is a resource that contains links to other resources that a client can add or remove; that concept is described more generally in {{Section 3.1 of I-D.ietf-core-interfaces}}.
 
 topic:
 : A resource used for configuration of the subscription and publication properties, which can be set by a client or by the broker. It is represented as a CBOR map containing configuration properties as top-level elements and hosted as a resource at the broker. All such resources associated with the same topic collection share a common base URI, i.e., the URI of the topic collection resource.
