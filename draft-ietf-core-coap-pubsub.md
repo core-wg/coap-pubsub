@@ -533,7 +533,7 @@ Example:
    Content-Format: TBD606 (application/core-pubsub+cbor)
    Payload (in CBOR diagnostic notation):
    {
-      / conf-filter / 10: [1, 3]
+      / conf-filter / 9: [1, 3]
    }
 
    Response:
