@@ -105,7 +105,7 @@ topic collection:
 : A topic collection is hosted as one collection resource at the broker. A collection resource is a resource that contains links to other resources that a client can add or remove; that concept is described more generally in {{Section 3.1 of I-D.ietf-core-interfaces}}.
 
 topic:
-: A resource used for configuration of the subscription and publication properties, which can be set by a client or by the broker. It is represented as a CBOR map containing configuration properties as top-level elements and hosted as a resource at the broker. All such resources associated with the same topic collection share a common base URI, i.e., the URI of the topic collection resource.
+: A set of information about an entity at the broker, including its configuration and other metadata. A topic is hosted as one topic resource at the broker, whose representation is the set of topic properties concerning the topic. All the topic resources associated with the same topic collection share a common base URI, i.e., the URI of the topic collection resource.
 
 topic property:
 : A single element of configuration information that is associated with a topic.
@@ -219,7 +219,7 @@ Unless specified otherwise, all topic properties are defined in this document an
 
 The CBOR map includes the following topic properties, whose CBOR abbreviations are defined in {{pubsub-parameters}}.
 
-* "topic-name": A required field used as an application identifier. It encodes the topic name as a CBOR text string. Examples of topic names include human-readable strings (e.g., "room2"), UUIDs, or other values.
+* "topic-name": A required field used as an application identifier. It encodes the topic name as a CBOR text string. Examples of topic names include human-readable strings (e.g., "room2"), UUIDs, or other values. The "topic-name" is required at topic creation to enable the broker to detect duplicate creation requests and to provide a stable application-level identifier. Applications that do not require human-readable names MAY use automatically generated values such as UUIDs.
 
 * "topic-data": A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI reference as a CBOR text string. The URI can be that of a resource on a different address than that of the broker; implementations MUST NOT assume that the topic-data resource is co-located with the broker. If a URI is not provided when creating the topic, the choice of the URI for the topic-data resource is left to the broker.
 
@@ -231,7 +231,7 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 
 * "expiration-date": An optional field used to indicate the expiration date of the topic. It encodes the expiration date as a CBOR tag 1 (epoch-based date/time) as defined in {{Section 3.4.2 of RFC8949@STD94}}, representing the number of seconds since 1970-01-01T00:00Z in UTC time. If this field is not present, the topic will not expire automatically. When "expiration-date" is reached, the topic resource is deleted as described in {{topic-delete}}.
 
-* "max-subscribers": An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as a CBOR unsigned integer. If this field is not present, then there is no limit to the number of simultaneous subscribers allowed.
+* "max-subscribers": An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as a CBOR unsigned integer. If this field is not present, then there is no limit to the number of simultaneous subscribers allowed. The broker MAY choose to ignore this value if enforcing it would be counterproductive (e.g., causing clients to fall back to polling). This field is intended as a hint from the topic creator; the broker is the final arbiter of resource allocation.
 
 * "observer-check": An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber (see {{unsubscribe}}). Encoded as a CBOR unsigned integer greater than 0, it ensures that subscribers that have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. If another CoAP server hosts the topic-data resource, that server is responsible for applying the "observer-check" value. The default value for this field is 86400, as defined in {{RFC7641}}, which corresponds to 24 hours.
 
