@@ -5,10 +5,10 @@
 CoRE Working Group                                            J. Jimenez
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                               M. Koster
-Expires: 27 August 2026                                    Dogtiger Labs
+Expires: 31 August 2026                                    Dogtiger Labs
                                                               A. Keranen
                                                                 Ericsson
-                                                        23 February 2026
+                                                        27 February 2026
 
 
     A publish-subscribe architecture for the Constrained Application
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Jimenez, et al.          Expires 27 August 2026                 [Page 1]
+Jimenez, et al.          Expires 31 August 2026                 [Page 1]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -63,7 +63,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 August 2026.
+   This Internet-Draft will expire on 31 August 2026.
 
 Copyright Notice
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Jimenez, et al.          Expires 27 August 2026                 [Page 2]
+Jimenez, et al.          Expires 31 August 2026                 [Page 2]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -165,7 +165,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                 [Page 3]
+Jimenez, et al.          Expires 31 August 2026                 [Page 3]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -221,7 +221,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                 [Page 4]
+Jimenez, et al.          Expires 31 August 2026                 [Page 4]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -277,7 +277,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                 [Page 5]
+Jimenez, et al.          Expires 31 August 2026                 [Page 5]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -333,7 +333,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                 [Page 6]
+Jimenez, et al.          Expires 31 August 2026                 [Page 6]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -389,7 +389,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                 [Page 7]
+Jimenez, et al.          Expires 31 August 2026                 [Page 7]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -445,7 +445,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                 [Page 8]
+Jimenez, et al.          Expires 31 August 2026                 [Page 8]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -501,7 +501,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                 [Page 9]
+Jimenez, et al.          Expires 31 August 2026                 [Page 9]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -557,7 +557,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 10]
+Jimenez, et al.          Expires 31 August 2026                [Page 10]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -613,7 +613,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 11]
+Jimenez, et al.          Expires 31 August 2026                [Page 11]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -669,7 +669,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 12]
+Jimenez, et al.          Expires 31 August 2026                [Page 12]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -725,7 +725,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 13]
+Jimenez, et al.          Expires 31 August 2026                [Page 13]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -781,7 +781,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 14]
+Jimenez, et al.          Expires 31 August 2026                [Page 14]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -837,7 +837,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 15]
+Jimenez, et al.          Expires 31 August 2026                [Page 15]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -893,7 +893,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 16]
+Jimenez, et al.          Expires 31 August 2026                [Page 16]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -949,7 +949,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 17]
+Jimenez, et al.          Expires 31 August 2026                [Page 17]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -1005,7 +1005,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 18]
+Jimenez, et al.          Expires 31 August 2026                [Page 18]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -1018,7 +1018,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
       Content-Format: TBD606 (application/core-pubsub+cbor)
       Payload (in CBOR diagnostic notation):
       {
-         / conf-filter / 10: [1, 3]
+         / conf-filter / 9: [1, 3]
       }
 
       Response:
@@ -1061,7 +1061,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 19]
+Jimenez, et al.          Expires 31 August 2026                [Page 19]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -1117,7 +1117,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 20]
+Jimenez, et al.          Expires 31 August 2026                [Page 20]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -1173,7 +1173,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 21]
+Jimenez, et al.          Expires 31 August 2026                [Page 21]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -1229,7 +1229,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 22]
+Jimenez, et al.          Expires 31 August 2026                [Page 22]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -1285,7 +1285,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 23]
+Jimenez, et al.          Expires 31 August 2026                [Page 23]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -1341,7 +1341,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 24]
+Jimenez, et al.          Expires 31 August 2026                [Page 24]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -1397,7 +1397,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 25]
+Jimenez, et al.          Expires 31 August 2026                [Page 25]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -1453,7 +1453,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 26]
+Jimenez, et al.          Expires 31 August 2026                [Page 26]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -1509,7 +1509,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 27]
+Jimenez, et al.          Expires 31 August 2026                [Page 27]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -1565,7 +1565,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 28]
+Jimenez, et al.          Expires 31 August 2026                [Page 28]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -1621,7 +1621,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 29]
+Jimenez, et al.          Expires 31 August 2026                [Page 29]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -1677,7 +1677,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 30]
+Jimenez, et al.          Expires 31 August 2026                [Page 30]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -1733,7 +1733,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 31]
+Jimenez, et al.          Expires 31 August 2026                [Page 31]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -1789,7 +1789,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 32]
+Jimenez, et al.          Expires 31 August 2026                [Page 32]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -1845,7 +1845,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 33]
+Jimenez, et al.          Expires 31 August 2026                [Page 33]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -1901,7 +1901,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 34]
+Jimenez, et al.          Expires 31 August 2026                [Page 34]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -1957,7 +1957,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 35]
+Jimenez, et al.          Expires 31 August 2026                [Page 35]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -2013,7 +2013,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 36]
+Jimenez, et al.          Expires 31 August 2026                [Page 36]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -2069,7 +2069,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 37]
+Jimenez, et al.          Expires 31 August 2026                [Page 37]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -2082,9 +2082,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
               Tiloca, M., Höglund, R., Van der Stok, P., and F.
               Palombini, "Admin Interface for the OSCORE Group Manager",
               Work in Progress, Internet-Draft, draft-ietf-ace-oscore-
-              gm-admin-14, 1 February 2026,
+              gm-admin-15, 23 February 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-ace-
-              oscore-gm-admin-14>.
+              oscore-gm-admin-15>.
 
    [I-D.ietf-ace-pubsub-profile]
               Palombini, F., Sengul, C., and M. Tiloca, "Publish-
@@ -2125,7 +2125,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 38]
+Jimenez, et al.          Expires 31 August 2026                [Page 38]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -2181,7 +2181,7 @@ A.2.  Version -14 to -15
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 39]
+Jimenez, et al.          Expires 31 August 2026                [Page 39]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -2237,7 +2237,7 @@ A.6.  Version -18 to 19
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 40]
+Jimenez, et al.          Expires 31 August 2026                [Page 40]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -2293,7 +2293,7 @@ Authors' Addresses
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 41]
+Jimenez, et al.          Expires 31 August 2026                [Page 41]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
@@ -2349,4 +2349,4 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 27 August 2026                [Page 42]
+Jimenez, et al.          Expires 31 August 2026                [Page 42]
