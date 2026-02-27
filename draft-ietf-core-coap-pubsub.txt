@@ -93,18 +93,18 @@ Table of Contents
        2.3.1.  Broker Discovery  . . . . . . . . . . . . . . . . . .  10
        2.3.2.  Topic Collection Discovery  . . . . . . . . . . . . .  11
        2.3.3.  Topic Discovery . . . . . . . . . . . . . . . . . . .  12
-       2.3.4.  Topic-Data Discovery  . . . . . . . . . . . . . . . .  12
+       2.3.4.  Topic-Data Discovery  . . . . . . . . . . . . . . . .  13
      2.4.  Topic Collection Interactions . . . . . . . . . . . . . .  13
-       2.4.1.  Retrieving all topics . . . . . . . . . . . . . . . .  13
-       2.4.2.  Getting Topics by Topic Properties  . . . . . . . . .  14
-       2.4.3.  Creating a Topic  . . . . . . . . . . . . . . . . . .  15
+       2.4.1.  Retrieving all topics . . . . . . . . . . . . . . . .  14
+       2.4.2.  Getting Topics by Topic Properties  . . . . . . . . .  15
+       2.4.3.  Creating a Topic  . . . . . . . . . . . . . . . . . .  16
      2.5.  Topic Interactions  . . . . . . . . . . . . . . . . . . .  17
        2.5.1.  Getting a topic . . . . . . . . . . . . . . . . . . .  17
        2.5.2.  Getting part of a topic . . . . . . . . . . . . . . .  18
        2.5.3.  Updating the topic  . . . . . . . . . . . . . . . . .  19
        2.5.4.  Updating the topic with iPATCH  . . . . . . . . . . .  21
        2.5.5.  Deleting a topic  . . . . . . . . . . . . . . . . . .  22
-   3.  Publish and Subscribe . . . . . . . . . . . . . . . . . . . .  22
+   3.  Publish and Subscribe . . . . . . . . . . . . . . . . . . . .  23
      3.1.  Topic Lifecycle . . . . . . . . . . . . . . . . . . . . .  23
 
 
@@ -116,7 +116,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
      3.2.  Topic-Data Interactions . . . . . . . . . . . . . . . . .  24
        3.2.1.  Publish . . . . . . . . . . . . . . . . . . . . . . .  24
-       3.2.2.  Subscribe . . . . . . . . . . . . . . . . . . . . . .  25
+       3.2.2.  Subscribe . . . . . . . . . . . . . . . . . . . . . .  26
        3.2.3.  Unsubscribe . . . . . . . . . . . . . . . . . . . . .  27
        3.2.4.  Delete topic-data . . . . . . . . . . . . . . . . . .  28
      3.3.  Read the latest data  . . . . . . . . . . . . . . . . . .  28
@@ -227,13 +227,12 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
    topic:
-      A resource used for configuration of the subscription and
-      publication properties, which can be set by a client or by the
-      broker.  It is represented as a CBOR map containing configuration
-      properties as top-level elements and hosted as a resource at the
-      broker.  All such resources associated with the same topic
-      collection share a common base URI, i.e., the URI of the topic
-      collection resource.
+      A set of information about an entity at the broker, including its
+      configuration and other metadata.  A topic is hosted as one topic
+      resource at the broker, whose representation is the set of topic
+      properties concerning the topic.  All the topic resources
+      associated with the same topic collection share a common base URI,
+      i.e., the URI of the topic collection resource.
 
    topic property:
       A single element of configuration information that is associated
@@ -271,6 +270,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
    the topic, which can be hosted at the broker.  Subscribers to a topic
    are notified of new publications by using Observe [RFC7641] on the
    corresponding topic-data resource.
+
 
 
 
@@ -430,16 +430,16 @@ Internet-Draft                 CoAP pubsub                 February 2026
    *  "topic-name": A required field used as an application identifier.
       It encodes the topic name as a CBOR text string.  Examples of
       topic names include human-readable strings (e.g., "room2"), UUIDs,
-      or other values.
+      or other values.  The "topic-name" is required at topic creation
+      to enable the broker to detect duplicate creation requests and to
+      provide a stable application-level identifier.  Applications that
+      do not require human-readable names MAY use automatically
+      generated values such as UUIDs.
 
-   *  "topic-data": A required field (optional during creation)
-      containing the URI of the topic-data resource for publishing/
-      subscribing to this topic.  It encodes the URI reference as a CBOR
-      text string.  The URI can be that of a resource on a different
-      address than that of the broker; implementations MUST NOT assume
-      that the topic-data resource is co-located with the broker.  If a
-      URI is not provided when creating the topic, the choice of the URI
-      for the topic-data resource is left to the broker.
+
+
+
+
 
 
 
@@ -449,6 +449,15 @@ Jimenez, et al.          Expires 31 August 2026                 [Page 8]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
+
+   *  "topic-data": A required field (optional during creation)
+      containing the URI of the topic-data resource for publishing/
+      subscribing to this topic.  It encodes the URI reference as a CBOR
+      text string.  The URI can be that of a resource on a different
+      address than that of the broker; implementations MUST NOT assume
+      that the topic-data resource is co-located with the broker.  If a
+      URI is not provided when creating the topic, the choice of the URI
+      for the topic-data resource is left to the broker.
 
    *  "resource-type": A required field used to indicate the resource
       type of the topic-data resource for the topic.  It encodes the
@@ -479,12 +488,24 @@ Internet-Draft                 CoAP pubsub                 February 2026
       number of simultaneous subscribers allowed for the topic.  It
       encodes the maximum number as a CBOR unsigned integer.  If this
       field is not present, then there is no limit to the number of
-      simultaneous subscribers allowed.
+      simultaneous subscribers allowed.  The broker MAY choose to ignore
+      this value if enforcing it would be counterproductive (e.g.,
+      causing clients to fall back to polling).  This field is intended
+      as a hint from the topic creator; the broker is the final arbiter
+      of resource allocation.
 
    *  "observer-check": An optional field that controls the maximum
       number of seconds between two consecutive Observe notifications
       sent as Confirmable messages to each topic subscriber (see
       Section 3.2.3).  Encoded as a CBOR unsigned integer greater than
+
+
+
+Jimenez, et al.          Expires 31 August 2026                 [Page 9]
+
+Internet-Draft                 CoAP pubsub                 February 2026
+
+
       0, it ensures that subscribers that have lost interest and
       silently forgotten the observation do not remain indefinitely on
       the server's observer list.  If another CoAP server hosts the
@@ -498,14 +519,6 @@ Internet-Draft                 CoAP pubsub                 February 2026
       initialize the topic-data resource with this representation using
       the Content-Format specified in "topic-content-format".  This
       allows the topic to be immediately subscribable without
-
-
-
-Jimenez, et al.          Expires 31 August 2026                 [Page 9]
-
-Internet-Draft                 CoAP pubsub                 February 2026
-
-
       encountering a 4.04 Not Found error.  The representation MUST be
       valid for the specified Content-Format.  For example, for CBOR-
       based formats, an empty array encoded as 0x80 (CBOR for []) is a
@@ -541,19 +554,6 @@ Internet-Draft                 CoAP pubsub                 February 2026
    with the resource type set to "core.ps" as defined in Section 6 of
    this document.
 
-   The following example shows an endpoint discovering a broker using
-   the "core.ps" resource type over a multicast network.  Brokers within
-   the multicast scope will answer the query.
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -561,6 +561,10 @@ Jimenez, et al.          Expires 31 August 2026                [Page 10]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
+
+   The following example shows an endpoint discovering a broker using
+   the "core.ps" resource type over a multicast network.  Brokers within
+   the multicast scope will answer the query.
 
       Request:
 
@@ -596,6 +600,24 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
    Example:
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.          Expires 31 August 2026                [Page 11]
+
+Internet-Draft                 CoAP pubsub                 February 2026
+
+
       Request:
 
       Header: GET (Code=0.01)
@@ -610,13 +632,6 @@ Internet-Draft                 CoAP pubsub                 February 2026
       Payload:
       </ps>;rt="core.ps.coll",
       </other/path>;rt="core.ps.coll"
-
-
-
-Jimenez, et al.          Expires 31 August 2026                [Page 11]
-
-Internet-Draft                 CoAP pubsub                 February 2026
-
 
    Note that in this example the "ct" attribute is not included for the
    two collections in the returned CoRE Link Format document.  This is
@@ -652,6 +667,13 @@ Internet-Draft                 CoAP pubsub                 February 2026
       </ps/h9392>;rt="core.ps.conf",
       </other/path/2e3570>;rt="core.ps.conf"
 
+
+
+Jimenez, et al.          Expires 31 August 2026                [Page 12]
+
+Internet-Draft                 CoAP pubsub                 February 2026
+
+
    In certain scenarios, the method described herein may not be
    applicable, particularly when the server restricts topic availability
    to authenticated clients only.  In such cases, it is recommended to
@@ -664,15 +686,6 @@ Internet-Draft                 CoAP pubsub                 February 2026
    contains the URI of the topic-data resource used for publishing and
    subscribing.  So retrieving the topic will also provide the URL of
    the topic-data resource (see Section 2.5.1).
-
-
-
-
-
-Jimenez, et al.          Expires 31 August 2026                [Page 12]
-
-Internet-Draft                 CoAP pubsub                 February 2026
-
 
    The topic-data resources use the resource type 'core.ps.data'.  It is
    also possible to discover a list of topic-data resources, by sending
@@ -707,6 +720,16 @@ Internet-Draft                 CoAP pubsub                 February 2026
    Topic collection interactions are the interactions that can happen
    directly with a specific topic collection.
 
+
+
+
+
+
+Jimenez, et al.          Expires 31 August 2026                [Page 13]
+
+Internet-Draft                 CoAP pubsub                 February 2026
+
+
    The CoRE Link Format responses shown in the examples in this section
    are illustrative only.  The normative requirements for this format
    are defined in [RFC6690].  The examples make minimal use of CoRE Link
@@ -719,16 +742,6 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
    A client can request a collection of the topics present in the broker
    by making a GET request to the topic collection URI.
-
-
-
-
-
-
-Jimenez, et al.          Expires 31 August 2026                [Page 13]
-
-Internet-Draft                 CoAP pubsub                 February 2026
-
 
    On success, the broker returns a 2.05 (Content) response, specifying
    the list of links to topic resources associated with this topic
@@ -761,6 +774,18 @@ Internet-Draft                 CoAP pubsub                 February 2026
    topic collection and the content-format (TBD606) is implied by the
    resource type.
 
+
+
+
+
+
+
+
+Jimenez, et al.          Expires 31 August 2026                [Page 14]
+
+Internet-Draft                 CoAP pubsub                 February 2026
+
+
 2.4.2.  Getting Topics by Topic Properties
 
    A client can filter a collection of topics by submitting the
@@ -778,13 +803,6 @@ Internet-Draft                 CoAP pubsub                 February 2026
    in the topic resource representation.
 
    Example:
-
-
-
-Jimenez, et al.          Expires 31 August 2026                [Page 14]
-
-Internet-Draft                 CoAP pubsub                 February 2026
-
 
       Request:
 
@@ -811,6 +829,19 @@ Internet-Draft                 CoAP pubsub                 February 2026
    each topic resource by this specification.  Eliding these attributes
    helps to minimize the size of the response payload.
 
+
+
+
+
+
+
+
+
+Jimenez, et al.          Expires 31 August 2026                [Page 15]
+
+Internet-Draft                 CoAP pubsub                 February 2026
+
+
 2.4.3.  Creating a Topic
 
    A client can add a new topic to a collection of topics by submitting
@@ -834,14 +865,6 @@ Internet-Draft                 CoAP pubsub                 February 2026
    the initialize value could be h'80' (the CBOR encoding of an empty
    array []).
 
-
-
-
-Jimenez, et al.          Expires 31 August 2026                [Page 15]
-
-Internet-Draft                 CoAP pubsub                 February 2026
-
-
    When "initialize" is omitted, the topic will only be fully created
    after data is published to it.
 
@@ -862,6 +885,18 @@ Internet-Draft                 CoAP pubsub                 February 2026
    The broker MUST reply with a 4.xx client error response (such as 4.00
    Bad Request) if a received parameter is invalid, unrecognized, or if
    the "topic-name" is already in use or otherwise invalid.
+
+
+
+
+
+
+
+
+Jimenez, et al.          Expires 31 August 2026                [Page 16]
+
+Internet-Draft                 CoAP pubsub                 February 2026
+
 
       Request:
 
@@ -887,17 +922,6 @@ Internet-Draft                 CoAP pubsub                 February 2026
          / resource-type /      2: "core.ps.data"
       }
 
-
-
-
-
-
-
-Jimenez, et al.          Expires 31 August 2026                [Page 16]
-
-Internet-Draft                 CoAP pubsub                 February 2026
-
-
 2.5.  Topic Interactions
 
    These are the interactions that can happen at the topic resource
@@ -922,6 +946,14 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
    For example, below is a request on the topic "/ps/h9392":
 
+
+
+
+Jimenez, et al.          Expires 31 August 2026                [Page 17]
+
+Internet-Draft                 CoAP pubsub                 February 2026
+
+
       Request:
 
       Header: GET (Code=0.01)
@@ -942,17 +974,6 @@ Internet-Draft                 CoAP pubsub                 February 2026
          / expiration-date /       5: 1(1680393599),
          / max-subscribers /       6: 100
       }
-
-
-
-
-
-
-
-Jimenez, et al.          Expires 31 August 2026                [Page 17]
-
-Internet-Draft                 CoAP pubsub                 February 2026
-
 
 2.5.2.  Getting part of a topic
 
@@ -981,6 +1002,14 @@ Internet-Draft                 CoAP pubsub                 February 2026
    specified in Section 2.2 and use the same abbreviations defined in
    Section 4.
 
+
+
+
+Jimenez, et al.          Expires 31 August 2026                [Page 18]
+
+Internet-Draft                 CoAP pubsub                 February 2026
+
+
    Content-Format TBD606 ("application/core-pubsub+cbor") is mandatory
    to support for both request and response.
 
@@ -989,26 +1018,6 @@ Internet-Draft                 CoAP pubsub                 February 2026
    representation.
 
    Example:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Jimenez, et al.          Expires 31 August 2026                [Page 18]
-
-Internet-Draft                 CoAP pubsub                 February 2026
-
 
       Request:
 
@@ -1046,6 +1055,17 @@ Internet-Draft                 CoAP pubsub                 February 2026
    broker MAY choose not to overwrite topic properties that are not
    explicitly modified in the request.
 
+
+
+
+
+
+
+Jimenez, et al.          Expires 31 August 2026                [Page 19]
+
+Internet-Draft                 CoAP pubsub                 February 2026
+
+
    Similarly, decreasing "max-subscribers" will also cause that some
    subscribers get unsubscribed.  Unsubscribed endpoints receive a final
    4.04 (Not Found) response as per Section 3.2 of [RFC7641].  The
@@ -1057,14 +1077,6 @@ Internet-Draft                 CoAP pubsub                 February 2026
    their default values.
 
    Example:
-
-
-
-
-Jimenez, et al.          Expires 31 August 2026                [Page 19]
-
-Internet-Draft                 CoAP pubsub                 February 2026
-
 
       Request:
 
@@ -1101,18 +1113,6 @@ Internet-Draft                 CoAP pubsub                 February 2026
    Note that, when a topic changes, it may result in disruptions for the
    subscribers.  Some potential issues that may arise include:
 
-   *  Limiting the number of subscribers will cause cancellation of
-      ongoing subscriptions until "max-subscribers" has been reached.
-
-   *  Changing of the "expiration-date" may cause cancellation of
-      ongoing subscriptions if the topic expires at an earlier data.
-
-
-
-
-
-
-
 
 
 
@@ -1121,6 +1121,12 @@ Jimenez, et al.          Expires 31 August 2026                [Page 20]
 
 Internet-Draft                 CoAP pubsub                 February 2026
 
+
+   *  Limiting the number of subscribers will cause cancellation of
+      ongoing subscriptions until "max-subscribers" has been reached.
+
+   *  Changing of the "expiration-date" may cause cancellation of
+      ongoing subscriptions if the topic expires at an earlier data.
 
 2.5.4.  Updating the topic with iPATCH
 
@@ -1142,6 +1148,35 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
    Contrary to POST, iPATCH operations will explicitly update some topic
    properties, leaving others unmodified.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.          Expires 31 August 2026                [Page 21]
+
+Internet-Draft                 CoAP pubsub                 February 2026
+
 
       Request:
 
@@ -1171,13 +1206,6 @@ Internet-Draft                 CoAP pubsub                 February 2026
          / observer-check /        7: 86400
       }
 
-
-
-Jimenez, et al.          Expires 31 August 2026                [Page 21]
-
-Internet-Draft                 CoAP pubsub                 February 2026
-
-
    Note that when a topic changes through an iPATCH request, it may
    result in disruptions for the subscribers.  For example, limiting the
    number of subscribers will cause cancellation of ongoing
@@ -1196,6 +1224,15 @@ Internet-Draft                 CoAP pubsub                 February 2026
    a final 4.04 (Not Found) response as per Section 3.2 of [RFC7641].
 
    Example:
+
+
+
+
+
+Jimenez, et al.          Expires 31 August 2026                [Page 22]
+
+Internet-Draft                 CoAP pubsub                 February 2026
+
 
       Request:
 
@@ -1224,16 +1261,6 @@ Internet-Draft                 CoAP pubsub                 February 2026
    can simply immediately publish some initial placeholder data to make
    the topic "fully created" (see Section 3.1).
 
-
-
-
-
-
-Jimenez, et al.          Expires 31 August 2026                [Page 22]
-
-Internet-Draft                 CoAP pubsub                 February 2026
-
-
    URIs for topic resources are broker-generated (see Section 2.4.3).
    There is no necessary URI pattern dependence between the URI where
    the topic-data resource exists and the URI of the topic resource.
@@ -1246,6 +1273,22 @@ Internet-Draft                 CoAP pubsub                 February 2026
    A publisher can publish to the topic-data resource.  However, a
    subscriber cannot yet subscribe to the topic-data resource nor read
    the latest data.
+
+
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.          Expires 31 August 2026                [Page 23]
+
+Internet-Draft                 CoAP pubsub                 February 2026
+
 
                     HALF                          FULLY
                    CREATED       Delete          CREATED
@@ -1282,14 +1325,6 @@ Internet-Draft                 CoAP pubsub                 February 2026
    unchanged but no subscription to topic-data nor reading of data is
    allowed.
 
-
-
-
-Jimenez, et al.          Expires 31 August 2026                [Page 23]
-
-Internet-Draft                 CoAP pubsub                 February 2026
-
-
 3.2.  Topic-Data Interactions
 
    Interactions with the topic-data resource are covered in this
@@ -1301,6 +1336,15 @@ Internet-Draft                 CoAP pubsub                 February 2026
    publish data to it (See Section 2.4.3) and be in the half-created or
    fully-created state in order for the publish operation to work (see
    Section 3.1).
+
+
+
+
+
+Jimenez, et al.          Expires 31 August 2026                [Page 24]
+
+Internet-Draft                 CoAP pubsub                 February 2026
+
 
    A client can publish data to a topic by submitting the data in a PUT
    request to the topic-data resource.  The URI for this resource is
@@ -1329,23 +1373,6 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
    Example of first publication:
 
-
-
-
-
-
-
-
-
-
-
-
-
-Jimenez, et al.          Expires 31 August 2026                [Page 24]
-
-Internet-Draft                 CoAP pubsub                 February 2026
-
-
       Request:
 
       Header: PUT (Code=0.03)
@@ -1366,6 +1393,14 @@ Internet-Draft                 CoAP pubsub                 February 2026
       Header: Created (Code=2.01)
 
    Example of subsequent publication:
+
+
+
+
+Jimenez, et al.          Expires 31 August 2026                [Page 25]
+
+Internet-Draft                 CoAP pubsub                 February 2026
+
 
       Request:
 
@@ -1392,16 +1427,6 @@ Internet-Draft                 CoAP pubsub                 February 2026
    request with the CoAP Observe Option set to 0 to subscribe to
    resource updates [RFC7641].
 
-
-
-
-
-
-Jimenez, et al.          Expires 31 August 2026                [Page 25]
-
-Internet-Draft                 CoAP pubsub                 February 2026
-
-
    On success, the server hosting the topic-data resource returns a
    successful response (typically 2.05 Content) with the data and the
    Observe Option.  If no Observe Option is present in the response, the
@@ -1424,31 +1449,6 @@ Internet-Draft                 CoAP pubsub                 February 2026
    failed.
 
    Example of a successful subscription followed by one update:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
