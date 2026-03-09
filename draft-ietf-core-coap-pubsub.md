@@ -666,7 +666,7 @@ Example:
 
 The overview of the publish-subscribe mechanism based on CoAP is as follows: a publisher publishes to a topic by submitting the data in a PUT request to a topic-data resource and subscribers subscribe to a topic by submitting a GET request with the Observe option set to 0 (register) to a topic-data resource. When resource state changes, the server will send a notification to current subscribers observing the resource {{RFC7641}}.
 
-A topic-data resource does not exist until some initial data has been published to it. Before initial data publication, a GET request to the topic-data resource URI results in a 4.04 (Not Found) response. If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created" (see {{topic-lifecycle}}).
+Unless the topic configuration includes the "initialize" property (see {{topic-properties}}), a topic-data resource does not exist until some initial data has been published to it. Consequently, a GET request sent to the topic-data resource URI before initial data publication would result in a 4.04 (Not Found) response. If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created" (see {{topic-lifecycle}}).
 
 
 URIs for topic resources are broker-generated (see {{topic-create}}). There is no necessary URI pattern dependence between the URI where the topic-data resource exists and the URI of the topic resource.
@@ -695,7 +695,7 @@ After a publisher publishes to the topic-data resource for the first time, the t
 
 When a client deletes a topic resource, the topic is placed into the DELETED state and shortly after removed from the server. In this state, all subscribers are removed from the list of observers of the topic-data resource and no further interactions with the topic are possible. Both the topic resource and the topic-data resource are deleted.
 
-When a client deletes a topic-data resource, the associated topic is placed into the HALF CREATED state, where clients can read, update and delete the topic and await for a publisher to begin publication. The "topic-data" property in the topic configuration remains unchanged but no subscription to topic-data nor reading of data is allowed.
+When a client deletes a topic-data resource, the associated topic is placed into the HALF CREATED state, where clients can read, update and delete the topic and await for a publisher to begin publication. The "topic-data" property in the topic configuration remains unchanged but no subscription to topic-data nor reading of data is allowed. Even if the "initialize" property in the topic configuration is present, the topic-data resource is not automatically initialized (see {{delete-topic-data}}).
 
 ## Topic-Data Interactions {#topic-data-interactions}
 
