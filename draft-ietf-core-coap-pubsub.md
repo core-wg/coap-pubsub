@@ -708,13 +708,13 @@ A topic with a topic-data resource must have been created in order to publish da
 A client can publish data to a topic by submitting the data in a PUT request to the topic-data resource.
 The URI for this resource is indicated in the "topic-data" topic property value. Please note that this URI is not the same as the topic URI used for configuring the topic (see {{topic-resource-representation}}).
 
-On success, the broker returns a successful response. Typically, this is a 2.04 (Changed) response. However, when data is published to the topic for the first time, the broker returns a 2.01 (Created) response and sets the topic in the FULLY CREATED state (see {{topic-lifecycle}}).
+On success, the server returns a successful response. Typically, this is a 2.04 (Changed) response. However, when data is published to the topic for the first time, the server returns a 2.01 (Created) response and the broker sets the topic in the FULLY CREATED state (see {{topic-lifecycle}}).
 
-Using the "initialize" property is equivalent to having had a first publication with the initial content specified in that property. A follow-up publication from a publisher should result in a 2.04 response from the broker.
+Using the "initialize" property is equivalent to having had a first publication with the initial content specified in that property. A follow-up publication from a publisher should result in a 2.04 response from the server.
 
-If the request does not have an acceptable Content-format, e.g., as specified by the "topic-content-format" property in the topic configuration, the broker returns a 4.15 (Unsupported Content-Format) response.
+If the request does not have an acceptable Content-format, e.g., as specified by the "topic-content-format" property in the topic configuration, the server returns a 4.15 (Unsupported Content-Format) response.
 
-If the client is sending publications too fast, the broker returns a 4.29 (Too Many Requests) response {{RFC8516}}.
+If the client is sending publications too fast, the server returns a 4.29 (Too Many Requests) response {{RFC8516}}.
 
 Example of first publication:
 
@@ -857,11 +857,11 @@ Example of a successful deletion:
 
 ## Read the latest data {#read-data}
 
-A client can get the latest published topic-data resource by making a GET request to the "topic-data" URI in the broker. Please note that discovery of the "topic-data" topic property is a required previous step (see {{topic-get-resource}}).
+A client can get the latest published topic-data resource by making a GET request to the "topic-data" URI. Please note that discovery of the "topic-data" topic property is a required previous step (see {{topic-get-resource}}).
 
 On success, the server returns a successful response (typically 2.05 Content) with the data.
 
-If the target URI does not match an existing resource or the topic is not in the FULLY CREATED state (see {{topic-lifecycle}}), the broker returns an error response (typically 4.04 Not Found).
+If the target URI does not match an existing resource or the topic is not in the FULLY CREATED state (see {{topic-lifecycle}}), the server returns an error response (typically 4.04 Not Found).
 
 Example:
 
@@ -893,7 +893,7 @@ As defined in this document, subscribers can retrieve the latest topic-data reso
 
 The server hosting the topic-data resource may have to handle a potentially large number of publishers and subscribers at the same time. This means it could become overwhelmed if it receives too many publications in a short period of time.
 
-In this situation, if a publisher is sending publications too fast, the server SHOULD return a 4.29 (Too Many Requests) response {{RFC8516}}.  As described in {{RFC8516}}, the Max-Age option {{RFC7252}} in this response indicates the number of seconds after which the client may retry. The broker MAY also stop dispatching messages from that publisher for the indicated time.
+In this situation, if a publisher is sending publications too fast, the server SHOULD return a 4.29 (Too Many Requests) response {{RFC8516}}. As described in {{RFC8516}}, the Max-Age option {{RFC7252}} in this response indicates the number of seconds after which the client may retry. The server MAY also stop dispatching messages from that publisher for the indicated time.
 
 When a publisher receives a 4.29 (Too Many Requests) response, it MUST NOT send any new publication requests to the same topic-data resource before the time indicated by the Max-Age option has passed.
 
