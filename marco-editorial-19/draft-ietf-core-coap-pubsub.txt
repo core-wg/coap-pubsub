@@ -1352,23 +1352,23 @@ Internet-Draft                 CoAP pubsub                    March 2026
    this URI is not the same as the topic URI used for configuring the
    topic (see Section 2.2).
 
-   On success, the broker returns a successful response.  Typically,
+   On success, the server returns a successful response.  Typically,
    this is a 2.04 (Changed) response.  However, when data is published
-   to the topic for the first time, the broker returns a 2.01 (Created)
-   response and sets the topic in the FULLY CREATED state (see
-   Section 3.1).
+   to the topic for the first time, the server returns a 2.01 (Created)
+   response and the broker sets the topic in the FULLY CREATED state
+   (see Section 3.1).
 
    Using the "initialize" property is equivalent to having had a first
    publication with the initial content specified in that property.  A
    follow-up publication from a publisher should result in a 2.04
-   response from the broker.
+   response from the server.
 
    If the request does not have an acceptable Content-format, e.g., as
    specified by the "topic-content-format" property in the topic
-   configuration, the broker returns a 4.15 (Unsupported Content-Format)
+   configuration, the server returns a 4.15 (Unsupported Content-Format)
    response.
 
-   If the client is sending publications too fast, the broker returns a
+   If the client is sending publications too fast, the server returns a
    4.29 (Too Many Requests) response [RFC8516].
 
    Example of first publication:
@@ -1554,9 +1554,9 @@ Internet-Draft                 CoAP pubsub                    March 2026
 3.3.  Read the latest data
 
    A client can get the latest published topic-data resource by making a
-   GET request to the "topic-data" URI in the broker.  Please note that
-   discovery of the "topic-data" topic property is a required previous
-   step (see Section 2.5.1).
+   GET request to the "topic-data" URI.  Please note that discovery of
+   the "topic-data" topic property is a required previous step (see
+   Section 2.5.1).
 
    On success, the server returns a successful response (typically 2.05
    Content) with the data.
@@ -1571,7 +1571,7 @@ Internet-Draft                 CoAP pubsub                    March 2026
 
 
    If the target URI does not match an existing resource or the topic is
-   not in the FULLY CREATED state (see Section 3.1), the broker returns
+   not in the FULLY CREATED state (see Section 3.1), the server returns
    an error response (typically 4.04 Not Found).
 
    Example:
@@ -1616,7 +1616,7 @@ Internet-Draft                 CoAP pubsub                    March 2026
    the server SHOULD return a 4.29 (Too Many Requests) response
    [RFC8516].  As described in [RFC8516], the Max-Age option [RFC7252]
    in this response indicates the number of seconds after which the
-   client may retry.  The broker MAY also stop dispatching messages from
+   client may retry.  The server MAY also stop dispatching messages from
    that publisher for the indicated time.
 
 
