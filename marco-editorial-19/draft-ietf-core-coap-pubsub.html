@@ -2376,7 +2376,7 @@ The URI for this resource is indicated in the "topic-data" topic property value.
           </h4>
 <p id="section-3.2.2-1">A client can subscribe to a topic-data resource by sending a CoAP GET request with the CoAP Observe Option set to 0 to subscribe to resource updates <span>[<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>.<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2.2-2">On success, the server hosting the topic-data resource returns a successful response (typically 2.05 Content) with the data and the Observe Option. If no Observe Option is present in the response, the client should assume that the subscription was not successful.<a href="#section-3.2.2-2" class="pilcrow">¶</a></p>
-<p id="section-3.2.2-3">If the topic is not yet in the FULLY CREATED state (see <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>), the broker returns an error response (typically 4.04 Not Found).<a href="#section-3.2.2-3" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-3">If the topic is not yet in the FULLY CREATED state (see <a href="#topic-lifecycle" class="auto internal xref">Section 3.1</a>), the server returns an error response (typically 4.04 Not Found).<a href="#section-3.2.2-3" class="pilcrow">¶</a></p>
 <p id="section-3.2.2-4">The following response codes are defined for the Subscribe operation:<a href="#section-3.2.2-4" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-3.2.2-5">
             <dt id="section-3.2.2-5.1">Success:</dt>
@@ -2390,7 +2390,7 @@ The URI for this resource is indicated in the "topic-data" topic property value.
 </dd>
           <dd class="break"></dd>
 </dl>
-<p id="section-3.2.2-6">If the "max-subscribers" topic property value has been reached, the broker must treat that as specified in <span><a href="https://rfc-editor.org/rfc/rfc7641#section-4.1" class="relref">Section 4.1</a> of [<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. The 2.05 (Content) response <span class="bcp14">MUST NOT</span> include an Observe Option, the absence of which signals to the subscriber that the subscription failed.<a href="#section-3.2.2-6" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-6">If the "max-subscribers" topic property value has been reached, the server must treat that as specified in <span><a href="https://rfc-editor.org/rfc/rfc7641#section-4.1" class="relref">Section 4.1</a> of [<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. The 2.05 (Content) response <span class="bcp14">MUST NOT</span> include an Observe Option, the absence of which signals to the subscriber that the subscription failed.<a href="#section-3.2.2-6" class="pilcrow">¶</a></p>
 <p id="section-3.2.2-7">Example of a successful subscription followed by one update:<a href="#section-3.2.2-7" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.2.2-8">
 <pre>
