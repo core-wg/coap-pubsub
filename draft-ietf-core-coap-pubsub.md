@@ -768,7 +768,7 @@ A client can subscribe to a topic-data resource by sending a CoAP GET request wi
 
 On success, the server hosting the topic-data resource returns a successful response (typically 2.05 Content) with the data and the Observe Option. If no Observe Option is present in the response, the client should assume that the subscription was not successful.
 
-If the topic is not yet in the FULLY CREATED state (see {{topic-lifecycle}}), the broker returns an error response (typically 4.04 Not Found).
+If the topic is not yet in the FULLY CREATED state (see {{topic-lifecycle}}), the server returns an error response (typically 4.04 Not Found).
 
 The following response codes are defined for the Subscribe operation:
 
@@ -778,7 +778,7 @@ Success:
 Failure:
 : 4.04 "Not Found". The topic-data resource does not exist.
 
-If the "max-subscribers" topic property value has been reached, the broker must treat that as specified in {{Section 4.1 of RFC7641}}. The 2.05 (Content) response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
+If the "max-subscribers" topic property value has been reached, the server must treat that as specified in {{Section 4.1 of RFC7641}}. The 2.05 (Content) response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
 
 
 Example of a successful subscription followed by one update:
