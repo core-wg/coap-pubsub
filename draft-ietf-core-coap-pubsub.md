@@ -562,7 +562,7 @@ Example:
 ~~~~
    Request:
 
-   Header: POST (Code=0.03)
+   Header: POST (Code=0.02)
    Uri-Path: "ps"
    Uri-Path: "h9392"
    Content-Format: TBD606 (application/core-pubsub+cbor)
