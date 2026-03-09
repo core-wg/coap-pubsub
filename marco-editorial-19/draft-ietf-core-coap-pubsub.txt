@@ -1437,8 +1437,9 @@ Internet-Draft                 CoAP pubsub                    March 2026
 
    The following response codes are defined for the Subscribe operation:
 
-   Success:  2.05 "Content".  Successful subscription with Observe
-      response, current value included in the response.
+   Success:  2.05 "Content".  The current topic data is included in the
+      response.  In case of successful subscription, the response
+      includes the Observe Option.
 
    Failure:  4.04 "Not Found".  The topic-data resource does not exist.
 
@@ -1449,7 +1450,6 @@ Internet-Draft                 CoAP pubsub                    March 2026
    failed.
 
    Example of a successful subscription followed by one update:
-
 
 
 
