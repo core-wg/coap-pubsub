@@ -773,7 +773,7 @@ If the topic is not yet in the FULLY CREATED state (see {{topic-lifecycle}}), th
 The following response codes are defined for the Subscribe operation:
 
 Success:
-: 2.05 "Content". Successful subscription with Observe response, current value included in the response.
+: 2.05 "Content". The current topic data is included in the response. In case of successful subscription, the response includes the Observe Option.
 
 Failure:
 : 4.04 "Not Found". The topic-data resource does not exist.
