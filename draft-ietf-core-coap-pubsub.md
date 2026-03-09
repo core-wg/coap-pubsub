@@ -1095,7 +1095,7 @@ Expert reviewers should take into consideration the following points:
 * rt, ct, obs attribute elision
 * Editorial changes
 
-## Version -18 to 19
+## Version -18 to -19
 
 * IANA early review
 * Addressed issues \#68, \#69
@@ -1106,6 +1106,10 @@ Expert reviewers should take into consideration the following points:
 * Relaxed overly strict response codes
 * Clarified topic-data URI reference, immutable properties, and architecture roles
 * Editorial fixes
+
+## Version -19 to -20
+
+* Minor fixes and editorial improvements.
 
 # Acknowledgements
 {: numbered='no'}
