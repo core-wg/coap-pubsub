@@ -521,11 +521,12 @@ Internet-Draft                 CoAP pubsub                    March 2026
       allows the topic to be immediately subscribable without
       encountering a 4.04 Not Found error.  The representation MUST be
       valid for the specified Content-Format.  For example, for CBOR-
-      based formats, an empty array encoded as 0x80 (CBOR for []) is a
-      valid empty representation.  If this field is not present, the
-      broker behaves as usual, and the topic-data resource is not
-      initialized.  When this field is present, "topic-content-format"
-      MUST also be specified.
+      based formats, the empty CBOR array encoded as 0x80 is a valid
+      empty representation, which corresponds to the "initialize"
+      property set to 0x4180 (<<[]>> in CBOR diagnostic notation).  If
+      this field is not present, the broker behaves as usual, and the
+      topic-data resource is not initialized.  When this field is
+      present, "topic-content-format" MUST also be specified.
 
 2.3.  Discovery
 
@@ -553,7 +554,6 @@ Internet-Draft                 CoAP pubsub                    March 2026
    register with an RD by following the steps on Section 5 of [RFC9176]
    with the resource type set to "core.ps" as defined in Section 6 of
    this document.
-
 
 
 
@@ -862,8 +862,8 @@ Internet-Draft                 CoAP pubsub                    March 2026
    representation, using the specified Content-Format.  This ensures
    RFC7641 compliance by maintaining Content-Format consistency across
    all notifications.  For example, for CBOR SenML (Content-Format 60),
-   the initialize value could be h'80' (the CBOR encoding of an empty
-   array []).
+   the "initialize" property could be 0x4180 (<<[]>> in CBOR diagnostic
+   notation), with 0x80 being the CBOR encoding of the empty CBOR array.
 
    When "initialize" is omitted, the topic will only be fully created
    after data is published to it.
