@@ -1254,12 +1254,14 @@ Internet-Draft                 CoAP pubsub                    March 2026
    the server will send a notification to current subscribers observing
    the resource [RFC7641].
 
-   A topic-data resource does not exist until some initial data has been
-   published to it.  Before initial data publication, a GET request to
-   the topic-data resource URI results in a 4.04 (Not Found) response.
-   If such a "half created" topic is undesired, the creator of the topic
-   can simply immediately publish some initial placeholder data to make
-   the topic "fully created" (see Section 3.1).
+   Unless the topic configuration includes the "initialize" property
+   (see Section 2.2.1), a topic-data resource does not exist until some
+   initial data has been published to it.  Consequently, a GET request
+   sent to the topic-data resource URI before initial data publication
+   would result in a 4.04 (Not Found) response.  If such a "half
+   created" topic is undesired, the creator of the topic can simply
+   immediately publish some initial placeholder data to make the topic
+   "fully created" (see Section 3.1).
 
    URIs for topic resources are broker-generated (see Section 2.4.3).
    There is no necessary URI pattern dependence between the URI where
@@ -1273,8 +1275,6 @@ Internet-Draft                 CoAP pubsub                    March 2026
    A publisher can publish to the topic-data resource.  However, a
    subscriber cannot yet subscribe to the topic-data resource nor read
    the latest data.
-
-
 
 
 
@@ -1323,7 +1323,9 @@ Internet-Draft                 CoAP pubsub                    March 2026
    and delete the topic and await for a publisher to begin publication.
    The "topic-data" property in the topic configuration remains
    unchanged but no subscription to topic-data nor reading of data is
-   allowed.
+   allowed.  Even if the "initialize" property in the topic
+   configuration is present, the topic-data resource is not
+   automatically initialized (see Section 3.2.4).
 
 3.2.  Topic-Data Interactions
 
@@ -1336,8 +1338,6 @@ Internet-Draft                 CoAP pubsub                    March 2026
    publish data to it (See Section 2.4.3) and be in the HALF CREATED or
    FULLY CREATED state in order for the publish operation to work (see
    Section 3.1).
-
-
 
 
 
