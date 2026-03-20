@@ -5,10 +5,10 @@
 CoRE Working Group                                            J. Jimenez
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                               M. Koster
-Expires: 31 August 2026                                    Dogtiger Labs
+Expires: 21 September 2026                                 Dogtiger Labs
                                                               A. Keranen
                                                                 Ericsson
-                                                        27 February 2026
+                                                           20 March 2026
 
 
     A publish-subscribe architecture for the Constrained Application
@@ -53,9 +53,9 @@ Status of This Memo
 
 
 
-Jimenez, et al.          Expires 31 August 2026                 [Page 1]
+Jimenez, et al.         Expires 21 September 2026               [Page 1]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    Internet-Drafts are draft documents valid for a maximum of six months
@@ -63,7 +63,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 31 August 2026.
+   This Internet-Draft will expire on 21 September 2026.
 
 Copyright Notice
 
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Jimenez, et al.          Expires 31 August 2026                 [Page 2]
+Jimenez, et al.         Expires 21 September 2026               [Page 2]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
      3.2.  Topic-Data Interactions . . . . . . . . . . . . . . . . .  24
@@ -138,7 +138,8 @@ Internet-Draft                 CoAP pubsub                 February 2026
      A.3.  Version -15 to -16  . . . . . . . . . . . . . . . . . . .  40
      A.4.  Version -16 to -17  . . . . . . . . . . . . . . . . . . .  40
      A.5.  Version -17 to -18  . . . . . . . . . . . . . . . . . . .  40
-     A.6.  Version -18 to 19 . . . . . . . . . . . . . . . . . . . .  40
+     A.6.  Version -18 to -19  . . . . . . . . . . . . . . . . . . .  40
+     A.7.  Version -19 to -20  . . . . . . . . . . . . . . . . . . .  41
    Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  41
    Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  41
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  41
@@ -164,10 +165,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-
-Jimenez, et al.          Expires 31 August 2026                 [Page 3]
+Jimenez, et al.         Expires 21 September 2026               [Page 3]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    For these nodes, the client/server-oriented architecture of REST can
@@ -221,9 +221,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                 [Page 4]
+Jimenez, et al.         Expires 21 September 2026               [Page 4]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    topic:
@@ -277,9 +277,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                 [Page 5]
+Jimenez, et al.         Expires 21 September 2026               [Page 5]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
            CoAP                      CoAP                 CoAP
@@ -333,9 +333,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                 [Page 6]
+Jimenez, et al.         Expires 21 September 2026               [Page 6]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    The broker exports one or more topic collection resources, with
@@ -389,9 +389,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                 [Page 7]
+Jimenez, et al.         Expires 21 September 2026               [Page 7]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    Publication and subscription to a topic occur at the target of a
@@ -445,9 +445,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                 [Page 8]
+Jimenez, et al.         Expires 21 September 2026               [Page 8]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    *  "topic-data": A required field (optional during creation)
@@ -501,9 +501,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                 [Page 9]
+Jimenez, et al.         Expires 21 September 2026               [Page 9]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
       0, it ensures that subscribers that have lost interest and
@@ -521,11 +521,12 @@ Internet-Draft                 CoAP pubsub                 February 2026
       allows the topic to be immediately subscribable without
       encountering a 4.04 Not Found error.  The representation MUST be
       valid for the specified Content-Format.  For example, for CBOR-
-      based formats, an empty array encoded as 0x80 (CBOR for []) is a
-      valid empty representation.  If this field is not present, the
-      broker behaves as usual, and the topic-data resource is not
-      initialized.  When this field is present, "topic-content-format"
-      MUST also be specified.
+      based formats, the empty CBOR array encoded as 0x80 is a valid
+      empty representation, which corresponds to the "initialize"
+      property set to 0x4180 (<<[]>> in CBOR diagnostic notation).  If
+      this field is not present, the broker behaves as usual, and the
+      topic-data resource is not initialized.  When this field is
+      present, "topic-content-format" MUST also be specified.
 
 2.3.  Discovery
 
@@ -556,10 +557,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-
-Jimenez, et al.          Expires 31 August 2026                [Page 10]
+Jimenez, et al.         Expires 21 September 2026              [Page 10]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    The following example shows an endpoint discovering a broker using
@@ -613,9 +613,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 11]
+Jimenez, et al.         Expires 21 September 2026              [Page 11]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
       Request:
@@ -669,9 +669,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 12]
+Jimenez, et al.         Expires 21 September 2026              [Page 12]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    In certain scenarios, the method described herein may not be
@@ -725,9 +725,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 13]
+Jimenez, et al.         Expires 21 September 2026              [Page 13]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    The CoRE Link Format responses shown in the examples in this section
@@ -781,9 +781,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 14]
+Jimenez, et al.         Expires 21 September 2026              [Page 14]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
 2.4.2.  Getting Topics by Topic Properties
@@ -809,7 +809,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
       Header: FETCH (Code=0.05)
       Uri-Path: "ps"
       Content-Format: TBD606 (application/core-pubsub+cbor)
-      Payload:
+      Payload (in CBOR diagnostic notation):
       {
          / topic-name /         0: "temperature",
          / resource-type /      2: "core.ps.data"
@@ -837,9 +837,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 15]
+Jimenez, et al.         Expires 21 September 2026              [Page 15]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
 2.4.3.  Creating a Topic
@@ -862,8 +862,8 @@ Internet-Draft                 CoAP pubsub                 February 2026
    representation, using the specified Content-Format.  This ensures
    RFC7641 compliance by maintaining Content-Format consistency across
    all notifications.  For example, for CBOR SenML (Content-Format 60),
-   the initialize value could be h'80' (the CBOR encoding of an empty
-   array []).
+   the "initialize" property could be 0x4180 (<<[]>> in CBOR diagnostic
+   notation), with 0x80 being the CBOR encoding of the empty CBOR array.
 
    When "initialize" is omitted, the topic will only be fully created
    after data is published to it.
@@ -893,9 +893,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 16]
+Jimenez, et al.         Expires 21 September 2026              [Page 16]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
       Request:
@@ -949,9 +949,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 17]
+Jimenez, et al.         Expires 21 September 2026              [Page 17]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
       Request:
@@ -1005,9 +1005,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 18]
+Jimenez, et al.         Expires 21 September 2026              [Page 18]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    Content-Format TBD606 ("application/core-pubsub+cbor") is mandatory
@@ -1061,9 +1061,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 19]
+Jimenez, et al.         Expires 21 September 2026              [Page 19]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    Similarly, decreasing "max-subscribers" will also cause that some
@@ -1080,7 +1080,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
       Request:
 
-      Header: POST (Code=0.03)
+      Header: POST (Code=0.02)
       Uri-Path: "ps"
       Uri-Path: "h9392"
       Content-Format: TBD606 (application/core-pubsub+cbor)
@@ -1117,16 +1117,16 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 20]
+Jimenez, et al.         Expires 21 September 2026              [Page 20]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    *  Limiting the number of subscribers will cause cancellation of
       ongoing subscriptions until "max-subscribers" has been reached.
 
    *  Changing of the "expiration-date" may cause cancellation of
-      ongoing subscriptions if the topic expires at an earlier data.
+      ongoing subscriptions if the topic expires at an earlier date.
 
 2.5.4.  Updating the topic with iPATCH
 
@@ -1173,9 +1173,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 21]
+Jimenez, et al.         Expires 21 September 2026              [Page 21]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
       Request:
@@ -1229,9 +1229,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 22]
+Jimenez, et al.         Expires 21 September 2026              [Page 22]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
       Request:
@@ -1251,15 +1251,17 @@ Internet-Draft                 CoAP pubsub                 February 2026
    PUT request to a topic-data resource and subscribers subscribe to a
    topic by submitting a GET request with the Observe option set to 0
    (register) to a topic-data resource.  When resource state changes,
-   subscribers observing the resource [RFC7641] at that time will
-   receive a notification.
+   the server will send a notification to current subscribers observing
+   the resource [RFC7641].
 
-   A topic-data resource does not exist until some initial data has been
-   published to it.  Before initial data publication, a GET request to
-   the topic-data resource URI results in a 4.04 (Not Found) response.
-   If such a "half created" topic is undesired, the creator of the topic
-   can simply immediately publish some initial placeholder data to make
-   the topic "fully created" (see Section 3.1).
+   Unless the topic configuration includes the "initialize" property
+   (see Section 2.2.1), a topic-data resource does not exist until some
+   initial data has been published to it.  Consequently, a GET request
+   sent to the topic-data resource URI before initial data publication
+   would result in a 4.04 (Not Found) response.  If such a "half
+   created" topic is undesired, the creator of the topic can simply
+   immediately publish some initial placeholder data to make the topic
+   "fully created" (see Section 3.1).
 
    URIs for topic resources are broker-generated (see Section 2.4.3).
    There is no necessary URI pattern dependence between the URI where
@@ -1283,11 +1285,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-
-
-Jimenez, et al.          Expires 31 August 2026                [Page 23]
+Jimenez, et al.         Expires 21 September 2026              [Page 23]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
                     HALF                          FULLY
@@ -1321,9 +1321,11 @@ Internet-Draft                 CoAP pubsub                 February 2026
    When a client deletes a topic-data resource, the associated topic is
    placed into the HALF CREATED state, where clients can read, update
    and delete the topic and await for a publisher to begin publication.
-   the "topic-data" property in the topic configuration remains
+   The "topic-data" property in the topic configuration remains
    unchanged but no subscription to topic-data nor reading of data is
-   allowed.
+   allowed.  Even if the "initialize" property in the topic
+   configuration is present, the topic-data resource is not
+   automatically initialized (see Section 3.2.4).
 
 3.2.  Topic-Data Interactions
 
@@ -1333,17 +1335,15 @@ Internet-Draft                 CoAP pubsub                 February 2026
 3.2.1.  Publish
 
    A topic with a topic-data resource must have been created in order to
-   publish data to it (See Section 2.4.3) and be in the half-created or
-   fully-created state in order for the publish operation to work (see
+   publish data to it (See Section 2.4.3) and be in the HALF CREATED or
+   FULLY CREATED state in order for the publish operation to work (see
    Section 3.1).
 
 
 
-
-
-Jimenez, et al.          Expires 31 August 2026                [Page 24]
+Jimenez, et al.         Expires 21 September 2026              [Page 24]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    A client can publish data to a topic by submitting the data in a PUT
@@ -1352,23 +1352,23 @@ Internet-Draft                 CoAP pubsub                 February 2026
    this URI is not the same as the topic URI used for configuring the
    topic (see Section 2.2).
 
-   On success, the broker returns a successful response.  Typically,
+   On success, the server returns a successful response.  Typically,
    this is a 2.04 (Changed) response.  However, when data is published
-   to the topic for the first time, the broker returns a 2.01 (Created)
-   response and sets the topic in the fully-created state (see
-   Section 3.1).
+   to the topic for the first time, the server returns a 2.01 (Created)
+   response and the broker sets the topic in the FULLY CREATED state
+   (see Section 3.1).
 
    Using the "initialize" property is equivalent to having had a first
    publication with the initial content specified in that property.  A
    follow-up publication from a publisher should result in a 2.04
-   response from the broker.
+   response from the server.
 
    If the request does not have an acceptable Content-format, e.g., as
    specified by the "topic-content-format" property in the topic
-   configuration, the broker returns a 4.15 (Unsupported Content-Format)
+   configuration, the server returns a 4.15 (Unsupported Content-Format)
    response.
 
-   If the client is sending publications too fast, the broker returns a
+   If the client is sending publications too fast, the server returns a
    4.29 (Too Many Requests) response [RFC8516].
 
    Example of first publication:
@@ -1380,7 +1380,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
       Uri-Path: "data"
       Uri-Path: "1bd0d6d"
       Content-Format: 110
-      Payload:
+      Payload (in CBOR diagnostic notation):
       {
          "n": "coaps://dev1.example.com/temperature",
          "u": "Cel",
@@ -1397,9 +1397,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 25]
+Jimenez, et al.         Expires 21 September 2026              [Page 25]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
       Request:
@@ -1409,7 +1409,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
       Uri-Path: "data"
       Uri-Path: "1bd0d6d"
       Content-Format: 110
-      Payload:
+      Payload (in CBOR diagnostic notation):
       {
          "n": "coaps://dev1.example.com/temperature",
          "u": "Cel",
@@ -1432,18 +1432,19 @@ Internet-Draft                 CoAP pubsub                 February 2026
    Observe Option.  If no Observe Option is present in the response, the
    client should assume that the subscription was not successful.
 
-   If the topic is not yet in the fully created state (see Section 3.1),
-   the broker returns an error response (typically 4.04 Not Found).
+   If the topic is not yet in the FULLY CREATED state (see Section 3.1),
+   the server returns an error response (typically 4.04 Not Found).
 
    The following response codes are defined for the Subscribe operation:
 
-   Success:  2.05 "Content".  Successful subscription with Observe
-      response, current value included in the response.
+   Success:  2.05 "Content".  The current topic data is included in the
+      response.  In case of successful subscription, the response
+      includes the Observe Option.
 
    Failure:  4.04 "Not Found".  The topic-data resource does not exist.
 
    If the "max-subscribers" topic property value has been reached, the
-   broker must treat that as specified in Section 4.1 of [RFC7641].  The
+   server must treat that as specified in Section 4.1 of [RFC7641].  The
    2.05 (Content) response MUST NOT include an Observe Option, the
    absence of which signals to the subscriber that the subscription
    failed.
@@ -1452,10 +1453,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-
-Jimenez, et al.          Expires 31 August 2026                [Page 26]
+Jimenez, et al.         Expires 21 September 2026              [Page 26]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
       Request:
@@ -1472,7 +1472,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
       Content-Format: 110
       Observe: 10001
       Max-Age: 15
-      Payload:
+      Payload (in CBOR diagnostic notation):
       {
          "n": "urn:dev:os:32473-123456",
          "u": "Cel",
@@ -1486,7 +1486,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
       Content-Format: 110
       Observe: 10002
       Max-Age: 15
-      Payload:
+      Payload (in CBOR diagnostic notation):
       {
          "n": "urn:dev:os:32473-123456",
          "u": "Cel",
@@ -1498,20 +1498,20 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
    A CoAP client can unsubscribe by canceling the observation as
    described in Section 3.6 of [RFC7641].  For example, the client can
-   use CoAP GET with the Observe Option set to 1, or simply "forget" the
-   observation and let the server remove it through its own observation
-   lifetime mechanisms.
+   use CoAP GET with the Observe Option set to 1 (deregister), or simply
+   "forget" the observation and let the server remove it through its own
+   observation lifetime mechanisms.
 
-   As per [RFC7641], a server transmits notifications mostly as non-
-   confirmable messages, but it sends a notification as a confirmable
-   message instead of a non-confirmable message at least every 24 hours.
-
-
+   As per [RFC7641], a server transmits notifications mostly as Non-
+   confirmable messages, but it sends a notification as a Confirmable
+   message instead of a Non-confirmable message at least every 24 hours.
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 27]
+
+
+Jimenez, et al.         Expires 21 September 2026              [Page 27]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    This value can be modified at the broker by the administrator of a
@@ -1529,8 +1529,8 @@ Internet-Draft                 CoAP pubsub                 February 2026
    On success, the broker returns a 2.02 (Deleted) response.
 
    When a topic-data resource is deleted, the topic is then set back to
-   the half created state as per Section 3.1 awaiting for a publisher to
-   publish and set the topic to FULLY-CREATED state where clients can
+   the HALF CREATED state as per Section 3.1 awaiting for a publisher to
+   publish and set the topic to FULLY CREATED state where clients can
    subscribe and read the topic-data.  The "topic-data" property in the
    topic configuration remains unchanged, but no subscription to topic-
    data nor reading of data is allowed.
@@ -1554,9 +1554,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 3.3.  Read the latest data
 
    A client can get the latest published topic-data resource by making a
-   GET request to the "topic-data" URI in the broker.  Please note that
-   discovery of the "topic-data" topic property is a required previous
-   step (see Section 2.5.1).
+   GET request to the "topic-data" URI.  Please note that discovery of
+   the "topic-data" topic property is a required previous step (see
+   Section 2.5.1).
 
    On success, the server returns a successful response (typically 2.05
    Content) with the data.
@@ -1565,13 +1565,13 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 28]
+Jimenez, et al.         Expires 21 September 2026              [Page 28]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    If the target URI does not match an existing resource or the topic is
-   not in the fully created state (see Section 3.1), the broker returns
+   not in the FULLY CREATED state (see Section 3.1), the server returns
    an error response (typically 4.04 Not Found).
 
    Example:
@@ -1588,7 +1588,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
       Header: Content (Code=2.05)
       Content-Format: 110
       Max-Age: 15
-      Payload:
+      Payload (in CBOR diagnostic notation):
       {
          "n": "coaps://dev1.example.com/temperature",
          "u": "Cel",
@@ -1616,14 +1616,14 @@ Internet-Draft                 CoAP pubsub                 February 2026
    the server SHOULD return a 4.29 (Too Many Requests) response
    [RFC8516].  As described in [RFC8516], the Max-Age option [RFC7252]
    in this response indicates the number of seconds after which the
-   client may retry.  The broker MAY also stop dispatching messages from
+   client may retry.  The server MAY also stop dispatching messages from
    that publisher for the indicated time.
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 29]
+Jimenez, et al.         Expires 21 September 2026              [Page 29]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    When a publisher receives a 4.29 (Too Many Requests) response, it
@@ -1638,38 +1638,36 @@ Internet-Draft                 CoAP pubsub                 February 2026
    summarizes them and specifies the CBOR key that MUST be used instead
    of the full descriptive name.
 
-   Note that the media type application/core-pubsub+cbor MUST be used
+   Note that the media type "application/core-pubsub+cbor" MUST be used
    when these topic properties are transported in the respective CoAP
    message payloads.
 
-              +======================+==========+===========+
-              | Name                 | CBOR Key | CBOR Type |
-              +======================+==========+===========+
-              | topic-name           | 0        | tstr      |
-              +----------------------+----------+-----------+
-              | topic-data           | 1        | tstr      |
-              +----------------------+----------+-----------+
-              | resource-type        | 2        | tstr      |
-              +----------------------+----------+-----------+
-              | topic-content-format | 3        | uint      |
-              +----------------------+----------+-----------+
-              | topic-type           | 4        | tstr      |
-              +----------------------+----------+-----------+
-              | expiration-date      | 5        | tag 1     |
-              +----------------------+----------+-----------+
-              | max-subscribers      | 6        | uint      |
-              +----------------------+----------+-----------+
-              | observer-check       | 7        | uint      |
-              +----------------------+----------+-----------+
-              | initialize           | 8        | bstr      |
-              +----------------------+----------+-----------+
-              | conf-filter          | 9        | array     |
-              +----------------------+----------+-----------+
+            +======================+==========+==============+
+            | Name                 | CBOR Key | CBOR Type    |
+            +======================+==========+==============+
+            | topic-name           | 0        | tstr         |
+            +----------------------+----------+--------------+
+            | topic-data           | 1        | tstr         |
+            +----------------------+----------+--------------+
+            | resource-type        | 2        | tstr         |
+            +----------------------+----------+--------------+
+            | topic-content-format | 3        | uint         |
+            +----------------------+----------+--------------+
+            | topic-type           | 4        | tstr         |
+            +----------------------+----------+--------------+
+            | expiration-date      | 5        | #6.1(number) |
+            +----------------------+----------+--------------+
+            | max-subscribers      | 6        | uint         |
+            +----------------------+----------+--------------+
+            | observer-check       | 7        | uint         |
+            +----------------------+----------+--------------+
+            | initialize           | 8        | bstr         |
+            +----------------------+----------+--------------+
+            | conf-filter          | 9        | array        |
+            +----------------------+----------+--------------+
 
-                 Table 1: CoAP Pubsub Topic Properties and
-                               CBOR Encoding
-
-
+              Table 1: CoAP Pubsub Topic Properties and CBOR
+                                 Encoding
 
 
 
@@ -1677,9 +1675,11 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 30]
+
+
+Jimenez, et al.         Expires 21 September 2026              [Page 30]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
 5.  Security Considerations
@@ -1696,7 +1696,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
    The content published on a topic by a publisher client SHOULD be
    protected end-to-end between the publisher and all the subscribers to
-   that topic.  In such a case, it MUST be possible to assert source
+   that topic.  In such a case, it MUST be possible to verify source
    authentication of the published data.  This can be achieved at the
    application layer, e.g., by using COSE [STD96] [RFC9053].
 
@@ -1722,20 +1722,20 @@ Internet-Draft                 CoAP pubsub                 February 2026
    publishers and subscribers to perform operations at the broker, with
    fine-grained access control; authorize publishers and subscribers to
    obtain the keying material required to take part to a topic managed
-   by the broker; protect published data end-to-end between a publisher
-   and all the subscribers to the targeted topic, ensuring
-   confidentiality, integrity, and source authentication of the
-   published content end-to-end.  That approach can be extended to
-   enforce authorization and fine-grained access control for
-   administrator clients that are intended to create, update, and delete
-   topics at the broker.
+   by the broker that also hosts the corresponding topic-data resource;
+   protect published data end-to-end between a publisher and all the
+   subscribers to the targeted topic, ensuring confidentiality,
+   integrity, and source authentication of the published content end-to-
+   end.  That approach can be extended to enforce authorization and
+   fine-grained access control for administrator clients that are
+   intended to create, update, and delete topics at the broker.
 
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 31]
+Jimenez, et al.         Expires 21 September 2026              [Page 31]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
 6.  IANA Considerations
@@ -1747,7 +1747,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 6.1.  Media Type Registrations
 
-   This specification registers the 'application/core-pubsub+cbor' media
+   This specification registers the "application/core-pubsub+cbor" media
    type for messages of the protocols defined in this document and
    carrying topic properties encoded in CBOR.  This registration follows
    the procedures specified in [BCP13].
@@ -1789,9 +1789,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 32]
+Jimenez, et al.         Expires 21 September 2026              [Page 32]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    Provisional registration:  no
@@ -1845,14 +1845,14 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 33]
+Jimenez, et al.         Expires 21 September 2026              [Page 33]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    The registration policy is either "Private Use", "Standards Action
-   with Expert Review", or "Specification Required", or "Expert Review"
-   per [BCP26].  "Expert Review" guidelines are provided in Section 6.5.
+   with Expert Review", "Specification Required", or "Expert Review" per
+   [BCP26].  "Expert Review" guidelines are provided in Section 6.5.
 
    All assignments according to "Standards Action with Expert Review"
    are made on a "Standards Action" basis per Section 4.9 of RFC 8126
@@ -1888,7 +1888,7 @@ Internet-Draft                 CoAP pubsub                 February 2026
       the item.
 
    This registry has been initially populated with the values in
-   Table 1.  Reference should always be [RFC-XXXX].
+   Table 1.  For all of them, the reference is [RFC-XXXX].
 
 6.5.  Expert Review Instructions
 
@@ -1901,9 +1901,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 34]
+Jimenez, et al.         Expires 21 September 2026              [Page 34]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    These registration policies are designed to accommodate different use
@@ -1957,9 +1957,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 35]
+Jimenez, et al.         Expires 21 September 2026              [Page 35]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    [BCP100]   Best Current Practice 100,
@@ -2013,9 +2013,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 36]
+Jimenez, et al.         Expires 21 September 2026              [Page 36]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    [RFC6570]  Gregorio, J., Fielding, R., Hadley, M., Nottingham, M.,
@@ -2069,9 +2069,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 37]
+Jimenez, et al.         Expires 21 September 2026              [Page 37]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
               Draft, draft-hartke-t2trg-coral-pubsub-01, 9 May 2020,
@@ -2082,9 +2082,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
               Tiloca, M., Höglund, R., Van der Stok, P., and F.
               Palombini, "Admin Interface for the OSCORE Group Manager",
               Work in Progress, Internet-Draft, draft-ietf-ace-oscore-
-              gm-admin-15, 23 February 2026,
+              gm-admin-16, 12 March 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-ace-
-              oscore-gm-admin-15>.
+              oscore-gm-admin-16>.
 
    [I-D.ietf-ace-pubsub-profile]
               Palombini, F., Sengul, C., and M. Tiloca, "Publish-
@@ -2125,9 +2125,9 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 38]
+Jimenez, et al.         Expires 21 September 2026              [Page 38]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    [RFC9594]  Palombini, F. and M. Tiloca, "Key Provisioning for Group
@@ -2181,9 +2181,9 @@ A.2.  Version -14 to -15
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 39]
+Jimenez, et al.         Expires 21 September 2026              [Page 39]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    *  Modified all examples to conform to RFC9594.
@@ -2217,7 +2217,7 @@ A.5.  Version -17 to -18
 
    *  Editorial changes
 
-A.6.  Version -18 to 19
+A.6.  Version -18 to -19
 
    *  IANA early review
 
@@ -2237,15 +2237,19 @@ A.6.  Version -18 to 19
 
 
 
-Jimenez, et al.          Expires 31 August 2026                [Page 40]
+Jimenez, et al.         Expires 21 September 2026              [Page 40]
 
-Internet-Draft                 CoAP pubsub                 February 2026
+Internet-Draft                 CoAP pubsub                    March 2026
 
 
    *  Clarified topic-data URI reference, immutable properties, and
       architecture roles
 
    *  Editorial fixes
+
+A.7.  Version -19 to -20
+
+   *  Minor fixes and editorial improvements.
 
 Acknowledgements
 
@@ -2268,14 +2272,14 @@ Contributors
    Marco Tiloca
    RISE AB
    Isafjordsgatan 22
-   SE-16440 Kista
+   SE-164 40 Kista
    Sweden
    Email: marco.tiloca@ri.se
 
 
    Marco offered comprehensive reviews and insightful guidance on the
    recent iterations of this document.  His contributions were valuable
-   un multiple parts of the document but particularly notable in the
+   in multiple parts of the document but particularly notable in the
    Security Considerations section.
 
 Authors' Addresses
@@ -2285,17 +2289,18 @@ Authors' Addresses
    Email: jaime@iki.fi
 
 
+
+
+
+
+Jimenez, et al.         Expires 21 September 2026              [Page 41]
+
+Internet-Draft                 CoAP pubsub                    March 2026
+
+
    Michael Koster
    Dogtiger Labs
    Email: michaeljohnkoster@gmail.com
-
-
-
-
-
-Jimenez, et al.          Expires 31 August 2026                [Page 41]
-
-Internet-Draft                 CoAP pubsub                 February 2026
 
 
    Ari Keranen
@@ -2344,9 +2349,4 @@ Internet-Draft                 CoAP pubsub                 February 2026
 
 
 
-
-
-
-
-
-Jimenez, et al.          Expires 31 August 2026                [Page 42]
+Jimenez, et al.         Expires 21 September 2026              [Page 42]
