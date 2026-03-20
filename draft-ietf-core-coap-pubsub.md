@@ -31,11 +31,11 @@ contributor:
   org: RISE AB
   street: Isafjordsgatan 22
   city: Kista
-  code: SE-16440
+  code: SE-164 40
   country: Sweden
   email: marco.tiloca@ri.se
 
-  contribution: Marco offered comprehensive reviews and insightful guidance on the recent iterations of this document. His contributions were valuable un multiple parts of the document but particularly notable in the Security Considerations section.
+  contribution: Marco offered comprehensive reviews and insightful guidance on the recent iterations of this document. His contributions were valuable in multiple parts of the document but particularly notable in the Security Considerations section.
 
 normative:
   RFC6570:
@@ -235,7 +235,7 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 
 * "observer-check": An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber (see {{unsubscribe}}). Encoded as a CBOR unsigned integer greater than 0, it ensures that subscribers that have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. If another CoAP server hosts the topic-data resource, that server is responsible for applying the "observer-check" value. The default value for this field is 86400, as defined in {{RFC7641}}, which corresponds to 24 hours.
 
-* "initialize": An optional field encoded as a CBOR byte string that contains the initial representation to pre-populate the topic-data resource. When present, the broker MUST create the topic and initialize the topic-data resource with this representation using the Content-Format specified in "topic-content-format". This allows the topic to be immediately subscribable without encountering a `4.04 Not Found` error. The representation MUST be valid for the specified Content-Format. For example, for CBOR-based formats, an empty array encoded as `0x80` (CBOR for `[]`) is a valid empty representation. If this field is not present, the broker behaves as usual, and the topic-data resource is not initialized. When this field is present, "topic-content-format" MUST also be specified.
+* "initialize": An optional field encoded as a CBOR byte string that contains the initial representation to pre-populate the topic-data resource. When present, the broker MUST create the topic and initialize the topic-data resource with this representation using the Content-Format specified in "topic-content-format". This allows the topic to be immediately subscribable without encountering a `4.04 Not Found` error. The representation MUST be valid for the specified Content-Format. For example, for CBOR-based formats, the empty CBOR array encoded as `0x80` is a valid empty representation, which corresponds to the "initialize" property set to `0x4180` (`<<[]>>` in CBOR diagnostic notation). If this field is not present, the broker behaves as usual, and the topic-data resource is not initialized. When this field is present, "topic-content-format" MUST also be specified.
 
 ## Discovery
 
@@ -405,7 +405,7 @@ Example:
    Header: FETCH (Code=0.05)
    Uri-Path: "ps"
    Content-Format: TBD606 (application/core-pubsub+cbor)
-   Payload:
+   Payload (in CBOR diagnostic notation):
    {
       / topic-name /         0: "temperature",
       / resource-type /      2: "core.ps.data"
@@ -430,7 +430,7 @@ A client can add a new topic to a collection of topics by submitting an initial 
 
 Please note that the topic will _not_ be fully created until a publisher has published some data to it (See {{topic-lifecycle}}).
 
-To facilitate immediate subscription and allow subscribers to subscribe to the topic before data has been published, the client can include the "initialize" property containing an initial representation (encoded as a CBOR byte string) along with the "topic-content-format" property. When included, the broker MUST create the topic and pre-populate the topic-data resource with the provided representation, using the specified Content-Format. This ensures RFC7641 compliance by maintaining Content-Format consistency across all notifications. For example, for CBOR SenML (Content-Format 60), the initialize value could be `h'80'` (the CBOR encoding of an empty array `[]`).
+To facilitate immediate subscription and allow subscribers to subscribe to the topic before data has been published, the client can include the "initialize" property containing an initial representation (encoded as a CBOR byte string) along with the "topic-content-format" property. When included, the broker MUST create the topic and pre-populate the topic-data resource with the provided representation, using the specified Content-Format. This ensures RFC7641 compliance by maintaining Content-Format consistency across all notifications. For example, for CBOR SenML (Content-Format 60), the "initialize" property could be `0x4180` (`<<[]>>` in CBOR diagnostic notation), with `0x80` being the CBOR encoding of the empty CBOR array.
 
 When "initialize" is omitted, the topic will only be fully created after data is published to it.
 
@@ -562,7 +562,7 @@ Example:
 ~~~~
    Request:
 
-   Header: POST (Code=0.03)
+   Header: POST (Code=0.02)
    Uri-Path: "ps"
    Uri-Path: "h9392"
    Content-Format: TBD606 (application/core-pubsub+cbor)
@@ -596,7 +596,7 @@ Example:
 Note that, when a topic changes, it may result in disruptions for the subscribers. Some potential issues that may arise include:
 
 * Limiting the number of subscribers will cause cancellation of ongoing subscriptions until "max-subscribers" has been reached.
-* Changing of the "expiration-date" may cause cancellation of ongoing subscriptions if the topic expires at an earlier data.
+* Changing of the "expiration-date" may cause cancellation of ongoing subscriptions if the topic expires at an earlier date.
 
 ### Updating the topic with iPATCH {#topic-update-resource-patch}
 
@@ -664,9 +664,9 @@ Example:
 
 # Publish and Subscribe {#pubsub}
 
-The overview of the publish-subscribe mechanism based on CoAP is as follows: a publisher publishes to a topic by submitting the data in a PUT request to a topic-data resource and subscribers subscribe to a topic by submitting a GET request with the Observe option set to 0 (register) to a topic-data resource. When resource state changes, subscribers observing the resource {{RFC7641}} at that time will receive a notification.
+The overview of the publish-subscribe mechanism based on CoAP is as follows: a publisher publishes to a topic by submitting the data in a PUT request to a topic-data resource and subscribers subscribe to a topic by submitting a GET request with the Observe option set to 0 (register) to a topic-data resource. When resource state changes, the server will send a notification to current subscribers observing the resource {{RFC7641}}.
 
-A topic-data resource does not exist until some initial data has been published to it. Before initial data publication, a GET request to the topic-data resource URI results in a 4.04 (Not Found) response. If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created" (see {{topic-lifecycle}}).
+Unless the topic configuration includes the "initialize" property (see {{topic-properties}}), a topic-data resource does not exist until some initial data has been published to it. Consequently, a GET request sent to the topic-data resource URI before initial data publication would result in a 4.04 (Not Found) response. If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created" (see {{topic-lifecycle}}).
 
 
 URIs for topic resources are broker-generated (see {{topic-create}}). There is no necessary URI pattern dependence between the URI where the topic-data resource exists and the URI of the topic resource.
@@ -695,7 +695,7 @@ After a publisher publishes to the topic-data resource for the first time, the t
 
 When a client deletes a topic resource, the topic is placed into the DELETED state and shortly after removed from the server. In this state, all subscribers are removed from the list of observers of the topic-data resource and no further interactions with the topic are possible. Both the topic resource and the topic-data resource are deleted.
 
-When a client deletes a topic-data resource, the associated topic is placed into the HALF CREATED state, where clients can read, update and delete the topic and await for a publisher to begin publication. the "topic-data" property in the topic configuration remains unchanged but no subscription to topic-data nor reading of data is allowed.
+When a client deletes a topic-data resource, the associated topic is placed into the HALF CREATED state, where clients can read, update and delete the topic and await for a publisher to begin publication. The "topic-data" property in the topic configuration remains unchanged but no subscription to topic-data nor reading of data is allowed. Even if the "initialize" property in the topic configuration is present, the topic-data resource is not automatically initialized (see {{delete-topic-data}}).
 
 ## Topic-Data Interactions {#topic-data-interactions}
 
@@ -703,18 +703,18 @@ Interactions with the topic-data resource are covered in this section.
 
 ### Publish {#publish}
 
-A topic with a topic-data resource must have been created in order to publish data to it (See {{topic-create}}) and be in the half-created or fully-created state in order for the publish operation to work (see {{topic-lifecycle}}).
+A topic with a topic-data resource must have been created in order to publish data to it (See {{topic-create}}) and be in the HALF CREATED or FULLY CREATED state in order for the publish operation to work (see {{topic-lifecycle}}).
 
 A client can publish data to a topic by submitting the data in a PUT request to the topic-data resource.
 The URI for this resource is indicated in the "topic-data" topic property value. Please note that this URI is not the same as the topic URI used for configuring the topic (see {{topic-resource-representation}}).
 
-On success, the broker returns a successful response. Typically, this is a 2.04 (Changed) response. However, when data is published to the topic for the first time, the broker returns a 2.01 (Created) response and sets the topic in the fully-created state (see {{topic-lifecycle}}).
+On success, the server returns a successful response. Typically, this is a 2.04 (Changed) response. However, when data is published to the topic for the first time, the server returns a 2.01 (Created) response and the broker sets the topic in the FULLY CREATED state (see {{topic-lifecycle}}).
 
-Using the "initialize" property is equivalent to having had a first publication with the initial content specified in that property. A follow-up publication from a publisher should result in a 2.04 response from the broker.
+Using the "initialize" property is equivalent to having had a first publication with the initial content specified in that property. A follow-up publication from a publisher should result in a 2.04 response from the server.
 
-If the request does not have an acceptable Content-format, e.g., as specified by the "topic-content-format" property in the topic configuration, the broker returns a 4.15 (Unsupported Content-Format) response.
+If the request does not have an acceptable Content-format, e.g., as specified by the "topic-content-format" property in the topic configuration, the server returns a 4.15 (Unsupported Content-Format) response.
 
-If the client is sending publications too fast, the broker returns a 4.29 (Too Many Requests) response {{RFC8516}}.
+If the client is sending publications too fast, the server returns a 4.29 (Too Many Requests) response {{RFC8516}}.
 
 Example of first publication:
 
@@ -726,7 +726,7 @@ Example of first publication:
    Uri-Path: "data"
    Uri-Path: "1bd0d6d"
    Content-Format: 110
-   Payload:
+   Payload (in CBOR diagnostic notation):
    {
       "n": "coaps://dev1.example.com/temperature",
       "u": "Cel",
@@ -749,7 +749,7 @@ Example of subsequent publication:
    Uri-Path: "data"
    Uri-Path: "1bd0d6d"
    Content-Format: 110
-   Payload:
+   Payload (in CBOR diagnostic notation):
    {
       "n": "coaps://dev1.example.com/temperature",
       "u": "Cel",
@@ -768,17 +768,17 @@ A client can subscribe to a topic-data resource by sending a CoAP GET request wi
 
 On success, the server hosting the topic-data resource returns a successful response (typically 2.05 Content) with the data and the Observe Option. If no Observe Option is present in the response, the client should assume that the subscription was not successful.
 
-If the topic is not yet in the fully created state (see {{topic-lifecycle}}), the broker returns an error response (typically 4.04 Not Found).
+If the topic is not yet in the FULLY CREATED state (see {{topic-lifecycle}}), the server returns an error response (typically 4.04 Not Found).
 
 The following response codes are defined for the Subscribe operation:
 
 Success:
-: 2.05 "Content". Successful subscription with Observe response, current value included in the response.
+: 2.05 "Content". The current topic data is included in the response. In case of successful subscription, the response includes the Observe Option.
 
 Failure:
 : 4.04 "Not Found". The topic-data resource does not exist.
 
-If the "max-subscribers" topic property value has been reached, the broker must treat that as specified in {{Section 4.1 of RFC7641}}. The 2.05 (Content) response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
+If the "max-subscribers" topic property value has been reached, the server must treat that as specified in {{Section 4.1 of RFC7641}}. The 2.05 (Content) response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
 
 
 Example of a successful subscription followed by one update:
@@ -798,7 +798,7 @@ Example of a successful subscription followed by one update:
    Content-Format: 110
    Observe: 10001
    Max-Age: 15
-   Payload:
+   Payload (in CBOR diagnostic notation):
    {
       "n": "urn:dev:os:32473-123456",
       "u": "Cel",
@@ -812,7 +812,7 @@ Example of a successful subscription followed by one update:
    Content-Format: 110
    Observe: 10002
    Max-Age: 15
-   Payload:
+   Payload (in CBOR diagnostic notation):
    {
       "n": "urn:dev:os:32473-123456",
       "u": "Cel",
@@ -823,9 +823,9 @@ Example of a successful subscription followed by one update:
 
 ### Unsubscribe {#unsubscribe}
 
-A CoAP client can unsubscribe by canceling the observation as described in {{Section 3.6 of RFC7641}}. For example, the client can use CoAP GET with the Observe Option set to 1, or simply "forget" the observation and let the server remove it through its own observation lifetime mechanisms.
+A CoAP client can unsubscribe by canceling the observation as described in {{Section 3.6 of RFC7641}}. For example, the client can use CoAP GET with the Observe Option set to 1 (deregister), or simply "forget" the observation and let the server remove it through its own observation lifetime mechanisms.
 
-As per {{RFC7641}}, a server transmits notifications mostly as non-confirmable messages, but it sends a notification as a confirmable message instead of a non-confirmable message at least every 24 hours.
+As per {{RFC7641}}, a server transmits notifications mostly as Non-confirmable messages, but it sends a notification as a Confirmable message instead of a Non-confirmable message at least every 24 hours.
 
 This value can be modified at the broker by the administrator of a topic by modifying the topic property "observer-check" (see {{topic-resource-representation}}). This would allow changing the rate at which different implementations verify that a subscriber is still interested in observing a topic-data resource.
 
@@ -835,7 +835,7 @@ A publisher can delete a topic-data resource by making a CoAP DELETE request on 
 
 On success, the broker returns a 2.02 (Deleted) response.
 
-When a topic-data resource is deleted, the topic is then set back to the half created state as per {{topic-lifecycle}} awaiting for a publisher to publish and set the topic to FULLY-CREATED state where clients can subscribe and read the topic-data. The "topic-data" property in the topic configuration remains unchanged, but no subscription to topic-data nor reading of data is allowed.
+When a topic-data resource is deleted, the topic is then set back to the HALF CREATED state as per {{topic-lifecycle}} awaiting for a publisher to publish and set the topic to FULLY CREATED state where clients can subscribe and read the topic-data. The "topic-data" property in the topic configuration remains unchanged, but no subscription to topic-data nor reading of data is allowed.
 
 Note that this is the case irrespective of the value of the "initialize" topic property (if present) in the topic configuration.
 
@@ -857,11 +857,11 @@ Example of a successful deletion:
 
 ## Read the latest data {#read-data}
 
-A client can get the latest published topic-data resource by making a GET request to the "topic-data" URI in the broker. Please note that discovery of the "topic-data" topic property is a required previous step (see {{topic-get-resource}}).
+A client can get the latest published topic-data resource by making a GET request to the "topic-data" URI. Please note that discovery of the "topic-data" topic property is a required previous step (see {{topic-get-resource}}).
 
 On success, the server returns a successful response (typically 2.05 Content) with the data.
 
-If the target URI does not match an existing resource or the topic is not in the fully created state (see {{topic-lifecycle}}), the broker returns an error response (typically 4.04 Not Found).
+If the target URI does not match an existing resource or the topic is not in the FULLY CREATED state (see {{topic-lifecycle}}), the server returns an error response (typically 4.04 Not Found).
 
 Example:
 
@@ -878,7 +878,7 @@ Example:
    Header: Content (Code=2.05)
    Content-Format: 110
    Max-Age: 15
-   Payload:
+   Payload (in CBOR diagnostic notation):
    {
       "n": "coaps://dev1.example.com/temperature",
       "u": "Cel",
@@ -893,7 +893,7 @@ As defined in this document, subscribers can retrieve the latest topic-data reso
 
 The server hosting the topic-data resource may have to handle a potentially large number of publishers and subscribers at the same time. This means it could become overwhelmed if it receives too many publications in a short period of time.
 
-In this situation, if a publisher is sending publications too fast, the server SHOULD return a 4.29 (Too Many Requests) response {{RFC8516}}.  As described in {{RFC8516}}, the Max-Age option {{RFC7252}} in this response indicates the number of seconds after which the client may retry. The broker MAY also stop dispatching messages from that publisher for the indicated time.
+In this situation, if a publisher is sending publications too fast, the server SHOULD return a 4.29 (Too Many Requests) response {{RFC8516}}. As described in {{RFC8516}}, the Max-Age option {{RFC7252}} in this response indicates the number of seconds after which the client may retry. The server MAY also stop dispatching messages from that publisher for the indicated time.
 
 When a publisher receives a 4.29 (Too Many Requests) response, it MUST NOT send any new publication requests to the same topic-data resource before the time indicated by the Max-Age option has passed.
 
@@ -902,20 +902,20 @@ When a publisher receives a 4.29 (Too Many Requests) response, it MUST NOT send 
 This document defines topic properties used in the messages exchanged between a client and the broker, for example during the topic creation and configuration process (see {{topic-resource-representation}}).
 {{tab-CoAP-Pubsub-Parameters}} summarizes them and specifies the CBOR key that MUST be used instead of the full descriptive name.
 
-Note that the media type application/core-pubsub+cbor MUST be used when these topic properties are transported in the respective CoAP message payloads.
+Note that the media type "application/core-pubsub+cbor" MUST be used when these topic properties are transported in the respective CoAP message payloads.
 
-| Name                 | CBOR Key | CBOR Type |
-|----------------------|----------|-----------|
-| topic-name           | 0        | tstr      |
-| topic-data           | 1        | tstr      |
-| resource-type        | 2        | tstr      |
-| topic-content-format | 3        | uint      |
-| topic-type           | 4        | tstr      |
-| expiration-date      | 5        | tag 1     |
-| max-subscribers      | 6        | uint      |
-| observer-check       | 7        | uint      |
-| initialize           | 8        | bstr      |
-| conf-filter          | 9        | array     |
+| Name                 | CBOR Key | CBOR Type     |
+|----------------------|----------|---------------|
+| topic-name           | 0        | tstr          |
+| topic-data           | 1        | tstr          |
+| resource-type        | 2        | tstr          |
+| topic-content-format | 3        | uint          |
+| topic-type           | 4        | tstr          |
+| expiration-date      | 5        | \#6.1(number) |
+| max-subscribers      | 6        | uint          |
+| observer-check       | 7        | uint          |
+| initialize           | 8        | bstr          |
+| conf-filter          | 9        | array         |
 {: #tab-CoAP-Pubsub-Parameters title="CoAP Pubsub Topic Properties and CBOR Encoding"}
 
 # Security Considerations {#seccons}
@@ -924,13 +924,13 @@ The architecture presented in this document inherits the security considerations
 
 Communications between each client and the broker are RECOMMENDED to be secured, e.g., by using OSCORE {{RFC8613}} or DTLS {{RFC9147}}. Security considerations for the used secure communication protocols apply too.
 
-The content published on a topic by a publisher client SHOULD be protected end-to-end between the publisher and all the subscribers to that topic. In such a case, it MUST be possible to assert source authentication of the published data. This can be achieved at the application layer, e.g., by using COSE {{STD96}} {{RFC9053}}.
+The content published on a topic by a publisher client SHOULD be protected end-to-end between the publisher and all the subscribers to that topic. In such a case, it MUST be possible to verify source authentication of the published data. This can be achieved at the application layer, e.g., by using COSE {{STD96}} {{RFC9053}}.
 
 Access control of clients at the broker MAY be enforced for performing discovery operations, and SHOULD be enforced in a fine-grained fashion for operations related to the creation, update, and deletion of topic resources, as well as for operations on topic-data resources such as publication on and subscription to topics. This prevents rogue clients to, among other things, repeatedly create topics at the broker or publish (large) contents, which may result in Denial of Service against the broker and the active subscribers.
 
 Building on {{RFC9594}}, its application profile for publish-subscribe communication with CoAP {{I-D.ietf-ace-pubsub-profile}} provides a security model that can be used in the architecture presented in this document, in order to enable secure communication between the different parties as well as secure, authorized operations of publishers and subscribers that fulfill the requirements above.
 
-In particular, the application profile above relies on the ACE framework for Authentication and Authorization in Constrained Environments (ACE) {{RFC9200}} and defines a method to: authorize publishers and subscribers to perform operations at the broker, with fine-grained access control; authorize publishers and subscribers to obtain the keying material required to take part to a topic managed by the broker; protect published data end-to-end between a publisher and all the subscribers to the targeted topic, ensuring confidentiality, integrity, and source authentication of the published content end-to-end. That approach can be extended to enforce authorization and fine-grained access control for administrator clients that are intended to create, update, and delete topics at the broker.
+In particular, the application profile above relies on the ACE framework for Authentication and Authorization in Constrained Environments (ACE) {{RFC9200}} and defines a method to: authorize publishers and subscribers to perform operations at the broker, with fine-grained access control; authorize publishers and subscribers to obtain the keying material required to take part to a topic managed by the broker that also hosts the corresponding topic-data resource; protect published data end-to-end between a publisher and all the subscribers to the targeted topic, ensuring confidentiality, integrity, and source authentication of the published content end-to-end. That approach can be extended to enforce authorization and fine-grained access control for administrator clients that are intended to create, update, and delete topics at the broker.
 
 # IANA Considerations {#iana}
 
@@ -940,7 +940,7 @@ Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with the RFC n
 
 ## Media Type Registrations {#media-type}
 
-This specification registers the 'application/core-pubsub+cbor' media type for messages of the protocols defined in this document and carrying topic properties encoded in CBOR. This registration follows the procedures specified in {{BCP13}}.
+This specification registers the "application/core-pubsub+cbor" media type for messages of the protocols defined in this document and carrying topic properties encoded in CBOR. This registration follows the procedures specified in {{BCP13}}.
 
 Type name:
 : application
@@ -1022,7 +1022,7 @@ IANA is asked to enter the following values from {{tab-CoAP-Pubsub-Resource-Type
 
 This specification establishes the "CoAP Pubsub Topic Properties" IANA registry within the "Constrained RESTful Environments (CoRE) Parameters" registry group.
 
-The registration policy is either "Private Use", "Standards Action with Expert Review", or "Specification Required", or "Expert Review" per {{BCP26}}. "Expert Review" guidelines are provided in {{review}}.
+The registration policy is either "Private Use", "Standards Action with Expert Review", "Specification Required", or "Expert Review" per {{BCP26}}. "Expert Review" guidelines are provided in {{review}}.
 
 All assignments according to "Standards Action with Expert Review" are made on a "Standards Action" basis per {{Section 4.9 of RFC8126@BCP26}} with "Expert Review" additionally required per {{Section 4.5 of RFC8126@BCP26}}. The procedure for early IANA allocation of "standards track code points" defined in {{BCP100}} also applies. When such a procedure is used, IANA will ask the designated expert(s) to approve the early allocation before registration. In addition, working group chairs are encouraged to consult the expert(s) early during the process outlined in {{Section 3.1 of RFC7120@BCP100}}.
 
@@ -1036,7 +1036,7 @@ The columns of this registry are:
 
 * Reference: This contains a pointer to the public specification for the item.
 
-This registry has been initially populated with the values in {{tab-CoAP-Pubsub-Parameters}}. Reference should always be {{&SELF}}.
+This registry has been initially populated with the values in {{tab-CoAP-Pubsub-Parameters}}. For all of them, the reference is {{&SELF}}.
 
 ## Expert Review Instructions {#review}
 
@@ -1095,7 +1095,7 @@ Expert reviewers should take into consideration the following points:
 * rt, ct, obs attribute elision
 * Editorial changes
 
-## Version -18 to 19
+## Version -18 to -19
 
 * IANA early review
 * Addressed issues \#68, \#69
@@ -1106,6 +1106,10 @@ Expert reviewers should take into consideration the following points:
 * Relaxed overly strict response codes
 * Clarified topic-data URI reference, immutable properties, and architecture roles
 * Editorial fixes
+
+## Version -19 to -20
+
+* Minor fixes and editorial improvements.
 
 # Acknowledgements
 {: numbered='no'}
