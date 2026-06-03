@@ -223,7 +223,7 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 
 * "topic-data": A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI reference as a CBOR text string. The URI can be that of a resource on a different address than that of the broker; implementations MUST NOT assume that the topic-data resource is co-located with the broker. If a URI is not provided when creating the topic, the choice of the URI for the topic-data resource is left to the broker.
 
-* "resource-type": A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. The value is typically "core.ps.data", i.e., when using the topic-data resource defined in this document.
+* "resource-type": A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. According to this document, the value is "core.ps.data". Other specifications or deployments MAY define and use alternative resource type values for the topic-data resource.
 
 * "topic-content-format": This optional field specifies the canonical CoAP Content-Format identifier of the topic-data resource representation as an unsigned integer, e.g., 60 for the media-type "application/cbor".
 
@@ -231,11 +231,13 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 
 * "expiration-date": An optional field used to indicate the expiration date of the topic. It encodes the expiration date as a CBOR tag 1 (epoch-based date/time) as defined in {{Section 3.4.2 of RFC8949@STD94}}, representing the number of seconds since 1970-01-01T00:00Z in UTC time. If this field is not present, the topic will not expire automatically. When "expiration-date" is reached, the topic resource is deleted as described in {{topic-delete}}.
 
-* "max-subscribers": An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as a CBOR unsigned integer. If this field is not present, then there is no limit to the number of simultaneous subscribers allowed. The broker MAY choose to ignore this value if enforcing it would be counterproductive (e.g., causing clients to fall back to polling). This field is intended as a hint from the topic creator; the broker is the final arbiter of resource allocation.
+* "max-subscribers": An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as a CBOR unsigned integer. If this field is not present, then there is no limit to the number of simultaneous subscribers allowed. At topic creation or update, this field is a hint from the topic creator; the broker MAY store a different value than the one requested. Once stored, the value is enforced: if the limit is reached, new subscriptions are handled as specified in {{Section 4.1 of RFC7641}}.
 
 * "observer-check": An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber (see {{unsubscribe}}). Encoded as a CBOR unsigned integer greater than 0, it ensures that subscribers that have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. If another CoAP server hosts the topic-data resource, that server is responsible for applying the "observer-check" value. The default value for this field is 86400, as defined in {{RFC7641}}, which corresponds to 24 hours.
 
 * "initialize": An optional field encoded as a CBOR byte string that contains the initial representation to pre-populate the topic-data resource. When present, the broker MUST create the topic and initialize the topic-data resource with this representation using the Content-Format specified in "topic-content-format". This allows the topic to be immediately subscribable without encountering a `4.04 Not Found` error. The representation MUST be valid for the specified Content-Format. For example, for CBOR-based formats, the empty CBOR array encoded as `0x80` is a valid empty representation, which corresponds to the "initialize" property set to `0x4180` (`<<[]>>` in CBOR diagnostic notation). If this field is not present, the broker behaves as usual, and the topic-data resource is not initialized. When this field is present, "topic-content-format" MUST also be specified.
+
+The "resource-type" field carries a single value pertaining to the publish-subscribe functionality of the topic-data resource. The topic-data resource itself MAY have additional resource types visible in Link-Format discovery {{RFC6690}}, but those are not represented in this field.
 
 ## Discovery
 
@@ -329,7 +331,7 @@ In certain scenarios, the method described herein may not be applicable, particu
 
 Within a topic, there is the "topic-data" topic property that contains the URI of the topic-data resource used for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data resource (see {{topic-get-resource}}).
 
-The topic-data resources use the resource type 'core.ps.data'. It is also possible to discover a list of topic-data resources, by sending a request to the collection resource with a query parameter rt=core.ps.data as shown in the example below. Every topic collection resource MUST support this query.
+According to this specification, the topic-data resources use the resource type "core.ps.data". Other specifications or deployments MAY use alternative resource type values (see {{topic-properties}}). It is also possible to discover a list of topic-data resources, by sending a request to the collection resource with a query parameter rt=core.ps.data as shown in the example below. Every topic collection resource MUST support this query.
 
 ~~~~
    Request:
@@ -697,7 +699,7 @@ After a publisher publishes to the topic-data resource for the first time, the t
 
 When a client deletes a topic resource, the topic is placed into the DELETED state and shortly after removed from the server. In this state, all subscribers are removed from the list of observers of the topic-data resource and no further interactions with the topic are possible. Both the topic resource and the topic-data resource are deleted.
 
-When a client deletes a topic-data resource, the associated topic is placed into the HALF CREATED state, where clients can read, update and delete the topic and await for a publisher to begin publication. The "topic-data" property in the topic configuration remains unchanged but no subscription to topic-data nor reading of data is allowed. Even if the "initialize" property in the topic configuration is present, the topic-data resource is not automatically initialized (see {{delete-topic-data}}).
+When a client deletes a topic-data resource, the associated topic is placed into the HALF CREATED state, where clients can read, update and delete the topic and await for a publisher to begin publication. All existing subscribers are removed from the list of observers of the topic-data resource by sending a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The "topic-data" property in the topic configuration remains unchanged, but no new subscription to topic-data nor reading of data is allowed until a publisher publishes again. Even if the "initialize" property in the topic configuration is present, the topic-data resource is not automatically initialized (see {{delete-topic-data}}).
 
 ## Topic-Data Interactions {#topic-data-interactions}
 
@@ -837,7 +839,7 @@ A publisher can delete a topic-data resource by making a CoAP DELETE request on 
 
 On success, the broker returns a 2.02 (Deleted) response.
 
-When a topic-data resource is deleted, the topic is then set back to the HALF CREATED state as per {{topic-lifecycle}} awaiting for a publisher to publish and set the topic to FULLY CREATED state where clients can subscribe and read the topic-data. The "topic-data" property in the topic configuration remains unchanged, but no subscription to topic-data nor reading of data is allowed.
+When a topic-data resource is deleted, the topic is then set back to the HALF CREATED state as per {{topic-lifecycle}} awaiting for a publisher to publish and set the topic to FULLY CREATED state where clients can subscribe and read the topic-data. All existing subscribers are removed from the list of observers of the topic-data resource by sending a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The "topic-data" property in the topic configuration remains unchanged, but no new subscription to topic-data nor reading of data is allowed.
 
 Note that this is the case irrespective of the value of the "initialize" topic property (if present) in the topic configuration.
 
@@ -1111,7 +1113,10 @@ Expert reviewers should take into consideration the following points:
 
 ## Version -19 to -20
 
-* Minor fixes and editorial improvements.
+* Clarified "resource-type" field: "core.ps.data" per this specification, alternative values permitted
+* Clarified "max-subscribers" semantics: hint at creation, enforced once stored
+* Added explicit 4.04 removal of subscribers on topic-data deletion
+* Merged PRs \#71, \#72, \#73 (editorial fixes, aasvg build, example clarification)
 
 # Acknowledgements
 {: numbered='no'}
