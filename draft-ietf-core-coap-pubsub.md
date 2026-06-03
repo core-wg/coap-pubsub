@@ -329,7 +329,7 @@ In certain scenarios, the method described herein may not be applicable, particu
 
 Within a topic, there is the "topic-data" topic property that contains the URI of the topic-data resource used for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data resource (see {{topic-get-resource}}).
 
-The topic-data resources use the resource type 'core.ps.data'. It is also possible to discover a list of topic-data resources, by sending a request to the collection resource with a query parameter rt=core.ps.data as shown below. Every topic collection resource MUST support this query.
+The topic-data resources use the resource type 'core.ps.data'. It is also possible to discover a list of topic-data resources, by sending a request to the collection resource with a query parameter rt=core.ps.data as shown in the example below. Every topic collection resource MUST support this query.
 
 ~~~~
    Request:
@@ -440,6 +440,7 @@ If requirements are defined for the client to create the topic as requested and 
 
 The broker MUST reply with a 4.xx client error response (such as 4.00 Bad Request) if a received parameter is invalid, unrecognized, or if the "topic-name" is already in use or otherwise invalid.
 
+Below is an example of a successful topic creation:
 
 ~~~~
    Request:
@@ -607,6 +608,7 @@ On success, the broker returns a 2.04 (Changed) response and the current full re
 Decreasing "max-subscribers" will also cause some subscribers to get unsubscribed. Unsubscribed endpoints receive a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}.
 
 Contrary to POST, iPATCH operations will explicitly update some topic properties, leaving others unmodified.
+In the below example, two properties are successfully updated with iPATCH:
 
 ~~~~
    Request:
