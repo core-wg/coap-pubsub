@@ -124,6 +124,7 @@ The broker can create its hosted topics and set their initial configurations. Al
 
 The broker is responsible for the store-and-forward of state update representations between CoAP clients. Publishers submit their data over the RESTful interface of a topic-data resource corresponding to the topic, which can be hosted at the broker. Subscribers to a topic are notified of new publications by using Observe {{RFC7641}} on the corresponding topic-data resource.
 
+As CoAP PubSub builds on {{RFC7252}} and {{RFC7641}}, its messages are not events but state updates with eventually-consistent semantics rather than per-event delivery. A message may be silently coalesced when a newer message on the same topic is delivered (e.g. by intermediaries or libraries), or be delivered twice, without changing the semantics. Applications requiring stronger guarantees need to handle that explicitly.
 
 ~~~~ aasvg
      CoAP                      CoAP                 CoAP
@@ -325,7 +326,7 @@ Below is an example of discovery via /.well-known/core with query rt=core.ps.con
    </other/path/2e3570>;rt="core.ps.conf"
 ~~~~
 
-In certain scenarios, the method described herein may not be applicable, particularly when the server restricts topic availability to authenticated clients only. In such cases, it is recommended to utilize the procedure outlined in {{topic-get-all}} and {{topic-get-properties}} for topic discovery.
+In certain scenarios, the method described herein may not be applicable. For example, the server hosting /.well-known/core may not be aware of the broker's authorization policy, the discovery interaction may not be secured (e.g. multicast over coap), or the size of the returned CoRE Link Format document may grow large. While {{Section 6 of RFC6690}} allows per-entry access control in /.well-known/core, in such cases it is recommended to utilize the procedure outlined in {{topic-get-all}} and {{topic-get-properties}} for topic discovery instead.
 
 ### Topic-Data Discovery
 
@@ -366,7 +367,7 @@ In general, a broker MAY include any CoRE Link Format attributes in each returne
 
 A client can request a collection of the topics present in the broker by making a GET request to the topic collection URI.
 
-On success, the broker returns a 2.05 (Content) response, specifying the list of links to topic resources associated with this topic collection (see {{topic-resource-representation}}).
+On success, the broker returns a successful response (typically 2.05 Content), specifying the list of links to topic resources associated with this topic collection (see {{topic-resource-representation}}).
 
 A client MAY retrieve a list of links to topics it is authorized to access, based on its permissions. A broker MUST implement topic collection discovery.
 
@@ -395,9 +396,11 @@ the content-format (TBD606) is implied by the resource type.
 ### Getting Topics by Topic Properties {#topic-get-properties}
 
 A client can filter a collection of topics by submitting the representation of a topic filter (see {{topic-fetch-resource}}) in a FETCH request to the topic collection URI.
-On success, the broker returns a 2.05 (Content) response with a representation of a list of topics in the collection (see {{topic-discovery}}) that match the filter in CoRE Link Format {{RFC6690}}.
+On success, the broker returns a successful response (typically 2.05 Content) with a representation of a list of topics in the collection (see {{topic-discovery}}) that match the filter in CoRE Link Format {{RFC6690}}.
 
-Upon success, the broker responds with a 2.05 (Content), providing a list of links to topic resources associated with this topic collection that match the request's filter criteria (refer to {{topic-discovery}}). A positive match happens only when each topic property in the request payload is present with the indicated value in the topic resource representation.
+Upon success, the broker responds with a successful response (typically 2.05 Content), providing a list of links to topic resources associated with this topic collection that match the request's filter criteria (refer to {{topic-discovery}}). A positive match happens only when each topic property in the request payload is present with the indicated value in the topic resource representation.
+
+This section describes FETCH semantics on the topic collection for request payloads with Content-Format TBD606 ("application/core-pubsub+cbor"); other request Content-Formats may be defined in extensions. The response uses Content-Format 40 ("application/link-format").
 
 Example:
 
@@ -436,7 +439,7 @@ To facilitate immediate subscription and allow subscribers to subscribe to the t
 
 When "initialize" is omitted, the topic will only be fully created after data is published to it.
 
-On success, the broker returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map. The response MUST include the required topic properties (see {{topic-properties}}), namely: "topic-name", "resource-type", and "topic-data". It MAY also include a number of optional topic properties too. The response MUST support Content-Format TBD606 ("application/core-pubsub+cbor"), which is the default.
+On success, the broker returns a successful response (typically 2.01 Created), indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map. The response MUST include the required topic properties (see {{topic-properties}}), namely: "topic-name", "resource-type", and "topic-data". It MAY also include a number of optional topic properties too. The response MUST support Content-Format TBD606 ("application/core-pubsub+cbor"), which is the default.
 
 If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST reply with a 4.xx client error response (such as 4.03 Forbidden).
 
@@ -478,7 +481,7 @@ These are the interactions that can happen at the topic resource level.
 
 A client can read the configuration of a topic by making a GET request to the topic resource URI.
 
-On success, the broker returns a 2.05 (Content) response with a representation of the topic resource, as specified in {{topic-resource-representation}}.
+On success, the broker returns a successful response (typically 2.05 Content) with a representation of the topic resource, as specified in {{topic-resource-representation}}.
 
 If requirements are defined for the client to read the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST reply with a 4.xx client error response (such as 4.03 Forbidden).
 
@@ -515,7 +518,7 @@ A client can read the configuration of a topic by making a FETCH request to the 
 
 The request contains a CBOR map with a configuration filter or 'conf-filter', a CBOR array of topic properties, using the same abbreviations defined in {{pubsub-parameters}}. Each element of the array specifies one requested topic property of the current topic resource (see {{topic-resource-representation}}).
 
-On success, the broker returns a 2.05 (Content) response with a representation of the topic resource. The response has as payload the partial representation of the topic resource as specified in {{topic-resource-representation}}.
+On success, the broker returns a successful response (typically 2.05 Content) with a representation of the topic resource. The response has as payload the partial representation of the topic resource as specified in {{topic-resource-representation}}.
 
 If requirements are defined for the client to read the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST reply with a 4.xx client error response (such as 4.03 Forbidden).
 
@@ -554,7 +557,7 @@ Example:
 
 A client can update a topic's configuration by submitting the updated topic representation in a POST request to the topic URI. However, the topic properties "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker. Since POST replaces the full resource representation, these immutable properties may be included in the request with their current values.
 
-On success, the topic is overwritten and the broker returns a 2.04 (Changed) response and the current full resource representation. The broker MAY choose not to overwrite topic properties that are not explicitly modified in the request.
+On success, the topic is overwritten and the broker returns a successful response (typically 2.04 Changed) and the current full resource representation. The broker MAY choose not to overwrite topic properties that are not explicitly modified in the request.
 
 Similarly, decreasing "max-subscribers" will also cause that some subscribers get unsubscribed. Unsubscribed endpoints receive a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The specific queue management for unsubscribing is left for implementors.
 
@@ -605,7 +608,7 @@ Note that, when a topic changes, it may result in disruptions for the subscriber
 
 A client can partially update a topic's configuration by submitting a partial topic representation in an iPATCH request to the topic URI. The iPATCH request allows for updating only specific fields of the topic while leaving the others unchanged. As with the POST method, the topic properties "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.
 
-On success, the broker returns a 2.04 (Changed) response and the current full resource representation. The broker only updates topic properties that are explicitly mentioned in the request.
+On success, the broker returns a successful response (typically 2.04 Changed) and the current full resource representation. The broker only updates topic properties that are explicitly mentioned in the request.
 
 Decreasing "max-subscribers" will also cause some subscribers to get unsubscribed. Unsubscribed endpoints receive a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}.
 
@@ -648,7 +651,7 @@ Note that when a topic changes through an iPATCH request, it may result in disru
 
 A client can delete a topic by making a CoAP DELETE request on the topic resource URI.
 
-On success, the broker returns a 2.02 (Deleted) response.
+On success, the broker returns a successful response (typically 2.02 Deleted). Since CoAP DELETE is idempotent, a client retransmitting a DELETE request for an already-deleted topic may receive a 4.04 (Not Found) response, which can be considered a successful deletion.
 
 When a topic resource is deleted, the broker MUST also delete the topic-data resource. As a result, the broker unsubscribes all subscribers by removing them from the list of observers and returning a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}.
 
@@ -837,7 +840,7 @@ This value can be modified at the broker by the administrator of a topic by modi
 
 A publisher can delete a topic-data resource by making a CoAP DELETE request on the topic-data resource (which is hosted at the "topic-data" URI).
 
-On success, the broker returns a 2.02 (Deleted) response.
+On success, the broker returns a successful response (typically 2.02 Deleted). Since CoAP DELETE is idempotent, a publisher retransmitting a DELETE request for an already-deleted topic-data resource may receive a 4.04 (Not Found) response, which can be considered a successful deletion.
 
 When a topic-data resource is deleted, the topic is then set back to the HALF CREATED state as per {{topic-lifecycle}} awaiting for a publisher to publish and set the topic to FULLY CREATED state where clients can subscribe and read the topic-data. All existing subscribers are removed from the list of observers of the topic-data resource by sending a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The "topic-data" property in the topic configuration remains unchanged, but no new subscription to topic-data nor reading of data is allowed.
 
