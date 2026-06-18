@@ -874,14 +874,14 @@ Internet-Draft                 CoAP pubsub                     June 2026
    When "initialize" is omitted, the topic will only be fully created
    after data is published to it.
 
-   On success, the broker returns a successful response (typically 2.01
-   Created), indicating the Location-Path of the new topic and the
-   current representation of the topic resource.  The response payload
-   includes a CBOR map.  The response MUST include the required topic
-   properties (see Section 2.2.1), namely: "topic-name", "resource-
-   type", and "topic-data".  It MAY also include a number of optional
-   topic properties too.  The response MUST support Content-Format
-   TBD606 ("application/core-pubsub+cbor"), which is the default.
+   On success, the broker returns a 2.01 (Created) response, indicating
+   the Location-Path of the new topic and the current representation of
+   the topic resource.  The response payload includes a CBOR map.  The
+   response MUST include the required topic properties (see
+   Section 2.2.1), namely: "topic-name", "resource-type", and "topic-
+   data".  It MAY also include a number of optional topic properties
+   too.  The response MUST support Content-Format TBD606 ("application/
+   core-pubsub+cbor"), which is the default.
 
    If requirements are defined for the client to create the topic as
    requested and the broker does not successfully assess that those
@@ -1066,10 +1066,10 @@ Jimenez, et al.         Expires 20 December 2026               [Page 19]
 Internet-Draft                 CoAP pubsub                     June 2026
 
 
-   On success, the topic is overwritten and the broker returns a
-   successful response (typically 2.04 Changed) and the current full
-   resource representation.  The broker MAY choose not to overwrite
-   topic properties that are not explicitly modified in the request.
+   On success, the topic is overwritten and the broker returns a 2.04
+   (Changed) response and the current full resource representation.  The
+   broker MAY choose not to overwrite topic properties that are not
+   explicitly modified in the request.
 
    Similarly, decreasing "max-subscribers" will also cause that some
    subscribers get unsubscribed.  Unsubscribed endpoints receive a final
@@ -1141,10 +1141,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
    are immutable post-creation, and any request attempting to change
    them will be deemed invalid by the broker.
 
-   On success, the broker returns a successful response (typically 2.04
-   Changed) and the current full resource representation.  The broker
-   only updates topic properties that are explicitly mentioned in the
-   request.
+   On success, the broker returns a 2.04 (Changed) response and the
+   current full resource representation.  The broker only updates topic
+   properties that are explicitly mentioned in the request.
 
    Decreasing "max-subscribers" will also cause some subscribers to get
    unsubscribed.  Unsubscribed endpoints receive a final 4.04 (Not
@@ -1153,6 +1152,7 @@ Internet-Draft                 CoAP pubsub                     June 2026
    Contrary to POST, iPATCH operations will explicitly update some topic
    properties, leaving others unmodified.  In the below example, two
    properties are successfully updated with iPATCH:
+
 
 
 
@@ -1216,10 +1216,10 @@ Internet-Draft                 CoAP pubsub                     June 2026
    A client can delete a topic by making a CoAP DELETE request on the
    topic resource URI.
 
-   On success, the broker returns a successful response (typically 2.02
-   Deleted).  Since CoAP DELETE is idempotent, a client retransmitting a
-   DELETE request for an already-deleted topic may receive a 4.04 (Not
-   Found) response, which can be considered a successful deletion.
+   On success, the broker returns a 2.02 (Deleted) response.  Since CoAP
+   DELETE is idempotent, a client retransmitting a DELETE request for an
+   already-deleted topic may receive a 4.04 (Not Found) response, which
+   can be considered a successful deletion.
 
    When a topic resource is deleted, the broker MUST also delete the
    topic-data resource.  As a result, the broker unsubscribes all
@@ -1582,11 +1582,10 @@ Internet-Draft                 CoAP pubsub                     June 2026
    request on the topic-data resource (which is hosted at the "topic-
    data" URI).
 
-   On success, the broker returns a successful response (typically 2.02
-   Deleted).  Since CoAP DELETE is idempotent, a publisher
-   retransmitting a DELETE request for an already-deleted topic-data
-   resource may receive a 4.04 (Not Found) response, which can be
-   considered a successful deletion.
+   On success, the broker returns a 2.02 (Deleted) response.  Since CoAP
+   DELETE is idempotent, a publisher retransmitting a DELETE request for
+   an already-deleted topic-data resource may receive a 4.04 (Not Found)
+   response, which can be considered a successful deletion.
 
    When a topic-data resource is deleted, the topic is then set back to
    the HALF CREATED state as per Section 3.1 awaiting for a publisher to
@@ -1613,6 +1612,7 @@ Internet-Draft                 CoAP pubsub                     June 2026
       Response:
 
       Header: Deleted (Code=2.02)
+
 
 
 
