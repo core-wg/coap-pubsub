@@ -254,7 +254,7 @@ In general, a broker MAY include any CoRE Link Format attributes in each returne
 
 CoAP clients MAY discover brokers by using CoAP discovery {{RFC7252}}, via multicast, through a Resource Directory (RD) {{RFC9176}} or by other means specified in extensions to {{RFC7252}}. Brokers MAY register with an RD by following the steps on {{Section 5 of RFC9176}} with the resource type set to "core.ps" as defined in {{iana}} of this document.
 
-The following example shows an endpoint discovering a broker using the "core.ps" resource type over a multicast network. Brokers within the multicast scope will answer the query.
+The following example shows an endpoint discovering a broker using the "core.ps" resource type over a multicast network. Brokers within the multicast scope will answer the query. Even when that discovery is unprotected, it does not disclose the existence of the topics but only that of the broker.
 
 ~~~~
    Request:
