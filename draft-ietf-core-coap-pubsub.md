@@ -254,7 +254,7 @@ In general, a broker MAY include any CoRE Link Format attributes in each returne
 
 CoAP clients MAY discover brokers by using CoAP discovery {{RFC7252}}, via multicast, through a Resource Directory (RD) {{RFC9176}} or by other means specified in extensions to {{RFC7252}}. Brokers MAY register with an RD by following the steps on {{Section 5 of RFC9176}} with the resource type set to "core.ps" as defined in {{iana}} of this document.
 
-The following example shows an endpoint discovering a broker using the "core.ps" resource type over a multicast network. Brokers within the multicast scope will answer the query.
+The following example shows an endpoint discovering a broker using the "core.ps" resource type over a multicast network. Brokers within the multicast scope will answer the query. Even when that discovery is unprotected, it does not disclose the existence of the topics but only that of the broker.
 
 ~~~~
    Request:
@@ -326,7 +326,7 @@ Below is an example of discovery via /.well-known/core with query rt=core.ps.con
    </other/path/2e3570>;rt="core.ps.conf"
 ~~~~
 
-In certain scenarios, the method described herein may not be applicable. For example, the server hosting /.well-known/core may not be aware of the broker's authorization policy, the discovery interaction may not be secured (e.g. multicast over coap), or the size of the returned CoRE Link Format document may grow large. While {{Section 6 of RFC6690}} allows per-entry access control in /.well-known/core, in such cases it is recommended to utilize the procedure outlined in {{topic-get-all}} and {{topic-get-properties}} for topic discovery instead.
+In certain scenarios, the method described herein may not be applicable, e.g., if the server wants to restrict topic availability. For example, the server hosting /.well-known/core may not be aware of the broker's authorization policy, the discovery interaction may need to be secured, or the size of the returned CoRE Link Format document may grow large. While {{Section 6 of RFC6690}} allows per-entry access control in /.well-known/core, in such cases it is recommended to utilize the procedure outlined in {{topic-get-all}} and {{topic-get-properties}} for topic discovery instead.
 
 ### Topic-Data Discovery
 
@@ -439,7 +439,7 @@ To facilitate immediate subscription and allow subscribers to subscribe to the t
 
 When "initialize" is omitted, the topic will only be fully created after data is published to it.
 
-On success, the broker returns a successful response (typically 2.01 Created), indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map. The response MUST include the required topic properties (see {{topic-properties}}), namely: "topic-name", "resource-type", and "topic-data". It MAY also include a number of optional topic properties too. The response MUST support Content-Format TBD606 ("application/core-pubsub+cbor"), which is the default.
+On success, the broker returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload includes a CBOR map. The response MUST include the required topic properties (see {{topic-properties}}), namely: "topic-name", "resource-type", and "topic-data". It MAY also include a number of optional topic properties too. The response MUST support Content-Format TBD606 ("application/core-pubsub+cbor"), which is the default.
 
 If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST reply with a 4.xx client error response (such as 4.03 Forbidden).
 
@@ -557,7 +557,7 @@ Example:
 
 A client can update a topic's configuration by submitting the updated topic representation in a POST request to the topic URI. However, the topic properties "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker. Since POST replaces the full resource representation, these immutable properties may be included in the request with their current values.
 
-On success, the topic is overwritten and the broker returns a successful response (typically 2.04 Changed) and the current full resource representation. The broker MAY choose not to overwrite topic properties that are not explicitly modified in the request.
+On success, the topic is overwritten and the broker returns a 2.04 (Changed) response and the current full resource representation. The broker MAY choose not to overwrite topic properties that are not explicitly modified in the request.
 
 Similarly, decreasing "max-subscribers" will also cause that some subscribers get unsubscribed. Unsubscribed endpoints receive a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The specific queue management for unsubscribing is left for implementors.
 
@@ -608,7 +608,7 @@ Note that, when a topic changes, it may result in disruptions for the subscriber
 
 A client can partially update a topic's configuration by submitting a partial topic representation in an iPATCH request to the topic URI. The iPATCH request allows for updating only specific fields of the topic while leaving the others unchanged. As with the POST method, the topic properties "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.
 
-On success, the broker returns a successful response (typically 2.04 Changed) and the current full resource representation. The broker only updates topic properties that are explicitly mentioned in the request.
+On success, the broker returns a 2.04 (Changed) response and the current full resource representation. The broker only updates topic properties that are explicitly mentioned in the request.
 
 Decreasing "max-subscribers" will also cause some subscribers to get unsubscribed. Unsubscribed endpoints receive a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}.
 
@@ -651,7 +651,7 @@ Note that when a topic changes through an iPATCH request, it may result in disru
 
 A client can delete a topic by making a CoAP DELETE request on the topic resource URI.
 
-On success, the broker returns a successful response (typically 2.02 Deleted). Since CoAP DELETE is idempotent, a client retransmitting a DELETE request for an already-deleted topic may receive a 4.04 (Not Found) response, which can be considered a successful deletion.
+On success, the broker returns a 2.02 (Deleted) response. Since CoAP DELETE is idempotent, a client retransmitting a DELETE request for an already-deleted topic may receive a 4.04 (Not Found) response, which can be considered a successful deletion.
 
 When a topic resource is deleted, the broker MUST also delete the topic-data resource. As a result, the broker unsubscribes all subscribers by removing them from the list of observers and returning a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}.
 
@@ -840,7 +840,7 @@ This value can be modified at the broker by the administrator of a topic by modi
 
 A publisher can delete a topic-data resource by making a CoAP DELETE request on the topic-data resource (which is hosted at the "topic-data" URI).
 
-On success, the broker returns a successful response (typically 2.02 Deleted). Since CoAP DELETE is idempotent, a publisher retransmitting a DELETE request for an already-deleted topic-data resource may receive a 4.04 (Not Found) response, which can be considered a successful deletion.
+On success, the broker returns a 2.02 (Deleted) response. Since CoAP DELETE is idempotent, a publisher retransmitting a DELETE request for an already-deleted topic-data resource may receive a 4.04 (Not Found) response, which can be considered a successful deletion.
 
 When a topic-data resource is deleted, the topic is then set back to the HALF CREATED state as per {{topic-lifecycle}} awaiting for a publisher to publish and set the topic to FULLY CREATED state where clients can subscribe and read the topic-data. All existing subscribers are removed from the list of observers of the topic-data resource by sending a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The "topic-data" property in the topic configuration remains unchanged, but no new subscription to topic-data nor reading of data is allowed.
 
