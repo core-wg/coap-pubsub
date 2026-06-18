@@ -675,14 +675,14 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
    In certain scenarios, the method described herein may not be
-   applicable.  For example, the server hosting /.well-known/core may
-   not be aware of the broker's authorization policy, the discovery
-   interaction may not be secured (e.g. multicast over coap), or the
-   size of the returned CoRE Link Format document may grow large.  While
-   Section 6 of [RFC6690] allows per-entry access control in /.well-
-   known/core, in such cases it is recommended to utilize the procedure
-   outlined in Section 2.4.1 and Section 2.4.2 for topic discovery
-   instead.
+   applicable, e.g., if the server wants to restrict topic availability.
+   For example, the server hosting /.well-known/core may not be aware of
+   the broker's authorization policy, the discovery interaction may need
+   to be secured, or the size of the returned CoRE Link Format document
+   may grow large.  While Section 6 of [RFC6690] allows per-entry access
+   control in /.well-known/core, in such cases it is recommended to
+   utilize the procedure outlined in Section 2.4.1 and Section 2.4.2 for
+   topic discovery instead.
 
 2.3.4.  Topic-Data Discovery
 
