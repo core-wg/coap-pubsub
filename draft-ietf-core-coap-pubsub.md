@@ -326,7 +326,7 @@ Below is an example of discovery via /.well-known/core with query rt=core.ps.con
    </other/path/2e3570>;rt="core.ps.conf"
 ~~~~
 
-In certain scenarios, the method described herein may not be applicable. For example, the server hosting /.well-known/core may not be aware of the broker's authorization policy, the discovery interaction may not be secured (e.g. multicast over coap), or the size of the returned CoRE Link Format document may grow large. While {{Section 6 of RFC6690}} allows per-entry access control in /.well-known/core, in such cases it is recommended to utilize the procedure outlined in {{topic-get-all}} and {{topic-get-properties}} for topic discovery instead.
+In certain scenarios, the method described herein may not be applicable, e.g., if the server wants to restrict topic availability. For example, the server hosting /.well-known/core may not be aware of the broker's authorization policy, the discovery interaction may need to be secured, or the size of the returned CoRE Link Format document may grow large. While {{Section 6 of RFC6690}} allows per-entry access control in /.well-known/core, in such cases it is recommended to utilize the procedure outlined in {{topic-get-all}} and {{topic-get-properties}} for topic discovery instead.
 
 ### Topic-Data Discovery
 
