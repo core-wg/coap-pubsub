@@ -38,7 +38,6 @@ contributor:
   contribution: Marco offered comprehensive reviews and insightful guidance on the recent iterations of this document. His contributions were valuable in multiple parts of the document but particularly notable in the Security Considerations section.
 
 normative:
-  RFC6570:
   RFC6690:
   RFC7252:
   RFC8288:
@@ -90,7 +89,7 @@ This document applies the idea of broker-based publish-subscribe to Constrained 
 
 {::boilerplate bcp14-tagged-bcp14}
 
-This specification requires readers to be familiar with all the terms and concepts that are discussed in {{RFC8288}} and {{RFC6690}}. Readers should also be familiar with the terms and concepts discussed in {{RFC7252}}, {{RFC9176}}, and {{RFC7641}}. The URI template format {{RFC6570}} is used to describe the REST API defined in this specification.
+This specification requires readers to be familiar with all the terms and concepts that are discussed in {{RFC8288}} and {{RFC6690}}. Readers should also be familiar with the terms and concepts discussed in {{RFC7252}}, {{RFC9176}}, and {{RFC7641}}.
 
 This specification makes use of the following terminology:
 
