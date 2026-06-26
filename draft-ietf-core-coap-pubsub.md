@@ -929,7 +929,7 @@ Note that the media type "application/core-pubsub+cbor" MUST be used when these 
 
 The architecture presented in this document inherits the security considerations from CoAP {{RFC7252}} and Observe {{RFC7641}}, as well as from Web Linking {{RFC8288}}, CoRE Link Format {{RFC6690}}, and the CoRE Resource Directory {{RFC9176}}.
 
-Communications between each client and the broker are RECOMMENDED to be secured, e.g., by using OSCORE {{RFC8613}} or DTLS {{RFC9147}}. Security considerations for the used secure communication protocols apply too.
+CoAP communications between each client and the broker are RECOMMENDED to be secured. The default security protocol is defined by [RFC7252]. Examples of other security protocols that could be applied to CoAP communications are OSCORE [RFC8613] and DTLS 1.3 [RFC9147]. The choice of a security protocol depends on the requirements of the specific application and deployment. Security considerations for the selected security protocol apply as well.
 
 The content published on a topic by a publisher client SHOULD be protected end-to-end between the publisher and all the subscribers to that topic. In such a case, it MUST be possible to verify source authentication of the published data. This can be achieved at the application layer, e.g., by using COSE {{STD96}} {{RFC9053}}.
 
