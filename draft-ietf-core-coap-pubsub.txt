@@ -1887,9 +1887,10 @@ Internet-Draft                 CoAP pubsub                     July 2026
 6.1.  Media Type Registrations
 
    This specification registers the "application/core-pubsub+cbor" media
-   type for messages of the protocols defined in this document and
-   carrying topic properties encoded in CBOR.  This registration follows
-   the procedures specified in [BCP13].
+   type in the IANA Media Types registry.  It is used for messages of
+   the protocols defined in this document and carries topic properties
+   encoded in CBOR.  This registration follows the procedures specified
+   in [BCP13].
 
    Type name:  application
 
@@ -1897,7 +1898,6 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
    Required parameters:  N/A
 
-   Optional parameters:  N/A
 
 
 
@@ -1905,6 +1905,8 @@ Jimenez, et al.          Expires 3 January 2027                [Page 34]
 
 Internet-Draft                 CoAP pubsub                     July 2026
 
+
+   Optional parameters:  N/A
 
    Encoding considerations:  Must be encoded as a CBOR map containing
       the topic properties defined in [RFC-XXXX].
@@ -1948,8 +1950,6 @@ Internet-Draft                 CoAP pubsub                     July 2026
    ID:  TBD606
 
    Reference:  [RFC-XXXX]
-
-
 
 
 
@@ -2078,29 +2078,29 @@ Internet-Draft                 CoAP pubsub                     July 2026
       that do not meet these objectives of clarity and completeness must
       not be registered.
 
-   *  Point squatting should be discouraged.  Reviewers are encouraged
-      to get sufficient information for registration requests to ensure
-      that the usage is not going to duplicate one that is already
-      registered and that the point is likely to be used in deployments.
-      The zones tagged as "Private Use" are intended for testing
-      purposes and closed environments.  Code points in other ranges
-      should not be assigned for testing.
+   *  Code point squatting should be discouraged.  Reviewers are
+      encouraged to get sufficient information for registration requests
+      to ensure that the usage is not going to duplicate one that is
+      already registered and that the code point is likely to be used in
+      deployments.  The zones tagged as "Private Use" are intended for
+      testing purposes and closed environments.  Code points in other
+      ranges should not be assigned for testing.
 
    *  Specifications are required for the "Standards Action With Expert
-      Review" range of point assignment.  Specifications should exist
-      for "Specification Required" ranges, but early assignment before a
-      specification is available is considered to be permissible.  When
-      specifications are not provided, the description provided needs to
-      have sufficient information to identify what the point is being
-      used for.
+      Review" range of code point assignment.  Specifications should
+      exist for "Specification Required" ranges, but early assignment
+      before a specification is available is considered to be
+      permissible.  When specifications are not provided, the
+      description provided needs to have sufficient information to
+      identify what the code point is being used for.
 
    *  Experts should take into account the expected usage of fields when
-      approving point assignment.  Documents published via Standards
-      Action can also register points outside the Standards Action
-      range.  The length of the encoded value should be weighed against
-      how many code points of that length are left, the size of device
-      it will be used on, and the number of code points left that encode
-      to that size.
+      approving a code point assignment.  Documents published via
+      Standards Action can also register code points outside the
+      Standards Action range.  The length of the encoded value should be
+      weighed against how many code points of that length are left, the
+      size of device it will be used on, and the number of code points
+      left that encode to that size.
 
 7.  References
 
