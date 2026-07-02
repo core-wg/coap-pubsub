@@ -135,7 +135,7 @@ Internet-Draft                 CoAP pubsub                     July 2026
    Appendix A.  Document Updates . . . . . . . . . . . . . . . . . .  42
      A.1.  Version -13 to -14  . . . . . . . . . . . . . . . . . . .  42
      A.2.  Version -14 to -15  . . . . . . . . . . . . . . . . . . .  42
-     A.3.  Version -15 to -16  . . . . . . . . . . . . . . . . . . .  43
+     A.3.  Version -15 to -16  . . . . . . . . . . . . . . . . . . .  42
      A.4.  Version -16 to -17  . . . . . . . . . . . . . . . . . . .  43
      A.5.  Version -17 to -18  . . . . . . . . . . . . . . . . . . .  43
      A.6.  Version -18 to -19  . . . . . . . . . . . . . . . . . . .  43
@@ -191,9 +191,7 @@ Internet-Draft                 CoAP pubsub                     July 2026
    This specification requires readers to be familiar with all the terms
    and concepts that are discussed in [RFC8288] and [RFC6690].  Readers
    should also be familiar with the terms and concepts discussed in
-   [RFC7252], [RFC9176], and [RFC7641].  The URI template format
-   [RFC6570] is used to describe the REST API defined in this
-   specification.
+   [RFC7252], [RFC9176], and [RFC7641].
 
    This specification makes use of the following terminology:
 
@@ -219,6 +217,8 @@ Internet-Draft                 CoAP pubsub                     July 2026
       is described more generally in Section 3.1 of
       [I-D.ietf-core-interfaces].
 
+   topic:
+
 
 
 Jimenez, et al.          Expires 3 January 2027                 [Page 4]
@@ -226,7 +226,6 @@ Jimenez, et al.          Expires 3 January 2027                 [Page 4]
 Internet-Draft                 CoAP pubsub                     July 2026
 
 
-   topic:
       A set of information about an entity at the broker, including its
       configuration and other metadata.  A topic is hosted as one topic
       resource at the broker, whose representation is the set of topic
@@ -274,6 +273,7 @@ Internet-Draft                 CoAP pubsub                     July 2026
    As CoAP PubSub builds on [RFC7252] and [RFC7641], its messages are
    not events but state updates with eventually-consistent semantics
    rather than per-event delivery.  A message may be silently coalesced
+   when a newer message on the same topic is delivered (e.g. by
 
 
 
@@ -282,7 +282,6 @@ Jimenez, et al.          Expires 3 January 2027                 [Page 5]
 Internet-Draft                 CoAP pubsub                     July 2026
 
 
-   when a newer message on the same topic is delivered (e.g. by
    intermediaries or libraries), or be delivered twice, without changing
    the semantics.  Applications requiring stronger guarantees need to
    handle that explicitly.
@@ -324,6 +323,7 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
    Figure 2 shows the resources related to a topic collection that can
    be managed at the broker.
+
 
 
 
@@ -2165,11 +2165,6 @@ Internet-Draft                 CoAP pubsub                     July 2026
               Points", BCP 100, RFC 7120, DOI 10.17487/RFC7120, January
               2014, <https://www.rfc-editor.org/info/rfc7120>.
 
-   [RFC6570]  Gregorio, J., Fielding, R., Hadley, M., Nottingham, M.,
-              and D. Orchard, "URI Template", RFC 6570,
-              DOI 10.17487/RFC6570, March 2012,
-              <https://www.rfc-editor.org/rfc/rfc6570>.
-
    [RFC6690]  Shelby, Z., "Constrained RESTful Environments (CoRE) Link
               Format", RFC 6690, DOI 10.17487/RFC6690, August 2012,
               <https://www.rfc-editor.org/rfc/rfc6690>.
@@ -2179,17 +2174,17 @@ Internet-Draft                 CoAP pubsub                     July 2026
               DOI 10.17487/RFC7252, June 2014,
               <https://www.rfc-editor.org/rfc/rfc7252>.
 
+   [RFC7641]  Hartke, K., "Observing Resources in the Constrained
+              Application Protocol (CoAP)", RFC 7641,
+              DOI 10.17487/RFC7641, September 2015,
+              <https://www.rfc-editor.org/rfc/rfc7641>.
+
 
 
 Jimenez, et al.          Expires 3 January 2027                [Page 39]
 
 Internet-Draft                 CoAP pubsub                     July 2026
 
-
-   [RFC7641]  Hartke, K., "Observing Resources in the Constrained
-              Application Protocol (CoAP)", RFC 7641,
-              DOI 10.17487/RFC7641, September 2015,
-              <https://www.rfc-editor.org/rfc/rfc7641>.
 
    [RFC8288]  Nottingham, M., "Web Linking", RFC 8288,
               DOI 10.17487/RFC8288, October 2017,
@@ -2232,16 +2227,6 @@ Internet-Draft                 CoAP pubsub                     July 2026
               <https://datatracker.ietf.org/doc/html/draft-ietf-ace-
               oscore-gm-admin-17>.
 
-
-
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 40]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
-
    [I-D.ietf-ace-pubsub-profile]
               Palombini, F., Sengul, C., and M. Tiloca, "Publish-
               Subscribe Profile for Authentication and Authorization for
@@ -2249,6 +2234,13 @@ Internet-Draft                 CoAP pubsub                     July 2026
               Internet-Draft, draft-ietf-ace-pubsub-profile-11, 7
               January 2025, <https://datatracker.ietf.org/doc/html/
               draft-ietf-ace-pubsub-profile-11>.
+
+
+
+Jimenez, et al.          Expires 3 January 2027                [Page 40]
+
+Internet-Draft                 CoAP pubsub                     July 2026
+
 
    [I-D.ietf-core-interfaces]
               Shelby, Z., Koster, M., Groves, C., Zhu, J., and B.
@@ -2288,16 +2280,6 @@ Internet-Draft                 CoAP pubsub                     July 2026
               <https://www.rfc-editor.org/info/std96>.
               At the time of writing, this STD comprises the following:
 
-
-
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 41]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
-
               Schaad, J., "CBOR Object Signing and Encryption (COSE):
               Structures and Process", STD 96, RFC 9052,
               DOI 10.17487/RFC9052, August 2022,
@@ -2307,6 +2289,14 @@ Internet-Draft                 CoAP pubsub                     July 2026
               Countersignatures", STD 96, RFC 9338,
               DOI 10.17487/RFC9338, December 2022,
               <https://www.rfc-editor.org/info/rfc9338>.
+
+
+
+
+Jimenez, et al.          Expires 3 January 2027                [Page 41]
+
+Internet-Draft                 CoAP pubsub                     July 2026
+
 
 Appendix A.  Document Updates
 
@@ -2347,18 +2337,22 @@ A.2.  Version -14 to -15
 
    *  Other editorial changes
 
+A.3.  Version -15 to -16
+
+   *  Various updates throughout the document based on AD review.
+
+   *  IANA clarifications
+
+
+
+
+
 
 
 Jimenez, et al.          Expires 3 January 2027                [Page 42]
 
 Internet-Draft                 CoAP pubsub                     July 2026
 
-
-A.3.  Version -15 to -16
-
-   *  Various updates throughout the document based on AD review.
-
-   *  IANA clarifications
 
 A.4.  Version -16 to -17
 
@@ -2403,17 +2397,18 @@ A.7.  Version -19 to -20
    *  Clarified "max-subscribers" semantics: hint at creation, enforced
       once stored
 
+   *  Added explicit 4.04 removal of subscribers on topic-data deletion
+
+   *  Merged PRs #71, #72, #73 (editorial fixes, aasvg build, example
+      clarification)
+
+
 
 
 Jimenez, et al.          Expires 3 January 2027                [Page 43]
 
 Internet-Draft                 CoAP pubsub                     July 2026
 
-
-   *  Added explicit 4.04 removal of subscribers on topic-data deletion
-
-   *  Merged PRs #71, #72, #73 (editorial fixes, aasvg build, example
-      clarification)
 
 Acknowledgements
 
@@ -2458,14 +2453,6 @@ Authors' Addresses
    Email: michaeljohnkoster@gmail.com
 
 
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 44]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
-
    Ari Keranen
    Ericsson
    Email: ari.keranen@ericsson.com
@@ -2474,47 +2461,4 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 45]
+Jimenez, et al.          Expires 3 January 2027                [Page 44]
