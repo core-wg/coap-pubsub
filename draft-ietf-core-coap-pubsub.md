@@ -1118,6 +1118,16 @@ Expert reviewers should take into consideration the following points:
 * Added explicit 4.04 removal of subscribers on topic-data deletion
 * Merged PRs \#71, \#72, \#73 (editorial fixes, aasvg build, example clarification)
 
+## Version -20 to -21
+
+* Addressed remaining WGLC comments from the 2026-06-17 interim (PR \#76)
+* Added eventual-consistency semantics of pubsub messages
+* Clarified "max-subscribers": broker may store a different value or none (PR \#74)
+* Removed unused RFC 6570 URI template reference (PR \#77)
+* IANA: named the Media Types registry, clarified "code point" (PR \#78)
+* Default security from RFC 7252; OSCORE and DTLS 1.3 kept informative (PR \#79)
+* Encoded the topic FETCH filter as an application/cbor array; removed conf-filter from the registry (PR \#80)
+
 # Acknowledgements
 {: numbered='no'}
 
