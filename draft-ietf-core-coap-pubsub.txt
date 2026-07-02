@@ -1828,10 +1828,13 @@ Internet-Draft                 CoAP pubsub                     July 2026
    from Web Linking [RFC8288], CoRE Link Format [RFC6690], and the CoRE
    Resource Directory [RFC9176].
 
-   Communications between each client and the broker are RECOMMENDED to
-   be secured, e.g., by using OSCORE [RFC8613] or DTLS [RFC9147].
-   Security considerations for the used secure communication protocols
-   apply too.
+   CoAP communications between each client and the broker are
+   RECOMMENDED to be secured.  The default security protocol is defined
+   by [RFC7252].  Examples of other security protocols that could be
+   applied to CoAP communications are OSCORE [RFC8613] and DTLS 1.3
+   [RFC9147].  The choice of a security protocol depends on the
+   requirements of the specific application and deployment.  Security
+   considerations for the selected security protocol apply as well.
 
    The content published on a topic by a publisher client SHOULD be
    protected end-to-end between the publisher and all the subscribers to
@@ -1839,9 +1842,6 @@ Internet-Draft                 CoAP pubsub                     July 2026
    authentication of the published data.  This can be achieved at the
    application layer, e.g., by using COSE [STD96] [RFC9053].
 
-   Access control of clients at the broker MAY be enforced for
-   performing discovery operations, and SHOULD be enforced in a fine-
-   grained fashion for operations related to the creation, update, and
 
 
 
@@ -1850,6 +1850,9 @@ Jimenez, et al.          Expires 3 January 2027                [Page 33]
 Internet-Draft                 CoAP pubsub                     July 2026
 
 
+   Access control of clients at the broker MAY be enforced for
+   performing discovery operations, and SHOULD be enforced in a fine-
+   grained fashion for operations related to the creation, update, and
    deletion of topic resources, as well as for operations on topic-data
    resources such as publication on and subscription to topics.  This
    prevents rogue clients to, among other things, repeatedly create
@@ -1896,15 +1899,14 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
    Subtype name:  core-pubsub+cbor
 
-   Required parameters:  N/A
-
-
 
 
 Jimenez, et al.          Expires 3 January 2027                [Page 34]
 
 Internet-Draft                 CoAP pubsub                     July 2026
 
+
+   Required parameters:  N/A
 
    Optional parameters:  N/A
 
@@ -1950,8 +1952,6 @@ Internet-Draft                 CoAP pubsub                     July 2026
    ID:  TBD606
 
    Reference:  [RFC-XXXX]
-
-
 
 
 
