@@ -515,7 +515,7 @@ For example, below is a request on the topic "/ps/h9392":
 
 A client can read the configuration of a topic by making a FETCH request to the topic resource URI with a filter for specific topic properties. This is done in order to retrieve part of the current topic resource.
 
-The request contains a CBOR map with a configuration filter or 'conf-filter', a CBOR array of topic properties, using the same abbreviations defined in {{pubsub-parameters}}. Each element of the array specifies one requested topic property of the current topic resource (see {{topic-resource-representation}}).
+The request payload is a CBOR array of topic property keys, using the same abbreviations defined in {{pubsub-parameters}}, and is carried with Content-Format 60 ("application/cbor"). Each element of the array specifies one requested topic property of the current topic resource (see {{topic-resource-representation}}).
 
 On success, the broker returns a successful response (typically 2.05 Content) with a representation of the topic resource. The response has as payload the partial representation of the topic resource as specified in {{topic-resource-representation}}.
 
@@ -523,7 +523,7 @@ If requirements are defined for the client to read the topic as requested and th
 
 The response payload is a CBOR map, whose possible entries are specified in {{topic-resource-representation}} and use the same abbreviations defined in {{pubsub-parameters}}.
 
-Content-Format TBD606 ("application/core-pubsub+cbor") is mandatory to support for both request and response.
+Content-Format 60 ("application/cbor") is mandatory to support for the request payload, and Content-Format TBD606 ("application/core-pubsub+cbor") is mandatory to support for the response payload.
 
 The CBOR map in the response payload includes entries for each topic property specified in the request and available in the topic resource representation.
 
@@ -535,11 +535,9 @@ Example:
    Header: FETCH (Code=0.05)
    Uri-Path: "ps"
    Uri-Path: "h9392"
-   Content-Format: TBD606 (application/core-pubsub+cbor)
+   Content-Format: 60 (application/cbor)
    Payload (in CBOR diagnostic notation):
-   {
-      / conf-filter / 9: [1, 3]
-   }
+   [1, 3]
 
    Response:
 
@@ -921,7 +919,6 @@ Note that the media type "application/core-pubsub+cbor" MUST be used when these 
 | max-subscribers      | 6        | uint          |
 | observer-check       | 7        | uint          |
 | initialize           | 8        | bstr          |
-| conf-filter          | 9        | array         |
 {: #tab-CoAP-Pubsub-Parameters title="CoAP Pubsub Topic Properties and CBOR Encoding"}
 
 # Security Considerations {#seccons}
