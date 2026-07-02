@@ -5,10 +5,10 @@
 CoRE Working Group                                            J. Jimenez
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                               M. Koster
-Expires: 20 December 2026                                  Dogtiger Labs
+Expires: 3 January 2027                                    Dogtiger Labs
                                                               A. Keranen
                                                                 Ericsson
-                                                            18 June 2026
+                                                             2 July 2026
 
 
     A publish-subscribe architecture for the Constrained Application
@@ -53,9 +53,9 @@ Status of This Memo
 
 
 
-Jimenez, et al.         Expires 20 December 2026                [Page 1]
+Jimenez, et al.          Expires 3 January 2027                 [Page 1]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
    Internet-Drafts are draft documents valid for a maximum of six months
@@ -63,7 +63,7 @@ Internet-Draft                 CoAP pubsub                     June 2026
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 December 2026.
+   This Internet-Draft will expire on 3 January 2027.
 
 Copyright Notice
 
@@ -98,51 +98,51 @@ Table of Contents
        2.4.1.  Retrieving all topics . . . . . . . . . . . . . . . .  14
        2.4.2.  Getting Topics by Topic Properties  . . . . . . . . .  15
        2.4.3.  Creating a Topic  . . . . . . . . . . . . . . . . . .  16
-     2.5.  Topic Interactions  . . . . . . . . . . . . . . . . . . .  17
-       2.5.1.  Getting a topic . . . . . . . . . . . . . . . . . . .  17
-       2.5.2.  Getting part of a topic . . . . . . . . . . . . . . .  18
-       2.5.3.  Updating the topic  . . . . . . . . . . . . . . . . .  19
-       2.5.4.  Updating the topic with iPATCH  . . . . . . . . . . .  21
-       2.5.5.  Deleting a topic  . . . . . . . . . . . . . . . . . .  22
-   3.  Publish and Subscribe . . . . . . . . . . . . . . . . . . . .  23
-     3.1.  Topic Lifecycle . . . . . . . . . . . . . . . . . . . . .  23
+     2.5.  Topic Interactions  . . . . . . . . . . . . . . . . . . .  18
+       2.5.1.  Getting a topic . . . . . . . . . . . . . . . . . . .  18
+       2.5.2.  Getting part of a topic . . . . . . . . . . . . . . .  19
+       2.5.3.  Updating the topic  . . . . . . . . . . . . . . . . .  20
+       2.5.4.  Updating the topic with iPATCH  . . . . . . . . . . .  22
+       2.5.5.  Deleting a topic  . . . . . . . . . . . . . . . . . .  23
+   3.  Publish and Subscribe . . . . . . . . . . . . . . . . . . . .  24
+     3.1.  Topic Lifecycle . . . . . . . . . . . . . . . . . . . . .  24
 
 
 
-Jimenez, et al.         Expires 20 December 2026                [Page 2]
+Jimenez, et al.          Expires 3 January 2027                 [Page 2]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
-     3.2.  Topic-Data Interactions . . . . . . . . . . . . . . . . .  24
-       3.2.1.  Publish . . . . . . . . . . . . . . . . . . . . . . .  25
-       3.2.2.  Subscribe . . . . . . . . . . . . . . . . . . . . . .  26
-       3.2.3.  Unsubscribe . . . . . . . . . . . . . . . . . . . . .  28
-       3.2.4.  Delete topic-data . . . . . . . . . . . . . . . . . .  29
-     3.3.  Read the latest data  . . . . . . . . . . . . . . . . . .  30
-     3.4.  Rate Limiting . . . . . . . . . . . . . . . . . . . . . .  31
-   4.  Encoding of PubSub Topic Properties . . . . . . . . . . . . .  31
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  32
-   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  33
-     6.1.  Media Type Registrations  . . . . . . . . . . . . . . . .  33
-     6.2.  CoAP Content-Formats  . . . . . . . . . . . . . . . . . .  34
-     6.3.  Resource Types  . . . . . . . . . . . . . . . . . . . . .  35
-     6.4.  CoAP Pubsub Topic Properties Registry . . . . . . . . . .  35
-     6.5.  Expert Review Instructions  . . . . . . . . . . . . . . .  36
-   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  37
-     7.1.  Normative References  . . . . . . . . . . . . . . . . . .  37
-     7.2.  Informative References  . . . . . . . . . . . . . . . . .  39
-   Appendix A.  Document Updates . . . . . . . . . . . . . . . . . .  41
-     A.1.  Version -13 to -14  . . . . . . . . . . . . . . . . . . .  41
-     A.2.  Version -14 to -15  . . . . . . . . . . . . . . . . . . .  41
-     A.3.  Version -15 to -16  . . . . . . . . . . . . . . . . . . .  42
-     A.4.  Version -16 to -17  . . . . . . . . . . . . . . . . . . .  42
-     A.5.  Version -17 to -18  . . . . . . . . . . . . . . . . . . .  42
-     A.6.  Version -18 to -19  . . . . . . . . . . . . . . . . . . .  42
-     A.7.  Version -19 to -20  . . . . . . . . . . . . . . . . . . .  42
-   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  43
-   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  43
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  43
+     3.2.  Topic-Data Interactions . . . . . . . . . . . . . . . . .  25
+       3.2.1.  Publish . . . . . . . . . . . . . . . . . . . . . . .  26
+       3.2.2.  Subscribe . . . . . . . . . . . . . . . . . . . . . .  27
+       3.2.3.  Unsubscribe . . . . . . . . . . . . . . . . . . . . .  29
+       3.2.4.  Delete topic-data . . . . . . . . . . . . . . . . . .  30
+     3.3.  Read the latest data  . . . . . . . . . . . . . . . . . .  31
+     3.4.  Rate Limiting . . . . . . . . . . . . . . . . . . . . . .  32
+   4.  Encoding of PubSub Topic Properties . . . . . . . . . . . . .  32
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  33
+   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  34
+     6.1.  Media Type Registrations  . . . . . . . . . . . . . . . .  34
+     6.2.  CoAP Content-Formats  . . . . . . . . . . . . . . . . . .  35
+     6.3.  Resource Types  . . . . . . . . . . . . . . . . . . . . .  36
+     6.4.  CoAP Pubsub Topic Properties Registry . . . . . . . . . .  36
+     6.5.  Expert Review Instructions  . . . . . . . . . . . . . . .  37
+   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  38
+     7.1.  Normative References  . . . . . . . . . . . . . . . . . .  38
+     7.2.  Informative References  . . . . . . . . . . . . . . . . .  40
+   Appendix A.  Document Updates . . . . . . . . . . . . . . . . . .  42
+     A.1.  Version -13 to -14  . . . . . . . . . . . . . . . . . . .  42
+     A.2.  Version -14 to -15  . . . . . . . . . . . . . . . . . . .  42
+     A.3.  Version -15 to -16  . . . . . . . . . . . . . . . . . . .  43
+     A.4.  Version -16 to -17  . . . . . . . . . . . . . . . . . . .  43
+     A.5.  Version -17 to -18  . . . . . . . . . . . . . . . . . . .  43
+     A.6.  Version -18 to -19  . . . . . . . . . . . . . . . . . . .  43
+     A.7.  Version -19 to -20  . . . . . . . . . . . . . . . . . . .  43
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  44
+   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  44
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  44
 
 1.  Introduction
 
@@ -165,9 +165,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026                [Page 3]
+Jimenez, et al.          Expires 3 January 2027                 [Page 3]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
    For these nodes, the client/server-oriented architecture of REST can
@@ -221,9 +221,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026                [Page 4]
+Jimenez, et al.          Expires 3 January 2027                 [Page 4]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
    topic:
@@ -277,9 +277,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026                [Page 5]
+Jimenez, et al.          Expires 3 January 2027                 [Page 5]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
    when a newer message on the same topic is delivered (e.g. by
@@ -333,9 +333,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026                [Page 6]
+Jimenez, et al.          Expires 3 January 2027                 [Page 6]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
                    ___
@@ -389,9 +389,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026                [Page 7]
+Jimenez, et al.          Expires 3 January 2027                 [Page 7]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
             Figure 3: Topic and topic-data resources of a topic
@@ -445,9 +445,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026                [Page 8]
+Jimenez, et al.          Expires 3 January 2027                 [Page 8]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
    *  "topic-data": A required field (optional during creation)
@@ -491,21 +491,24 @@ Internet-Draft                 CoAP pubsub                     June 2026
       field is not present, then there is no limit to the number of
       simultaneous subscribers allowed.  At topic creation or update,
       this field is a hint from the topic creator; the broker MAY store
-      a different value than the one requested.  Once stored, the value
-      is enforced: if the limit is reached, new subscriptions are
-      handled as specified in Section 4.1 of [RFC7641].
+      a different value than the one requested, or none at all.  Once
+      stored, the value is enforced: if the limit is reached, new
+      subscriptions are handled as specified in Section 4.1 of
+      [RFC7641].
+
+
+
+
+
+
+Jimenez, et al.          Expires 3 January 2027                 [Page 9]
+
+Internet-Draft                 CoAP pubsub                     July 2026
+
 
    *  "observer-check": An optional field that controls the maximum
       number of seconds between two consecutive Observe notifications
       sent as Confirmable messages to each topic subscriber (see
-
-
-
-Jimenez, et al.         Expires 20 December 2026                [Page 9]
-
-Internet-Draft                 CoAP pubsub                     June 2026
-
-
       Section 3.2.3).  Encoded as a CBOR unsigned integer greater than
       0, it ensures that subscribers that have lost interest and
       silently forgotten the observation do not remain indefinitely on
@@ -544,6 +547,21 @@ Internet-Draft                 CoAP pubsub                     June 2026
    parameter as defined in Section 4.1 of [RFC6690] and as used in the
    examples in this section.
 
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.          Expires 3 January 2027                [Page 10]
+
+Internet-Draft                 CoAP pubsub                     July 2026
+
+
    The CoRE Link Format discovery responses shown in the examples in
    this section are illustrative only.  The normative requirements for
    this format are defined in [RFC6690].  The examples make minimal use
@@ -552,15 +570,6 @@ Internet-Draft                 CoAP pubsub                     June 2026
    constrained networks.  In general, a broker MAY include any CoRE Link
    Format attributes in each returned link, for example to meet specific
    use case requirements.
-
-
-
-
-
-Jimenez, et al.         Expires 20 December 2026               [Page 10]
-
-Internet-Draft                 CoAP pubsub                     June 2026
-
 
 2.3.1.  Broker Discovery
 
@@ -599,6 +608,16 @@ Internet-Draft                 CoAP pubsub                     June 2026
    collection resource (see Section 1.2.2 of [RFC6690]) and is
    identified by the resource type "core.ps.coll".
 
+
+
+
+
+
+Jimenez, et al.          Expires 3 January 2027                [Page 11]
+
+Internet-Draft                 CoAP pubsub                     July 2026
+
+
    The specific resource path is left for implementations.  Examples in
    this document use the "/ps" path.  The interactions with a topic
    collection are further defined in Section 2.4.
@@ -610,13 +629,6 @@ Internet-Draft                 CoAP pubsub                     June 2026
    discovery.
 
    Example:
-
-
-
-Jimenez, et al.         Expires 20 December 2026               [Page 11]
-
-Internet-Draft                 CoAP pubsub                     June 2026
-
 
       Request:
 
@@ -652,6 +664,16 @@ Internet-Draft                 CoAP pubsub                     June 2026
    rt=core.ps.conf that returns a list of topics, as the list of links
    to the corresponding topic resources.
 
+
+
+
+
+
+Jimenez, et al.          Expires 3 January 2027                [Page 12]
+
+Internet-Draft                 CoAP pubsub                     July 2026
+
+
       Request:
 
       Header: GET (Code=0.01)
@@ -666,13 +688,6 @@ Internet-Draft                 CoAP pubsub                     June 2026
       Payload:
       </ps/h9392>;rt="core.ps.conf",
       </other/path/2e3570>;rt="core.ps.conf"
-
-
-
-Jimenez, et al.         Expires 20 December 2026               [Page 12]
-
-Internet-Draft                 CoAP pubsub                     June 2026
-
 
    In certain scenarios, the method described herein may not be
    applicable, e.g., if the server wants to restrict topic availability.
@@ -699,6 +714,22 @@ Internet-Draft                 CoAP pubsub                     June 2026
    rt=core.ps.data as shown in the example below.  Every topic
    collection resource MUST support this query.
 
+
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.          Expires 3 January 2027                [Page 13]
+
+Internet-Draft                 CoAP pubsub                     July 2026
+
+
       Request:
 
       Header: GET (Code=0.01)
@@ -720,15 +751,6 @@ Internet-Draft                 CoAP pubsub                     June 2026
    much larger.  So the broker, in this example case, was implemented to
    elide these attributes always, to minimize the size of discovery
    response payloads.
-
-
-
-
-
-Jimenez, et al.         Expires 20 December 2026               [Page 13]
-
-Internet-Draft                 CoAP pubsub                     June 2026
-
 
 2.4.  Topic Collection Interactions
 
@@ -756,6 +778,14 @@ Internet-Draft                 CoAP pubsub                     June 2026
    access, based on its permissions.  A broker MUST implement topic
    collection discovery.
 
+
+
+
+Jimenez, et al.          Expires 3 January 2027                [Page 14]
+
+Internet-Draft                 CoAP pubsub                     July 2026
+
+
    The content-format 40 ("application/link-format") MUST be supported
    for the topic collection resource.
 
@@ -778,13 +808,6 @@ Internet-Draft                 CoAP pubsub                     June 2026
    (rt="core.ps.conf") is already implied by this specification for the
    topic collection and the content-format (TBD606) is implied by the
    resource type.
-
-
-
-Jimenez, et al.         Expires 20 December 2026               [Page 14]
-
-Internet-Draft                 CoAP pubsub                     June 2026
-
 
 2.4.2.  Getting Topics by Topic Properties
 
@@ -811,6 +834,14 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
    Example:
 
+
+
+
+Jimenez, et al.          Expires 3 January 2027                [Page 15]
+
+Internet-Draft                 CoAP pubsub                     July 2026
+
+
       Request:
 
       Header: FETCH (Code=0.05)
@@ -829,18 +860,6 @@ Internet-Draft                 CoAP pubsub                     June 2026
       Content-Format: 40 (application/link-format)
       Payload:
       </ps/2e3570>
-
-
-
-
-
-
-
-
-Jimenez, et al.         Expires 20 December 2026               [Page 15]
-
-Internet-Draft                 CoAP pubsub                     June 2026
-
 
    Note that in this example no "rt" or "ct" attributes are returned in
    the response payload, since the type of each link (topic resource
@@ -871,6 +890,14 @@ Internet-Draft                 CoAP pubsub                     June 2026
    the "initialize" property could be 0x4180 (<<[]>> in CBOR diagnostic
    notation), with 0x80 being the CBOR encoding of the empty CBOR array.
 
+
+
+
+Jimenez, et al.          Expires 3 January 2027                [Page 16]
+
+Internet-Draft                 CoAP pubsub                     July 2026
+
+
    When "initialize" is omitted, the topic will only be fully created
    after data is published to it.
 
@@ -887,16 +914,6 @@ Internet-Draft                 CoAP pubsub                     June 2026
    requested and the broker does not successfully assess that those
    requirements are met, then the broker MUST reply with a 4.xx client
    error response (such as 4.03 Forbidden).
-
-
-
-
-
-
-Jimenez, et al.         Expires 20 December 2026               [Page 16]
-
-Internet-Draft                 CoAP pubsub                     June 2026
-
 
    The broker MUST reply with a 4.xx client error response (such as 4.00
    Bad Request) if a received parameter is invalid, unrecognized, or if
@@ -928,6 +945,15 @@ Internet-Draft                 CoAP pubsub                     June 2026
          / resource-type /      2: "core.ps.data"
       }
 
+
+
+
+
+Jimenez, et al.          Expires 3 January 2027                [Page 17]
+
+Internet-Draft                 CoAP pubsub                     July 2026
+
+
 2.5.  Topic Interactions
 
    These are the interactions that can happen at the topic resource
@@ -946,13 +972,6 @@ Internet-Draft                 CoAP pubsub                     June 2026
    requested and the broker does not successfully assess that those
    requirements are met, then the broker MUST reply with a 4.xx client
    error response (such as 4.03 Forbidden).
-
-
-
-Jimenez, et al.         Expires 20 December 2026               [Page 17]
-
-Internet-Draft                 CoAP pubsub                     June 2026
-
 
    The response payload is a CBOR map, whose possible entries are
    specified in Section 2.2 and use the same abbreviations defined in
@@ -981,6 +1000,16 @@ Internet-Draft                 CoAP pubsub                     June 2026
          / max-subscribers /       6: 100
       }
 
+
+
+
+
+
+Jimenez, et al.          Expires 3 January 2027                [Page 18]
+
+Internet-Draft                 CoAP pubsub                     July 2026
+
+
 2.5.2.  Getting part of a topic
 
    A client can read the configuration of a topic by making a FETCH
@@ -999,17 +1028,6 @@ Internet-Draft                 CoAP pubsub                     June 2026
    has as payload the partial representation of the topic resource as
    specified in Section 2.2.
 
-
-
-
-
-
-
-Jimenez, et al.         Expires 20 December 2026               [Page 18]
-
-Internet-Draft                 CoAP pubsub                     June 2026
-
-
    If requirements are defined for the client to read the topic as
    requested and the broker does not successfully assess that those
    requirements are met, then the broker MUST reply with a 4.xx client
@@ -1027,6 +1045,26 @@ Internet-Draft                 CoAP pubsub                     June 2026
    representation.
 
    Example:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.          Expires 3 January 2027                [Page 19]
+
+Internet-Draft                 CoAP pubsub                     July 2026
+
 
       Request:
 
@@ -1059,13 +1097,6 @@ Internet-Draft                 CoAP pubsub                     June 2026
    full resource representation, these immutable properties may be
    included in the request with their current values.
 
-
-
-Jimenez, et al.         Expires 20 December 2026               [Page 19]
-
-Internet-Draft                 CoAP pubsub                     June 2026
-
-
    On success, the topic is overwritten and the broker returns a 2.04
    (Changed) response and the current full resource representation.  The
    broker MAY choose not to overwrite topic properties that are not
@@ -1082,6 +1113,14 @@ Internet-Draft                 CoAP pubsub                     June 2026
    their default values.
 
    Example:
+
+
+
+
+Jimenez, et al.          Expires 3 January 2027                [Page 20]
+
+Internet-Draft                 CoAP pubsub                     July 2026
+
 
       Request:
 
@@ -1115,13 +1154,6 @@ Internet-Draft                 CoAP pubsub                     June 2026
          / observer-check /        7: 86400
       }
 
-
-
-Jimenez, et al.         Expires 20 December 2026               [Page 20]
-
-Internet-Draft                 CoAP pubsub                     June 2026
-
-
    Note that, when a topic changes, it may result in disruptions for the
    subscribers.  Some potential issues that may arise include:
 
@@ -1130,6 +1162,21 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
    *  Changing of the "expiration-date" may cause cancellation of
       ongoing subscriptions if the topic expires at an earlier date.
+
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.          Expires 3 January 2027                [Page 21]
+
+Internet-Draft                 CoAP pubsub                     July 2026
+
 
 2.5.4.  Updating the topic with iPATCH
 
@@ -1173,9 +1220,18 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 21]
+
+
+
+
+
+
+
+
+
+Jimenez, et al.          Expires 3 January 2027                [Page 22]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
       Request:
@@ -1229,9 +1285,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 22]
+Jimenez, et al.          Expires 3 January 2027                [Page 23]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
    Example:
@@ -1285,9 +1341,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 23]
+Jimenez, et al.          Expires 3 January 2027                [Page 24]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
                     HALF                          FULLY
@@ -1341,9 +1397,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 24]
+Jimenez, et al.          Expires 3 January 2027                [Page 25]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
 3.2.1.  Publish
@@ -1397,9 +1453,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 25]
+Jimenez, et al.          Expires 3 January 2027                [Page 26]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
       Request:
@@ -1453,9 +1509,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 26]
+Jimenez, et al.          Expires 3 January 2027                [Page 27]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
    On success, the server hosting the topic-data resource returns a
@@ -1509,9 +1565,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 27]
+Jimenez, et al.          Expires 3 January 2027                [Page 28]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
       Request:
@@ -1565,9 +1621,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 28]
+Jimenez, et al.          Expires 3 January 2027                [Page 29]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
    This value can be modified at the broker by the administrator of a
@@ -1621,9 +1677,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 29]
+Jimenez, et al.          Expires 3 January 2027                [Page 30]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
 3.3.  Read the latest data
@@ -1677,9 +1733,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 30]
+Jimenez, et al.          Expires 3 January 2027                [Page 31]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
 3.4.  Rate Limiting
@@ -1733,9 +1789,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 31]
+Jimenez, et al.          Expires 3 January 2027                [Page 32]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
             +======================+==========+==============+
@@ -1789,9 +1845,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 32]
+Jimenez, et al.          Expires 3 January 2027                [Page 33]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
    deletion of topic resources, as well as for operations on topic-data
@@ -1845,9 +1901,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 33]
+Jimenez, et al.          Expires 3 January 2027                [Page 34]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
    Encoding considerations:  Must be encoded as a CBOR map containing
@@ -1901,9 +1957,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 34]
+Jimenez, et al.          Expires 3 January 2027                [Page 35]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
 6.3.  Resource Types
@@ -1957,9 +2013,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 35]
+Jimenez, et al.          Expires 3 January 2027                [Page 36]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
    *  Name: This is a descriptive name that enables easier reference to
@@ -2013,9 +2069,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 36]
+Jimenez, et al.          Expires 3 January 2027                [Page 37]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
       clearly defined in the corresponding specification.  Properties
@@ -2069,9 +2125,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 37]
+Jimenez, et al.          Expires 3 January 2027                [Page 38]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
               Dürst, M.J., "Guidelines for the Definition of New Top-
@@ -2125,9 +2181,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 38]
+Jimenez, et al.          Expires 3 January 2027                [Page 39]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
    [RFC7641]  Hartke, K., "Observing Resources in the Constrained
@@ -2181,9 +2237,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 39]
+Jimenez, et al.          Expires 3 January 2027                [Page 40]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
    [I-D.ietf-ace-pubsub-profile]
@@ -2237,9 +2293,9 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 40]
+Jimenez, et al.          Expires 3 January 2027                [Page 41]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
               Schaad, J., "CBOR Object Signing and Encryption (COSE):
@@ -2293,9 +2349,9 @@ A.2.  Version -14 to -15
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 41]
+Jimenez, et al.          Expires 3 January 2027                [Page 42]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
 A.3.  Version -15 to -16
@@ -2349,9 +2405,9 @@ A.7.  Version -19 to -20
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 42]
+Jimenez, et al.          Expires 3 January 2027                [Page 43]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
    *  Added explicit 4.04 removal of subscribers on topic-data deletion
@@ -2405,9 +2461,9 @@ Authors' Addresses
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 43]
+Jimenez, et al.          Expires 3 January 2027                [Page 44]
 
-Internet-Draft                 CoAP pubsub                     June 2026
+Internet-Draft                 CoAP pubsub                     July 2026
 
 
    Ari Keranen
@@ -2461,4 +2517,4 @@ Internet-Draft                 CoAP pubsub                     June 2026
 
 
 
-Jimenez, et al.         Expires 20 December 2026               [Page 44]
+Jimenez, et al.          Expires 3 January 2027                [Page 45]
