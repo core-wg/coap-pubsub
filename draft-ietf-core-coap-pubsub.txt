@@ -271,9 +271,9 @@ Internet-Draft                 CoAP pubsub                     July 2026
    corresponding topic-data resource.
 
    As CoAP PubSub builds on [RFC7252] and [RFC7641], its messages are
-   not events but state updates with eventually-consistent semantics
-   rather than per-event delivery.  A message may be silently coalesced
-   when a newer message on the same topic is delivered (e.g. by
+   not events but state updates following the principle of eventual
+   consistency rather than per-event delivery.  A message may be
+   silently coalesced when a newer message on the same topic is
 
 
 
@@ -282,9 +282,9 @@ Jimenez, et al.          Expires 3 January 2027                 [Page 5]
 Internet-Draft                 CoAP pubsub                     July 2026
 
 
-   intermediaries or libraries), or be delivered twice, without changing
-   the semantics.  Applications requiring stronger guarantees need to
-   handle that explicitly.
+   delivered (e.g. by intermediaries or libraries), or be delivered
+   twice, without changing the semantics.  Applications requiring
+   stronger guarantees need to handle that explicitly.
 
            CoAP                      CoAP                 CoAP
            clients                  server                clients
