@@ -123,7 +123,7 @@ The broker can create its hosted topics and set their initial configurations. Al
 
 The broker is responsible for the store-and-forward of state update representations between CoAP clients. Publishers submit their data over the RESTful interface of a topic-data resource corresponding to the topic, which can be hosted at the broker. Subscribers to a topic are notified of new publications by using Observe {{RFC7641}} on the corresponding topic-data resource.
 
-As CoAP PubSub builds on {{RFC7252}} and {{RFC7641}}, its messages are not events but state updates with eventually-consistent semantics rather than per-event delivery. A message may be silently coalesced when a newer message on the same topic is delivered (e.g. by intermediaries or libraries), or be delivered twice, without changing the semantics. Applications requiring stronger guarantees need to handle that explicitly.
+As CoAP PubSub builds on {{RFC7252}} and {{RFC7641}}, its messages are not events but state updates following the principle of eventual consistency rather than per-event delivery. A message may be silently coalesced when a newer message on the same topic is delivered (e.g. by intermediaries or libraries), or be delivered twice, without changing the semantics. Applications requiring stronger guarantees need to handle that explicitly.
 
 ~~~~ aasvg
      CoAP                      CoAP                 CoAP
