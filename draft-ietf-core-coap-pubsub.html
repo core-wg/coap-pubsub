@@ -2056,11 +2056,11 @@ Eliding these attributes helps to minimize the size of the response payload.<a h
 <a href="#section-2.5.2" class="section-number selfRef">2.5.2. </a><a href="#name-getting-part-of-a-topic" class="section-name selfRef">Getting part of a topic</a>
           </h4>
 <p id="section-2.5.2-1">A client can read the configuration of a topic by making a FETCH request to the topic resource URI with a filter for specific topic properties. This is done in order to retrieve part of the current topic resource.<a href="#section-2.5.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.5.2-2">The request contains a CBOR map with a configuration filter or 'conf-filter', a CBOR array of topic properties, using the same abbreviations defined in <a href="#pubsub-parameters" class="auto internal xref">Section 4</a>. Each element of the array specifies one requested topic property of the current topic resource (see <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>).<a href="#section-2.5.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.5.2-2">The request payload is a CBOR array of topic property keys, using the same abbreviations defined in <a href="#pubsub-parameters" class="auto internal xref">Section 4</a>, and is carried with Content-Format 60 ("application/cbor"). Each element of the array specifies one requested topic property of the current topic resource (see <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>).<a href="#section-2.5.2-2" class="pilcrow">¶</a></p>
 <p id="section-2.5.2-3">On success, the broker returns a successful response (typically 2.05 Content) with a representation of the topic resource. The response has as payload the partial representation of the topic resource as specified in <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a>.<a href="#section-2.5.2-3" class="pilcrow">¶</a></p>
 <p id="section-2.5.2-4">If requirements are defined for the client to read the topic as requested and the broker does not successfully assess that those requirements are met, then the broker <span class="bcp14">MUST</span> reply with a 4.xx client error response (such as 4.03 Forbidden).<a href="#section-2.5.2-4" class="pilcrow">¶</a></p>
 <p id="section-2.5.2-5">The response payload is a CBOR map, whose possible entries are specified in <a href="#topic-resource-representation" class="auto internal xref">Section 2.2</a> and use the same abbreviations defined in <a href="#pubsub-parameters" class="auto internal xref">Section 4</a>.<a href="#section-2.5.2-5" class="pilcrow">¶</a></p>
-<p id="section-2.5.2-6">Content-Format TBD606 ("application/core-pubsub+cbor") is mandatory to support for both request and response.<a href="#section-2.5.2-6" class="pilcrow">¶</a></p>
+<p id="section-2.5.2-6">Content-Format 60 ("application/cbor") is mandatory to support for the request payload, and Content-Format TBD606 ("application/core-pubsub+cbor") is mandatory to support for the response payload.<a href="#section-2.5.2-6" class="pilcrow">¶</a></p>
 <p id="section-2.5.2-7">The CBOR map in the response payload includes entries for each topic property specified in the request and available in the topic resource representation.<a href="#section-2.5.2-7" class="pilcrow">¶</a></p>
 <p id="section-2.5.2-8">Example:<a href="#section-2.5.2-8" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.5.2-9">
@@ -2070,11 +2070,9 @@ Eliding these attributes helps to minimize the size of the response payload.<a h
    Header: FETCH (Code=0.05)
    Uri-Path: "ps"
    Uri-Path: "h9392"
-   Content-Format: TBD606 (application/core-pubsub+cbor)
+   Content-Format: 60 (application/cbor)
    Payload (in CBOR diagnostic notation):
-   {
-      / conf-filter / 9: [1, 3]
-   }
+   [1, 3]
 
    Response:
 
@@ -2591,11 +2589,6 @@ The URI for this resource is indicated in the "topic-data" topic property value.
             <td class="text-left" rowspan="1" colspan="1">initialize</td>
             <td class="text-left" rowspan="1" colspan="1">8</td>
             <td class="text-left" rowspan="1" colspan="1">bstr</td>
-          </tr>
-          <tr>
-            <td class="text-left" rowspan="1" colspan="1">conf-filter</td>
-            <td class="text-left" rowspan="1" colspan="1">9</td>
-            <td class="text-left" rowspan="1" colspan="1">array</td>
           </tr>
         </tbody>
       </table>
