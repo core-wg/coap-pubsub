@@ -272,9 +272,9 @@ The following example shows an endpoint discovering a broker using the "core.ps"
    <coaps://mythinguri.com/broker/v1>;rt="core.ps"
 ~~~~
 
-### Topic Collection Discovery
+### Topic Collection Discovery {#topic-collection-discovery}
 
-A broker SHOULD offer a topic discovery entry point to enable clients to find topics of interest. The resource entry point is the topic collection resource (see {{Section 1.2.2 of RFC6690}}) and is identified by the resource type "core.ps.coll".
+The topic collection resource is the entry point for topic discovery, since its representation lists the topics it contains (see {{topic-get-all}}). A broker SHOULD make its topic collection resources discoverable via "/.well-known/core" (see {{Section 1.2.2 of RFC6690}}), identified by the resource type "core.ps.coll". A broker that restricts the discovery of its topic collections to authorized clients can omit them from "/.well-known/core" and rely on other means, such as a Resource Directory {{RFC9176}} or pre-configuration.
 
 The specific resource path is left for implementations. Examples in this document use the "/ps" path. The interactions with a topic collection are further defined in {{topic-collection-interactions}}.
 
@@ -368,7 +368,7 @@ A client can request a collection of the topics present in the broker by making 
 
 On success, the broker returns a successful response (typically 2.05 Content), specifying the list of links to topic resources associated with this topic collection (see {{topic-resource-representation}}).
 
-A client MAY retrieve a list of links to topics it is authorized to access, based on its permissions. A broker MUST implement topic collection discovery.
+The broker MAY limit the returned list to the topics that the client is authorized to access. Discovery of the topic collection resource itself is described in {{topic-collection-discovery}}.
 
 The content-format 40 ("application/link-format")  MUST be supported for the topic collection resource.
 
