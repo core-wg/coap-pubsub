@@ -607,7 +607,7 @@ Note that, when a topic changes, it may result in disruptions for the subscriber
 
 ### Updating the topic with iPATCH {#topic-update-resource-patch}
 
-A client can partially update a topic's configuration by submitting a partial topic representation in an iPATCH request to the topic URI. The iPATCH request allows for updating only specific fields of the topic while leaving the others unchanged. As with the POST method, the topic properties "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.
+A client can partially update a topic's configuration by submitting a partial topic representation in an iPATCH request to the topic URI. The request payload is a CBOR map with Content-Format TBD606 ("application/core-pubsub+cbor") carrying the topic properties to update. Each topic property present in the request replaces the current value of that property in the topic resource. Topic properties absent from the request are left unchanged. As with the POST method, the topic properties "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker.
 
 On success, the broker returns a 2.04 (Changed) response and the current full resource representation. The broker only updates topic properties that are explicitly mentioned in the request.
 
@@ -948,7 +948,7 @@ Note to RFC Editor: Please replace all occurrences of "{{&SELF}}" with the RFC n
 ## Media Type Registrations {#media-type}
 
 This specification registers the "application/core-pubsub+cbor" media type in the IANA Media Types registry.
-It is used for messages of the protocols defined in this document and carries topic properties encoded in CBOR. This registration follows the procedures specified in {{BCP13}}.
+It is used for messages of the protocols defined in this document and carries topic properties encoded in CBOR. In an iPATCH request to a topic resource, the map carries the topic properties to update (see {{topic-update-resource-patch}}). This registration follows the procedures specified in {{BCP13}}.
 
 Type name:
 : application
