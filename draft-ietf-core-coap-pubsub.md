@@ -213,7 +213,7 @@ A CoAP client can create a new topic by submitting an initial configuration for 
 
 The configuration of a topic itself consists of a set of topic properties that can be set by a client or by the broker. The topic is represented as a CBOR map containing the topic properties as top-level elements.
 
-Unless specified otherwise, all topic properties are defined in this document and their CBOR abbreviations are defined in {{pubsub-parameters}}.
+The topic properties defined in this document are listed in {{topic-properties}}, with their CBOR abbreviations in {{pubsub-parameters}}. Further topic properties can be registered in the registry established in {{iana-coap-pubsub-parameters}}.
 
 ### Topic Properties {#topic-properties}
 
@@ -236,6 +236,8 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 * "observer-check": An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber (see {{unsubscribe}}). Encoded as a CBOR unsigned integer greater than 0, it ensures that subscribers that have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. The server from which the topic-data resource is served applies the "observer-check" value. The default value for this field is 86400, as defined in {{RFC7641}}, which corresponds to 24 hours.
 
 * "initialize": An optional field encoded as a CBOR byte string that contains the initial representation to pre-populate the topic-data resource. When present, the broker MUST create the topic and initialize the topic-data resource with this representation using the Content-Format specified in "topic-content-format". This allows the topic to be immediately subscribable without encountering a `4.04 Not Found` error. The representation MUST be valid for the specified Content-Format. For example, for CBOR-based formats, the empty CBOR array encoded as `0x80` is a valid empty representation, which corresponds to the "initialize" property set to `0x4180` (`<<[]>>` in CBOR diagnostic notation). If this field is not present, the broker behaves as usual, and the topic-data resource is not initialized. When this field is present, "topic-content-format" MUST also be specified.
+
+A broker MUST ignore topic properties that it does not recognize: they are not stored and do not appear in the representation of the topic resource. Since the responses to topic creation and update return the current representation of the topic resource (see {{topic-create}}, {{topic-update-resource}}, and {{topic-update-resource-patch}}), a client can determine from the response which of the properties it sent have been accepted.
 
 The "resource-type" field carries a single value pertaining to the publish-subscribe functionality of the topic-data resource. The topic-data resource itself MAY have additional resource types visible in Link-Format discovery {{RFC6690}}, but those are not represented in this field.
 
@@ -442,7 +444,7 @@ On success, the broker returns a 2.01 (Created) response, indicating the Locatio
 
 If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST reply with a 4.xx client error response (such as 4.03 Forbidden).
 
-The broker MUST reply with a 4.xx client error response (such as 4.00 Bad Request) if a received parameter is invalid, unrecognized, or if the "topic-name" is already in use or otherwise invalid.
+The broker MUST reply with a 4.xx client error response (such as 4.00 Bad Request) if the value of a recognized topic property is invalid, or if the "topic-name" is already in use or otherwise invalid. Unrecognized topic properties are ignored (see {{topic-properties}}).
 
 If the request includes a "topic-data" URI at which the broker cannot serve the topic-data resource, the broker MUST reply with a 4.xx client error response (such as 4.00 Bad Request).
 
