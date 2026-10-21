@@ -355,7 +355,7 @@ So the broker, in this example case, was implemented to elide these attributes a
 
 ## Topic Collection Interactions {#topic-collection-interactions}
 
-Topic collection interactions are the interactions that can happen directly with a specific topic collection.
+A broker MUST support all the interactions with a topic collection resource defined in this section. A client MAY use any subset of them.
 
 The CoRE Link Format responses shown in the examples in this section are illustrative only.
 The normative requirements for this format are defined in {{RFC6690}}.
@@ -476,7 +476,7 @@ Below is an example of a successful topic creation:
 
 ## Topic Interactions {#topic-configuration-interactions}
 
-These are the interactions that can happen at the topic resource level.
+A broker MUST support all the interactions with a topic resource defined in this section. A client MAY use any subset of them.
 
 ### Getting a topic {#topic-get-resource}
 
@@ -705,7 +705,7 @@ When a client deletes a topic-data resource, the associated topic is placed into
 
 ## Topic-Data Interactions {#topic-data-interactions}
 
-Interactions with the topic-data resource are covered in this section.
+The server hosting the topic-data resource MUST support all the interactions defined in this section and in {{read-data}}. A client MAY use any subset of them.
 
 ### Publish {#publish}
 
