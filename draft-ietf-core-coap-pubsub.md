@@ -113,7 +113,7 @@ topic-data resource:
 : A resource where clients can publish data and/or subscribe to data for a specific topic. The representation of the topic resource corresponding to such a topic also specifies the URI to the present topic-data resource.
 
 broker:
-: A CoAP server component that hosts one or more topic collections with their topics, and typically also topic-data resources. The broker is responsible for the store-and-forward of state update representations, for the topics for which it hosts the corresponding topic-data resources. The broker is also responsible for handling the topic lifecycle as defined in {{topic-lifecycle}}. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
+: A CoAP server component that hosts one or more topic collections with their topics, together with the topic-data resources of those topics. The broker is responsible for the store-and-forward of state update representations and for handling the topic lifecycle as defined in {{topic-lifecycle}}. A topic-data resource may be served from a different address than the topic resource, e.g., by a server that is part of the same broker deployment. The creation, configuration, and discovery of topics at a broker is specified in {{topics}}.
 
 ## CoAP Publish-Subscribe Architecture
 
@@ -121,7 +121,7 @@ broker:
 
 The broker can create its hosted topics and set their initial configurations. Alternatively, topics can be created together with their initial configuration by a client (e.g., a publisher or a dedicated administrator), over the RESTful interface of the topic collection resource hosted by the broker.
 
-The broker is responsible for the store-and-forward of state update representations between CoAP clients. Publishers submit their data over the RESTful interface of a topic-data resource corresponding to the topic, which can be hosted at the broker. Subscribers to a topic are notified of new publications by using Observe {{RFC7641}} on the corresponding topic-data resource.
+The broker is responsible for the store-and-forward of state update representations between CoAP clients. Publishers submit their data over the RESTful interface of the topic-data resource corresponding to the topic, hosted by the broker. Subscribers to a topic are notified of new publications by using Observe {{RFC7641}} on the corresponding topic-data resource.
 
 As CoAP PubSub builds on {{RFC7252}} and {{RFC7641}}, its messages are not events but state updates following the principle of eventual consistency rather than per-event delivery. A message may be silently coalesced when a newer message on the same topic is delivered (e.g. by intermediaries or libraries), or be delivered twice, without changing the semantics. Applications requiring stronger guarantees need to handle that explicitly.
 
@@ -221,7 +221,7 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 
 * "topic-name": A required field used as an application identifier. It encodes the topic name as a CBOR text string. Examples of topic names include human-readable strings (e.g., "room2"), UUIDs, or other values. The "topic-name" is required at topic creation to enable the broker to detect duplicate creation requests and to provide a stable application-level identifier. Applications that do not require human-readable names MAY use automatically generated values such as UUIDs.
 
-* "topic-data": A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI reference as a CBOR text string. The URI can be that of a resource on a different address than that of the broker; implementations MUST NOT assume that the topic-data resource is co-located with the broker. If a URI is not provided when creating the topic, the choice of the URI for the topic-data resource is left to the broker.
+* "topic-data": A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI reference as a CBOR text string. The topic-data resource is controlled by the broker but may be served from a different address than the topic resource. Clients MUST use the URI in this field to reach it and MUST NOT derive it from the URI of the topic resource. If a URI is not provided when creating the topic, the choice of the URI for the topic-data resource is left to the broker.
 
 * "resource-type": A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. According to this document, the value is "core.ps.data". Other specifications or deployments MAY define and use alternative resource type values for the topic-data resource.
 
@@ -233,7 +233,7 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 
 * "max-subscribers": An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as a CBOR unsigned integer. If this field is not present, then there is no limit to the number of simultaneous subscribers allowed. At topic creation or update, this field is a hint from the topic creator; the broker MAY store a different value than the one requested, or none at all. Once stored, the value is enforced: if the limit is reached, new subscriptions are handled as specified in {{Section 4.1 of RFC7641}}.
 
-* "observer-check": An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber (see {{unsubscribe}}). Encoded as a CBOR unsigned integer greater than 0, it ensures that subscribers that have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. If another CoAP server hosts the topic-data resource, that server is responsible for applying the "observer-check" value. The default value for this field is 86400, as defined in {{RFC7641}}, which corresponds to 24 hours.
+* "observer-check": An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber (see {{unsubscribe}}). Encoded as a CBOR unsigned integer greater than 0, it ensures that subscribers that have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. The server from which the topic-data resource is served applies the "observer-check" value. The default value for this field is 86400, as defined in {{RFC7641}}, which corresponds to 24 hours.
 
 * "initialize": An optional field encoded as a CBOR byte string that contains the initial representation to pre-populate the topic-data resource. When present, the broker MUST create the topic and initialize the topic-data resource with this representation using the Content-Format specified in "topic-content-format". This allows the topic to be immediately subscribable without encountering a `4.04 Not Found` error. The representation MUST be valid for the specified Content-Format. For example, for CBOR-based formats, the empty CBOR array encoded as `0x80` is a valid empty representation, which corresponds to the "initialize" property set to `0x4180` (`<<[]>>` in CBOR diagnostic notation). If this field is not present, the broker behaves as usual, and the topic-data resource is not initialized. When this field is present, "topic-content-format" MUST also be specified.
 
@@ -443,6 +443,8 @@ On success, the broker returns a 2.01 (Created) response, indicating the Locatio
 If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST reply with a 4.xx client error response (such as 4.03 Forbidden).
 
 The broker MUST reply with a 4.xx client error response (such as 4.00 Bad Request) if a received parameter is invalid, unrecognized, or if the "topic-name" is already in use or otherwise invalid.
+
+If the request includes a "topic-data" URI at which the broker cannot serve the topic-data resource, the broker MUST reply with a 4.xx client error response (such as 4.00 Bad Request).
 
 Below is an example of a successful topic creation:
 
@@ -673,7 +675,7 @@ The overview of the publish-subscribe mechanism based on CoAP is as follows: a p
 Unless the topic configuration includes the "initialize" property (see {{topic-properties}}), a topic-data resource does not exist until some initial data has been published to it. Consequently, a GET request sent to the topic-data resource URI before initial data publication would result in a 4.04 (Not Found) response. If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created" (see {{topic-lifecycle}}).
 
 
-URIs for topic resources are broker-generated (see {{topic-create}}). There is no necessary URI pattern dependence between the URI where the topic-data resource exists and the URI of the topic resource.
+URIs for topic resources are broker-generated (see {{topic-create}}). Clients obtain the URI of the topic-data resource from the "topic-data" property (see {{topic-properties}}); it has no necessary URI pattern dependence on the URI of the topic resource.
 
 ## Topic Lifecycle {#topic-lifecycle}
 
