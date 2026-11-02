@@ -24,6 +24,7 @@ author:
   email: michaeljohnkoster@gmail.com
 - name: Ari Keranen
   org: Ericsson
+  country: Finland
   email: ari.keranen@ericsson.com
 
 contributor:
