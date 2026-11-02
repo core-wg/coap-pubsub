@@ -306,7 +306,7 @@ This is because the "ct" attribute is an optional hint, which is not needed in t
 
 ### Topic Discovery {#topic-discovery}
 
-A broker MAY offer topic resources via /.well-known/core. Each topic collection is associated with a group of topic resources, each detailing the configuration of its respective topic (refer to {{topic-properties}}). Each topic resource is identified by the resource type "core.ps.conf".
+A broker can also list its topic resources in /.well-known/core, identified by the resource type "core.ps.conf". Each topic collection is associated with a group of topic resources, each detailing the configuration of its respective topic (refer to {{topic-properties}}).
 
 Below is an example of discovery via /.well-known/core with query rt=core.ps.conf that returns a list of topics, as the list of links to the corresponding topic resources.
 
