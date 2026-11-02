@@ -690,7 +690,7 @@ URIs for topic resources are broker-generated (see {{topic-create}}). Clients ob
 When a topic is created, the broker places it in the CREATED state (see {{fig-life}}) and creates its topic-data resource. In this state a client can read, update and delete the topic, a publisher can publish to the topic-data resource, and a subscriber can read or observe the topic-data resource. Until the first publication, and after the topic-data resource has been deleted (see {{delete-topic-data}}), the topic-data resource has no representation: a GET request on it returns 2.06 (No Content), an Observe registration is confirmed with 2.06 (No Content), and observers receive a 2.05 (Content) notification when the first representation is published {{I-D.jimenez-core-coap-no-content}}.
 
 ~~~~ aasvg
-                  Publish, Read, Subscribe,
+              Publish, Read, Subscribe, Unsubscribe,
                   Update topic, Delete topic-data
                         .-------------.
                         |             |
