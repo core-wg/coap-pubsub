@@ -561,11 +561,11 @@ Example:
 
 A client can update a topic's configuration by submitting the updated topic representation in a POST request to the topic URI. However, the topic properties "topic-name", "topic-data", and "resource-type" are immutable post-creation, and any request attempting to change them will be deemed invalid by the broker. Since POST replaces the full resource representation, these immutable properties may be included in the request with their current values.
 
-On success, the topic is overwritten and the broker returns a 2.04 (Changed) response and the current full resource representation. The broker MAY choose not to overwrite topic properties that are not explicitly modified in the request.
+On success, the topic is overwritten and the broker returns a 2.04 (Changed) response and the current full resource representation.
 
 Similarly, decreasing "max-subscribers" will also cause that some subscribers get unsubscribed. Unsubscribed endpoints receive a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The specific queue management for unsubscribing is left for implementors.
 
-Please note that when using POST the topic is being overwritten, thus some of the optional topic properties (e.g., "max-subscribers", "observer-check") not included in the POST message will be reset to their default values.
+Please note that when using POST the topic is being overwritten, thus any optional topic property (e.g., "max-subscribers", "observer-check") not included in the POST message is reset to its default value.
 
 Example:
 
