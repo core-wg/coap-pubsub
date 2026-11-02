@@ -687,7 +687,21 @@ URIs for topic resources are broker-generated (see {{topic-create}}). Clients ob
 
 ## Topic Lifecycle {#topic-lifecycle}
 
-When a topic is created, the broker places it in the CREATED state and creates its topic-data resource. In this state a client can read, update and delete the topic, a publisher can publish to the topic-data resource, and a subscriber can read or observe the topic-data resource. Until the first publication, and after the topic-data resource has been deleted (see {{delete-topic-data}}), the topic-data resource has no representation: a GET request on it returns 2.06 (No Content), an Observe registration is confirmed with 2.06 (No Content), and observers receive a 2.05 (Content) notification when the first representation is published {{I-D.jimenez-core-coap-no-content}}.
+When a topic is created, the broker places it in the CREATED state (see {{fig-life}}) and creates its topic-data resource. In this state a client can read, update and delete the topic, a publisher can publish to the topic-data resource, and a subscriber can read or observe the topic-data resource. Until the first publication, and after the topic-data resource has been deleted (see {{delete-topic-data}}), the topic-data resource has no representation: a GET request on it returns 2.06 (No Content), an Observe registration is confirmed with 2.06 (No Content), and observers receive a 2.05 (Content) notification when the first representation is published {{I-D.jimenez-core-coap-no-content}}.
+
+~~~~ aasvg
+                  Publish, Read, Subscribe,
+                  Update topic, Delete topic-data
+                        .-------------.
+                        |             |
+                        v             |
+              .---------+---.         |      .-------------.
+   Create     |             +---------'      |             |
+ ------------>|   CREATED   +--------------->|   DELETED   |
+              |             |  Delete topic  |             |
+              '-------------'                '-------------'
+~~~~
+{: #fig-life title='Lifecycle of a Topic' artwork-align="center"}
 
 When a client deletes a topic resource, the topic is placed into the DELETED state and shortly after removed from the server. Both the topic resource and the topic-data resource are deleted. All observers of the topic-data resource are removed from the list of observers with a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}, and no further interactions with the topic are possible.
 
