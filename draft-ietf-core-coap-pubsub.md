@@ -224,7 +224,7 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 
 * "topic-data": A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI reference as a CBOR text string. The topic-data resource is controlled by the broker but may be served from a different address than the topic resource. Clients MUST use the URI in this field to reach it and MUST NOT derive it from the URI of the topic resource. If a URI is not provided when creating the topic, the choice of the URI for the topic-data resource is left to the broker.
 
-* "resource-type": A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. According to this document, the value is "core.ps.data". Other specifications or deployments MAY define and use alternative resource type values for the topic-data resource.
+* "resource-type": A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. This document defines the value "core.ps.data". Other specifications or deployments MAY define and use alternative resource type values for the topic-data resource.
 
 * "topic-content-format": This optional field specifies the canonical CoAP Content-Format identifier of the topic-data resource representation as an unsigned integer, e.g., 60 for the media-type "application/cbor".
 
@@ -303,7 +303,7 @@ Example:
 ~~~~
 
 Note that in this example the "ct" attribute is not included for the two collections in the returned CoRE Link Format document.
-This is because the "ct" attribute is an optional hint, which is not needed in this case: the Content-format of each topic collection resource is implied by its resource type (rt="core.ps.coll") to be 40 ("application/link-format").
+This is because the "ct" attribute is an optional hint, which is not needed in this case: the Content-Format of each topic collection resource is implied by its resource type (rt="core.ps.coll") to be 40 ("application/link-format").
 
 ### Topic Discovery {#topic-discovery}
 
@@ -332,9 +332,9 @@ In certain scenarios, the method described herein may not be applicable, e.g., i
 
 ### Topic-Data Discovery
 
-Within a topic, there is the "topic-data" topic property that contains the URI of the topic-data resource used for publishing and subscribing. So retrieving the topic will also provide the URL of the topic-data resource (see {{topic-get-resource}}).
+The "topic-data" topic property of a topic contains the URI of the topic-data resource used for publishing and subscribing. Retrieving the topic will also provide the URL of the topic-data resource (see {{topic-get-resource}}).
 
-According to this specification, the topic-data resources use the resource type "core.ps.data". Other specifications or deployments MAY use alternative resource type values (see {{topic-properties}}). It is also possible to discover a list of topic-data resources, by sending a request to the collection resource with a query parameter rt=core.ps.data as shown in the example below. Every topic collection resource MUST support this query.
+This specification defines the resource type "core.ps.data" for topic-data resources. Other specifications or deployments MAY use alternative resource type values (see {{topic-properties}}). It is also possible to discover a list of topic-data resources by sending a request to the collection resource with a query parameter rt=core.ps.data, as shown in the example below. Every topic collection resource MUST support this query.
 
 ~~~~
    Request:
@@ -373,7 +373,7 @@ On success, the broker returns a successful response (typically 2.05 Content), s
 
 The broker MAY limit the returned list to the topics that the client is authorized to access. Discovery of the topic collection resource itself is described in {{topic-collection-discovery}}.
 
-The content-format 40 ("application/link-format")  MUST be supported for the topic collection resource.
+The Content-Format 40 ("application/link-format") MUST be supported for the topic collection resource.
 
 Example:
 
@@ -433,7 +433,7 @@ Eliding these attributes helps to minimize the size of the response payload.
 
 ### Creating a Topic {#topic-create}
 
-A client can add a new topic to a collection of topics by submitting an initial representation of the topic resource (see {{topic-resource-representation}}) in a POST request to the topic collection URI. The request MUST specify at least a subset of the topic properties in {{topic-properties}}, namely: "topic-name" and "resource-type".
+A client can add a new topic to a collection of topics by submitting an initial representation of the topic resource (see {{topic-resource-representation}}) in a POST request to the topic collection URI. The request MUST include the "topic-name" and "resource-type" topic properties, and MAY include any other topic property in {{topic-properties}}.
 
 Please note that the topic will _not_ be fully created until a publisher has published some data to it (See {{topic-lifecycle}}).
 
@@ -441,7 +441,7 @@ To facilitate immediate subscription and allow subscribers to subscribe to the t
 
 When "initialize" is omitted, the topic will only be fully created after data is published to it.
 
-On success, the broker returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload is a CBOR map. The response MUST include the required topic properties (see {{topic-properties}}), namely: "topic-name", "resource-type", and "topic-data". It MAY also include a number of optional topic properties too. The response MUST support Content-Format TBD606 ("application/core-pubsub+cbor"), which is the default.
+On success, the broker returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload is a CBOR map. The response MUST include the required topic properties "topic-name", "resource-type", and "topic-data" (see {{topic-properties}}), and MAY include optional topic properties. The response MUST support Content-Format TBD606 ("application/core-pubsub+cbor"), which is the default.
 
 If requirements are defined for the client to create the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST reply with a 4.xx client error response (such as 4.03 Forbidden).
 
@@ -563,7 +563,7 @@ A client can update a topic's configuration by submitting the updated topic repr
 
 On success, the topic is overwritten and the broker returns a 2.04 (Changed) response and the current full resource representation.
 
-Similarly, decreasing "max-subscribers" will also cause that some subscribers get unsubscribed. Unsubscribed endpoints receive a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The specific queue management for unsubscribing is left for implementors.
+Decreasing "max-subscribers" causes some subscribers to be unsubscribed. Unsubscribed endpoints receive a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The specific queue management for unsubscribing is left for implementors.
 
 Please note that when using POST the topic is being overwritten, thus any optional topic property (e.g., "max-subscribers", "observer-check") not included in the POST message is reset to its default value.
 
@@ -704,7 +704,7 @@ After a publisher publishes to the topic-data resource for the first time, the t
 
 When a client deletes a topic resource, the topic is placed into the DELETED state and shortly after removed from the server. In this state, all subscribers are removed from the list of observers of the topic-data resource and no further interactions with the topic are possible. Both the topic resource and the topic-data resource are deleted.
 
-When a client deletes a topic-data resource, the associated topic is placed into the HALF CREATED state, where clients can read, update and delete the topic and await for a publisher to begin publication. All existing subscribers are removed from the list of observers of the topic-data resource by sending a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The "topic-data" property in the topic configuration remains unchanged, but no new subscription to topic-data nor reading of data is allowed until a publisher publishes again. Even if the "initialize" property in the topic configuration is present, the topic-data resource is not automatically initialized (see {{delete-topic-data}}).
+When a client deletes a topic-data resource, the associated topic is placed into the HALF CREATED state, where clients can read, update and delete the topic and wait for a publisher to begin publication. All existing subscribers are removed from the list of observers of the topic-data resource by sending a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The "topic-data" property in the topic configuration remains unchanged, but no new subscription to topic-data nor reading of data is allowed until a publisher publishes again. Even if the "initialize" property in the topic configuration is present, the topic-data resource is not automatically initialized (see {{delete-topic-data}}).
 
 ## Topic-Data Interactions {#topic-data-interactions}
 
@@ -721,7 +721,7 @@ On success, the server returns a successful response. Typically, this is a 2.04 
 
 Using the "initialize" property is equivalent to having had a first publication with the initial content specified in that property. A follow-up publication from a publisher should result in a 2.04 response from the server.
 
-If the request does not have an acceptable Content-format, e.g., as specified by the "topic-content-format" property in the topic configuration, the server returns a 4.15 (Unsupported Content-Format) response.
+If the request does not have an acceptable Content-Format, e.g., as specified by the "topic-content-format" property in the topic configuration, the server returns a 4.15 (Unsupported Content-Format) response.
 
 If the client is sending publications too fast, the server returns a 4.29 (Too Many Requests) response {{RFC8516}}.
 
@@ -734,7 +734,7 @@ Example of first publication:
    Uri-Path: "ps"
    Uri-Path: "data"
    Uri-Path: "1bd0d6d"
-   Content-Format: 110
+   Content-Format: 112 (application/senml+cbor)
    Payload (in CBOR diagnostic notation):
    {
       "n": "coaps://dev1.example.com/temperature",
@@ -757,7 +757,7 @@ Example of subsequent publication:
    Uri-Path: "ps"
    Uri-Path: "data"
    Uri-Path: "1bd0d6d"
-   Content-Format: 110
+   Content-Format: 112 (application/senml+cbor)
    Payload (in CBOR diagnostic notation):
    {
       "n": "coaps://dev1.example.com/temperature",
@@ -804,7 +804,7 @@ Example of a successful subscription followed by one update:
    Response:
 
    Header: Content (Code=2.05)
-   Content-Format: 110
+   Content-Format: 112 (application/senml+cbor)
    Observe: 10001
    Max-Age: 15
    Payload (in CBOR diagnostic notation):
@@ -818,7 +818,7 @@ Example of a successful subscription followed by one update:
    Response:
 
    Header: Content (Code=2.05)
-   Content-Format: 110
+   Content-Format: 112 (application/senml+cbor)
    Observe: 10002
    Max-Age: 15
    Payload (in CBOR diagnostic notation):
@@ -844,7 +844,7 @@ A publisher can delete a topic-data resource by making a CoAP DELETE request on 
 
 On success, the broker returns a 2.02 (Deleted) response. Since CoAP DELETE is idempotent, a publisher retransmitting a DELETE request for an already-deleted topic-data resource may receive a 4.04 (Not Found) response, which can be considered a successful deletion.
 
-When a topic-data resource is deleted, the topic is then set back to the HALF CREATED state as per {{topic-lifecycle}} awaiting for a publisher to publish and set the topic to FULLY CREATED state where clients can subscribe and read the topic-data. All existing subscribers are removed from the list of observers of the topic-data resource by sending a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The "topic-data" property in the topic configuration remains unchanged, but no new subscription to topic-data nor reading of data is allowed.
+When a topic-data resource is deleted, the topic is then set back to the HALF CREATED state as per {{topic-lifecycle}}, waiting for a publisher to publish and set the topic to the FULLY CREATED state where clients can subscribe and read the topic-data. All existing subscribers are removed from the list of observers of the topic-data resource by sending a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The "topic-data" property in the topic configuration remains unchanged, but no new subscription to topic-data nor reading of data is allowed.
 
 Note that this is the case irrespective of the value of the "initialize" topic property (if present) in the topic configuration.
 
@@ -885,7 +885,7 @@ Example:
    Response:
 
    Header: Content (Code=2.05)
-   Content-Format: 110
+   Content-Format: 112 (application/senml+cbor)
    Max-Age: 15
    Payload (in CBOR diagnostic notation):
    {
@@ -900,9 +900,9 @@ This document only defines a mechanism for subscribers to retrieve the latest to
 
 ## Rate Limiting {#rate-limit}
 
-The server hosting the topic-data resource may have to handle a potentially large number of publishers and subscribers at the same time. This means it could become overwhelmed if it receives too many publications in a short period of time.
+The server hosting the topic-data resource may have to handle a large number of publishers and subscribers at the same time. This means it could become overwhelmed if it receives too many publications in a short period of time.
 
-In this situation, if a publisher is sending publications too fast, the server SHOULD return a 4.29 (Too Many Requests) response {{RFC8516}}. As described in {{RFC8516}}, the Max-Age option {{RFC7252}} in this response indicates the number of seconds after which the client may retry. The server MAY also stop dispatching messages from that publisher for the indicated time.
+If a publisher is sending publications too fast, the server SHOULD return a 4.29 (Too Many Requests) response {{RFC8516}}. As described in {{RFC8516}}, the Max-Age option {{RFC7252}} in this response indicates the number of seconds after which the client may retry. The server MAY also stop dispatching messages from that publisher for the indicated time.
 
 When a publisher receives a 4.29 (Too Many Requests) response, it MUST NOT send any new publication requests to the same topic-data resource before the time indicated by the Max-Age option has passed.
 
@@ -936,9 +936,15 @@ The content published on a topic by a publisher client SHOULD be protected end-t
 
 Access control of clients at the broker MAY be enforced for performing discovery operations, and SHOULD be enforced in a fine-grained fashion for operations related to the creation, update, and deletion of topic resources, as well as for operations on topic-data resources such as publication on and subscription to topics. This prevents rogue clients to, among other things, repeatedly create topics at the broker or publish (large) contents, which may result in Denial of Service against the broker and the active subscribers.
 
-Building on {{RFC9594}}, its application profile for publish-subscribe communication with CoAP {{I-D.ietf-ace-pubsub-profile}} provides a security model that can be used in the architecture presented in this document, in order to enable secure communication between the different parties as well as secure, authorized operations of publishers and subscribers that fulfill the requirements above.
+The application profile for publish-subscribe communication with CoAP {{I-D.ietf-ace-pubsub-profile}}, which builds on {{RFC9594}}, provides a security model that can be used in the architecture presented in this document, in order to enable secure communication between the different parties as well as secure, authorized operations of publishers and subscribers that fulfill the requirements above.
 
-In particular, the application profile above relies on the ACE framework for Authentication and Authorization in Constrained Environments (ACE) {{RFC9200}} and defines a method to: authorize publishers and subscribers to perform operations at the broker, with fine-grained access control; authorize publishers and subscribers to obtain the keying material required to take part to a topic managed by the broker that also hosts the corresponding topic-data resource; protect published data end-to-end between a publisher and all the subscribers to the targeted topic, ensuring confidentiality, integrity, and source authentication of the published content end-to-end. That approach can be extended to enforce authorization and fine-grained access control for administrator clients that are intended to create, update, and delete topics at the broker.
+In particular, the application profile above relies on the ACE framework {{RFC9200}} and defines a method to:
+
+* authorize publishers and subscribers to perform operations at the broker, with fine-grained access control;
+* authorize publishers and subscribers to obtain the keying material required to take part to a topic managed by the broker that also hosts the corresponding topic-data resource;
+* protect published data end-to-end between a publisher and all the subscribers to the targeted topic, ensuring confidentiality, integrity, and source authentication of the published content.
+
+That approach can be extended to enforce authorization and fine-grained access control for administrator clients that are intended to create, update, and delete topics at the broker.
 
 # IANA Considerations {#iana}
 
@@ -1047,7 +1053,7 @@ The columns of this registry are:
 
 This registry has been initially populated with the values in {{tab-CoAP-Pubsub-Parameters}}. For all of them, the reference is {{&SELF}}.
 
-## Expert Review Instructions {#review}
+### Expert Review Instructions {#review}
 
 The registration policy for the IANA registry established in {{iana-coap-pubsub-parameters}} is defined as one of "Standards Action with Expert Review", "Specification Required", and "Expert Review". This section gives some general guidelines for what the experts should be looking for; however, they are being designated as experts for a reason, so they should be given substantial latitude.
 
