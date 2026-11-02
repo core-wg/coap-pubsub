@@ -682,7 +682,7 @@ URIs for topic resources are broker-generated (see {{topic-create}}). Clients ob
 
 ## Topic Lifecycle {#topic-lifecycle}
 
-When a topic is newly created, it is first placed by the broker into the HALF CREATED state (see {{fig-life}}). In this state, a client can read and update the configuration of the topic and delete the topic. A publisher can publish to the topic-data resource.  However, a subscriber cannot yet subscribe to the topic-data resource nor read the latest data.
+When a topic is newly created, it is first placed by the broker into the HALF CREATED state (see {{fig-life}}). In this state, a client can read and update the configuration of the topic and delete the topic. A publisher can publish to the topic-data resource.  However, a subscriber cannot yet subscribe to the topic-data resource nor read the latest data: a GET request on it returns 4.04 (Not Found), as it does for a DELETED topic. A client can tell the two states apart by retrieving the topic resource (see {{topic-get-resource}}), which still exists for a HALF CREATED topic and is gone for a DELETED one.
 
 ~~~~ aasvg
                 HALF                          FULLY
