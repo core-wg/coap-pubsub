@@ -15,8 +15,9 @@ venue:
   github: core-wg/coap-pubsub
 
 author:
-- name: Jaime Jimenez
+- name: Jaime Jiménez
   org: Ericsson
+  country: Finland
   email: jaime@iki.fi
 - name: Michael Koster
   org: Dogtiger Labs
