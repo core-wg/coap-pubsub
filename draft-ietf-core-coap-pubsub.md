@@ -21,6 +21,7 @@ author:
   email: jaime@iki.fi
 - name: Michael Koster
   org: Dogtiger Labs
+  country: United States of America
   email: michaeljohnkoster@gmail.com
 - name: Ari Keranen
   org: Ericsson
