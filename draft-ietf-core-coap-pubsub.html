@@ -2340,7 +2340,7 @@ The URI for this resource is indicated in the "topic-data" topic property value.
 </dd>
           <dd class="break"></dd>
 </dl>
-<p id="section-3.2.2-6">If the "max-subscribers" topic property value has been reached, the server must treat that as specified in <span><a href="https://rfc-editor.org/rfc/rfc7641#section-4.1" class="relref">Section 4.1</a> of [<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. The 2.05 (Content) response <span class="bcp14">MUST NOT</span> include an Observe Option, the absence of which signals to the subscriber that the subscription failed.<a href="#section-3.2.2-6" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-6">If the "max-subscribers" topic property value has been reached, the server must treat that as specified in <span><a href="https://rfc-editor.org/rfc/rfc7641#section-4.1" class="relref">Section 4.1</a> of [<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>. The 2.05 (Content) or 2.06 (No Content) response <span class="bcp14">MUST NOT</span> include an Observe Option, the absence of which signals to the subscriber that the subscription failed.<a href="#section-3.2.2-6" class="pilcrow">¶</a></p>
 <p id="section-3.2.2-7">Example of a subscription before the first publication, followed by the notification of that publication:<a href="#section-3.2.2-7" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-3.2.2-8">
 <pre>
