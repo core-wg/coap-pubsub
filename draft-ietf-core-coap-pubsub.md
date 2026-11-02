@@ -866,7 +866,7 @@ Example of a successful deletion:
 
 ## Read the latest data {#read-data}
 
-A client can get the latest published topic-data resource by making a GET request to the "topic-data" URI. Please note that discovery of the "topic-data" topic property is a required previous step (see {{topic-get-resource}}).
+A client can get the latest published topic-data resource by making a GET request to the "topic-data" URI. Discovery of that URI through the "topic-data" topic property is described in {{topic-get-resource}}.
 
 On success, the server returns a successful response (typically 2.05 Content) with the data.
 
