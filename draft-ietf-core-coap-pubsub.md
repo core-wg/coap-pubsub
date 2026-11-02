@@ -1139,6 +1139,27 @@ Expert reviewers should take into consideration the following points:
 * Default security from RFC 7252; OSCORE and DTLS 1.3 kept informative (PR \#79)
 * Encoded the topic FETCH filter as an application/cbor array; removed conf-filter from the registry (PR \#80)
 
+## Version -21 to -22
+
+Addressed the AD review of -21:
+
+* Topic-data resource is controlled by the broker and may be served from a different address; clients take its URI from the "topic-data" property
+* Brokers support all interactions on topic collections, topics and topic-data; clients use any subset
+* Reconciled topic collection discovery: GET on the collection always works, advertising it in /.well-known/core is a SHOULD
+* Unrecognized topic properties are ignored, not rejected; the returned representation shows what was accepted
+* Defined the iPATCH request payload as the topic properties to update, in the text and in the media type registration
+* Security between clients and broker is a MUST; protection below CoAP allowed as in RFC 7252 Section 9
+* End-to-end protection, when used, includes source authentication
+* "max-subscribers": the broker may enforce an undisclosed limit; "observer-check": bounded at 86400, hint until stored
+* Replaced MAYs that granted no permission with "can" in broker and topic discovery; explicit MAY for eliding link attributes
+* Link-format FETCH response tied to the TBD606 request Content-Format
+* Topic resource GET and FETCH responses are cacheable; added RFC 8132 as a normative reference
+* POST update resets any absent optional property; one subscriber-disruption note for both update methods
+* How a client tells HALF CREATED from DELETED; discovery of the topic-data URI described rather than required
+* Old-representations paragraph kept as an extensibility example
+* Editorial nits; topic-data examples use Content-Format 112
+* The HALF CREATED state and a 2.06 (No Content) response code are discussed in the CoRE WG; see draft-jimenez-core-coap-no-content
+
 # Acknowledgements
 {: numbered='no'}
 
