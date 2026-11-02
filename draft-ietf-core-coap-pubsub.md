@@ -401,7 +401,7 @@ On success, the broker returns a successful response (typically 2.05 Content) wi
 
 Upon success, the broker responds with a successful response (typically 2.05 Content), providing a list of links to topic resources associated with this topic collection that match the request's filter criteria (refer to {{topic-discovery}}). A positive match happens only when each topic property in the request payload is present with the indicated value in the topic resource representation.
 
-This section describes FETCH semantics on the topic collection for request payloads with Content-Format TBD606 ("application/core-pubsub+cbor"); other request Content-Formats may be defined in extensions. The response uses Content-Format 40 ("application/link-format").
+This section describes FETCH semantics on the topic collection for request payloads with Content-Format TBD606 ("application/core-pubsub+cbor"), for which the response uses Content-Format 40 ("application/link-format"). Extensions that define other request Content-Formats also define the Content-Format of the corresponding response.
 
 Example:
 
