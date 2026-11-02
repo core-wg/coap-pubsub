@@ -1346,7 +1346,7 @@ Jiménez, et al.            Expires 6 May 2027                  [Page 24]
 Internet-Draft                 CoAP pubsub                 November 2026
 
 
-                         Publish, Read, Subscribe,
+                     Publish, Read, Subscribe, Unsubscribe,
                          Update topic, Delete topic-data
                                .-------------.
                                |             |
