@@ -41,6 +41,16 @@ normative:
   RFC6690:
   RFC7252:
   RFC8132:
+  I-D.jimenez-core-coap-no-content:
+    title: "The 2.06 (No Content) Response Code for the Constrained Application Protocol (CoAP)"
+    author:
+    - name: Jaime Jiménez
+      org: Ericsson
+    - name: Carsten Bormann
+      org: Universität Bremen TZI
+    date: 2026-11
+    seriesinfo:
+      Internet-Draft: draft-jimenez-core-coap-no-content-00
   RFC8288:
   RFC8516:
   STD94:
@@ -235,8 +245,6 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 * "max-subscribers": An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as a CBOR unsigned integer. If this field is not present, the topic configuration sets no limit. A broker MAY still enforce a limit of its own, e.g., based on its available resources, without exposing it in this field. At topic creation or update, this field is a hint from the topic creator; the broker MAY store a different value than the one requested, or none at all. Once stored, the value is enforced: if the limit is reached, new subscriptions are handled as specified in {{Section 4.1 of RFC7641}}.
 
 * "observer-check": An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber (see {{unsubscribe}}). It is encoded as a CBOR unsigned integer greater than 0 and no greater than 86400, since {{Section 4.5 of RFC7641}} requires a Confirmable notification at least every 24 hours. It ensures that subscribers that have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. At topic creation or update, this field is a hint from the topic creator; the broker MAY store a different value than the one requested, within the same bound. Once stored, the server from which the topic-data resource is served applies the value. The default value for this field is 86400, which corresponds to 24 hours.
-
-* "initialize": An optional field encoded as a CBOR byte string that contains the initial representation to pre-populate the topic-data resource. When present, the broker MUST create the topic and initialize the topic-data resource with this representation using the Content-Format specified in "topic-content-format". This allows the topic to be immediately subscribable without encountering a `4.04 Not Found` error. The representation MUST be valid for the specified Content-Format. For example, for CBOR-based formats, the empty CBOR array encoded as `0x80` is a valid empty representation, which corresponds to the "initialize" property set to `0x4180` (`<<[]>>` in CBOR diagnostic notation). If this field is not present, the broker behaves as usual, and the topic-data resource is not initialized. When this field is present, "topic-content-format" MUST also be specified.
 
 A broker MUST ignore topic properties that it does not recognize: they are not stored and do not appear in the representation of the topic resource. Since the responses to topic creation and update return the current representation of the topic resource (see {{topic-create}}, {{topic-update-resource}}, and {{topic-update-resource-patch}}), a client can determine from the response which of the properties it sent have been accepted.
 
@@ -434,12 +442,6 @@ Eliding these attributes helps to minimize the size of the response payload.
 ### Creating a Topic {#topic-create}
 
 A client can add a new topic to a collection of topics by submitting an initial representation of the topic resource (see {{topic-resource-representation}}) in a POST request to the topic collection URI. The request MUST include the "topic-name" and "resource-type" topic properties, and MAY include any other topic property in {{topic-properties}}.
-
-Please note that the topic will _not_ be fully created until a publisher has published some data to it (See {{topic-lifecycle}}).
-
-To facilitate immediate subscription and allow subscribers to subscribe to the topic before data has been published, the client can include the "initialize" property containing an initial representation (encoded as a CBOR byte string) along with the "topic-content-format" property. When included, the broker MUST create the topic and pre-populate the topic-data resource with the provided representation, using the specified Content-Format. This ensures RFC7641 compliance by maintaining Content-Format consistency across all notifications. For example, for CBOR SenML (Content-Format 60), the "initialize" property could be `0x4180` (`<<[]>>` in CBOR diagnostic notation), with `0x80` being the CBOR encoding of the empty CBOR array.
-
-When "initialize" is omitted, the topic will only be fully created after data is published to it.
 
 On success, the broker returns a 2.01 (Created) response, indicating the Location-Path of the new topic and the current representation of the topic resource. The response payload is a CBOR map. The response MUST include the required topic properties "topic-name", "resource-type", and "topic-data" (see {{topic-properties}}), and MAY include optional topic properties. The response MUST support Content-Format TBD606 ("application/core-pubsub+cbor"), which is the default.
 
@@ -675,36 +677,35 @@ Example:
 
 The overview of the publish-subscribe mechanism based on CoAP is as follows: a publisher publishes to a topic by submitting the data in a PUT request to a topic-data resource and subscribers subscribe to a topic by submitting a GET request with the Observe option set to 0 (register) to a topic-data resource. When resource state changes, the server will send a notification to current subscribers observing the resource {{RFC7641}}.
 
-Unless the topic configuration includes the "initialize" property (see {{topic-properties}}), a topic-data resource does not exist until some initial data has been published to it. Consequently, a GET request sent to the topic-data resource URI before initial data publication would result in a 4.04 (Not Found) response. If such a "half created" topic is undesired, the creator of the topic can simply immediately publish some initial placeholder data to make the topic "fully created" (see {{topic-lifecycle}}).
+The broker creates the topic-data resource when it creates the topic. Until a publisher has published to it, the topic-data resource exists but has no representation: a GET request on it returns 2.06 (No Content) {{I-D.jimenez-core-coap-no-content}}, and a subscriber can register for notifications and receive the first publication when it happens (see {{subscribe}}).
 
 
 URIs for topic resources are broker-generated (see {{topic-create}}). Clients obtain the URI of the topic-data resource from the "topic-data" property (see {{topic-properties}}); it has no necessary URI pattern dependence on the URI of the topic resource.
 
 ## Topic Lifecycle {#topic-lifecycle}
 
-When a topic is newly created, it is first placed by the broker into the HALF CREATED state (see {{fig-life}}). In this state, a client can read and update the configuration of the topic and delete the topic. A publisher can publish to the topic-data resource.  However, a subscriber cannot yet subscribe to the topic-data resource nor read the latest data: a GET request on it returns 4.04 (Not Found), as it does for a DELETED topic. A client can tell the two states apart by retrieving the topic resource (see {{topic-get-resource}}), which still exists for a HALF CREATED topic and is gone for a DELETED one.
+When a topic is created, the broker places it in the CREATED state (see {{fig-life}}) and creates its topic-data resource. In this state a client can read, update and delete the topic, a publisher can publish to the topic-data resource, and a subscriber can read or observe the topic-data resource. Until the first publication, and after the topic-data resource has been deleted (see {{delete-topic-data}}), the topic-data resource has no representation: a GET request on it returns 2.06 (No Content), an Observe registration is confirmed with 2.06 (No Content), and observers receive a 2.05 (Content) notification when the first representation is published {{I-D.jimenez-core-coap-no-content}}.
 
 ~~~~ aasvg
-                HALF                          FULLY
-               CREATED       Delete          CREATED
-                ____        topic-data        ____     Publish
------------->  |    |  <-------------------  |    |  ------------.
-   Create      |    |                        |    |               |
-               |____|  ------------------->  |____|  <-----------'
-                      \      Publish      /            Subscribe
-               |   ^   \       ___       /   |   ^
-         Read/ |   |    '-->  |   |  <--'    |   | Read/
-        Update |   |  Delete  |___|  Delete  |   | Update
-         Topic  '-'   Topic          Topic    '-'  Topic
-                             DELETED
+                      CREATED
+                       ____     Publish, Subscribe, Read,
+   ------------->     |    |  <-----------------------------.
+      Create          |    |    Read/Update Topic,           |
+                      |____|    Delete topic-data            |
+                        |     ------------------------------'
+                        | Delete
+                        | Topic
+                        v
+                       ____
+                      |    |
+                      |____|
+                      DELETED
 ~~~~
 {: #fig-life title='Lifecycle of a Topic' artwork-align="center"}
 
-After a publisher publishes to the topic-data resource for the first time, the topic is placed into the FULLY CREATED state. In this state, a client can read data by means of a GET request without observe. A publisher can publish to the topic-data resource and a subscriber can observe the topic-data resource.
+When a client deletes a topic resource, the topic is placed into the DELETED state and shortly after removed from the server. Both the topic resource and the topic-data resource are deleted. All observers of the topic-data resource are removed from the list of observers with a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}, and no further interactions with the topic are possible.
 
-When a client deletes a topic resource, the topic is placed into the DELETED state and shortly after removed from the server. In this state, all subscribers are removed from the list of observers of the topic-data resource and no further interactions with the topic are possible. Both the topic resource and the topic-data resource are deleted.
-
-When a client deletes a topic-data resource, the associated topic is placed into the HALF CREATED state, where clients can read, update and delete the topic and wait for a publisher to begin publication. All existing subscribers are removed from the list of observers of the topic-data resource by sending a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The "topic-data" property in the topic configuration remains unchanged, but no new subscription to topic-data nor reading of data is allowed until a publisher publishes again. Even if the "initialize" property in the topic configuration is present, the topic-data resource is not automatically initialized (see {{delete-topic-data}}).
+When a client deletes the topic-data resource, the topic stays in the CREATED state. The topic-data resource loses its representation and its observers receive a 2.06 (No Content) notification; they remain registered and receive the next publication as a 2.05 (Content) notification. The "topic-data" property of the topic is unchanged.
 
 ## Topic-Data Interactions {#topic-data-interactions}
 
@@ -712,43 +713,18 @@ The server hosting the topic-data resource MUST support all the interactions def
 
 ### Publish {#publish}
 
-A topic with a topic-data resource must have been created in order to publish data to it (See {{topic-create}}) and be in the HALF CREATED or FULLY CREATED state in order for the publish operation to work (see {{topic-lifecycle}}).
+A topic must have been created (see {{topic-create}}) in order to publish data to its topic-data resource.
 
 A client can publish data to a topic by submitting the data in a PUT request to the topic-data resource.
 The URI for this resource is indicated in the "topic-data" topic property value. Please note that this URI is not the same as the topic URI used for configuring the topic (see {{topic-resource-representation}}).
 
-On success, the server returns a successful response. Typically, this is a 2.04 (Changed) response. However, when data is published to the topic for the first time, the server returns a 2.01 (Created) response and the broker sets the topic in the FULLY CREATED state (see {{topic-lifecycle}}).
-
-Using the "initialize" property is equivalent to having had a first publication with the initial content specified in that property. A follow-up publication from a publisher should result in a 2.04 response from the server.
+On success, the server returns a successful response, typically 2.04 (Changed). The first publication to a topic-data resource that has no representation is no different from any other.
 
 If the request does not have an acceptable Content-Format, e.g., as specified by the "topic-content-format" property in the topic configuration, the server returns a 4.15 (Unsupported Content-Format) response.
 
 If the client is sending publications too fast, the server returns a 4.29 (Too Many Requests) response {{RFC8516}}.
 
-Example of first publication:
-
-~~~~
-   Request:
-
-   Header: PUT (Code=0.03)
-   Uri-Path: "ps"
-   Uri-Path: "data"
-   Uri-Path: "1bd0d6d"
-   Content-Format: 112 (application/senml+cbor)
-   Payload (in CBOR diagnostic notation):
-   {
-      "n": "coaps://dev1.example.com/temperature",
-      "u": "Cel",
-      "t": 1621452122,
-      "v": 23.5
-   }
-
-   Response:
-
-   Header: Created (Code=2.01)
-~~~~
-
-Example of subsequent publication:
+Example of a publication:
 
 ~~~~
    Request:
@@ -777,20 +753,56 @@ A client can subscribe to a topic-data resource by sending a CoAP GET request wi
 
 On success, the server hosting the topic-data resource returns a successful response (typically 2.05 Content) with the data and the Observe Option. If no Observe Option is present in the response, the client should assume that the subscription was not successful.
 
-If the topic is not yet in the FULLY CREATED state (see {{topic-lifecycle}}), the server returns an error response (typically 4.04 Not Found).
+If the topic-data resource has no representation yet, the server confirms the registration with a 2.06 (No Content) response carrying the Observe Option {{I-D.jimenez-core-coap-no-content}}, and the subscriber receives the first publication as a 2.05 (Content) notification. Since a 2.06 (No Content) response carries no Content-Format, a subscriber that needs a specific Content-Format SHOULD include the Accept Option in the registration request; the "topic-content-format" property, when present, tells the subscriber which one to ask for.
 
 The following response codes are defined for the Subscribe operation:
 
 Success:
-: 2.05 "Content". The current topic data is included in the response. In case of successful subscription, the response includes the Observe Option.
+: 2.05 (Content). The current topic data is included in the response. In case of successful subscription, the response includes the Observe Option.
+
+Success:
+: 2.06 (No Content). The topic-data resource exists and has no representation yet. In case of successful subscription, the response includes the Observe Option.
 
 Failure:
-: 4.04 "Not Found". The topic-data resource does not exist.
+: 4.04 (Not Found). The topic does not exist.
 
 If the "max-subscribers" topic property value has been reached, the server must treat that as specified in {{Section 4.1 of RFC7641}}. The 2.05 (Content) response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
 
 
-Example of a successful subscription followed by one update:
+Example of a subscription before the first publication, followed by the notification of that publication:
+
+~~~~
+   Request:
+
+   Header: GET (Code=0.01)
+   Uri-Path: "ps"
+   Uri-Path: "data"
+   Uri-Path: "1bd0d6d"
+   Observe: 0
+   Accept: 112 (application/senml+cbor)
+
+   Response:
+
+   Header: No Content (Code=2.06)
+   Observe: 10000
+   Max-Age: 600
+
+   Response:
+
+   Header: Content (Code=2.05)
+   Content-Format: 112 (application/senml+cbor)
+   Observe: 10001
+   Max-Age: 15
+   Payload (in CBOR diagnostic notation):
+   {
+      "n": "urn:dev:os:32473-123456",
+      "u": "Cel",
+      "t": 1696341182,
+      "v": 19.87
+   }
+~~~~
+
+Example of a subscription to a topic with data, followed by one update:
 
 ~~~~
    Request:
@@ -842,11 +854,9 @@ This value can be modified at the broker by the administrator of a topic by modi
 
 A publisher can delete a topic-data resource by making a CoAP DELETE request on the topic-data resource (which is hosted at the "topic-data" URI).
 
-On success, the broker returns a 2.02 (Deleted) response. Since CoAP DELETE is idempotent, a publisher retransmitting a DELETE request for an already-deleted topic-data resource may receive a 4.04 (Not Found) response, which can be considered a successful deletion.
+On success, the broker returns a 2.02 (Deleted) response. Since CoAP DELETE is idempotent, repeating the request on a topic-data resource that already has no representation also returns 2.02 (Deleted).
 
-When a topic-data resource is deleted, the topic is then set back to the HALF CREATED state as per {{topic-lifecycle}}, waiting for a publisher to publish and set the topic to the FULLY CREATED state where clients can subscribe and read the topic-data. All existing subscribers are removed from the list of observers of the topic-data resource by sending a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}. The "topic-data" property in the topic configuration remains unchanged, but no new subscription to topic-data nor reading of data is allowed.
-
-Note that this is the case irrespective of the value of the "initialize" topic property (if present) in the topic configuration.
+When a topic-data resource is deleted, the topic stays in the CREATED state as per {{topic-lifecycle}} and the topic-data resource loses its representation. Observers receive a 2.06 (No Content) notification and remain registered; they receive the next publication as a 2.05 (Content) notification. The "topic-data" property in the topic configuration remains unchanged.
 
 Example of a successful deletion:
 
@@ -870,7 +880,7 @@ A client can get the latest published topic-data resource by making a GET reques
 
 On success, the server returns a successful response (typically 2.05 Content) with the data.
 
-If the target URI does not match an existing resource or the topic is not in the FULLY CREATED state (see {{topic-lifecycle}}), the server returns an error response (typically 4.04 Not Found).
+If the topic-data resource has no representation, the server returns 2.06 (No Content) {{I-D.jimenez-core-coap-no-content}}. If the target URI does not match an existing resource, the server returns an error response (typically 4.04 Not Found).
 
 Example:
 
@@ -923,7 +933,6 @@ Note that the media type "application/core-pubsub+cbor" MUST be used when these 
 | expiration-date      | 5        | \#6.1(number) |
 | max-subscribers      | 6        | uint          |
 | observer-check       | 7        | uint          |
-| initialize           | 8        | bstr          |
 {: #tab-CoAP-Pubsub-Parameters title="CoAP Pubsub Topic Properties and CBOR Encoding"}
 
 # Security Considerations {#seccons}
@@ -933,6 +942,8 @@ The architecture presented in this document inherits the security considerations
 CoAP communications between each client and the broker MUST be secured. The default security protocol is defined by {{RFC7252}}. Examples of other security protocols that could be applied to CoAP communications are OSCORE {{RFC8613}} and DTLS 1.3 {{RFC9147}}. Protection MAY instead be provided below CoAP, e.g., by a secured link layer or by IPsec, as discussed for the NoSec mode in {{Section 9 of RFC7252}}. The choice of a security protocol depends on the requirements of the specific application and deployment. Security considerations for the selected security protocol apply as well.
 
 The content published on a topic by a publisher client SHOULD be protected end-to-end between the publisher and all the subscribers to that topic. Such protection MUST include source authentication of the published data, so that subscribers can verify who published it. This can be achieved at the application layer, e.g., by using COSE {{STD96}} {{RFC9053}}.
+
+A 2.06 (No Content) response reveals that a topic-data resource exists. A broker that enforces access control on topic-data resources responds to unauthorized clients as it would for a nonexistent resource (see {{Section 7 of I-D.jimenez-core-coap-no-content}}).
 
 Access control of clients at the broker MAY be enforced for performing discovery operations, and SHOULD be enforced in a fine-grained fashion for operations related to the creation, update, and deletion of topic resources, as well as for operations on topic-data resources such as publication on and subscription to topics. This prevents rogue clients to, among other things, repeatedly create topics at the broker or publish (large) contents, which may result in Denial of Service against the broker and the active subscribers.
 
@@ -1155,10 +1166,10 @@ Addressed the AD review of -21:
 * Link-format FETCH response tied to the TBD606 request Content-Format
 * Topic resource GET and FETCH responses are cacheable; added RFC 8132 as a normative reference
 * POST update resets any absent optional property; one subscriber-disruption note for both update methods
-* How a client tells HALF CREATED from DELETED; discovery of the topic-data URI described rather than required
+* Discovery of the topic-data URI described rather than required
 * Old-representations paragraph kept as an extensibility example
 * Editorial nits; topic-data examples use Content-Format 112
-* The HALF CREATED state and a 2.06 (No Content) response code are discussed in the CoRE WG; see draft-jimenez-core-coap-no-content
+* Replaced the HALF CREATED and FULLY CREATED states with one CREATED state: the broker creates the topic-data resource with the topic, GET and Observe on it return 2.06 (No Content) until the first publication, deleting the topic-data clears it and notifies observers with 2.06; first publication returns 2.04; removed the "initialize" property; normative reference to draft-jimenez-core-coap-no-content
 
 # Acknowledgements
 {: numbered='no'}
