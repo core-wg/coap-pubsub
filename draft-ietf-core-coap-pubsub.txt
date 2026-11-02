@@ -2507,14 +2507,70 @@ Authors' Addresses
 
    Michael Koster
    Dogtiger Labs
+   United States of America
    Email: michaeljohnkoster@gmail.com
 
 
    Ari Keranen
    Ericsson
    Finland
-   Email: ari.keranen@ericsson.com
 
 
 
 Jiménez, et al.            Expires 6 May 2027                  [Page 45]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
+
+   Email: ari.keranen@ericsson.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jiménez, et al.            Expires 6 May 2027                  [Page 46]
