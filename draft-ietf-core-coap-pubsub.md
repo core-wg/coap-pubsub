@@ -7,7 +7,7 @@ docname: draft-ietf-core-coap-pubsub-latest
 
 category: std
 stream: IETF
-area: Applications
+area: "Web and Internet Transport"
 workgroup: CoRE Working Group
 
 venue:
