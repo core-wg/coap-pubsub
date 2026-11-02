@@ -896,7 +896,7 @@ Example:
    }
 ~~~~
 
-As defined in this document, subscribers can retrieve the latest topic-data resource representation. Future specifications can enable subscribers to additionally retrieve old representations of the topic-data resource. The storing of those old representations can be affected, for example, by an additional topic property at the broker that specifies the maximum number of stored old representations of the topic-data. Further details are out of the scope of this document.
+This document only defines a mechanism for subscribers to retrieve the latest topic-data resource representation. As an example of extension, a future specification might enable subscribers to retrieve old representations of the topic-data resource and control their storage with additional topic properties registered as described in {{iana-coap-pubsub-parameters}}.
 
 ## Rate Limiting {#rate-limit}
 
