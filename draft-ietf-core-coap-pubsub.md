@@ -235,7 +235,7 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 
 * "topic-name": A required field used as an application identifier. It encodes the topic name as a CBOR text string. Examples of topic names include human-readable strings (e.g., "room2"), UUIDs, or other values. The "topic-name" is required at topic creation to enable the broker to detect duplicate creation requests and to provide a stable application-level identifier. Applications that do not require human-readable names MAY use automatically generated values such as UUIDs.
 
-* "topic-data": A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI reference as a CBOR text string. The topic-data resource is controlled by the broker but may be served from a different address than the topic resource. Clients MUST use the URI in this field to reach it and MUST NOT derive it from the URI of the topic resource. If a URI is not provided when creating the topic, the choice of the URI for the topic-data resource is left to the broker.
+* "topic-data": A required field (optional during creation) containing the URI of the topic-data resource for publishing/subscribing to this topic. It encodes the URI reference as a CBOR text string. The topic-data resource is controlled by the broker but may be served from a different address than the topic resource. Clients MUST use the URI in this field to reach the topic-data resource. Clients MUST NOT derive that URI from the URI of the topic resource. If a URI is not provided when creating the topic, the choice of the URI for the topic-data resource is left to the broker.
 
 * "resource-type": A required field used to indicate the resource type of the topic-data resource for the topic. It encodes the resource type as a CBOR text string. This document defines the value "core.ps.data". Other specifications or deployments MAY define and use alternative resource type values for the topic-data resource.
 
@@ -245,11 +245,11 @@ The CBOR map includes the following topic properties, whose CBOR abbreviations a
 
 * "expiration-date": An optional field used to indicate the expiration date of the topic. It encodes the expiration date as a CBOR tag 1 (epoch-based date/time) as defined in {{Section 3.4.2 of RFC8949@STD94}}, representing the number of seconds since 1970-01-01T00:00Z in UTC time. If this field is not present, the topic will not expire automatically. When "expiration-date" is reached, the topic resource is deleted as described in {{topic-delete}}.
 
-* "max-subscribers": An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as a CBOR unsigned integer. If this field is not present, the topic configuration sets no limit. A broker MAY still enforce a limit of its own, e.g., based on its available resources, without exposing it in this field. At topic creation or update, this field is a hint from the topic creator; the broker MAY store a different value than the one requested, or none at all. Once stored, the value is enforced: if the limit is reached, new subscriptions are handled as specified in {{Section 4.1 of RFC7641}}.
+* "max-subscribers": An optional field used to indicate the maximum number of simultaneous subscribers allowed for the topic. It encodes the maximum number as a CBOR unsigned integer. If this field is not present, the topic configuration sets no limit. A broker MAY still enforce its own limit, e.g., based on its available resources, without exposing it in this field. At topic creation or update, this field is a hint from the topic creator; the broker MAY store a different value than the one requested, or none at all. Once stored, the value is enforced: if the limit is reached, new subscriptions are handled as specified in {{Section 4.1 of RFC7641}}.
 
-* "observer-check": An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber (see {{unsubscribe}}). It is encoded as a CBOR unsigned integer greater than 0 and no greater than 86400, since {{Section 4.5 of RFC7641}} requires a Confirmable notification at least every 24 hours. It ensures that subscribers that have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. At topic creation or update, this field is a hint from the topic creator; the broker MAY store a different value than the one requested, within the same bound. Once stored, the server from which the topic-data resource is served applies the value. The default value for this field is 86400, which corresponds to 24 hours.
+* "observer-check": An optional field that controls the maximum number of seconds between two consecutive Observe notifications sent as Confirmable messages to each topic subscriber (see {{unsubscribe}}). It is encoded as a CBOR unsigned integer greater than 0 and no greater than 86400, since {{Section 4.5 of RFC7641}} requires a Confirmable notification at least every 24 hours. It ensures that subscribers that have lost interest and silently forgotten the observation do not remain indefinitely on the server's observer list. At topic creation or update, this field is a hint from the topic creator; the broker MAY store a different value than the one requested, within the same bound. Once stored, the server hosting the topic-data resource applies the value. The default value for this field is 86400, which corresponds to 24 hours.
 
-A broker MUST ignore topic properties that it does not recognize: they are not stored and do not appear in the representation of the topic resource. Since the responses to topic creation and update return the current representation of the topic resource (see {{topic-create}}, {{topic-update-resource}}, and {{topic-update-resource-patch}}), a client can determine from the response which of the properties it sent have been accepted.
+A broker MUST ignore topic properties that it does not recognize. Ignored properties are not stored and do not appear in the representation of the topic resource. Since the responses to topic creation and update return the current representation of the topic resource (see {{topic-create}}, {{topic-update-resource}}, and {{topic-update-resource-patch}}), a client can determine from the response which of the properties it sent were accepted.
 
 The "resource-type" field carries a single value pertaining to the publish-subscribe functionality of the topic-data resource. The topic-data resource itself MAY have additional resource types visible in Link-Format discovery {{RFC6690}}, but those are not represented in this field.
 
@@ -496,7 +496,7 @@ If requirements are defined for the client to read the topic as requested and th
 
 The response payload is a CBOR map, whose possible entries are specified in {{topic-resource-representation}} and use the same abbreviations defined in {{pubsub-parameters}}.
 
-Successful responses to GET and FETCH requests on a topic resource are cacheable, following {{Section 5.6 of RFC7252}} and {{Section 2 of RFC8132}}. The broker indicates how long a topic representation stays fresh with the Max-Age option, bearing in mind that the configuration can be updated or the topic deleted at any time.
+Successful responses to GET and FETCH requests on a topic resource are cacheable, following {{Section 5.6 of RFC7252}} and {{Section 2 of RFC8132}}. The broker uses the Max-Age option to indicate for how long a topic representation can be considered fresh, taking into account that the topic configuration can be updated or the topic deleted at any time.
 
 For example, below is a request on the topic "/ps/h9392":
 
@@ -680,7 +680,7 @@ Example:
 
 The overview of the publish-subscribe mechanism based on CoAP is as follows: a publisher publishes to a topic by submitting the data in a PUT request to a topic-data resource and subscribers subscribe to a topic by submitting a GET request with the Observe option set to 0 (register) to a topic-data resource. When resource state changes, the server will send a notification to current subscribers observing the resource {{RFC7641}}.
 
-The broker creates the topic-data resource when it creates the topic. Until a publisher has published to it, the topic-data resource exists but has no representation: a GET request on it returns 2.06 (No Content) {{I-D.jimenez-core-coap-no-content}}, and a subscriber can register for notifications and receive the first publication when it happens (see {{subscribe}}).
+The broker creates the topic-data resource when it creates the topic. Until a publisher has published to it, the topic-data resource exists but has no representation: a GET request on it returns 2.06 (No Content) {{I-D.jimenez-core-coap-no-content}}, and a subscriber can register for notifications and receives the first publication as a notification (see {{subscribe}}).
 
 
 URIs for topic resources are broker-generated (see {{topic-create}}). Clients obtain the URI of the topic-data resource from the "topic-data" property (see {{topic-properties}}); it has no necessary URI pattern dependence on the URI of the topic resource.
@@ -716,7 +716,7 @@ A topic must have been created (see {{topic-create}}) in order to publish data t
 A client can publish data to a topic by submitting the data in a PUT request to the topic-data resource.
 The URI for this resource is indicated in the "topic-data" topic property value. Please note that this URI is not the same as the topic URI used for configuring the topic (see {{topic-resource-representation}}).
 
-On success, the server returns a successful response, typically 2.04 (Changed). The first publication to a topic-data resource that has no representation is no different from any other.
+On success, the server returns a successful response, typically 2.04 (Changed). The first publication to a topic-data resource that has no representation is handled like any other publication.
 
 If the request does not have an acceptable Content-Format, e.g., as specified by the "topic-content-format" property in the topic configuration, the server returns a 4.15 (Unsupported Content-Format) response.
 
@@ -751,7 +751,7 @@ A client can subscribe to a topic-data resource by sending a CoAP GET request wi
 
 On success, the server hosting the topic-data resource returns a successful response (typically 2.05 Content) with the data and the Observe Option. If no Observe Option is present in the response, the client should assume that the subscription was not successful.
 
-If the topic-data resource has no representation yet, the server confirms the registration with a 2.06 (No Content) response carrying the Observe Option {{I-D.jimenez-core-coap-no-content}}, and the subscriber receives the first publication as a 2.05 (Content) notification. Since a 2.06 (No Content) response carries no Content-Format, a subscriber that needs a specific Content-Format SHOULD include the Accept Option in the registration request; the "topic-content-format" property, when present, tells the subscriber which one to ask for.
+If the topic-data resource has no representation yet, the server confirms the registration with a 2.06 (No Content) response carrying the Observe Option {{I-D.jimenez-core-coap-no-content}}, and the subscriber receives the first publication as a 2.05 (Content) notification. Since a 2.06 (No Content) response carries no Content-Format, a subscriber that needs a specific Content-Format SHOULD include the Accept Option in the registration request; the "topic-content-format" property, when present, indicates the Content-Format to request.
 
 The following response codes are defined for the Subscribe operation:
 
@@ -880,7 +880,7 @@ Example:
    }
 ~~~~
 
-This document only defines a mechanism for subscribers to retrieve the latest topic-data resource representation. As an example of extension, a future specification might enable subscribers to retrieve old representations of the topic-data resource and control their storage with additional topic properties registered as described in {{iana-coap-pubsub-parameters}}.
+This document only defines a mechanism for subscribers to retrieve the latest topic-data resource representation. For example, a future specification could enable subscribers to retrieve earlier representations of the topic-data resource, and could define additional topic properties, registered as described in {{iana-coap-pubsub-parameters}}, to control how many of them the broker stores.
 
 ## Rate Limiting {#rate-limit}
 
@@ -915,7 +915,7 @@ The architecture presented in this document inherits the security considerations
 
 CoAP communications between each client and the broker MUST be secured. The default security protocol is defined by {{RFC7252}}. Examples of other security protocols that could be applied to CoAP communications are OSCORE {{RFC8613}} and DTLS 1.3 {{RFC9147}}. Protection MAY instead be provided below CoAP, e.g., by a secured link layer or by IPsec, as discussed for the NoSec mode in {{Section 9 of RFC7252}}. The choice of a security protocol depends on the requirements of the specific application and deployment. Security considerations for the selected security protocol apply as well.
 
-The content published on a topic by a publisher client SHOULD be protected end-to-end between the publisher and all the subscribers to that topic. Such protection MUST include source authentication of the published data, so that subscribers can verify who published it. This can be achieved at the application layer, e.g., by using COSE {{STD96}} {{RFC9053}}.
+The content published on a topic by a publisher client SHOULD be protected end-to-end between the publisher and all the subscribers to that topic. Such protection MUST include source authentication of the published data, so that subscribers can verify its origin. This can be achieved at the application layer, e.g., by using COSE {{STD96}} {{RFC9053}}.
 
 A 2.06 (No Content) response reveals that a topic-data resource exists. A broker that enforces access control on topic-data resources responds to unauthorized clients as it would for a nonexistent resource (see {{Section 7 of I-D.jimenez-core-coap-no-content}}).
 
@@ -1131,7 +1131,7 @@ Addressed the AD review of -21:
 * Topic-data resource is controlled by the broker and may be served from a different address; clients take its URI from the "topic-data" property
 * Brokers support all interactions on topic collections, topics and topic-data; clients use any subset
 * Reconciled topic collection discovery: GET on the collection always works, advertising it in /.well-known/core is a SHOULD
-* Unrecognized topic properties are ignored, not rejected; the returned representation shows what was accepted
+* Unrecognized topic properties are ignored; the returned representation shows which properties were accepted
 * Defined the iPATCH request payload as the topic properties to update, in the text and in the media type registration
 * Security between clients and broker is a MUST; protection below CoAP allowed as in RFC 7252 Section 9
 * End-to-end protection, when used, includes source authentication
@@ -1140,15 +1140,15 @@ Addressed the AD review of -21:
 * Link-format FETCH response tied to the TBD606 request Content-Format
 * Topic resource GET and FETCH responses are cacheable; added RFC 8132 as a normative reference
 * POST update resets any absent optional property; one subscriber-disruption note for both update methods
-* Discovery of the topic-data URI described rather than required
+* Section 3.3 points to where the topic-data URI is discovered instead of calling it a required step
 * Old-representations paragraph kept as an extensibility example
 * Editorial nits; topic-data examples use Content-Format 112
 * Replaced the HALF CREATED and FULLY CREATED states with one CREATED state: the broker creates the topic-data resource with the topic, GET and Observe on it return 2.06 (No Content) until the first publication; first publication returns 2.04; removed the "initialize" property; normative reference to draft-jimenez-core-coap-no-content
-* Removed the Delete topic-data operation: a DELETE terminates all observations, so it cannot clear a topic while keeping its subscribers; delete the topic or publish instead
+* Removed the Delete topic-data operation: a DELETE terminates all observations and therefore cannot clear a topic without losing its subscribers
 
 # Acknowledgements
 {: numbered='no'}
 
 The current version of this document contains a substantial contribution by Klaus Hartke's proposal {{I-D.hartke-t2trg-coral-pubsub}}, which defines the topic resource model and structure as well as the topic lifecycle and interactions. The document follows a similar architectural design as that provided by Marco Tiloca's {{I-D.ietf-ace-oscore-gm-admin}}.
 
-The authors would like to thank {{{Marco Tiloca}}}, {{{Esko Dijk}}},{{{Francesca Palombini}}}, {{{Christian Amsüss}}}, {{{Carsten Bormann}}}, {{{Hannes Tschofenig}}}, {{{Zach Shelby}}}, {{{Mohit Sethi}}}, Peter van der Stok, Tim Kellogg, Anders Eriksson, {{{Göran Selander}}}, Mikko Majanen, {{{Olaf Bergmann}}}, {{{David Navarro}}}, Oscar Novo and Lorenzo Corneo for their valuable contributions and reviews. {{{Mike Bishop}}} provided a detailed AD review of -21 that shaped this version.
+The authors would like to thank {{{Marco Tiloca}}}, {{{Esko Dijk}}},{{{Francesca Palombini}}}, {{{Christian Amsüss}}}, {{{Carsten Bormann}}}, {{{Hannes Tschofenig}}}, {{{Zach Shelby}}}, {{{Mohit Sethi}}}, Peter van der Stok, Tim Kellogg, Anders Eriksson, {{{Göran Selander}}}, Mikko Majanen, {{{Olaf Bergmann}}}, {{{David Navarro}}}, Oscar Novo and Lorenzo Corneo for their valuable contributions and reviews. The authors also thank {{{Mike Bishop}}} for his detailed AD review of -21.
