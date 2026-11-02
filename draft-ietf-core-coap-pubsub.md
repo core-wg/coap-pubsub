@@ -163,7 +163,7 @@ This document describes two sets of interactions; interactions to configure topi
 
 Topic interactions are: discovery, create, read configuration, update configuration, and delete configuration. These operations concern the management of the topics.
 
-The topic-data interactions are: publish, subscribe, unsubscribe, read, and delete. These operations are oriented on how data is transferred from a publisher to a subscriber.
+The topic-data interactions are: publish, subscribe, unsubscribe, and read. These operations are oriented on how data is transferred from a publisher to a subscriber.
 
 ## Managing Topics {#managing-topics}
 
@@ -660,7 +660,7 @@ A client can delete a topic by making a CoAP DELETE request on the topic resourc
 
 On success, the broker returns a 2.02 (Deleted) response. Since CoAP DELETE is idempotent, a client retransmitting a DELETE request for an already-deleted topic may receive a 4.04 (Not Found) response, which can be considered a successful deletion.
 
-When a topic resource is deleted, the broker MUST also delete the topic-data resource. As a result, the broker unsubscribes all subscribers by removing them from the list of observers and returning a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}.
+When a topic resource is deleted, the broker MUST also delete the topic-data resource. As a result, all observers of the topic-data resource are removed from the list of observers and receive a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}.
 
 Example:
 
@@ -687,11 +687,11 @@ URIs for topic resources are broker-generated (see {{topic-create}}). Clients ob
 
 ## Topic Lifecycle {#topic-lifecycle}
 
-When a topic is created, the broker places it in the CREATED state (see {{fig-life}}) and creates its topic-data resource. In this state a client can read, update and delete the topic, a publisher can publish to the topic-data resource, and a subscriber can read or observe the topic-data resource. Until the first publication, and after the topic-data resource has been deleted (see {{delete-topic-data}}), the topic-data resource has no representation: a GET request on it returns 2.06 (No Content), an Observe registration is confirmed with 2.06 (No Content), and observers receive a 2.05 (Content) notification when the first representation is published {{I-D.jimenez-core-coap-no-content}}.
+When a topic is created, the broker places it in the CREATED state (see {{fig-life}}) and creates its topic-data resource. In this state a client can read, update and delete the topic, a publisher can publish to the topic-data resource, and a subscriber can read or observe the topic-data resource. Until the first publication, the topic-data resource has no representation: a GET request on it returns 2.06 (No Content), an Observe registration is confirmed with 2.06 (No Content), and observers receive a 2.05 (Content) notification when the first representation is published {{I-D.jimenez-core-coap-no-content}}.
 
 ~~~~ aasvg
               Publish, Read, Subscribe, Unsubscribe,
-                  Update topic, Delete topic-data
+                      Update topic
                         .-------------.
                         |             |
                         v             |
@@ -704,8 +704,6 @@ When a topic is created, the broker places it in the CREATED state (see {{fig-li
 {: #fig-life title='Lifecycle of a Topic' artwork-align="center"}
 
 When a client deletes a topic resource, the topic is placed into the DELETED state and shortly after removed from the server. Both the topic resource and the topic-data resource are deleted. All observers of the topic-data resource are removed from the list of observers with a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}, and no further interactions with the topic are possible.
-
-When a client deletes the topic-data resource, the topic stays in the CREATED state. The topic-data resource loses its representation and its observers receive a 2.06 (No Content) notification; they remain registered and receive the next publication as a 2.05 (Content) notification. The "topic-data" property of the topic is unchanged.
 
 ## Topic-Data Interactions {#topic-data-interactions}
 
@@ -849,30 +847,6 @@ A CoAP client can unsubscribe by canceling the observation as described in {{Sec
 As per {{RFC7641}}, a server transmits notifications mostly as Non-confirmable messages, but it sends a notification as a Confirmable message instead of a Non-confirmable message at least every 24 hours.
 
 This value can be modified at the broker by the administrator of a topic by modifying the topic property "observer-check" (see {{topic-resource-representation}}). This would allow changing the rate at which different implementations verify that a subscriber is still interested in observing a topic-data resource.
-
-### Delete topic-data {#delete-topic-data}
-
-A publisher can delete a topic-data resource by making a CoAP DELETE request on the topic-data resource (which is hosted at the "topic-data" URI).
-
-On success, the broker returns a 2.02 (Deleted) response. Since CoAP DELETE is idempotent, repeating the request on a topic-data resource that already has no representation also returns 2.02 (Deleted).
-
-When a topic-data resource is deleted, the topic stays in the CREATED state as per {{topic-lifecycle}} and the topic-data resource loses its representation. Observers receive a 2.06 (No Content) notification and remain registered; they receive the next publication as a 2.05 (Content) notification. The "topic-data" property in the topic configuration remains unchanged.
-
-Example of a successful deletion:
-
-
-~~~~
-   Request:
-
-   Header: DELETE (Code=0.04)
-   Uri-Path: "ps"
-   Uri-Path: "data"
-   Uri-Path: "1bd0d6d"
-
-   Response:
-
-   Header: Deleted (Code=2.02)
-~~~~
 
 ## Read the latest data {#read-data}
 
@@ -1169,11 +1143,12 @@ Addressed the AD review of -21:
 * Discovery of the topic-data URI described rather than required
 * Old-representations paragraph kept as an extensibility example
 * Editorial nits; topic-data examples use Content-Format 112
-* Replaced the HALF CREATED and FULLY CREATED states with one CREATED state: the broker creates the topic-data resource with the topic, GET and Observe on it return 2.06 (No Content) until the first publication, deleting the topic-data clears it and notifies observers with 2.06; first publication returns 2.04; removed the "initialize" property; normative reference to draft-jimenez-core-coap-no-content
+* Replaced the HALF CREATED and FULLY CREATED states with one CREATED state: the broker creates the topic-data resource with the topic, GET and Observe on it return 2.06 (No Content) until the first publication; first publication returns 2.04; removed the "initialize" property; normative reference to draft-jimenez-core-coap-no-content
+* Removed the Delete topic-data operation: a DELETE terminates all observations, so it cannot clear a topic while keeping its subscribers; delete the topic or publish instead
 
 # Acknowledgements
 {: numbered='no'}
 
 The current version of this document contains a substantial contribution by Klaus Hartke's proposal {{I-D.hartke-t2trg-coral-pubsub}}, which defines the topic resource model and structure as well as the topic lifecycle and interactions. The document follows a similar architectural design as that provided by Marco Tiloca's {{I-D.ietf-ace-oscore-gm-admin}}.
 
-The authors would like to thank {{{Marco Tiloca}}}, {{{Esko Dijk}}},{{{Francesca Palombini}}}, {{{Christian Amsüss}}}, {{{Carsten Bormann}}}, {{{Hannes Tschofenig}}}, {{{Zach Shelby}}}, {{{Mohit Sethi}}}, Peter van der Stok, Tim Kellogg, Anders Eriksson, {{{Goran Selander}}}, Mikko Majanen, {{{Olaf Bergmann}}}, {{{David Navarro}}}, Oscar Novo and Lorenzo Corneo for their valuable contributions and reviews. {{{Mike Bishop}}} provided a detailed AD review of -21 that shaped this version.
+The authors would like to thank {{{Marco Tiloca}}}, {{{Esko Dijk}}},{{{Francesca Palombini}}}, {{{Christian Amsüss}}}, {{{Carsten Bormann}}}, {{{Hannes Tschofenig}}}, {{{Zach Shelby}}}, {{{Mohit Sethi}}}, Peter van der Stok, Tim Kellogg, Anders Eriksson, {{{Göran Selander}}}, Mikko Majanen, {{{Olaf Bergmann}}}, {{{David Navarro}}}, Oscar Novo and Lorenzo Corneo for their valuable contributions and reviews. {{{Mike Bishop}}} provided a detailed AD review of -21 that shaped this version.
