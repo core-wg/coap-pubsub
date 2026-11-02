@@ -5,10 +5,10 @@
 CoRE Working Group                                            J. Jimenez
 Internet-Draft                                                  Ericsson
 Intended status: Standards Track                               M. Koster
-Expires: 3 January 2027                                    Dogtiger Labs
+Expires: 6 May 2027                                        Dogtiger Labs
                                                               A. Keranen
                                                                 Ericsson
-                                                             2 July 2026
+                                                         2 November 2026
 
 
     A publish-subscribe architecture for the Constrained Application
@@ -53,9 +53,9 @@ Status of This Memo
 
 
 
-Jimenez, et al.          Expires 3 January 2027                 [Page 1]
+Jimenez, et al.            Expires 6 May 2027                   [Page 1]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
    Internet-Drafts are draft documents valid for a maximum of six months
@@ -63,7 +63,7 @@ Internet-Draft                 CoAP pubsub                     July 2026
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 January 2027.
+   This Internet-Draft will expire on 6 May 2027.
 
 Copyright Notice
 
@@ -89,61 +89,62 @@ Table of Contents
      2.1.  Collection Representation . . . . . . . . . . . . . . . .   8
      2.2.  Topic Representation  . . . . . . . . . . . . . . . . . .   8
        2.2.1.  Topic Properties  . . . . . . . . . . . . . . . . . .   8
-     2.3.  Discovery . . . . . . . . . . . . . . . . . . . . . . . .  10
+     2.3.  Discovery . . . . . . . . . . . . . . . . . . . . . . . .  11
        2.3.1.  Broker Discovery  . . . . . . . . . . . . . . . . . .  11
-       2.3.2.  Topic Collection Discovery  . . . . . . . . . . . . .  11
-       2.3.3.  Topic Discovery . . . . . . . . . . . . . . . . . . .  12
-       2.3.4.  Topic-Data Discovery  . . . . . . . . . . . . . . . .  13
-     2.4.  Topic Collection Interactions . . . . . . . . . . . . . .  14
-       2.4.1.  Retrieving all topics . . . . . . . . . . . . . . . .  14
-       2.4.2.  Getting Topics by Topic Properties  . . . . . . . . .  15
-       2.4.3.  Creating a Topic  . . . . . . . . . . . . . . . . . .  16
-     2.5.  Topic Interactions  . . . . . . . . . . . . . . . . . . .  18
-       2.5.1.  Getting a topic . . . . . . . . . . . . . . . . . . .  18
-       2.5.2.  Getting part of a topic . . . . . . . . . . . . . . .  19
-       2.5.3.  Updating the topic  . . . . . . . . . . . . . . . . .  20
-       2.5.4.  Updating the topic with iPATCH  . . . . . . . . . . .  22
-       2.5.5.  Deleting a topic  . . . . . . . . . . . . . . . . . .  23
-   3.  Publish and Subscribe . . . . . . . . . . . . . . . . . . . .  24
-     3.1.  Topic Lifecycle . . . . . . . . . . . . . . . . . . . . .  24
+       2.3.2.  Topic Collection Discovery  . . . . . . . . . . . . .  12
+       2.3.3.  Topic Discovery . . . . . . . . . . . . . . . . . . .  13
+       2.3.4.  Topic-Data Discovery  . . . . . . . . . . . . . . . .  14
+     2.4.  Topic Collection Interactions . . . . . . . . . . . . . .  15
+       2.4.1.  Retrieving all topics . . . . . . . . . . . . . . . .  15
+       2.4.2.  Getting Topics by Topic Properties  . . . . . . . . .  16
+       2.4.3.  Creating a Topic  . . . . . . . . . . . . . . . . . .  17
+     2.5.  Topic Interactions  . . . . . . . . . . . . . . . . . . .  19
+       2.5.1.  Getting a topic . . . . . . . . . . . . . . . . . . .  19
+       2.5.2.  Getting part of a topic . . . . . . . . . . . . . . .  20
+       2.5.3.  Updating the topic  . . . . . . . . . . . . . . . . .  21
+       2.5.4.  Updating the topic with iPATCH  . . . . . . . . . . .  23
+       2.5.5.  Deleting a topic  . . . . . . . . . . . . . . . . . .  24
+   3.  Publish and Subscribe . . . . . . . . . . . . . . . . . . . .  25
+     3.1.  Topic Lifecycle . . . . . . . . . . . . . . . . . . . . .  25
 
 
 
-Jimenez, et al.          Expires 3 January 2027                 [Page 2]
+Jimenez, et al.            Expires 6 May 2027                   [Page 2]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
-     3.2.  Topic-Data Interactions . . . . . . . . . . . . . . . . .  25
-       3.2.1.  Publish . . . . . . . . . . . . . . . . . . . . . . .  26
-       3.2.2.  Subscribe . . . . . . . . . . . . . . . . . . . . . .  27
-       3.2.3.  Unsubscribe . . . . . . . . . . . . . . . . . . . . .  29
-       3.2.4.  Delete topic-data . . . . . . . . . . . . . . . . . .  30
+     3.2.  Topic-Data Interactions . . . . . . . . . . . . . . . . .  26
+       3.2.1.  Publish . . . . . . . . . . . . . . . . . . . . . . .  27
+       3.2.2.  Subscribe . . . . . . . . . . . . . . . . . . . . . .  28
+       3.2.3.  Unsubscribe . . . . . . . . . . . . . . . . . . . . .  30
+       3.2.4.  Delete topic-data . . . . . . . . . . . . . . . . . .  31
      3.3.  Read the latest data  . . . . . . . . . . . . . . . . . .  31
      3.4.  Rate Limiting . . . . . . . . . . . . . . . . . . . . . .  32
-   4.  Encoding of PubSub Topic Properties . . . . . . . . . . . . .  32
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  33
-   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  34
-     6.1.  Media Type Registrations  . . . . . . . . . . . . . . . .  34
-     6.2.  CoAP Content-Formats  . . . . . . . . . . . . . . . . . .  35
+   4.  Encoding of PubSub Topic Properties . . . . . . . . . . . . .  33
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  34
+   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  35
+     6.1.  Media Type Registrations  . . . . . . . . . . . . . . . .  35
+     6.2.  CoAP Content-Formats  . . . . . . . . . . . . . . . . . .  36
      6.3.  Resource Types  . . . . . . . . . . . . . . . . . . . . .  36
-     6.4.  CoAP Pubsub Topic Properties Registry . . . . . . . . . .  36
-     6.5.  Expert Review Instructions  . . . . . . . . . . . . . . .  37
-   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  38
-     7.1.  Normative References  . . . . . . . . . . . . . . . . . .  38
-     7.2.  Informative References  . . . . . . . . . . . . . . . . .  40
-   Appendix A.  Document Updates . . . . . . . . . . . . . . . . . .  42
-     A.1.  Version -13 to -14  . . . . . . . . . . . . . . . . . . .  42
-     A.2.  Version -14 to -15  . . . . . . . . . . . . . . . . . . .  42
-     A.3.  Version -15 to -16  . . . . . . . . . . . . . . . . . . .  42
-     A.4.  Version -16 to -17  . . . . . . . . . . . . . . . . . . .  43
-     A.5.  Version -17 to -18  . . . . . . . . . . . . . . . . . . .  43
-     A.6.  Version -18 to -19  . . . . . . . . . . . . . . . . . . .  43
-     A.7.  Version -19 to -20  . . . . . . . . . . . . . . . . . . .  43
-     A.8.  Version -20 to -21  . . . . . . . . . . . . . . . . . . .  44
-   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  44
-   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  44
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  45
+     6.4.  CoAP Pubsub Topic Properties Registry . . . . . . . . . .  37
+       6.4.1.  Expert Review Instructions  . . . . . . . . . . . . .  38
+   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  39
+     7.1.  Normative References  . . . . . . . . . . . . . . . . . .  39
+     7.2.  Informative References  . . . . . . . . . . . . . . . . .  41
+   Appendix A.  Document Updates . . . . . . . . . . . . . . . . . .  43
+     A.1.  Version -13 to -14  . . . . . . . . . . . . . . . . . . .  43
+     A.2.  Version -14 to -15  . . . . . . . . . . . . . . . . . . .  43
+     A.3.  Version -15 to -16  . . . . . . . . . . . . . . . . . . .  43
+     A.4.  Version -16 to -17  . . . . . . . . . . . . . . . . . . .  44
+     A.5.  Version -17 to -18  . . . . . . . . . . . . . . . . . . .  44
+     A.6.  Version -18 to -19  . . . . . . . . . . . . . . . . . . .  44
+     A.7.  Version -19 to -20  . . . . . . . . . . . . . . . . . . .  44
+     A.8.  Version -20 to -21  . . . . . . . . . . . . . . . . . . .  45
+     A.9.  Version -21 to -22  . . . . . . . . . . . . . . . . . . .  45
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  46
+   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  46
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  47
 
 1.  Introduction
 
@@ -164,10 +165,9 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
 
 
-
-Jimenez, et al.          Expires 3 January 2027                 [Page 3]
+Jimenez, et al.            Expires 6 May 2027                   [Page 3]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
    For these nodes, the client/server-oriented architecture of REST can
@@ -221,9 +221,9 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
 
 
-Jimenez, et al.          Expires 3 January 2027                 [Page 4]
+Jimenez, et al.            Expires 6 May 2027                   [Page 4]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
       A set of information about an entity at the broker, including its
@@ -245,13 +245,14 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
    broker:
       A CoAP server component that hosts one or more topic collections
-      with their topics, and typically also topic-data resources.  The
-      broker is responsible for the store-and-forward of state update
-      representations, for the topics for which it hosts the
-      corresponding topic-data resources.  The broker is also
-      responsible for handling the topic lifecycle as defined in
-      Section 3.1.  The creation, configuration, and discovery of topics
-      at a broker is specified in Section 2.
+      with their topics, together with the topic-data resources of those
+      topics.  The broker is responsible for the store-and-forward of
+      state update representations and for handling the topic lifecycle
+      as defined in Section 3.1.  A topic-data resource may be served
+      from a different address than the topic resource, e.g., by a
+      server that is part of the same broker deployment.  The creation,
+      configuration, and discovery of topics at a broker is specified in
+      Section 2.
 
 1.2.  CoAP Publish-Subscribe Architecture
 
@@ -265,23 +266,23 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
    The broker is responsible for the store-and-forward of state update
    representations between CoAP clients.  Publishers submit their data
-   over the RESTful interface of a topic-data resource corresponding to
-   the topic, which can be hosted at the broker.  Subscribers to a topic
-   are notified of new publications by using Observe [RFC7641] on the
+   over the RESTful interface of the topic-data resource corresponding
+   to the topic, hosted by the broker.  Subscribers to a topic are
+   notified of new publications by using Observe [RFC7641] on the
    corresponding topic-data resource.
 
    As CoAP PubSub builds on [RFC7252] and [RFC7641], its messages are
    not events but state updates following the principle of eventual
    consistency rather than per-event delivery.  A message may be
-   silently coalesced when a newer message on the same topic is
 
 
 
-Jimenez, et al.          Expires 3 January 2027                 [Page 5]
+Jimenez, et al.            Expires 6 May 2027                   [Page 5]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
+   silently coalesced when a newer message on the same topic is
    delivered (e.g. by intermediaries or libraries), or be delivered
    twice, without changing the semantics.  Applications requiring
    stronger guarantees need to handle that explicitly.
@@ -332,10 +333,9 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
 
 
-
-Jimenez, et al.          Expires 3 January 2027                 [Page 6]
+Jimenez, et al.            Expires 6 May 2027                   [Page 6]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
                    ___
@@ -389,9 +389,9 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
 
 
-Jimenez, et al.          Expires 3 January 2027                 [Page 7]
+Jimenez, et al.            Expires 6 May 2027                   [Page 7]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
             Figure 3: Topic and topic-data resources of a topic
@@ -426,13 +426,29 @@ Internet-Draft                 CoAP pubsub                     July 2026
    is represented as a CBOR map containing the topic properties as top-
    level elements.
 
-   Unless specified otherwise, all topic properties are defined in this
-   document and their CBOR abbreviations are defined in Section 4.
+   The topic properties defined in this document are listed in
+   Section 2.2.1, with their CBOR abbreviations in Section 4.  Further
+   topic properties can be registered in the registry established in
+   Section 6.4.
 
 2.2.1.  Topic Properties
 
    The CBOR map includes the following topic properties, whose CBOR
    abbreviations are defined in Section 4.
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.            Expires 6 May 2027                   [Page 8]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
 
    *  "topic-name": A required field used as an application identifier.
       It encodes the topic name as a CBOR text string.  Examples of
@@ -443,28 +459,22 @@ Internet-Draft                 CoAP pubsub                     July 2026
       do not require human-readable names MAY use automatically
       generated values such as UUIDs.
 
-
-
-Jimenez, et al.          Expires 3 January 2027                 [Page 8]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
-
    *  "topic-data": A required field (optional during creation)
       containing the URI of the topic-data resource for publishing/
       subscribing to this topic.  It encodes the URI reference as a CBOR
-      text string.  The URI can be that of a resource on a different
-      address than that of the broker; implementations MUST NOT assume
-      that the topic-data resource is co-located with the broker.  If a
-      URI is not provided when creating the topic, the choice of the URI
-      for the topic-data resource is left to the broker.
+      text string.  The topic-data resource is controlled by the broker
+      but may be served from a different address than the topic
+      resource.  Clients MUST use the URI in this field to reach it and
+      MUST NOT derive it from the URI of the topic resource.  If a URI
+      is not provided when creating the topic, the choice of the URI for
+      the topic-data resource is left to the broker.
 
    *  "resource-type": A required field used to indicate the resource
       type of the topic-data resource for the topic.  It encodes the
-      resource type as a CBOR text string.  According to this document,
-      the value is "core.ps.data".  Other specifications or deployments
-      MAY define and use alternative resource type values for the topic-
-      data resource.
+      resource type as a CBOR text string.  This document defines the
+      value "core.ps.data".  Other specifications or deployments MAY
+      define and use alternative resource type values for the topic-data
+      resource.
 
    *  "topic-content-format": This optional field specifies the
       canonical CoAP Content-Format identifier of the topic-data
@@ -488,34 +498,37 @@ Internet-Draft                 CoAP pubsub                     July 2026
    *  "max-subscribers": An optional field used to indicate the maximum
       number of simultaneous subscribers allowed for the topic.  It
       encodes the maximum number as a CBOR unsigned integer.  If this
-      field is not present, then there is no limit to the number of
-      simultaneous subscribers allowed.  At topic creation or update,
-      this field is a hint from the topic creator; the broker MAY store
-      a different value than the one requested, or none at all.  Once
-      stored, the value is enforced: if the limit is reached, new
-      subscriptions are handled as specified in Section 4.1 of
-      [RFC7641].
 
 
 
-
-
-
-Jimenez, et al.          Expires 3 January 2027                 [Page 9]
+Jimenez, et al.            Expires 6 May 2027                   [Page 9]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
+
+      field is not present, the topic configuration sets no limit.  A
+      broker MAY still enforce a limit of its own, e.g., based on its
+      available resources, without exposing it in this field.  At topic
+      creation or update, this field is a hint from the topic creator;
+      the broker MAY store a different value than the one requested, or
+      none at all.  Once stored, the value is enforced: if the limit is
+      reached, new subscriptions are handled as specified in Section 4.1
+      of [RFC7641].
 
    *  "observer-check": An optional field that controls the maximum
       number of seconds between two consecutive Observe notifications
       sent as Confirmable messages to each topic subscriber (see
-      Section 3.2.3).  Encoded as a CBOR unsigned integer greater than
-      0, it ensures that subscribers that have lost interest and
-      silently forgotten the observation do not remain indefinitely on
-      the server's observer list.  If another CoAP server hosts the
-      topic-data resource, that server is responsible for applying the
-      "observer-check" value.  The default value for this field is
-      86400, as defined in [RFC7641], which corresponds to 24 hours.
+      Section 3.2.3).  It is encoded as a CBOR unsigned integer greater
+      than 0 and no greater than 86400, since Section 4.5 of [RFC7641]
+      requires a Confirmable notification at least every 24 hours.  It
+      ensures that subscribers that have lost interest and silently
+      forgotten the observation do not remain indefinitely on the
+      server's observer list.  At topic creation or update, this field
+      is a hint from the topic creator; the broker MAY store a different
+      value than the one requested, within the same bound.  Once stored,
+      the server from which the topic-data resource is served applies
+      the value.  The default value for this field is 86400, which
+      corresponds to 24 hours.
 
    *  "initialize": An optional field encoded as a CBOR byte string that
       contains the initial representation to pre-populate the topic-data
@@ -532,6 +545,23 @@ Internet-Draft                 CoAP pubsub                     July 2026
       topic-data resource is not initialized.  When this field is
       present, "topic-content-format" MUST also be specified.
 
+   A broker MUST ignore topic properties that it does not recognize:
+   they are not stored and do not appear in the representation of the
+   topic resource.  Since the responses to topic creation and update
+   return the current representation of the topic resource (see
+   Section 2.4.3, Section 2.5.3, and Section 2.5.4), a client can
+   determine from the response which of the properties it sent have been
+   accepted.
+
+
+
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 10]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
+
    The "resource-type" field carries a single value pertaining to the
    publish-subscribe functionality of the topic-data resource.  The
    topic-data resource itself MAY have additional resource types visible
@@ -547,21 +577,6 @@ Internet-Draft                 CoAP pubsub                     July 2026
    parameter as defined in Section 4.1 of [RFC6690] and as used in the
    examples in this section.
 
-
-
-
-
-
-
-
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 10]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
-
    The CoRE Link Format discovery responses shown in the examples in
    this section are illustrative only.  The normative requirements for
    this format are defined in [RFC6690].  The examples make minimal use
@@ -573,10 +588,10 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
 2.3.1.  Broker Discovery
 
-   CoAP clients MAY discover brokers by using CoAP discovery [RFC7252],
+   CoAP clients can discover brokers by using CoAP discovery [RFC7252],
    via multicast, through a Resource Directory (RD) [RFC9176] or by
-   other means specified in extensions to [RFC7252].  Brokers MAY
-   register with an RD by following the steps on Section 5 of [RFC9176]
+   other means specified in extensions to [RFC7252].  Brokers can
+   register with an RD by following the steps in Section 5 of [RFC9176]
    with the resource type set to "core.ps" as defined in Section 6 of
    this document.
 
@@ -585,6 +600,23 @@ Internet-Draft                 CoAP pubsub                     July 2026
    the multicast scope will answer the query.  Even when that discovery
    is unprotected, it does not disclose the existence of the topics but
    only that of the broker.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 11]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
 
       Request:
 
@@ -603,20 +635,14 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
 2.3.2.  Topic Collection Discovery
 
-   A broker SHOULD offer a topic discovery entry point to enable clients
-   to find topics of interest.  The resource entry point is the topic
-   collection resource (see Section 1.2.2 of [RFC6690]) and is
-   identified by the resource type "core.ps.coll".
-
-
-
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 11]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
+   The topic collection resource is the entry point for topic discovery,
+   since its representation lists the topics it contains (see
+   Section 2.4.1).  A broker SHOULD make its topic collection resources
+   discoverable via "/.well-known/core" (see Section 1.2.2 of
+   [RFC6690]), identified by the resource type "core.ps.coll".  A broker
+   that restricts the discovery of its topic collections to authorized
+   clients can omit them from "/.well-known/core" and rely on other
+   means, such as a Resource Directory [RFC9176] or pre-configuration.
 
    The specific resource path is left for implementations.  Examples in
    this document use the "/ps" path.  The interactions with a topic
@@ -629,6 +655,24 @@ Internet-Draft                 CoAP pubsub                     July 2026
    discovery.
 
    Example:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 12]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
 
       Request:
 
@@ -648,31 +692,21 @@ Internet-Draft                 CoAP pubsub                     July 2026
    Note that in this example the "ct" attribute is not included for the
    two collections in the returned CoRE Link Format document.  This is
    because the "ct" attribute is an optional hint, which is not needed
-   in this case: the Content-format of each topic collection resource is
+   in this case: the Content-Format of each topic collection resource is
    implied by its resource type (rt="core.ps.coll") to be 40
    ("application/link-format").
 
 2.3.3.  Topic Discovery
 
-   A broker MAY offer topic resources via /.well-known/core.  Each topic
+   A broker can also list its topic resources in /.well-known/core,
+   identified by the resource type "core.ps.conf".  Each topic
    collection is associated with a group of topic resources, each
    detailing the configuration of its respective topic (refer to
-   Section 2.2.1).  Each topic resource is identified by the resource
-   type "core.ps.conf".
+   Section 2.2.1).
 
    Below is an example of discovery via /.well-known/core with query
    rt=core.ps.conf that returns a list of topics, as the list of links
    to the corresponding topic resources.
-
-
-
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 12]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
 
       Request:
 
@@ -689,6 +723,13 @@ Internet-Draft                 CoAP pubsub                     July 2026
       </ps/h9392>;rt="core.ps.conf",
       </other/path/2e3570>;rt="core.ps.conf"
 
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 13]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
+
    In certain scenarios, the method described herein may not be
    applicable, e.g., if the server wants to restrict topic availability.
    For example, the server hosting /.well-known/core may not be aware of
@@ -701,34 +742,18 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
 2.3.4.  Topic-Data Discovery
 
-   Within a topic, there is the "topic-data" topic property that
-   contains the URI of the topic-data resource used for publishing and
-   subscribing.  So retrieving the topic will also provide the URL of
-   the topic-data resource (see Section 2.5.1).
+   The "topic-data" topic property of a topic contains the URI of the
+   topic-data resource used for publishing and subscribing.  Retrieving
+   the topic will also provide the URL of the topic-data resource (see
+   Section 2.5.1).
 
-   According to this specification, the topic-data resources use the
-   resource type "core.ps.data".  Other specifications or deployments
-   MAY use alternative resource type values (see Section 2.2.1).  It is
-   also possible to discover a list of topic-data resources, by sending
-   a request to the collection resource with a query parameter
-   rt=core.ps.data as shown in the example below.  Every topic
+   This specification defines the resource type "core.ps.data" for
+   topic-data resources.  Other specifications or deployments MAY use
+   alternative resource type values (see Section 2.2.1).  It is also
+   possible to discover a list of topic-data resources by sending a
+   request to the collection resource with a query parameter
+   rt=core.ps.data, as shown in the example below.  Every topic
    collection resource MUST support this query.
-
-
-
-
-
-
-
-
-
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 13]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
 
       Request:
 
@@ -748,14 +773,24 @@ Internet-Draft                 CoAP pubsub                     July 2026
    already constrains all links in the response to be only of type
    "core.ps.data".  Therefore, including the "rt" attribute for each
    returned link would be unnecessary and would make the response size
-   much larger.  So the broker, in this example case, was implemented to
-   elide these attributes always, to minimize the size of discovery
-   response payloads.
+   much larger.  A broker MAY elide these attributes to minimize the
+   size of discovery response payloads, as the broker in this example
+   does.
+
+
+
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 14]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
 
 2.4.  Topic Collection Interactions
 
-   Topic collection interactions are the interactions that can happen
-   directly with a specific topic collection.
+   A broker MUST support all the interactions with a topic collection
+   resource defined in this section.  A client MAY use any subset of
+   them.
 
    The CoRE Link Format responses shown in the examples in this section
    are illustrative only.  The normative requirements for this format
@@ -774,19 +809,11 @@ Internet-Draft                 CoAP pubsub                     July 2026
    Content), specifying the list of links to topic resources associated
    with this topic collection (see Section 2.2).
 
-   A client MAY retrieve a list of links to topics it is authorized to
-   access, based on its permissions.  A broker MUST implement topic
-   collection discovery.
+   The broker MAY limit the returned list to the topics that the client
+   is authorized to access.  Discovery of the topic collection resource
+   itself is described in Section 2.3.2.
 
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 14]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
-
-   The content-format 40 ("application/link-format") MUST be supported
+   The Content-Format 40 ("application/link-format") MUST be supported
    for the topic collection resource.
 
    Example:
@@ -802,6 +829,18 @@ Internet-Draft                 CoAP pubsub                     July 2026
       Content-Format: 40 (application/link-format)
       Payload:
       </ps/h9392>,</ps/2e3570>
+
+
+
+
+
+
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 15]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
 
    Note that no "rt" or "ct" attributes are returned for the topic
    resources in the example payload, because the resource type
@@ -828,18 +867,35 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
    This section describes FETCH semantics on the topic collection for
    request payloads with Content-Format TBD606 ("application/core-
-   pubsub+cbor"); other request Content-Formats may be defined in
-   extensions.  The response uses Content-Format 40 ("application/link-
-   format").
+   pubsub+cbor"), for which the response uses Content-Format 40
+   ("application/link-format").  Extensions that define other request
+   Content-Formats also define the Content-Format of the corresponding
+   response.
 
    Example:
 
 
 
 
-Jimenez, et al.          Expires 3 January 2027                [Page 15]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 16]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
       Request:
@@ -871,9 +927,9 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
    A client can add a new topic to a collection of topics by submitting
    an initial representation of the topic resource (see Section 2.2) in
-   a POST request to the topic collection URI.  The request MUST specify
-   at least a subset of the topic properties in Section 2.2.1, namely:
-   "topic-name" and "resource-type".
+   a POST request to the topic collection URI.  The request MUST include
+   the "topic-name" and "resource-type" topic properties, and MAY
+   include any other topic property in Section 2.2.1.
 
    Please note that the topic will _not_ be fully created until a
    publisher has published some data to it (See Section 3.1).
@@ -893,9 +949,9 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
 
 
-Jimenez, et al.          Expires 3 January 2027                [Page 16]
+Jimenez, et al.            Expires 6 May 2027                  [Page 17]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
    When "initialize" is omitted, the topic will only be fully created
@@ -903,12 +959,12 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
    On success, the broker returns a 2.01 (Created) response, indicating
    the Location-Path of the new topic and the current representation of
-   the topic resource.  The response payload includes a CBOR map.  The
-   response MUST include the required topic properties (see
-   Section 2.2.1), namely: "topic-name", "resource-type", and "topic-
-   data".  It MAY also include a number of optional topic properties
-   too.  The response MUST support Content-Format TBD606 ("application/
-   core-pubsub+cbor"), which is the default.
+   the topic resource.  The response payload is a CBOR map.  The
+   response MUST include the required topic properties "topic-name",
+   "resource-type", and "topic-data" (see Section 2.2.1), and MAY
+   include optional topic properties.  The response MUST support
+   Content-Format TBD606 ("application/core-pubsub+cbor"), which is the
+   default.
 
    If requirements are defined for the client to create the topic as
    requested and the broker does not successfully assess that those
@@ -916,10 +972,43 @@ Internet-Draft                 CoAP pubsub                     July 2026
    error response (such as 4.03 Forbidden).
 
    The broker MUST reply with a 4.xx client error response (such as 4.00
-   Bad Request) if a received parameter is invalid, unrecognized, or if
-   the "topic-name" is already in use or otherwise invalid.
+   Bad Request) if the value of a recognized topic property is invalid,
+   or if the "topic-name" is already in use or otherwise invalid.
+   Unrecognized topic properties are ignored (see Section 2.2.1).
+
+   If the request includes a "topic-data" URI at which the broker cannot
+   serve the topic-data resource, the broker MUST reply with a 4.xx
+   client error response (such as 4.00 Bad Request).
 
    Below is an example of a successful topic creation:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 18]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
 
       Request:
 
@@ -945,19 +1034,10 @@ Internet-Draft                 CoAP pubsub                     July 2026
          / resource-type /      2: "core.ps.data"
       }
 
-
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 17]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
-
 2.5.  Topic Interactions
 
-   These are the interactions that can happen at the topic resource
-   level.
+   A broker MUST support all the interactions with a topic resource
+   defined in this section.  A client MAY use any subset of them.
 
 2.5.1.  Getting a topic
 
@@ -976,6 +1056,21 @@ Internet-Draft                 CoAP pubsub                     July 2026
    The response payload is a CBOR map, whose possible entries are
    specified in Section 2.2 and use the same abbreviations defined in
    Section 4.
+
+
+
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 19]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
+
+   Successful responses to GET and FETCH requests on a topic resource
+   are cacheable, following Section 5.6 of [RFC7252] and Section 2 of
+   [RFC8132].  The broker indicates how long a topic representation
+   stays fresh with the Max-Age option, bearing in mind that the
+   configuration can be updated or the topic deleted at any time.
 
    For example, below is a request on the topic "/ps/h9392":
 
@@ -1000,16 +1095,6 @@ Internet-Draft                 CoAP pubsub                     July 2026
          / max-subscribers /       6: 100
       }
 
-
-
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 18]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
-
 2.5.2.  Getting part of a topic
 
    A client can read the configuration of a topic by making a FETCH
@@ -1027,6 +1112,15 @@ Internet-Draft                 CoAP pubsub                     July 2026
    Content) with a representation of the topic resource.  The response
    has as payload the partial representation of the topic resource as
    specified in Section 2.2.
+
+
+
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 20]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
 
    If requirements are defined for the client to read the topic as
    requested and the broker does not successfully assess that those
@@ -1046,25 +1140,6 @@ Internet-Draft                 CoAP pubsub                     July 2026
    representation.
 
    Example:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 19]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
 
       Request:
 
@@ -1095,32 +1170,28 @@ Internet-Draft                 CoAP pubsub                     July 2026
    full resource representation, these immutable properties may be
    included in the request with their current values.
 
-   On success, the topic is overwritten and the broker returns a 2.04
-   (Changed) response and the current full resource representation.  The
-   broker MAY choose not to overwrite topic properties that are not
-   explicitly modified in the request.
 
-   Similarly, decreasing "max-subscribers" will also cause that some
-   subscribers get unsubscribed.  Unsubscribed endpoints receive a final
-   4.04 (Not Found) response as per Section 3.2 of [RFC7641].  The
-   specific queue management for unsubscribing is left for implementors.
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 21]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
+
+   On success, the topic is overwritten and the broker returns a 2.04
+   (Changed) response and the current full resource representation.
+
+   Decreasing "max-subscribers" causes some subscribers to be
+   unsubscribed.  Unsubscribed endpoints receive a final 4.04 (Not
+   Found) response as per Section 3.2 of [RFC7641].  The specific queue
+   management for unsubscribing is left for implementors.
 
    Please note that when using POST the topic is being overwritten, thus
-   some of the optional topic properties (e.g., "max-subscribers",
-   "observer-check") not included in the POST message will be reset to
-   their default values.
+   any optional topic property (e.g., "max-subscribers", "observer-
+   check") not included in the POST message is reset to its default
+   value.
 
    Example:
-
-
-
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 20]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
 
       Request:
 
@@ -1154,47 +1225,46 @@ Internet-Draft                 CoAP pubsub                     July 2026
          / observer-check /        7: 86400
       }
 
-   Note that, when a topic changes, it may result in disruptions for the
-   subscribers.  Some potential issues that may arise include:
-
-   *  Limiting the number of subscribers will cause cancellation of
-      ongoing subscriptions until "max-subscribers" has been reached.
-
-   *  Changing of the "expiration-date" may cause cancellation of
-      ongoing subscriptions if the topic expires at an earlier date.
 
 
 
 
-
-
-
-
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 21]
+Jimenez, et al.            Expires 6 May 2027                  [Page 22]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
+
+   Note that, when a topic changes through either update method (POST or
+   iPATCH), it may result in disruptions for the subscribers.  Some
+   potential issues that may arise include:
+
+   *  Reducing the number of subscribers will cause cancellation of
+      ongoing subscriptions if the new "max-subscribers" has been
+      exceeded.
+
+   *  Changing the "expiration-date" to an earlier time will cause the
+      topic to expire earlier, cancelling ongoing subscriptions at that
+      time.
 
 2.5.4.  Updating the topic with iPATCH
 
    A client can partially update a topic's configuration by submitting a
    partial topic representation in an iPATCH request to the topic URI.
-   The iPATCH request allows for updating only specific fields of the
-   topic while leaving the others unchanged.  As with the POST method,
-   the topic properties "topic-name", "topic-data", and "resource-type"
-   are immutable post-creation, and any request attempting to change
-   them will be deemed invalid by the broker.
+   The request payload is a CBOR map with Content-Format TBD606
+   ("application/core-pubsub+cbor") carrying the topic properties to
+   update.  Each topic property present in the request replaces the
+   current value of that property in the topic resource.  Topic
+   properties absent from the request are left unchanged.  As with the
+   POST method, the topic properties "topic-name", "topic-data", and
+   "resource-type" are immutable post-creation, and any request
+   attempting to change them will be deemed invalid by the broker.
 
    On success, the broker returns a 2.04 (Changed) response and the
    current full resource representation.  The broker only updates topic
    properties that are explicitly mentioned in the request.
 
-   Decreasing "max-subscribers" will also cause some subscribers to get
-   unsubscribed.  Unsubscribed endpoints receive a final 4.04 (Not
-   Found) response as per Section 3.2 of [RFC7641].
+   The disruptions for subscribers described in Section 2.5.3 apply to
+   iPATCH updates as well.
 
    Contrary to POST, iPATCH operations will explicitly update some topic
    properties, leaving others unmodified.  In the below example, two
@@ -1215,23 +1285,9 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 22]
+Jimenez, et al.            Expires 6 May 2027                  [Page 23]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
       Request:
@@ -1262,11 +1318,6 @@ Internet-Draft                 CoAP pubsub                     July 2026
          / observer-check /        7: 86400
       }
 
-   Note that when a topic changes through an iPATCH request, it may
-   result in disruptions for the subscribers.  For example, limiting the
-   number of subscribers will cause cancellation of ongoing
-   subscriptions until "max-subscribers" has been reached.
-
 2.5.5.  Deleting a topic
 
    A client can delete a topic by making a CoAP DELETE request on the
@@ -1282,15 +1333,18 @@ Internet-Draft                 CoAP pubsub                     July 2026
    subscribers by removing them from the list of observers and returning
    a final 4.04 (Not Found) response as per Section 3.2 of [RFC7641].
 
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 23]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
-
    Example:
+
+
+
+
+
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 24]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
 
       Request:
 
@@ -1322,8 +1376,9 @@ Internet-Draft                 CoAP pubsub                     July 2026
    "fully created" (see Section 3.1).
 
    URIs for topic resources are broker-generated (see Section 2.4.3).
-   There is no necessary URI pattern dependence between the URI where
-   the topic-data resource exists and the URI of the topic resource.
+   Clients obtain the URI of the topic-data resource from the "topic-
+   data" property (see Section 2.2.1); it has no necessary URI pattern
+   dependence on the URI of the topic resource.
 
 3.1.  Topic Lifecycle
 
@@ -1332,18 +1387,19 @@ Internet-Draft                 CoAP pubsub                     July 2026
    read and update the configuration of the topic and delete the topic.
    A publisher can publish to the topic-data resource.  However, a
    subscriber cannot yet subscribe to the topic-data resource nor read
-   the latest data.
+   the latest data: a GET request on it returns 4.04 (Not Found), as it
+   does for a DELETED topic.  A client can tell the two states apart by
+   retrieving the topic resource (see Section 2.5.1), which still exists
+   for a HALF CREATED topic and is gone for a DELETED one.
 
 
 
 
 
 
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 24]
+Jimenez, et al.            Expires 6 May 2027                  [Page 25]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
                     HALF                          FULLY
@@ -1376,7 +1432,7 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
    When a client deletes a topic-data resource, the associated topic is
    placed into the HALF CREATED state, where clients can read, update
-   and delete the topic and await for a publisher to begin publication.
+   and delete the topic and wait for a publisher to begin publication.
    All existing subscribers are removed from the list of observers of
    the topic-data resource by sending a final 4.04 (Not Found) response
    as per Section 3.2 of [RFC7641].  The "topic-data" property in the
@@ -1388,18 +1444,18 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
 3.2.  Topic-Data Interactions
 
-   Interactions with the topic-data resource are covered in this
-   section.
+   The server hosting the topic-data resource MUST support all the
+   interactions defined in this section and in Section 3.3.  A client
+   MAY use any subset of them.
 
 
 
 
 
 
-
-Jimenez, et al.          Expires 3 January 2027                [Page 25]
+Jimenez, et al.            Expires 6 May 2027                  [Page 26]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
 3.2.1.  Publish
@@ -1426,7 +1482,7 @@ Internet-Draft                 CoAP pubsub                     July 2026
    follow-up publication from a publisher should result in a 2.04
    response from the server.
 
-   If the request does not have an acceptable Content-format, e.g., as
+   If the request does not have an acceptable Content-Format, e.g., as
    specified by the "topic-content-format" property in the topic
    configuration, the server returns a 4.15 (Unsupported Content-Format)
    response.
@@ -1453,9 +1509,9 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
 
 
-Jimenez, et al.          Expires 3 January 2027                [Page 26]
+Jimenez, et al.            Expires 6 May 2027                  [Page 27]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
       Request:
@@ -1464,7 +1520,7 @@ Internet-Draft                 CoAP pubsub                     July 2026
       Uri-Path: "ps"
       Uri-Path: "data"
       Uri-Path: "1bd0d6d"
-      Content-Format: 110
+      Content-Format: 112 (application/senml+cbor)
       Payload (in CBOR diagnostic notation):
       {
          "n": "coaps://dev1.example.com/temperature",
@@ -1485,7 +1541,7 @@ Internet-Draft                 CoAP pubsub                     July 2026
       Uri-Path: "ps"
       Uri-Path: "data"
       Uri-Path: "1bd0d6d"
-      Content-Format: 110
+      Content-Format: 112 (application/senml+cbor)
       Payload (in CBOR diagnostic notation):
       {
          "n": "coaps://dev1.example.com/temperature",
@@ -1509,9 +1565,9 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
 
 
-Jimenez, et al.          Expires 3 January 2027                [Page 27]
+Jimenez, et al.            Expires 6 May 2027                  [Page 28]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
    On success, the server hosting the topic-data resource returns a
@@ -1565,9 +1621,9 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
 
 
-Jimenez, et al.          Expires 3 January 2027                [Page 28]
+Jimenez, et al.            Expires 6 May 2027                  [Page 29]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
       Request:
@@ -1581,7 +1637,7 @@ Internet-Draft                 CoAP pubsub                     July 2026
       Response:
 
       Header: Content (Code=2.05)
-      Content-Format: 110
+      Content-Format: 112 (application/senml+cbor)
       Observe: 10001
       Max-Age: 15
       Payload (in CBOR diagnostic notation):
@@ -1595,7 +1651,7 @@ Internet-Draft                 CoAP pubsub                     July 2026
       Response:
 
       Header: Content (Code=2.05)
-      Content-Format: 110
+      Content-Format: 112 (application/senml+cbor)
       Observe: 10002
       Max-Age: 15
       Payload (in CBOR diagnostic notation):
@@ -1621,9 +1677,9 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
 
 
-Jimenez, et al.          Expires 3 January 2027                [Page 29]
+Jimenez, et al.            Expires 6 May 2027                  [Page 30]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
    This value can be modified at the broker by the administrator of a
@@ -1644,9 +1700,9 @@ Internet-Draft                 CoAP pubsub                     July 2026
    response, which can be considered a successful deletion.
 
    When a topic-data resource is deleted, the topic is then set back to
-   the HALF CREATED state as per Section 3.1 awaiting for a publisher to
-   publish and set the topic to FULLY CREATED state where clients can
-   subscribe and read the topic-data.  All existing subscribers are
+   the HALF CREATED state as per Section 3.1, waiting for a publisher to
+   publish and set the topic to the FULLY CREATED state where clients
+   can subscribe and read the topic-data.  All existing subscribers are
    removed from the list of observers of the topic-data resource by
    sending a final 4.04 (Not Found) response as per Section 3.2 of
    [RFC7641].  The "topic-data" property in the topic configuration
@@ -1669,25 +1725,18 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
       Header: Deleted (Code=2.02)
 
-
-
-
-
-
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 30]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
-
 3.3.  Read the latest data
 
    A client can get the latest published topic-data resource by making a
-   GET request to the "topic-data" URI.  Please note that discovery of
-   the "topic-data" topic property is a required previous step (see
-   Section 2.5.1).
+   GET request to the "topic-data" URI.  Discovery of that URI through
+   the "topic-data" topic property is described in Section 2.5.1.
+
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 31]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
 
    On success, the server returns a successful response (typically 2.05
    Content) with the data.
@@ -1708,7 +1757,7 @@ Internet-Draft                 CoAP pubsub                     July 2026
       Response:
 
       Header: Content (Code=2.05)
-      Content-Format: 110
+      Content-Format: 112 (application/senml+cbor)
       Max-Age: 15
       Payload (in CBOR diagnostic notation):
       {
@@ -1718,39 +1767,39 @@ Internet-Draft                 CoAP pubsub                     July 2026
          "v": 23.5
       }
 
-   As defined in this document, subscribers can retrieve the latest
-   topic-data resource representation.  Future specifications can enable
-   subscribers to additionally retrieve old representations of the
-   topic-data resource.  The storing of those old representations can be
-   affected, for example, by an additional topic property at the broker
-   that specifies the maximum number of stored old representations of
-   the topic-data.  Further details are out of the scope of this
-   document.
-
-
-
-
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 31]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
+   This document only defines a mechanism for subscribers to retrieve
+   the latest topic-data resource representation.  As an example of
+   extension, a future specification might enable subscribers to
+   retrieve old representations of the topic-data resource and control
+   their storage with additional topic properties registered as
+   described in Section 6.4.
 
 3.4.  Rate Limiting
 
-   The server hosting the topic-data resource may have to handle a
-   potentially large number of publishers and subscribers at the same
-   time.  This means it could become overwhelmed if it receives too many
-   publications in a short period of time.
+   The server hosting the topic-data resource may have to handle a large
+   number of publishers and subscribers at the same time.  This means it
+   could become overwhelmed if it receives too many publications in a
+   short period of time.
 
-   In this situation, if a publisher is sending publications too fast,
-   the server SHOULD return a 4.29 (Too Many Requests) response
-   [RFC8516].  As described in [RFC8516], the Max-Age option [RFC7252]
-   in this response indicates the number of seconds after which the
-   client may retry.  The server MAY also stop dispatching messages from
-   that publisher for the indicated time.
+
+
+
+
+
+
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 32]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
+
+   If a publisher is sending publications too fast, the server SHOULD
+   return a 4.29 (Too Many Requests) response [RFC8516].  As described
+   in [RFC8516], the Max-Age option [RFC7252] in this response indicates
+   the number of seconds after which the client may retry.  The server
+   MAY also stop dispatching messages from that publisher for the
+   indicated time.
 
    When a publisher receives a 4.29 (Too Many Requests) response, it
    MUST NOT send any new publication requests to the same topic-data
@@ -1767,32 +1816,6 @@ Internet-Draft                 CoAP pubsub                     July 2026
    Note that the media type "application/core-pubsub+cbor" MUST be used
    when these topic properties are transported in the respective CoAP
    message payloads.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 32]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
 
             +======================+==========+==============+
             | Name                 | CBOR Key | CBOR Type    |
@@ -1819,6 +1842,14 @@ Internet-Draft                 CoAP pubsub                     July 2026
               Table 1: CoAP Pubsub Topic Properties and CBOR
                                  Encoding
 
+
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 33]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
+
 5.  Security Considerations
 
    The architecture presented in this document inherits the security
@@ -1826,29 +1857,22 @@ Internet-Draft                 CoAP pubsub                     July 2026
    from Web Linking [RFC8288], CoRE Link Format [RFC6690], and the CoRE
    Resource Directory [RFC9176].
 
-   CoAP communications between each client and the broker are
-   RECOMMENDED to be secured.  The default security protocol is defined
-   by [RFC7252].  Examples of other security protocols that could be
-   applied to CoAP communications are OSCORE [RFC8613] and DTLS 1.3
-   [RFC9147].  The choice of a security protocol depends on the
+   CoAP communications between each client and the broker MUST be
+   secured.  The default security protocol is defined by [RFC7252].
+   Examples of other security protocols that could be applied to CoAP
+   communications are OSCORE [RFC8613] and DTLS 1.3 [RFC9147].
+   Protection MAY instead be provided below CoAP, e.g., by a secured
+   link layer or by IPsec, as discussed for the NoSec mode in Section 9
+   of [RFC7252].  The choice of a security protocol depends on the
    requirements of the specific application and deployment.  Security
    considerations for the selected security protocol apply as well.
 
    The content published on a topic by a publisher client SHOULD be
    protected end-to-end between the publisher and all the subscribers to
-   that topic.  In such a case, it MUST be possible to verify source
-   authentication of the published data.  This can be achieved at the
-   application layer, e.g., by using COSE [STD96] [RFC9053].
-
-
-
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 33]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
+   that topic.  Such protection MUST include source authentication of
+   the published data, so that subscribers can verify who published it.
+   This can be achieved at the application layer, e.g., by using COSE
+   [STD96] [RFC9053].
 
    Access control of clients at the broker MAY be enforced for
    performing discovery operations, and SHOULD be enforced in a fine-
@@ -1859,26 +1883,40 @@ Internet-Draft                 CoAP pubsub                     July 2026
    topics at the broker or publish (large) contents, which may result in
    Denial of Service against the broker and the active subscribers.
 
-   Building on [RFC9594], its application profile for publish-subscribe
-   communication with CoAP [I-D.ietf-ace-pubsub-profile] provides a
+   The application profile for publish-subscribe communication with CoAP
+   [I-D.ietf-ace-pubsub-profile], which builds on [RFC9594], provides a
    security model that can be used in the architecture presented in this
    document, in order to enable secure communication between the
    different parties as well as secure, authorized operations of
    publishers and subscribers that fulfill the requirements above.
 
    In particular, the application profile above relies on the ACE
-   framework for Authentication and Authorization in Constrained
-   Environments (ACE) [RFC9200] and defines a method to: authorize
-   publishers and subscribers to perform operations at the broker, with
-   fine-grained access control; authorize publishers and subscribers to
-   obtain the keying material required to take part to a topic managed
-   by the broker that also hosts the corresponding topic-data resource;
-   protect published data end-to-end between a publisher and all the
-   subscribers to the targeted topic, ensuring confidentiality,
-   integrity, and source authentication of the published content end-to-
-   end.  That approach can be extended to enforce authorization and
-   fine-grained access control for administrator clients that are
-   intended to create, update, and delete topics at the broker.
+   framework [RFC9200] and defines a method to:
+
+   *  authorize publishers and subscribers to perform operations at the
+      broker, with fine-grained access control;
+
+
+
+
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 34]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
+
+   *  authorize publishers and subscribers to obtain the keying material
+      required to take part to a topic managed by the broker that also
+      hosts the corresponding topic-data resource;
+
+   *  protect published data end-to-end between a publisher and all the
+      subscribers to the targeted topic, ensuring confidentiality,
+      integrity, and source authentication of the published content.
+
+   That approach can be extended to enforce authorization and fine-
+   grained access control for administrator clients that are intended to
+   create, update, and delete topics at the broker.
 
 6.  IANA Considerations
 
@@ -1892,19 +1930,13 @@ Internet-Draft                 CoAP pubsub                     July 2026
    This specification registers the "application/core-pubsub+cbor" media
    type in the IANA Media Types registry.  It is used for messages of
    the protocols defined in this document and carries topic properties
-   encoded in CBOR.  This registration follows the procedures specified
-   in [BCP13].
+   encoded in CBOR.  In an iPATCH request to a topic resource, the map
+   carries the topic properties to update (see Section 2.5.4).  This
+   registration follows the procedures specified in [BCP13].
 
    Type name:  application
 
    Subtype name:  core-pubsub+cbor
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 34]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
 
    Required parameters:  N/A
 
@@ -1922,6 +1954,13 @@ Internet-Draft                 CoAP pubsub                     July 2026
    Applications that use this media type:  This type is used by clients
       that create, retrieve, and update topics at servers acting as a
       broker.
+
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 35]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
 
    Fragment identifier considerations:  N/A
 
@@ -1953,21 +1992,31 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
    Reference:  [RFC-XXXX]
 
-
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 35]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
-
 6.3.  Resource Types
 
    IANA is asked to enter the following values from Table 2 in the
    "Resource Type (rt=) Link Target Attribute Values" registry within
    the "Constrained Restful Environments (CoRE) Parameters" registry
    group.  Reference should always be [RFC-XXXX].
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 36]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
 
               +==============+==============================+
               | Value        | Description                  |
@@ -1994,7 +2043,7 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
    The registration policy is either "Private Use", "Standards Action
    with Expert Review", "Specification Required", or "Expert Review" per
-   [BCP26].  "Expert Review" guidelines are provided in Section 6.5.
+   [BCP26].  "Expert Review" guidelines are provided in Section 6.4.1.
 
    All assignments according to "Standards Action with Expert Review"
    are made on a "Standards Action" basis per Section 4.9 of RFC 8126
@@ -2008,16 +2057,6 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
    The columns of this registry are:
 
-
-
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 36]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
-
    *  Name: This is a descriptive name that enables easier reference to
       the item.  The name MUST be unique.  It is not used in the
       encoding.
@@ -2027,6 +2066,14 @@ Internet-Draft                 CoAP pubsub                     July 2026
       positive or negative).  Different ranges of values use different
       registration policies [BCP26].  Integer values from -256 to 255
       are designated as "Standards Action With Expert Review".  Integer
+
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 37]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
+
       values from -65536 to -257 and from 256 to 65535 are designated as
       "Specification Required".  Integer values greater than 65535 are
       designated as "Expert Review".  Integer values less than -65536
@@ -2042,7 +2089,7 @@ Internet-Draft                 CoAP pubsub                     July 2026
    This registry has been initially populated with the values in
    Table 1.  For all of them, the reference is [RFC-XXXX].
 
-6.5.  Expert Review Instructions
+6.4.1.  Expert Review Instructions
 
    The registration policy for the IANA registry established in
    Section 6.4 is defined as one of "Standards Action with Expert
@@ -2066,17 +2113,22 @@ Internet-Draft                 CoAP pubsub                     July 2026
    *  Clarity and correctness of registrations.  Experts are expected to
       check the clarity of purpose and use of the requested entries.
       Experts need to make sure that registered topic properties are
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 37]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
-
       clearly defined in the corresponding specification.  Properties
       that do not meet these objectives of clarity and completeness must
       not be registered.
+
+
+
+
+
+
+
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 38]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
 
    *  Code point squatting should be discouraged.  Reviewers are
       encouraged to get sufficient information for registration requests
@@ -2120,20 +2172,19 @@ Internet-Draft                 CoAP pubsub                     July 2026
               RFC 6838, DOI 10.17487/RFC6838, January 2013,
               <https://www.rfc-editor.org/info/rfc6838>.
 
-
-
-
-
-
-Jimenez, et al.          Expires 3 January 2027                [Page 38]
-
-Internet-Draft                 CoAP pubsub                     July 2026
-
-
               Dürst, M.J., "Guidelines for the Definition of New Top-
               Level Media Types", BCP 13, RFC 9694,
               DOI 10.17487/RFC9694, March 2025,
               <https://www.rfc-editor.org/info/rfc9694>.
+
+
+
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 39]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
 
    [BCP14]    Best Current Practice 14,
               <https://www.rfc-editor.org/info/bcp14>.
@@ -2179,11 +2230,16 @@ Internet-Draft                 CoAP pubsub                     July 2026
               DOI 10.17487/RFC7641, September 2015,
               <https://www.rfc-editor.org/rfc/rfc7641>.
 
+   [RFC8132]  van der Stok, P., Bormann, C., and A. Sehgal, "PATCH and
+              FETCH Methods for the Constrained Application Protocol
+              (CoAP)", RFC 8132, DOI 10.17487/RFC8132, April 2017,
+              <https://www.rfc-editor.org/rfc/rfc8132>.
 
 
-Jimenez, et al.          Expires 3 January 2027                [Page 39]
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 40]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
    [RFC8288]  Nottingham, M., "Web Linking", RFC 8288,
@@ -2237,9 +2293,9 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
 
 
-Jimenez, et al.          Expires 3 January 2027                [Page 40]
+Jimenez, et al.            Expires 6 May 2027                  [Page 41]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
    [I-D.ietf-core-interfaces]
@@ -2293,9 +2349,9 @@ Internet-Draft                 CoAP pubsub                     July 2026
 
 
 
-Jimenez, et al.          Expires 3 January 2027                [Page 41]
+Jimenez, et al.            Expires 6 May 2027                  [Page 42]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
 Appendix A.  Document Updates
@@ -2349,9 +2405,9 @@ A.3.  Version -15 to -16
 
 
 
-Jimenez, et al.          Expires 3 January 2027                [Page 42]
+Jimenez, et al.            Expires 6 May 2027                  [Page 43]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
 A.4.  Version -16 to -17
@@ -2405,9 +2461,9 @@ A.7.  Version -19 to -20
 
 
 
-Jimenez, et al.          Expires 3 January 2027                [Page 43]
+Jimenez, et al.            Expires 6 May 2027                  [Page 44]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
 A.8.  Version -20 to -21
@@ -2430,6 +2486,63 @@ A.8.  Version -20 to -21
 
    *  Encoded the topic FETCH filter as an application/cbor array;
       removed conf-filter from the registry (PR #80)
+
+A.9.  Version -21 to -22
+
+   Addressed the AD review of -21:
+
+   *  Topic-data resource is controlled by the broker and may be served
+      from a different address; clients take its URI from the "topic-
+      data" property
+
+   *  Brokers support all interactions on topic collections, topics and
+      topic-data; clients use any subset
+
+   *  Reconciled topic collection discovery: GET on the collection
+      always works, advertising it in /.well-known/core is a SHOULD
+
+   *  Unrecognized topic properties are ignored, not rejected; the
+      returned representation shows what was accepted
+
+   *  Defined the iPATCH request payload as the topic properties to
+      update, in the text and in the media type registration
+
+   *  Security between clients and broker is a MUST; protection below
+      CoAP allowed as in RFC 7252 Section 9
+
+   *  End-to-end protection, when used, includes source authentication
+
+   *  "max-subscribers": the broker may enforce an undisclosed limit;
+      "observer-check": bounded at 86400, hint until stored
+
+
+
+Jimenez, et al.            Expires 6 May 2027                  [Page 45]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
+
+   *  Replaced MAYs that granted no permission with "can" in broker and
+      topic discovery; explicit MAY for eliding link attributes
+
+   *  Link-format FETCH response tied to the TBD606 request Content-
+      Format
+
+   *  Topic resource GET and FETCH responses are cacheable; added RFC
+      8132 as a normative reference
+
+   *  POST update resets any absent optional property; one subscriber-
+      disruption note for both update methods
+
+   *  How a client tells HALF CREATED from DELETED; discovery of the
+      topic-data URI described rather than required
+
+   *  Old-representations paragraph kept as an extensibility example
+
+   *  Editorial nits; topic-data examples use Content-Format 112
+
+   *  The HALF CREATED state and a 2.06 (No Content) response code are
+      discussed in the CoRE WG; see draft-jimenez-core-coap-no-content
 
 Acknowledgements
 
@@ -2460,10 +2573,9 @@ Contributors
 
 
 
-
-Jimenez, et al.          Expires 3 January 2027                [Page 44]
+Jimenez, et al.            Expires 6 May 2027                  [Page 46]
 
-Internet-Draft                 CoAP pubsub                     July 2026
+Internet-Draft                 CoAP pubsub                 November 2026
 
 
    Marco offered comprehensive reviews and insightful guidance on the
@@ -2517,4 +2629,4 @@ Authors' Addresses
 
 
 
-Jimenez, et al.          Expires 3 January 2027                [Page 45]
+Jimenez, et al.            Expires 6 May 2027                  [Page 47]
