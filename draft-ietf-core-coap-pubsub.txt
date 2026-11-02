@@ -2536,7 +2536,8 @@ Acknowledgements
    Shelby, Mohit Sethi, Peter van der Stok, Tim Kellogg, Anders
    Eriksson, Goran Selander, Mikko Majanen, Olaf Bergmann, David
    Navarro, Oscar Novo and Lorenzo Corneo for their valuable
-   contributions and reviews.
+   contributions and reviews.  Mike Bishop provided a detailed AD review
+   of -21 that shaped this version.
 
 Contributors
 
@@ -2567,9 +2568,8 @@ Authors' Addresses
    Email: michaeljohnkoster@gmail.com
 
 
-   Ari Keranen
-   Ericsson
-   Finland
+
+
 
 
 
@@ -2578,10 +2578,10 @@ Jiménez, et al.            Expires 6 May 2027                  [Page 46]
 Internet-Draft                 CoAP pubsub                 November 2026
 
 
+   Ari Keranen
+   Ericsson
+   Finland
    Email: ari.keranen@ericsson.com
-
-
-
 
 
 
