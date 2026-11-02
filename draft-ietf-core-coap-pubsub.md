@@ -40,6 +40,7 @@ contributor:
 normative:
   RFC6690:
   RFC7252:
+  RFC8132:
   RFC8288:
   RFC8516:
   STD94:
@@ -489,6 +490,8 @@ On success, the broker returns a successful response (typically 2.05 Content) wi
 If requirements are defined for the client to read the topic as requested and the broker does not successfully assess that those requirements are met, then the broker MUST reply with a 4.xx client error response (such as 4.03 Forbidden).
 
 The response payload is a CBOR map, whose possible entries are specified in {{topic-resource-representation}} and use the same abbreviations defined in {{pubsub-parameters}}.
+
+Successful responses to GET and FETCH requests on a topic resource are cacheable, following {{Section 5.6 of RFC7252}} and {{Section 2 of RFC8132}}. The broker indicates how long a topic representation stays fresh with the Max-Age option, bearing in mind that the configuration can be updated or the topic deleted at any time.
 
 For example, below is a request on the topic "/ps/h9392":
 
