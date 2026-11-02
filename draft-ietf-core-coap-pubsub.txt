@@ -117,34 +117,34 @@ Internet-Draft                 CoAP pubsub                 November 2026
      3.2.  Topic-Data Interactions . . . . . . . . . . . . . . . . .  25
        3.2.1.  Publish . . . . . . . . . . . . . . . . . . . . . . .  25
        3.2.2.  Subscribe . . . . . . . . . . . . . . . . . . . . . .  26
-       3.2.3.  Unsubscribe . . . . . . . . . . . . . . . . . . . . .  28
-       3.2.4.  Delete topic-data . . . . . . . . . . . . . . . . . .  29
-     3.3.  Read the latest data  . . . . . . . . . . . . . . . . . .  29
-     3.4.  Rate Limiting . . . . . . . . . . . . . . . . . . . . . .  30
-   4.  Encoding of PubSub Topic Properties . . . . . . . . . . . . .  31
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  31
-   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  33
-     6.1.  Media Type Registrations  . . . . . . . . . . . . . . . .  33
-     6.2.  CoAP Content-Formats  . . . . . . . . . . . . . . . . . .  34
-     6.3.  Resource Types  . . . . . . . . . . . . . . . . . . . . .  34
-     6.4.  CoAP Pubsub Topic Properties Registry . . . . . . . . . .  35
-       6.4.1.  Expert Review Instructions  . . . . . . . . . . . . .  36
-   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  37
-     7.1.  Normative References  . . . . . . . . . . . . . . . . . .  37
-     7.2.  Informative References  . . . . . . . . . . . . . . . . .  39
-   Appendix A.  Document Updates . . . . . . . . . . . . . . . . . .  41
-     A.1.  Version -13 to -14  . . . . . . . . . . . . . . . . . . .  41
-     A.2.  Version -14 to -15  . . . . . . . . . . . . . . . . . . .  41
-     A.3.  Version -15 to -16  . . . . . . . . . . . . . . . . . . .  42
-     A.4.  Version -16 to -17  . . . . . . . . . . . . . . . . . . .  42
-     A.5.  Version -17 to -18  . . . . . . . . . . . . . . . . . . .  42
-     A.6.  Version -18 to -19  . . . . . . . . . . . . . . . . . . .  42
-     A.7.  Version -19 to -20  . . . . . . . . . . . . . . . . . . .  43
-     A.8.  Version -20 to -21  . . . . . . . . . . . . . . . . . . .  43
-     A.9.  Version -21 to -22  . . . . . . . . . . . . . . . . . . .  43
-   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  45
-   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  45
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  45
+       3.2.3.  Unsubscribe . . . . . . . . . . . . . . . . . . . . .  29
+       3.2.4.  Delete topic-data . . . . . . . . . . . . . . . . . .  30
+     3.3.  Read the latest data  . . . . . . . . . . . . . . . . . .  30
+     3.4.  Rate Limiting . . . . . . . . . . . . . . . . . . . . . .  31
+   4.  Encoding of PubSub Topic Properties . . . . . . . . . . . . .  32
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  32
+   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  34
+     6.1.  Media Type Registrations  . . . . . . . . . . . . . . . .  34
+     6.2.  CoAP Content-Formats  . . . . . . . . . . . . . . . . . .  35
+     6.3.  Resource Types  . . . . . . . . . . . . . . . . . . . . .  35
+     6.4.  CoAP Pubsub Topic Properties Registry . . . . . . . . . .  36
+       6.4.1.  Expert Review Instructions  . . . . . . . . . . . . .  37
+   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  38
+     7.1.  Normative References  . . . . . . . . . . . . . . . . . .  38
+     7.2.  Informative References  . . . . . . . . . . . . . . . . .  40
+   Appendix A.  Document Updates . . . . . . . . . . . . . . . . . .  42
+     A.1.  Version -13 to -14  . . . . . . . . . . . . . . . . . . .  42
+     A.2.  Version -14 to -15  . . . . . . . . . . . . . . . . . . .  42
+     A.3.  Version -15 to -16  . . . . . . . . . . . . . . . . . . .  43
+     A.4.  Version -16 to -17  . . . . . . . . . . . . . . . . . . .  43
+     A.5.  Version -17 to -18  . . . . . . . . . . . . . . . . . . .  43
+     A.6.  Version -18 to -19  . . . . . . . . . . . . . . . . . . .  43
+     A.7.  Version -19 to -20  . . . . . . . . . . . . . . . . . . .  44
+     A.8.  Version -20 to -21  . . . . . . . . . . . . . . . . . . .  44
+     A.9.  Version -21 to -22  . . . . . . . . . . . . . . . . . . .  44
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  46
+   Contributors  . . . . . . . . . . . . . . . . . . . . . . . . . .  46
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  46
 
 1.  Introduction
 
@@ -1325,13 +1325,13 @@ Internet-Draft                 CoAP pubsub                 November 2026
 3.1.  Topic Lifecycle
 
    When a topic is created, the broker places it in the CREATED state
-   and creates its topic-data resource.  In this state a client can
-   read, update and delete the topic, a publisher can publish to the
-   topic-data resource, and a subscriber can read or observe the topic-
-   data resource.  Until the first publication, and after the topic-data
-   resource has been deleted (see Section 3.2.4), the topic-data
-   resource has no representation: a GET request on it returns 2.06 (No
-   Content), an Observe registration is confirmed with 2.06 (No
+   (see Figure 4) and creates its topic-data resource.  In this state a
+   client can read, update and delete the topic, a publisher can publish
+   to the topic-data resource, and a subscriber can read or observe the
+   topic-data resource.  Until the first publication, and after the
+   topic-data resource has been deleted (see Section 3.2.4), the topic-
+   data resource has no representation: a GET request on it returns 2.06
+   (No Content), an Observe registration is confirmed with 2.06 (No
    Content), and observers receive a 2.05 (Content) notification when
    the first representation is published
    [I-D.jimenez-core-coap-no-content].
@@ -1345,6 +1345,19 @@ Jiménez, et al.            Expires 6 May 2027                  [Page 24]
 
 Internet-Draft                 CoAP pubsub                 November 2026
 
+
+                         Publish, Read, Subscribe,
+                         Update topic, Delete topic-data
+                               .-------------.
+                               |             |
+                               v             |
+                     .---------+---.         |      .-------------.
+          Create     |             +---------'      |             |
+        ------------>|   CREATED   +--------------->|   DELETED   |
+                     |             |  Delete topic  |             |
+                     '-------------'                '-------------'
+
+                       Figure 4: Lifecycle of a Topic
 
    When a client deletes a topic resource, the topic is placed into the
    DELETED state and shortly after removed from the server.  Both the
@@ -1381,6 +1394,14 @@ Internet-Draft                 CoAP pubsub                 November 2026
    (Changed).  The first publication to a topic-data resource that has
    no representation is no different from any other.
 
+
+
+
+Jiménez, et al.            Expires 6 May 2027                  [Page 25]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
+
    If the request does not have an acceptable Content-Format, e.g., as
    specified by the "topic-content-format" property in the topic
    configuration, the server returns a 4.15 (Unsupported Content-Format)
@@ -1390,17 +1411,6 @@ Internet-Draft                 CoAP pubsub                 November 2026
    4.29 (Too Many Requests) response [RFC8516].
 
    Example of a publication:
-
-
-
-
-
-
-
-Jiménez, et al.            Expires 6 May 2027                  [Page 25]
-
-Internet-Draft                 CoAP pubsub                 November 2026
-
 
       Request:
 
@@ -1432,6 +1442,22 @@ Internet-Draft                 CoAP pubsub                 November 2026
    Observe Option.  If no Observe Option is present in the response, the
    client should assume that the subscription was not successful.
 
+
+
+
+
+
+
+
+
+
+
+
+Jiménez, et al.            Expires 6 May 2027                  [Page 26]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
+
    If the topic-data resource has no representation yet, the server
    confirms the registration with a 2.06 (No Content) response carrying
    the Observe Option [I-D.jimenez-core-coap-no-content], and the
@@ -1449,15 +1475,6 @@ Internet-Draft                 CoAP pubsub                 November 2026
       includes the Observe Option.
 
    Success:  2.06 (No Content).  The topic-data resource exists and has
-
-
-
-
-Jiménez, et al.            Expires 6 May 2027                  [Page 26]
-
-Internet-Draft                 CoAP pubsub                 November 2026
-
-
       no representation yet.  In case of successful subscription, the
       response includes the Observe Option.
 
@@ -1471,6 +1488,31 @@ Internet-Draft                 CoAP pubsub                 November 2026
 
    Example of a subscription before the first publication, followed by
    the notification of that publication:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jiménez, et al.            Expires 6 May 2027                  [Page 27]
+
+Internet-Draft                 CoAP pubsub                 November 2026
+
 
       Request:
 
@@ -1509,7 +1551,21 @@ Internet-Draft                 CoAP pubsub                 November 2026
 
 
 
-Jiménez, et al.            Expires 6 May 2027                  [Page 27]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Jiménez, et al.            Expires 6 May 2027                  [Page 28]
 
 Internet-Draft                 CoAP pubsub                 November 2026
 
@@ -1565,7 +1621,7 @@ Internet-Draft                 CoAP pubsub                 November 2026
 
 
 
-Jiménez, et al.            Expires 6 May 2027                  [Page 28]
+Jiménez, et al.            Expires 6 May 2027                  [Page 29]
 
 Internet-Draft                 CoAP pubsub                 November 2026
 
@@ -1621,7 +1677,7 @@ Internet-Draft                 CoAP pubsub                 November 2026
 
 
 
-Jiménez, et al.            Expires 6 May 2027                  [Page 29]
+Jiménez, et al.            Expires 6 May 2027                  [Page 30]
 
 Internet-Draft                 CoAP pubsub                 November 2026
 
@@ -1677,7 +1733,7 @@ Internet-Draft                 CoAP pubsub                 November 2026
 
 
 
-Jiménez, et al.            Expires 6 May 2027                  [Page 30]
+Jiménez, et al.            Expires 6 May 2027                  [Page 31]
 
 Internet-Draft                 CoAP pubsub                 November 2026
 
@@ -1733,7 +1789,7 @@ Internet-Draft                 CoAP pubsub                 November 2026
 
 
 
-Jiménez, et al.            Expires 6 May 2027                  [Page 31]
+Jiménez, et al.            Expires 6 May 2027                  [Page 32]
 
 Internet-Draft                 CoAP pubsub                 November 2026
 
@@ -1789,7 +1845,7 @@ Internet-Draft                 CoAP pubsub                 November 2026
 
 
 
-Jiménez, et al.            Expires 6 May 2027                  [Page 32]
+Jiménez, et al.            Expires 6 May 2027                  [Page 33]
 
 Internet-Draft                 CoAP pubsub                 November 2026
 
@@ -1845,7 +1901,7 @@ Internet-Draft                 CoAP pubsub                 November 2026
 
 
 
-Jiménez, et al.            Expires 6 May 2027                  [Page 33]
+Jiménez, et al.            Expires 6 May 2027                  [Page 34]
 
 Internet-Draft                 CoAP pubsub                 November 2026
 
@@ -1901,7 +1957,7 @@ Internet-Draft                 CoAP pubsub                 November 2026
 
 
 
-Jiménez, et al.            Expires 6 May 2027                  [Page 34]
+Jiménez, et al.            Expires 6 May 2027                  [Page 35]
 
 Internet-Draft                 CoAP pubsub                 November 2026
 
@@ -1957,7 +2013,7 @@ Internet-Draft                 CoAP pubsub                 November 2026
 
 
 
-Jiménez, et al.            Expires 6 May 2027                  [Page 35]
+Jiménez, et al.            Expires 6 May 2027                  [Page 36]
 
 Internet-Draft                 CoAP pubsub                 November 2026
 
@@ -2013,7 +2069,7 @@ Internet-Draft                 CoAP pubsub                 November 2026
 
 
 
-Jiménez, et al.            Expires 6 May 2027                  [Page 36]
+Jiménez, et al.            Expires 6 May 2027                  [Page 37]
 
 Internet-Draft                 CoAP pubsub                 November 2026
 
@@ -2069,7 +2125,7 @@ Internet-Draft                 CoAP pubsub                 November 2026
 
 
 
-Jiménez, et al.            Expires 6 May 2027                  [Page 37]
+Jiménez, et al.            Expires 6 May 2027                  [Page 38]
 
 Internet-Draft                 CoAP pubsub                 November 2026
 
@@ -2125,7 +2181,7 @@ Internet-Draft                 CoAP pubsub                 November 2026
 
 
 
-Jiménez, et al.            Expires 6 May 2027                  [Page 38]
+Jiménez, et al.            Expires 6 May 2027                  [Page 39]
 
 Internet-Draft                 CoAP pubsub                 November 2026
 
@@ -2181,7 +2237,7 @@ Internet-Draft                 CoAP pubsub                 November 2026
 
 
 
-Jiménez, et al.            Expires 6 May 2027                  [Page 39]
+Jiménez, et al.            Expires 6 May 2027                  [Page 40]
 
 Internet-Draft                 CoAP pubsub                 November 2026
 
@@ -2237,7 +2293,7 @@ Internet-Draft                 CoAP pubsub                 November 2026
 
 
 
-Jiménez, et al.            Expires 6 May 2027                  [Page 40]
+Jiménez, et al.            Expires 6 May 2027                  [Page 41]
 
 Internet-Draft                 CoAP pubsub                 November 2026
 
@@ -2293,7 +2349,7 @@ A.2.  Version -14 to -15
 
 
 
-Jiménez, et al.            Expires 6 May 2027                  [Page 41]
+Jiménez, et al.            Expires 6 May 2027                  [Page 42]
 
 Internet-Draft                 CoAP pubsub                 November 2026
 
@@ -2349,7 +2405,7 @@ A.6.  Version -18 to -19
 
 
 
-Jiménez, et al.            Expires 6 May 2027                  [Page 42]
+Jiménez, et al.            Expires 6 May 2027                  [Page 43]
 
 Internet-Draft                 CoAP pubsub                 November 2026
 
@@ -2405,7 +2461,7 @@ A.9.  Version -21 to -22
 
 
 
-Jiménez, et al.            Expires 6 May 2027                  [Page 43]
+Jiménez, et al.            Expires 6 May 2027                  [Page 44]
 
 Internet-Draft                 CoAP pubsub                 November 2026
 
@@ -2461,7 +2517,7 @@ Internet-Draft                 CoAP pubsub                 November 2026
 
 
 
-Jiménez, et al.            Expires 6 May 2027                  [Page 44]
+Jiménez, et al.            Expires 6 May 2027                  [Page 45]
 
 Internet-Draft                 CoAP pubsub                 November 2026
 
@@ -2517,7 +2573,7 @@ Authors' Addresses
 
 
 
-Jiménez, et al.            Expires 6 May 2027                  [Page 45]
+Jiménez, et al.            Expires 6 May 2027                  [Page 46]
 
 Internet-Draft                 CoAP pubsub                 November 2026
 
@@ -2573,4 +2629,4 @@ Internet-Draft                 CoAP pubsub                 November 2026
 
 
 
-Jiménez, et al.            Expires 6 May 2027                  [Page 46]
+Jiménez, et al.            Expires 6 May 2027                  [Page 47]
