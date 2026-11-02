@@ -764,7 +764,7 @@ Success:
 Failure:
 : 4.04 (Not Found). The topic does not exist.
 
-If the "max-subscribers" topic property value has been reached, the server must treat that as specified in {{Section 4.1 of RFC7641}}. The 2.05 (Content) response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
+If the "max-subscribers" topic property value has been reached, the server must treat that as specified in {{Section 4.1 of RFC7641}}. The 2.05 (Content) or 2.06 (No Content) response MUST NOT include an Observe Option, the absence of which signals to the subscriber that the subscription failed.
 
 
 Example of a subscription before the first publication, followed by the notification of that publication:
