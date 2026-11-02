@@ -603,10 +603,10 @@ Example:
    }
 ~~~~
 
-Note that, when a topic changes, it may result in disruptions for the subscribers. Some potential issues that may arise include:
+Note that, when a topic changes through either update method (POST or iPATCH), it may result in disruptions for the subscribers. Some potential issues that may arise include:
 
-* Limiting the number of subscribers will cause cancellation of ongoing subscriptions until "max-subscribers" has been reached.
-* Changing of the "expiration-date" may cause cancellation of ongoing subscriptions if the topic expires at an earlier date.
+* Reducing the number of subscribers will cause cancellation of ongoing subscriptions if the new "max-subscribers" has been exceeded.
+* Changing the "expiration-date" to an earlier time will cause the topic to expire earlier, cancelling ongoing subscriptions at that time.
 
 ### Updating the topic with iPATCH {#topic-update-resource-patch}
 
@@ -614,7 +614,7 @@ A client can partially update a topic's configuration by submitting a partial to
 
 On success, the broker returns a 2.04 (Changed) response and the current full resource representation. The broker only updates topic properties that are explicitly mentioned in the request.
 
-Decreasing "max-subscribers" will also cause some subscribers to get unsubscribed. Unsubscribed endpoints receive a final 4.04 (Not Found) response as per {{Section 3.2 of RFC7641}}.
+The disruptions for subscribers described in {{topic-update-resource}} apply to iPATCH updates as well.
 
 Contrary to POST, iPATCH operations will explicitly update some topic properties, leaving others unmodified.
 In the below example, two properties are successfully updated with iPATCH:
@@ -648,8 +648,6 @@ In the below example, two properties are successfully updated with iPATCH:
       / observer-check /        7: 86400
    }
 ~~~~
-
-Note that when a topic changes through an iPATCH request, it may result in disruptions for the subscribers. For example, limiting the number of subscribers will cause cancellation of ongoing subscriptions until "max-subscribers" has been reached.
 
 ### Deleting a topic {#topic-delete}
 
