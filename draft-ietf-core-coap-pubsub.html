@@ -2229,53 +2229,9 @@ In the below example, two properties are successfully updated with iPATCH:<a hre
         <h3 id="name-topic-lifecycle">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-topic-lifecycle" class="section-name selfRef">Topic Lifecycle</a>
         </h3>
-<p id="section-3.1-1">When a topic is created, the broker places it in the CREATED state (see <a href="#fig-life" class="auto internal xref">Figure 4</a>) and creates its topic-data resource. In this state a client can read, update and delete the topic, a publisher can publish to the topic-data resource, and a subscriber can read or observe the topic-data resource. Until the first publication, and after the topic-data resource has been deleted (see <a href="#delete-topic-data" class="auto internal xref">Section 3.2.4</a>), the topic-data resource has no representation: a GET request on it returns 2.06 (No Content), an Observe registration is confirmed with 2.06 (No Content), and observers receive a 2.05 (Content) notification when the first representation is published <span>[<a href="#I-D.jimenez-core-coap-no-content" class="cite xref">I-D.jimenez-core-coap-no-content</a>]</span>.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<span id="name-lifecycle-of-a-topic"></span><div id="fig-life">
-<figure id="figure-4">
-          <div id="section-3.1-2.1">
-            <div class="alignCenter art-svg artwork" id="section-3.1-2.1.1">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="256" width="480" viewBox="0 0 480 256" class="diagram" text-anchor="middle" font-family="monospace" font-size="13px" stroke-linecap="round">
-                <path d="M 160,56 L 160,104" fill="none" stroke="black"></path>
-                <path d="M 160,184 L 160,216" fill="none" stroke="black"></path>
-                <path d="M 176,104 L 176,160" fill="none" stroke="black"></path>
-                <path d="M 200,56 L 200,104" fill="none" stroke="black"></path>
-                <path d="M 200,184 L 200,216" fill="none" stroke="black"></path>
-                <path d="M 472,80 L 472,96" fill="none" stroke="black"></path>
-                <path d="M 8,64 L 112,64" fill="none" stroke="black"></path>
-                <path d="M 224,64 L 456,64" fill="none" stroke="black"></path>
-                <path d="M 224,112 L 456,112" fill="none" stroke="black"></path>
-                <path d="M 456,64 C 464.83064,64 472,71.16936 472,80" fill="none" stroke="black"></path>
-                <path d="M 456,112 C 464.83064,112 472,104.83064 472,96" fill="none" stroke="black"></path>
-                <path d="M 160,56 L 200,56" fill="none" stroke="black"></path>
-                <path d="M 160,104 L 200,104" fill="none" stroke="black"></path>
-                <path d="M 160,184 L 200,184" fill="none" stroke="black"></path>
-                <path d="M 160,216 L 200,216" fill="none" stroke="black"></path>
-                <polygon class="arrowhead" points="232,64 220,58.4 220,69.6" fill="black" transform="rotate(180,224,64)"></polygon>
-                <polygon class="arrowhead" points="184,160 172,154.4 172,165.6" fill="black" transform="rotate(90,176,160)"></polygon>
-                <polygon class="arrowhead" points="120,64 108,58.4 108,69.6" fill="black" transform="rotate(0,112,64)"></polygon>
-                <g class="text">
-                  <text x="184" y="36">CREATED</text>
-                  <text x="268" y="52">Publish,</text>
-                  <text x="348" y="52">Subscribe,</text>
-                  <text x="416" y="52">Read,</text>
-                  <text x="52" y="84">Create</text>
-                  <text x="280" y="84">Read/Update</text>
-                  <text x="356" y="84">Topic,</text>
-                  <text x="260" y="100">Delete</text>
-                  <text x="332" y="100">topic-data</text>
-                  <text x="212" y="132">Delete</text>
-                  <text x="208" y="148">Topic</text>
-                  <text x="184" y="228">DELETED</text>
-                </g>
-              </svg><a href="#section-3.1-2.1.1" class="pilcrow">¶</a>
-</div>
-</div>
-<figcaption><a href="#figure-4" class="selfRef">Figure 4</a>:
-<a href="#name-lifecycle-of-a-topic" class="selfRef">Lifecycle of a Topic</a>
-          </figcaption></figure>
-</div>
-<p id="section-3.1-3">When a client deletes a topic resource, the topic is placed into the DELETED state and shortly after removed from the server. Both the topic resource and the topic-data resource are deleted. All observers of the topic-data resource are removed from the list of observers with a final 4.04 (Not Found) response as per <span><a href="https://rfc-editor.org/rfc/rfc7641#section-3.2" class="relref">Section 3.2</a> of [<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, and no further interactions with the topic are possible.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.1-4">When a client deletes the topic-data resource, the topic stays in the CREATED state. The topic-data resource loses its representation and its observers receive a 2.06 (No Content) notification; they remain registered and receive the next publication as a 2.05 (Content) notification. The "topic-data" property of the topic is unchanged.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.1-1">When a topic is created, the broker places it in the CREATED state and creates its topic-data resource. In this state a client can read, update and delete the topic, a publisher can publish to the topic-data resource, and a subscriber can read or observe the topic-data resource. Until the first publication, and after the topic-data resource has been deleted (see <a href="#delete-topic-data" class="auto internal xref">Section 3.2.4</a>), the topic-data resource has no representation: a GET request on it returns 2.06 (No Content), an Observe registration is confirmed with 2.06 (No Content), and observers receive a 2.05 (Content) notification when the first representation is published <span>[<a href="#I-D.jimenez-core-coap-no-content" class="cite xref">I-D.jimenez-core-coap-no-content</a>]</span>.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">When a client deletes a topic resource, the topic is placed into the DELETED state and shortly after removed from the server. Both the topic resource and the topic-data resource are deleted. All observers of the topic-data resource are removed from the list of observers with a final 4.04 (Not Found) response as per <span><a href="https://rfc-editor.org/rfc/rfc7641#section-3.2" class="relref">Section 3.2</a> of [<a href="#RFC7641" class="cite xref">RFC7641</a>]</span>, and no further interactions with the topic are possible.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">When a client deletes the topic-data resource, the topic stays in the CREATED state. The topic-data resource loses its representation and its observers receive a 2.06 (No Content) notification; they remain registered and receive the next publication as a 2.05 (Content) notification. The "topic-data" property of the topic is unchanged.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="topic-data-interactions">
