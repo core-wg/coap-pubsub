@@ -353,7 +353,7 @@ According to this specification, the topic-data resources use the resource type 
 Note that the "rt" attribute is not included in the returned link in the example response.
 This is because the query in the request already constrains all links in the response to be only of type "core.ps.data".
 Therefore, including the "rt" attribute for each returned link would be unnecessary and would make the response size much larger.
-So the broker, in this example case, was implemented to elide these attributes always, to minimize the size of discovery response payloads.
+A broker MAY elide these attributes to minimize the size of discovery response payloads, as the broker in this example does.
 
 ## Topic Collection Interactions {#topic-collection-interactions}
 
